@@ -4,7 +4,7 @@ make:
 	node ribosome.js generate.js
 
 preview:
-	cd .. && .factory/node_modules/.bin/http-server
+	cd .. && .factory/node_modules/http-server/bin/http-server
 
 .PHONY:\
   make \

@@ -3,8 +3,8 @@
 ..posts > li { border-bottom: solid 1px #CCC; padding: 20px 0; }
 ..posts > li .date { font-family: Menlo, Monaco, "Courier New", monospace; }
 ..posts > li .post-content { font-size: 90%; }
-..posts > li .permalink { font-weight: normal; font-size: 80%; }
-..content a { color: inherit; font-weight: bold; }
+..posts > li > .date-link  { color: inherit; font-size: 80%; }
+..posts > li > .title-link { color: inherit; font-weight: bold; }
 ..pagination { color: #AAA; margin-top: 10px; }
 .</style>
 .<ul class="posts">
@@ -15,13 +15,13 @@ for (i = (page-1) * posts_per_page ; i < page * posts_per_page && posts[i] != un
     if (post.meta.layout == "post") {
 
 .    <span class="date">@{post.date.format("DD MMM YYYY")} &bull;</span>
-.    <a href="/@{post.permalink}">@{post.meta.title}</a>
+.    <a class="title-link" href="/@{post.permalink}">@{post.meta.title}</a>
     }
     else if (post.meta.layout == "brief") {
 .    <div class="post-content">
 .      @{post.content}
 .    </div>
-.    <a class="permalink" href="/@{post.permalink}">@{post.date.format("DD MMM YYYY")}</a>
+.    <a class="date-link" href="/@{post.permalink}">@{post.date.format("DD MMM YYYY")}</a>
     }
 .  </li>
 }

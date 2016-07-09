@@ -79,3 +79,19 @@ for (filename of fs.readdirSync("pages")) {
 ./!output("../" + permalink + "/index.html")
 ./!include("page.dna")
 }
+
+// --- Generate Draft Pages
+
+var layout = "post";
+for (filename of fs.readdirSync("draft")) {
+    var str = fs.readFileSync("draft/" + filename, {encoding: "utf-8"});
+    var date = moment();
+    var permalink = filename.slice(0, -3);
+    var obj = matter(str);
+    var meta = obj.data;
+    if (meta.title) meta.title = escape_html(meta.title);
+    var content = marked(obj.content);
+    fs.mkdirSync("../" + permalink);
+./!output("../" + permalink + "/index.html")
+./!include("page.dna")
+}

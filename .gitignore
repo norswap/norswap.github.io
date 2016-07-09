@@ -1,2 +1,4 @@
 .DS_Store
-.factory/node_modules
+/.factory/node_modules/
+/.factory/draft/
+/draft/

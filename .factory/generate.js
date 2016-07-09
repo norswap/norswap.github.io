@@ -25,7 +25,7 @@ var layout = "post";
 for (filename of fs.readdirSync("posts")) {
     var str = fs.readFileSync("posts/" + filename, {encoding: "utf-8"});
     var date = moment(filename.slice(0, 10), "YYYY-MM-DD");
-    var permalink = filename.slice(11, -3);
+    var permalink = filename.slice(13, -3);
     var obj = matter(str);
     var meta = obj.data;
     if (meta.title) meta.title = escape_html(meta.title);

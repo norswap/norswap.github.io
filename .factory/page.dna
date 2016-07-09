@@ -5,7 +5,7 @@
 .  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
 .  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 .  <title>
-      if (meta.title == "Home")
+      if (layout == "home")
 .       norswap
       else
 .       norswap &middot; @{meta.title}

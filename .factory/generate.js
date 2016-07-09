@@ -44,8 +44,8 @@ var num_pages = Math.floor((posts.length - 1) / posts_per_page) + 1;
 var layout = "home"
 
 for (page of range(num_pages)) {
-    var tmpFile = tmp.fileSync();
-./!output(tmpFile.name)
+    var tmpFile = tmp.tmpNameSync();
+./!output(tmpFile)
 ./!include("home.dna")
 
     if (page == 1) {
@@ -55,7 +55,7 @@ for (page of range(num_pages)) {
 ./!output("../" + page + "/index.html")
     }
 
-    var content = fs.readFileSync(tmpFile.name, {encoding: "utf-8"});
+    var content = fs.readFileSync(tmpFile, {encoding: "utf-8"});
 
 ./!include("page.dna")
 }

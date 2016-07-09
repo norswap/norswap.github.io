@@ -1,6 +1,6 @@
 make:
-	rm -rf ../../web2/*
-	cp -r top/* ../../web2/
+	rm -rf ../../web/*
+	cp -r top/* ../../web/
 	node ribosome.js generate.js
 
 preview:

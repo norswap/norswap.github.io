@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Micro-Rant: Java Build Systems
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="/atom.xml">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Micro-Rant: Java Build Systems</h1>
+      <span class="post-date">09 Jul 2016</span>
+      <p>Ant is Make in XML.</p>
+      <p>Maven is an over-engineered, yet castrated build system. You can&#39;t do
+      fundamental stuff (such as specifying which version of Java you want to use or
+      <strong>moving files</strong> without importing a plugin or calling Ant. Want to do something
+      slightly different? Build you own plugin (this process is more painful than it
+      sounds). On the plus side, Maven does have a handy (but not best-in-class)
+      dependency system, which is why we still have to suffer it.</p>
+      <p>Gradle allows custom build tasks (<strong>finally!</strong>). It&#39;s also huge, bloated, and
+      comes with a <a href="https://docs.gradle.org/current/userguide/userguide.html">70-chapters manual</a> that still manages to be lacunary and
+      confusing. Understanding Gradle is not the work of an afternoon but of weeks.</p>
+      <p>Scala is not served better. To think sbt once stood for &quot;simple build
+      tool&quot; (now retconned to &quot;scala build tool&quot;) is enough to choke on the irony.</p>
+      <p><a href="/build-java-with-make">One might as well build Java using Make.</a></p>
+      <h2 id="hope-">Hope?</h2>
+      <p><a href="http://beust.com/kobalt/">Kobalt</a> is a sane build system for Kotlin &amp; Java by Cedric Beust (the
+      author of TestNG). However it&#39;s still in its infancy.</p>
+      <p><a href="http://pluto-build.github.io/">pluto</a> is a prototype from academia (<a href="http://www.informatik.uni-marburg.de/~seba/publications/pluto-incremental-build.pdf">related paper</a>)
+      that enables incremental, minimal, and safe builds (no need to <code>make clean</code>).
+      You can&#39;t really use it as is, but the idea only asks to be picked up.</p>
+    </div>
+  </div>
+</body>
+</html>

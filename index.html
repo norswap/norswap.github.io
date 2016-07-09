@@ -5,7 +5,7 @@
   <!-- https://css-tricks.com/probably-use-initial-scale1/-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-       norswap &middot; The Path to Wisdom
+       norswap
   </title>
   <link rel="stylesheet" href="/assets/poole.css">
   <link rel="stylesheet" href="/assets/syntax.css">
@@ -47,11 +47,31 @@
     .posts > li { border-bottom: solid 1px #CCC; padding: 20px 0; }
     .posts > li .date { font-family: Menlo, Monaco, "Courier New", monospace; }
     .posts > li .post-content { font-size: 90%; }
-    .posts > li .permalink { font-weight: normal; font-size: 80%; }
-    .content a { color: inherit; font-weight: bold; }
+    .posts > li > .date-link  { color: inherit; font-size: 80%; }
+    .posts > li > .title-link { color: inherit; font-weight: bold; }
     .pagination { color: #AAA; margin-top: 10px; }
     </style>
     <ul class="posts">
+      <li>
+        <div class="post-content">
+          <p>In <a href="https://github.com/norswap/violin">violin</a>, I set up the build using the good old <code>make</code> tool (you might have
+          gathered that <a href="/rant-java-build">I harbor no love</a> for Java build systems).</p>
+          <p>For examples of how to perform common Java build tasks by calling command line
+          tools from make, <a href="https://github.com/norswap/violin/blob/master/makefile">have a look at the makefile</a>.</p>
+        </div>
+        <a class="date-link" href="/build-java-with-make">09 Jul 2016</a>
+      </li>
+      <li>
+        <span class="date">09 Jul 2016 &bull;</span>
+        <a class="title-link" href="/rant-java-build">Micro-Rant: Java Build Systems</a>
+      </li>
+      <li>
+        <div class="post-content">
+          <p>I just released <a href="https://github.com/norswap/violin">violin</a>, a small Kotlin utility library that features
+          simple streams and some other stuff too.</p>
+        </div>
+        <a class="date-link" href="/violin-release">09 Jul 2016</a>
+      </li>
       <li>
         <div class="post-content">
           <blockquote>
@@ -59,19 +79,19 @@
           moves two steps away.</p>
           </blockquote>
         </div>
-        <a class="permalink" href="/path-to-wisdom">08 Jul 2016</a>
+        <a class="date-link" href="/path-to-wisdom">08 Jul 2016</a>
       </li>
       <li>
         <span class="date">03 Oct 2015 &bull;</span>
-        <a href="/checked-exceptions">In Defence of Checked Exceptions</a>
+        <a class="title-link" href="/checked-exceptions">In Defence of Checked Exceptions</a>
       </li>
       <li>
         <span class="date">24 Feb 2015 &bull;</span>
-        <a href="/java_caster">The Most Useful Java Function</a>
+        <a class="title-link" href="/java_caster">The Most Useful Java Function</a>
       </li>
       <li>
         <span class="date">26 Jan 2015 &bull;</span>
-        <a href="/c_scope_duration_linkage">C: Scope, Duration &amp; Linkage</a>
+        <a class="title-link" href="/c_scope_duration_linkage">C: Scope, Duration &amp; Linkage</a>
       </li>
     </ul>
     <div class="pagination">

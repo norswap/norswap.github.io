@@ -3,12 +3,61 @@
   <title>norswap</title>
   <link href="http://norswap.com/atom.xml" rel="self"/>
   <link href="http://norswap.com/"/>
-  <updated>2016-07-08T16:28:15.308Z</updated>
+  <updated>2016-07-09T17:03:34.567Z</updated>
   <id>http://norswap.com/</id>
   <author>
     <name>Nicolas "Norswap" Laurent</name>
     <email>norswap+atom@gmail.com</email>
   </author>
+  <entry>
+    <title>Building Java with Make</title>
+    <link href="http://norswap.com/build-java-with-make"/>
+    <updated>2016-07-08T22:00:00.000Z</updated>
+    <id>http://norswap.com/build-java-with-make</id>
+    <content type="html">
+      <p>In <a href="https://github.com/norswap/violin">violin</a>, I set up the build using the good old <code>make</code> tool (you might have
+      gathered that <a href="/rant-java-build">I harbor no love</a> for Java build systems).</p>
+      <p>For examples of how to perform common Java build tasks by calling command line
+      tools from make, <a href="https://github.com/norswap/violin/blob/master/makefile">have a look at the makefile</a>.</p>
+    </content>
+  </entry>
+  <entry>
+    <title>Micro-Rant: Java Build Systems</title>
+    <link href="http://norswap.com/rant-java-build"/>
+    <updated>2016-07-08T22:00:00.000Z</updated>
+    <id>http://norswap.com/rant-java-build</id>
+    <content type="html">
+      <p>Ant is Make in XML.</p>
+      <p>Maven is an over-engineered, yet castrated build system. You can&#39;t do
+      fundamental stuff (such as specifying which version of Java you want to use or
+      <strong>moving files</strong> without importing a plugin or calling Ant. Want to do something
+      slightly different? Build you own plugin (this process is more painful than it
+      sounds). On the plus side, Maven does have a handy (but not best-in-class)
+      dependency system, which is why we still have to suffer it.</p>
+      <p>Gradle allows custom build tasks (<strong>finally!</strong>). It&#39;s also huge, bloated, and
+      comes with a <a href="https://docs.gradle.org/current/userguide/userguide.html">70-chapters manual</a> that still manages to be lacunary and
+      confusing. Understanding Gradle is not the work of an afternoon but of weeks.</p>
+      <p>Scala is not served better. To think sbt once stood for &quot;simple build
+      tool&quot; (now retconned to &quot;scala build tool&quot;) is enough to choke on the irony.</p>
+      <p><a href="/build-java-with-make">One might as well build Java using Make.</a></p>
+      <h2 id="hope-">Hope?</h2>
+      <p><a href="http://beust.com/kobalt/">Kobalt</a> is a sane build system for Kotlin &amp; Java by Cedric Beust (the
+      author of TestNG). However it&#39;s still in its infancy.</p>
+      <p><a href="http://pluto-build.github.io/">pluto</a> is a prototype from academia (<a href="http://www.informatik.uni-marburg.de/~seba/publications/pluto-incremental-build.pdf">related paper</a>)
+      that enables incremental, minimal, and safe builds (no need to <code>make clean</code>).
+      You can&#39;t really use it as is, but the idea only asks to be picked up.</p>
+    </content>
+  </entry>
+  <entry>
+    <title>Released: Violin, a human-sized Kotlin utility library</title>
+    <link href="http://norswap.com/violin-release"/>
+    <updated>2016-07-08T22:00:00.000Z</updated>
+    <id>http://norswap.com/violin-release</id>
+    <content type="html">
+      <p>I just released <a href="https://github.com/norswap/violin">violin</a>, a small Kotlin utility library that features
+      simple streams and some other stuff too.</p>
+    </content>
+  </entry>
   <entry>
     <title>The Path to Wisdom</title>
     <link href="http://norswap.com/path-to-wisdom"/>

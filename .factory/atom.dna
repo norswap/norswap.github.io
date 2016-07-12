@@ -1,23 +1,22 @@
-.<?xml version="1.0" encoding="utf-8"?>
-.<feed xmlns="http://www.w3.org/2005/Atom">
-.  <title>norswap</title>
-.  <link href="@{url}/atom.xml" rel="self"/>
-.  <link href="@{url}/"/>
-.  <updated>@{moment().toISOString()}</updated>
-.  <id>@{url}/</id>
-.  <author>
-.    <name>Nicolas "Norswap" Laurent</name>
-.    <email>norswap+atom@gmail.com</email>
-.  </author>
+.<?xml version="1.0" encoding="UTF-8"?>
+.<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+.  <channel>
+.    <title>norswap</title>
+.    <description></description>      
+.    <link>@{url}/</link>
+.    <atom:link href="@{url}/atom.xml" rel="self" type="application/rss+xml" />
+var i = 0
 for (post of posts) {
-.  <entry>
-.    <title>@{post.meta.title ? post.meta.title : "briefly"}</title>
-.    <link href="@{url}/@{post.permalink}"/>
-.    <updated>@{post.date.toISOString()}</updated>
-.    <id>@{url}/@{post.permalink}</id>
-.    <content type="html">
-.      @{post.content}
-.    </content>
-.  </entry>
+    if (i++ == 10) break;
+.    <item>
+.      <title>@{post.meta.title ? post.meta.title : "briefly"}</title>
+.      <description>
+.        @{post.content}
+.      </description>
+.      <pubDate>@{post.date.toISOString()}</pubDate>
+.      <link>@{url}/@{post.permalink}</link>
+.      <guid isPermaLink="true">@{url}/@{post.permalink}</guid>
+.    </item>
 }
-.</feed>
+.  </channel>
+.</rss>

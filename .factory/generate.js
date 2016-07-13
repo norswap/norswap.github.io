@@ -23,6 +23,7 @@ var posts = [];
 
 var layout = "post";
 for (filename of fs.readdirSync("posts")) {
+    if (filename[0] == '.') continue;
     var str = fs.readFileSync("posts/" + filename, {encoding: "utf-8"});
     var date = moment(filename.slice(0, 10), "YYYY-MM-DD");
     var permalink = filename.slice(13, -3);
@@ -69,6 +70,7 @@ for (page of range(num_pages)) {
 
 var layout = "page";
 for (filename of fs.readdirSync("pages")) {
+    if (filename[0] == '.') continue;
     var str = fs.readFileSync("pages/" + filename, {encoding: "utf-8"});
     var permalink = filename.slice(0, -3);
     var obj = matter(str);
@@ -84,6 +86,7 @@ for (filename of fs.readdirSync("pages")) {
 
 var layout = "post";
 for (filename of fs.readdirSync("draft")) {
+    if (filename[0] == '.') continue;
     var str = fs.readFileSync("draft/" + filename, {encoding: "utf-8"});
     var date = moment();
     var permalink = filename.slice(0, -3);

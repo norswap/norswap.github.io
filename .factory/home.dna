@@ -1,9 +1,8 @@
 .<style scoped>
-..posts { border-top: solid 1px #CCC; list-style-type: none; padding-left: 0; }
-..posts > li { border-bottom: solid 1px #CCC; padding: 20px 0; }
-..posts > li .date { font-family: Menlo, Monaco, "Courier New", monospace; }
+..posts { border-bottom: solid 1px #CCC; list-style-type: none; padding-left: 0; }
+..posts > li { border-top: solid 1px #CCC; padding: 20px 0; clear: both; }
 ..posts > li .post-content { font-size: 90%; }
-..posts > li > .date-link  { color: inherit; font-size: 80%; }
+..posts > li > .date-link  { color: inherit; display: block; font-size: 80%; float: right; padding: 3px 0 20px; }
 ..posts > li > .title-link { color: inherit; font-weight: bold; }
 ..pagination { color: #AAA; margin-top: 10px; }
 .</style>
@@ -13,9 +12,8 @@ for (i = (page-1) * posts_per_page ; i < page * posts_per_page && posts[i] != un
     var post = posts[i];
 .  <li>
     if (post.meta.layout == "post") {
-
-.    <span class="date">@{post.date.format("DD MMM YYYY")} &bull;</span>
 .    <a class="title-link" href="/@{post.permalink}">@{post.meta.title}</a>
+.    <a class="date-link" href="/@{post.permalink}">@{post.date.format("DD MMM YYYY")}</a>
     }
     else if (post.meta.layout == "brief") {
 .    <div class="post-content">

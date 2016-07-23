@@ -7,7 +7,7 @@ Ant is Make in XML.
 
 Maven is an over-engineered, yet castrated build system. You can't do
 fundamental stuff (such as specifying which version of Java you want to use or
-**moving files** without importing a plugin or calling Ant. Want to do something
+**moving files**) without importing a plugin or calling Ant. Want to do something
 slightly different? Build you own plugin (this process is more painful than it
 sounds). On the plus side, Maven does have a handy (but not best-in-class)
 dependency system, which is why we still have to suffer it.

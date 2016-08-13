@@ -37,7 +37,7 @@
 .        <li class="sidebar-nav-item">
 .          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
 .        <li class="sidebar-nav-item">
-.          <a class="sidebar-nav-item" href="/atom.xml">
+.          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
 .            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
 .            RSS Feed
 .          </a>

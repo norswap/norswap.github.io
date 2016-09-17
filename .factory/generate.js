@@ -94,7 +94,7 @@ for (filename of fs.readdirSync("draft")) {
     var meta = obj.data;
     if (meta.title) meta.title = escape_html(meta.title);
     var content = marked(obj.content);
-    fs.mkdirSync("../" + permalink);
-./!output("../" + permalink + "/index.html")
+    fs.mkdirSync("../draft-" + permalink);
+./!output("../draft-" + permalink + "/index.html")
 ./!include("page.dna")
 }

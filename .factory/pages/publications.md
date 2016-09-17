@@ -23,3 +23,10 @@ Nicolas Laurent, Stefano Vissichio and Marco Canini
 (HotSDN 2014)*  
 *Chicago, USA, August 22 2014*  
 [\[PDF\]](/pubs/hotsdn2014.pdf)
+
+----
+
+See also:
+
+- [My dblp Profile](http://dblp.uni-trier.de/pers/hd/l/Laurent:Nicolas)
+- [List of my publications at UCLouvain (with DOI)](http://dial.uclouvain.be/pr/boreal/en/search/site/sm_creator%3A%22Laurent%2C%20Nicolas%22)

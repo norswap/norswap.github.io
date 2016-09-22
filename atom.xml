@@ -325,8 +325,8 @@ the file to which the output is redirected and include other files. This makes
 it possible to generate your whole website from a single script
 (&lt;a href=&quot;https://github.com/norswap/norswap.github.io/blob/master/.factory/generate.js&quot;&gt;have a look at mine&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;Something I really like about Ribosome is how it respects whitespace, resulting
-in really nice-looking output, unlike most templating engines (have a look at
-the html for this page). It&amp;#39;s &lt;a href=&quot;http://ribosome.ch/documentation.html#advanced-layout-management&quot;&gt;block layouting&lt;/a&gt; capability is also quite
+in really nice-looking output, unlike most templating engines (&lt;strike&gt;have a look at
+the html for this page&lt;/strike&gt; [1]). It&amp;#39;s &lt;a href=&quot;http://ribosome.ch/documentation.html#advanced-layout-management&quot;&gt;block layouting&lt;/a&gt; capability is also quite
 handy.&lt;/p&gt;
 &lt;p&gt;I&amp;#39;m also very pleased about the Node.js ecosystem. I was really easy to find
 libraries to &lt;a href=&quot;https://www.npmjs.com/package/gray-matter&quot;&gt;parse YAML front matter&lt;/a&gt;, &lt;a href=&quot;https://www.npmjs.com/package/marked&quot;&gt;parse Markdown&lt;/a&gt;,
@@ -334,6 +334,9 @@ libraries to &lt;a href=&quot;https://www.npmjs.com/package/gray-matter&quot;&gt
 &lt;a href=&quot;https://www.npmjs.com/package/tmp&quot;&gt;create temporary files&lt;/a&gt;. They were easy to use too.&lt;/p&gt;
 &lt;p&gt;All in all, updating the website was a surprisingly pleasant experience.
 Ribosome in particular is great, I encourage you to try it.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;[1]: I was forced to flush the content to the left, otherwise &lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt; tags would
+pick up additional whitespace. HTML sucks.&lt;/p&gt;
       </description>
       <pubDate>2016-07-12T22:00:00.000Z</pubDate>
       <link>http://norswap.com/ribosome-static-site</link>

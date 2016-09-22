@@ -18,8 +18,8 @@ it possible to generate your whole website from a single script
 ([have a look at mine][script]).
 
 Something I really like about Ribosome is how it respects whitespace, resulting
-in really nice-looking output, unlike most templating engines (have a look at
-the html for this page). It's [block layouting][block] capability is also quite
+in really nice-looking output, unlike most templating engines (<strike>have a look at
+the html for this page</strike> \[1\]). It's [block layouting][block] capability is also quite
 handy.
 
 I'm also very pleased about the Node.js ecosystem. I was really easy to find
@@ -29,6 +29,11 @@ libraries to [parse YAML front matter][yaml], [parse Markdown][markdown],
 
 All in all, updating the website was a surprisingly pleasant experience.
 Ribosome in particular is great, I encourage you to try it.
+
+---
+
+\[1\]: I was forced to flush the content to the left, otherwise `<pre>` tags would
+pick up additional whitespace. HTML sucks.
 
 [jekyll]: https://jekyllrb.com/
 [ribosome]: http://ribosome.ch/

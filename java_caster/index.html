@@ -45,47 +45,47 @@
     <div class="post">
       <h1 class="post-title">The Most Useful Java Function</h1>
       <span class="post-date">24 Feb 2015</span>
-      <p>Warning: title may contain hyperbole.</p>
-      <p>Without further ado:</p>
-      <pre><code>public class Caster
-      {
-          @SuppressWarnings(&quot;unchecked&quot;)
-          public static &lt;T&gt; T cast(Object obj)
-          {
-              return (T) obj;
-          }
-      }
-      </code></pre><p>Now you can write:</p>
-      <pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
-      functionExpectingStringList(Caster.cast(x));
-      </code></pre><p>instead of:</p>
-      <pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
-      @SuppressWarnings(&quot;unchecked&quot;)
-      List&lt;String&gt; y = (List&lt;String&gt;) x;
-      functionExpectingStringList(y);
-      </code></pre><p>So, it does two things: (1) automatically infer the destination type and (2)
-      avoid an intermediate variable declaration, which you need if you want to ignore
-      the resulting &quot;unchecked cast&quot; warning. This warning appears when the cast can&#39;t
-      be checked at run-time, as is the case when casting between types that differ in
-      their generic type parameters.</p>
-      <p>The type inference part will only work with Java 8 and higher. The definition of
-      <code>cast</code> is valid on Java 5 and higher however, and you still get benefit (2).</p>
-      <p>In the cases where the type cannot be inferred, you need to specify it
-      explicitly:</p>
-      <pre><code>Object x = &quot;cthulhu&quot;;
-      functionExpectingString(Caster.&lt;String&gt;cast(x));
-      </code></pre><p>It also holds up remarkably well when using multiple casts with generics:</p>
-      <pre><code>static &lt;T&gt; void takeArrayListPair(ArrayList&lt;T&gt; a, ArrayList&lt;T&gt; b) {}
-      
-      static void test()
-      {
-          List&lt;String&gt; x = new ArrayList&lt;&gt;();
-          List&lt;Integer&gt; y = new ArrayList&lt;&gt;();
-      
-          takeArrayListPair(Caster.cast(x), Caster.cast(y));
-          // x and y are casted to ArrayList&lt;Object&gt;
-      }
-      </code></pre>
+<p>Warning: title may contain hyperbole.</p>
+<p>Without further ado:</p>
+<pre><code>public class Caster
+{
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;T&gt; T cast(Object obj)
+    {
+        return (T) obj;
+    }
+}
+</code></pre><p>Now you can write:</p>
+<pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
+functionExpectingStringList(Caster.cast(x));
+</code></pre><p>instead of:</p>
+<pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
+@SuppressWarnings(&quot;unchecked&quot;)
+List&lt;String&gt; y = (List&lt;String&gt;) x;
+functionExpectingStringList(y);
+</code></pre><p>So, it does two things: (1) automatically infer the destination type and (2)
+avoid an intermediate variable declaration, which you need if you want to ignore
+the resulting &quot;unchecked cast&quot; warning. This warning appears when the cast can&#39;t
+be checked at run-time, as is the case when casting between types that differ in
+their generic type parameters.</p>
+<p>The type inference part will only work with Java 8 and higher. The definition of
+<code>cast</code> is valid on Java 5 and higher however, and you still get benefit (2).</p>
+<p>In the cases where the type cannot be inferred, you need to specify it
+explicitly:</p>
+<pre><code>Object x = &quot;cthulhu&quot;;
+functionExpectingString(Caster.&lt;String&gt;cast(x));
+</code></pre><p>It also holds up remarkably well when using multiple casts with generics:</p>
+<pre><code>static &lt;T&gt; void takeArrayListPair(ArrayList&lt;T&gt; a, ArrayList&lt;T&gt; b) {}
+
+static void test()
+{
+    List&lt;String&gt; x = new ArrayList&lt;&gt;();
+    List&lt;Integer&gt; y = new ArrayList&lt;&gt;();
+
+    takeArrayListPair(Caster.cast(x), Caster.cast(y));
+    // x and y are casted to ArrayList&lt;Object&gt;
+}
+</code></pre>
     </div>
     <div id="disqus_thread"></div>
     <script>

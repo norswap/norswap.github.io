@@ -45,61 +45,61 @@
     <div class="post">
       <h1 class="post-title">In Defence of Checked Exceptions</h1>
       <span class="post-date">03 Oct 2015</span>
-      <p>I had a minor epiphany recently. I realized that checked exceptions are great.
-      Until then I supported the hip opinion that checked exceptions are a design
-      mistakes, and that all exceptions should be unchecked.</p>
-      <p>The first step on my path to enlightenment was to realize the different use
-      cases for checked and unchecked exceptions. Java Practices <a href="http://www.javapractices.com/topic/TopicAction.do?Id=129">says it best</a>:</p>
-      <blockquote>
-      <p>Unchecked exceptions represent defects in the program (bugs) - often invalid
-          arguments passed to a non-private method. To quote from The Java Programming
-          Language, by Gosling, Arnold, and Holmes: &quot;Unchecked runtime exceptions
-          represent conditions that, generally speaking, reflect errors in your
-          program&#39;s logic and cannot be reasonably recovered from at run time.&quot;</p>
-      <p>Checked exceptions represent invalid conditions in areas outside the
-          immediate control of the program (invalid user input, database problems,
-          network outages, absent files).</p>
-      </blockquote>
-      <p>Ideally, all unchecked exceptions can be removed from your program without
-      causing problems. They are just a debugging aid in pinpointing what went wrong
-      when you made a mistake. Under this assumption, unchecked exceptions should
-      never be handled: the program is incorrect and should crash and burn. Or at
-      least, the component (~ a blob of features) should. It&#39;s good form to insulate
-      other components from the failure of a component, if they can still perform
-      usefully without it.</p>
-      <p>On the other hand, you can&#39;t prevent checked exceptions from occuring, they are
-      outside your sphere of control. Hence the need to ensure that are handled
-      correctly.</p>
-      <p>This seems to make sense. So why are people so fiercely opposed to checked
-      exceptions?</p>
-      <p>Well imagine that you are writing some code, and you make a call to a method
-      that throws a checked exception. You have two choices: add a <code>throws</code> clause to
-      your method, or wrap the method call in a try-catch block. The right thing to do
-      is to use try-catch if you can handle the exception at that level, otherwise to
-      add a <code>throws</code> clause. In practice, the <code>throws</code> clause is almost always the
-      right thing to do. Yet, adding a <code>throws</code> clause is tedious, because it must be
-      propagated to all the callers of the current method. It&#39;s much easier to add a
-      try-catch block even though there&#39;s nothing we can do about the exception, and
-      so ignore it silently, leading to a loss of information in case of failure.</p>
-      <p>People who oppose exceptions have either performed this kind of abuse, or have
-      been bitten by the consequences of other people doing it. I am not making this
-      up, it&#39;s quite obvious from pieces like <a href="http://www.mindview.net/Etc/Discussions/CheckedExceptions">this one</a> and it&#39;s explained in
-      great length <a href="http://stackoverflow.com/a/614494/298664">here</a>.</p>
-      <p>Summarized: people don&#39;t want exceptions because they are going to be abused by
-      lazy programmers.</p>
-      <p>I can also think of another reason why exceptions might be frustrating to use:
-      people don&#39;t understand the distinction between checked and unchecked exceptions
-      as spelled out above, and so create frustrating APIs. Even Sun has been guilty
-      of this: should <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/NoSuchMethodException.html">NoSuchMethodException</a> really be a checked exception?
-      Probably not.</p>
-      <p>Finally, I&#39;ll note that it&#39;s sometimes allowable to cheat a little bit. If
-      you&#39;re writing a component with a well-delimited interface, you could for
-      instance eschew checked exceptions if all the exceptions are going to be handled
-      at the API boundary and no cleanup needs to be performed. You&#39;re trading off
-      some safety for some typing. Just be aware that you are making the trade-off.</p>
-      <p>In conclusion, do use checked exception, but use them properly: define checked
-      exceptions only for areas outside the programmer&#39;s control; and don&#39;t silently
-      swallow checked exceptions.</p>
+<p>I had a minor epiphany recently. I realized that checked exceptions are great.
+Until then I supported the hip opinion that checked exceptions are a design
+mistakes, and that all exceptions should be unchecked.</p>
+<p>The first step on my path to enlightenment was to realize the different use
+cases for checked and unchecked exceptions. Java Practices <a href="http://www.javapractices.com/topic/TopicAction.do?Id=129">says it best</a>:</p>
+<blockquote>
+<p>Unchecked exceptions represent defects in the program (bugs) - often invalid
+    arguments passed to a non-private method. To quote from The Java Programming
+    Language, by Gosling, Arnold, and Holmes: &quot;Unchecked runtime exceptions
+    represent conditions that, generally speaking, reflect errors in your
+    program&#39;s logic and cannot be reasonably recovered from at run time.&quot;</p>
+<p>Checked exceptions represent invalid conditions in areas outside the
+    immediate control of the program (invalid user input, database problems,
+    network outages, absent files).</p>
+</blockquote>
+<p>Ideally, all unchecked exceptions can be removed from your program without
+causing problems. They are just a debugging aid in pinpointing what went wrong
+when you made a mistake. Under this assumption, unchecked exceptions should
+never be handled: the program is incorrect and should crash and burn. Or at
+least, the component (~ a blob of features) should. It&#39;s good form to insulate
+other components from the failure of a component, if they can still perform
+usefully without it.</p>
+<p>On the other hand, you can&#39;t prevent checked exceptions from occuring, they are
+outside your sphere of control. Hence the need to ensure that are handled
+correctly.</p>
+<p>This seems to make sense. So why are people so fiercely opposed to checked
+exceptions?</p>
+<p>Well imagine that you are writing some code, and you make a call to a method
+that throws a checked exception. You have two choices: add a <code>throws</code> clause to
+your method, or wrap the method call in a try-catch block. The right thing to do
+is to use try-catch if you can handle the exception at that level, otherwise to
+add a <code>throws</code> clause. In practice, the <code>throws</code> clause is almost always the
+right thing to do. Yet, adding a <code>throws</code> clause is tedious, because it must be
+propagated to all the callers of the current method. It&#39;s much easier to add a
+try-catch block even though there&#39;s nothing we can do about the exception, and
+so ignore it silently, leading to a loss of information in case of failure.</p>
+<p>People who oppose exceptions have either performed this kind of abuse, or have
+been bitten by the consequences of other people doing it. I am not making this
+up, it&#39;s quite obvious from pieces like <a href="http://www.mindview.net/Etc/Discussions/CheckedExceptions">this one</a> and it&#39;s explained in
+great length <a href="http://stackoverflow.com/a/614494/298664">here</a>.</p>
+<p>Summarized: people don&#39;t want exceptions because they are going to be abused by
+lazy programmers.</p>
+<p>I can also think of another reason why exceptions might be frustrating to use:
+people don&#39;t understand the distinction between checked and unchecked exceptions
+as spelled out above, and so create frustrating APIs. Even Sun has been guilty
+of this: should <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/NoSuchMethodException.html">NoSuchMethodException</a> really be a checked exception?
+Probably not.</p>
+<p>Finally, I&#39;ll note that it&#39;s sometimes allowable to cheat a little bit. If
+you&#39;re writing a component with a well-delimited interface, you could for
+instance eschew checked exceptions if all the exceptions are going to be handled
+at the API boundary and no cleanup needs to be performed. You&#39;re trading off
+some safety for some typing. Just be aware that you are making the trade-off.</p>
+<p>In conclusion, do use checked exception, but use them properly: define checked
+exceptions only for areas outside the programmer&#39;s control; and don&#39;t silently
+swallow checked exceptions.</p>
     </div>
     <div id="disqus_thread"></div>
     <script>

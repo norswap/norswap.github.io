@@ -11,7 +11,7 @@ for (post of posts) {
 .    <item>
 .      <title>@{post.meta.title ? post.meta.title : "briefly"}</title>
 .      <description>
-.        @{escape_html(post.content)}
+.@{escape_html(post.content)}
 .      </description>
 .      <pubDate>@{post.date.toISOString()}</pubDate>
 .      <link>@{url}/@{post.permalink}</link>

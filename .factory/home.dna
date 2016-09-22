@@ -17,7 +17,7 @@ for (i = (page-1) * posts_per_page ; i < page * posts_per_page && posts[i] != un
     }
     else if (post.meta.layout == "brief") {
 .    <div class="post-content">
-.      @{post.content}
+.@{post.content}
 .    </div>
 .    <a class="date-link" href="/@{post.permalink}">@{post.date.format("DD MMM YYYY")}</a>
     }

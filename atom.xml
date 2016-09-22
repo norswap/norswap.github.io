@@ -6,6 +6,35 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>A website for your project with Github</title>
+      <description>
+&lt;p&gt;Github has a thing called &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; that lets you publish a static HTML
+website directly from your github repository. It&amp;#39;s quite handy, but I&amp;#39;m not
+really convinced with the documentation. So here goes the super-duper easy guide
+on how to add Github Pages to your existing project and manage it easily.&lt;/p&gt;
+&lt;p&gt;Run the following commands:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir pages
+cd pages
+git init .
+git remote add origin git@github.com:USERNAME/REPO.git
+git checkout --orphan gh-pages
+git commit --allow-empty -m &amp;quot;initial empty commit (pages)&amp;quot;
+git push -u origin gh-pages
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Finally, add &lt;code&gt;/pages/&lt;/code&gt; to the &lt;code&gt;.gitignore&lt;/code&gt; file for your project.&lt;/p&gt;
+&lt;p&gt;What it does: basically it clones your repo inside the &lt;code&gt;pages&lt;/code&gt; directory and
+immediately switches to an empty, commit-less branch called &lt;code&gt;gh-pages&lt;/code&gt; (as
+required by Github).&lt;/p&gt;
+&lt;p&gt;Github simply serves any file within the &lt;code&gt;gh-pages&lt;/code&gt; branch to the brower through
+&lt;code&gt;USERNAME.github.io/PROJECT/&lt;/code&gt;. If you&amp;#39;ve set up a custom domain name with
+Github, this domain will be used instead of &lt;code&gt;USERNAME.github.io&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;When inside the &lt;code&gt;page&lt;/code&gt; directory, you can make changes to your website, commit
+them and publish them with &lt;code&gt;git push&lt;/code&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2016-09-21T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/github-pages</link>
+      <guid isPermaLink="true">http://norswap.com/github-pages</guid>
+    </item>
+    <item>
       <title>Cruising Blues</title>
       <description>
 &lt;p&gt;Completing my series of posts about Robert Pirsig&amp;#39;s
@@ -358,18 +387,6 @@ simple streams and some other stuff too.&lt;/p&gt;
       <pubDate>2016-07-08T22:00:00.000Z</pubDate>
       <link>http://norswap.com/violin-release</link>
       <guid isPermaLink="true">http://norswap.com/violin-release</guid>
-    </item>
-    <item>
-      <title>The Path to Wisdom</title>
-      <description>
-&lt;blockquote&gt;
-&lt;p&gt;The path to wisdom is like this: each time you get one step closer, the target
-moves two steps away.&lt;/p&gt;
-&lt;/blockquote&gt;
-      </description>
-      <pubDate>2016-07-07T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/path-to-wisdom</link>
-      <guid isPermaLink="true">http://norswap.com/path-to-wisdom</guid>
     </item>
   </channel>
 </rss>

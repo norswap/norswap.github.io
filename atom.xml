@@ -6,6 +6,17 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>briefly</title>
+      <description>
+&lt;p&gt;As a learning exercise, I implemented the CHAMP (Compressed Hash-Array Mapped
+Prefix-tree) data structure in Kotlin.
+&lt;a href=&quot;https://github.com/norswap/triemap&quot;&gt;Check it here.&lt;/a&gt;&lt;/p&gt;
+      </description>
+      <pubDate>2016-09-22T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/triemap-champ</link>
+      <guid isPermaLink="true">http://norswap.com/triemap-champ</guid>
+    </item>
+    <item>
       <title>A website for your project with Github</title>
       <description>
 &lt;p&gt;Github has a thing called &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; that lets you publish a static HTML
@@ -380,16 +391,6 @@ You can&amp;#39;t really use it as is, but the idea only asks to be picked up.&l
       <pubDate>2016-07-08T22:00:00.000Z</pubDate>
       <link>http://norswap.com/rant-java-build</link>
       <guid isPermaLink="true">http://norswap.com/rant-java-build</guid>
-    </item>
-    <item>
-      <title>Released: Violin, a human-sized Kotlin utility library</title>
-      <description>
-&lt;p&gt;I just released &lt;a href=&quot;https://github.com/norswap/violin&quot;&gt;violin&lt;/a&gt;, a small Kotlin utility library that features
-simple streams and some other stuff too.&lt;/p&gt;
-      </description>
-      <pubDate>2016-07-08T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/violin-release</link>
-      <guid isPermaLink="true">http://norswap.com/violin-release</guid>
     </item>
   </channel>
 </rss>

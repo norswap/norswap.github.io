@@ -6,6 +6,116 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Learned Optimism</title>
+      <description>
+&lt;p&gt;Summary of &lt;a href=&quot;https://github.com/raganwald/presentations/blob/master/optimism.md&quot;&gt;Reginald Braithwaite&amp;#39;s presentation&lt;/a&gt; at Nordic Ruby 2016.&lt;/p&gt;
+&lt;p&gt;Learned Optimism is a book by Dr. Martin Seligman.&lt;/p&gt;
+&lt;p&gt;The book exposes a theory about how people explain things to themselves. We all
+do this, it&amp;#39;s part of the whole sentience thing we have going on. Something
+happens, and we make up a little theory about why it happened.&lt;/p&gt;
+&lt;p&gt;The explanations you produce are classified along the following axis:&lt;/p&gt;
+&lt;dl&gt;
+
+  &lt;dt&gt;Personal vs Impersonal&lt;/dt&gt;
+
+  &lt;dd&gt;Whether the explanation makes you responsible for the thing that happened
+  (personal) or not (impersonal).&lt;/dd&gt;
+
+  &lt;dt&gt;Specific vs General&lt;/dt&gt;
+
+  &lt;dd&gt;Is the explanation about the thing that happened (specific), or are they
+  about you, your beliefs, your methods, ... (general).&lt;/dd&gt;
+
+  &lt;dt&gt;Temporary vs Permanent&lt;/dt&gt;
+
+  &lt;dd&gt;Is the thing that happened temporary? Or is it permanent? Did it happen
+  just one time, or is it a pattern that will repeat itself?&lt;/dd&gt;
+
+&lt;/dl&gt;
+
+&lt;p&gt;Seligman research showed that explanations differ depending on whether the
+explainer is an optimist or a pessimist, and whether the thing that happened is
+good or bad.&lt;/p&gt;
+&lt;dl&gt;
+    &lt;dt&gt;Optimists&lt;/dt&gt;
+
+    &lt;dd&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Good things are personal, general, and permanent.&lt;/li&gt;
+    &lt;li&gt;Bad things are impersonal, specific, and temporary.&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;/dd&gt;
+
+    &lt;dt&gt;Pessimists&lt;/dt&gt;
+
+    &lt;dd&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Good things are impersonal, specific, and temporary.&lt;/li&gt;
+    &lt;li&gt;Bad things are personal, general, and permanent.&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;/dd&gt;
+&lt;/dl&gt;
+
+&lt;p&gt;Both optimists are pessimists are inconsistent in their explanations, but in a
+different way.&lt;/p&gt;
+&lt;p&gt;This is a simplified model, and may even seem silly; but if you&amp;#39;re like me
+(norswap), it&amp;#39;s hard not to recognize that you flog yourself over your mistakes
+more often than you pat yourself on the back for your achievements.&lt;/p&gt;
+&lt;p&gt;Seligman says you can train yourself to become an optimist, and this implies
+changing the patterns of your explanations. He claims this changes your mood and
+your productivity.&lt;/p&gt;
+&lt;p&gt;It is not controversial to say that our moods affect the explanations we make up
+for things that happen in our lives. Explanatory Theory takes it a step further
+and says that the explanations we make up for things also affect our moods and
+behaviour.&lt;/p&gt;
+&lt;p&gt;To train yourself to become an optimist:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;You train yourself to make a note of your explanations, every day. Repetition
+and consistency matters.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You analyze whether your explanations for good things are personal, general,
+and permanent. You analyze whether your explanations for bad things are
+impersonal, specific, and temporary.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You correct your explanations to make them optimistic. And you track your
+progress, just as you would track your progress for anything else you are
+trying to change in your life.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+      </description>
+      <pubDate>2016-09-26T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/learned-optimism</link>
+      <guid isPermaLink="true">http://norswap.com/learned-optimism</guid>
+    </item>
+    <item>
+      <title>Book Summaries</title>
+      <description>
+&lt;p&gt;I like to read a lot, notably books about psychology, philosophy, and other
+actionable topics. However, I often feel that these book dilute their ideas too
+much, in order to make a &amp;quot;proper&amp;quot; (fat) book out of it.&lt;/p&gt;
+&lt;p&gt;But now, I have the cure. &lt;a href=&quot;https://www.quora.com/What-are-the-best-book-summary-websites&quot;&gt;This list of book summary websites&lt;/a&gt; covers
+a large range of books in the topics that interest me.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s a copy of the list for posterity:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.deconstructingexcellence.com/&quot;&gt;Deconstructing Excellence&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://sivers.org/book&quot;&gt;Derek Sivers&amp;#39; Books Read&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.farnamstreetblog.com/&quot;&gt;Farnam Street&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://fourminutebooks.com/all-summaries/&quot;&gt;4 Minute Books&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;www.actionablebooks.com/en-ca/summaries/&quot;&gt;Actionable Books&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://app.blinkist.com/en/library/&quot;&gt;Blinkist (paid)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The first four websites are great, but the selection is limited.&lt;/p&gt;
+&lt;p&gt;Actionable Books has a lot of things, but the summaries only include 3/4 bullet
+points and sometimes fail to capture the essence of the book, as far as I&amp;#39;ve
+seen.&lt;/p&gt;
+&lt;p&gt;Blinkist seemed like the most well-rounded option. I made a trial account and
+was quite satisfied with the two summaries I read.&lt;/p&gt;
+      </description>
+      <pubDate>2016-09-23T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/book-summaries</link>
+      <guid isPermaLink="true">http://norswap.com/book-summaries</guid>
+    </item>
+    <item>
       <title>briefly</title>
       <description>
 &lt;p&gt;As a learning exercise, I implemented the CHAMP (Compressed Hash-Array Mapped
@@ -352,45 +462,6 @@ pick up additional whitespace. HTML sucks.&lt;/p&gt;
       <pubDate>2016-07-12T22:00:00.000Z</pubDate>
       <link>http://norswap.com/ribosome-static-site</link>
       <guid isPermaLink="true">http://norswap.com/ribosome-static-site</guid>
-    </item>
-    <item>
-      <title>Building Java with Make</title>
-      <description>
-&lt;p&gt;In &lt;a href=&quot;https://github.com/norswap/violin&quot;&gt;violin&lt;/a&gt;, I set up the build using the good old &lt;code&gt;make&lt;/code&gt; tool (you might have
-gathered that &lt;a href=&quot;/rant-java-build&quot;&gt;I harbor no love&lt;/a&gt; for Java build systems).&lt;/p&gt;
-&lt;p&gt;For examples of how to perform common Java build tasks by calling command line
-tools from make, &lt;a href=&quot;https://github.com/norswap/violin/blob/master/makefile&quot;&gt;have a look at the makefile&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2016-07-08T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/build-java-with-make</link>
-      <guid isPermaLink="true">http://norswap.com/build-java-with-make</guid>
-    </item>
-    <item>
-      <title>Micro-Rant: Java Build Systems</title>
-      <description>
-&lt;p&gt;Ant is Make in XML.&lt;/p&gt;
-&lt;p&gt;Maven is an over-engineered, yet castrated build system. You can&amp;#39;t do
-fundamental stuff (such as specifying which version of Java you want to use or
-&lt;strong&gt;moving files&lt;/strong&gt;) without importing a plugin or calling Ant. Want to do something
-slightly different? Build you own plugin (this process is more painful than it
-sounds). On the plus side, Maven does have a handy (but not best-in-class)
-dependency system, which is why we still have to suffer it.&lt;/p&gt;
-&lt;p&gt;Gradle allows custom build tasks (&lt;strong&gt;finally!&lt;/strong&gt;). It&amp;#39;s also huge, bloated, and
-comes with a &lt;a href=&quot;https://docs.gradle.org/current/userguide/userguide.html&quot;&gt;70-chapters manual&lt;/a&gt; that still manages to be lacunary and
-confusing. Understanding Gradle is not the work of an afternoon but of weeks.&lt;/p&gt;
-&lt;p&gt;Scala is not served better. To think sbt once stood for &amp;quot;simple build
-tool&amp;quot; (now retconned to &amp;quot;scala build tool&amp;quot;) is enough to choke on the irony.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;/build-java-with-make&quot;&gt;One might as well build Java using Make.&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;hope-&quot;&gt;Hope?&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;http://beust.com/kobalt/&quot;&gt;Kobalt&lt;/a&gt; is a sane build system for Kotlin &amp;amp; Java by Cedric Beust (the
-author of TestNG). However it&amp;#39;s still in its infancy.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://pluto-build.github.io/&quot;&gt;pluto&lt;/a&gt; is a prototype from academia (&lt;a href=&quot;http://www.informatik.uni-marburg.de/~seba/publications/pluto-incremental-build.pdf&quot;&gt;related paper&lt;/a&gt;)
-that enables incremental, minimal, and safe builds (no need to &lt;code&gt;make clean&lt;/code&gt;).
-You can&amp;#39;t really use it as is, but the idea only asks to be picked up.&lt;/p&gt;
-      </description>
-      <pubDate>2016-07-08T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/rant-java-build</link>
-      <guid isPermaLink="true">http://norswap.com/rant-java-build</guid>
     </item>
   </channel>
 </rss>

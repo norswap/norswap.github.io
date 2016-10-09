@@ -6,6 +6,67 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Robin Hood Hashing on the JVM</title>
+      <description>
+&lt;p&gt;Robin Hood Hashing, despite its name, isn&amp;#39;t a hashing technique, but rather a
+way to implement &lt;a href=&quot;https://en.wikipedia.org/wiki/Linear_probing&quot;&gt;linear-probing hash tables&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In the classical linear probing implementation, whenever a hash table slot is
+already taken (due to hash collision), you probe ahead until you find an empty
+slot. When the hash table is highly loaded, this can lead to entries being
+stored far away from their preferred position.&lt;/p&gt;
+&lt;p&gt;Robin Hood Hashing features a notion of &lt;em&gt;displacement&lt;/em&gt;. The displacement of an
+entry is the distance between its actual position and its preferred position.
+Furthermore, we call &lt;em&gt;probe count&lt;/em&gt; the number of probed slots in order to find a
+free slot. When inserting an entry, the final probe count is the diplacement.&lt;/p&gt;
+&lt;p&gt;When inserting an entry A using Robin Hood Hashing, if you encounter an entry B
+whose displacement is smaller than the probe count, you insert A in B&amp;#39;s
+position, and relocate B further in the table (following the same rules).&lt;/p&gt;
+&lt;p&gt;The result is that the displacements of all entries in the map tend to even out.
+The length of the longest displacement tends to increase as the load increase
+but very slowly (around 6 for a load of 0.9 &amp;mdash; see
+&lt;a href=&quot;http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.130.6339&quot;&gt;this paper (pdf)&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;The technique is actually quite old. It was first &lt;a href=&quot;https://cs.uwaterloo.ca/research/tr/1986/CS-86-14.pdf&quot;&gt;published in 1986&lt;/a&gt;.
+As for me, I first become aware of Robin Hood Hashing through
+&lt;a href=&quot;http://www.sebastiansylvan.com/post/robin-hood-hashing-should-be-your-default-hash-table-implementation/&quot;&gt;a post by Sebastian Sylvan&lt;/a&gt;. Emmanuel Goossaert also has two posts
+(&lt;a href=&quot;http://codecapsule.com/2013/11/11/robin-hood-hashing/&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;http://codecapsule.com/2013/11/17/robin-hood-hashing-backward-shift-deletion/&quot;&gt;two&lt;/a&gt;) analyzing and then improving the technique. If you&amp;#39;re
+looking for further information, I highly recommend these posts.&lt;/p&gt;
+&lt;p&gt;I was interesting in a more pragmatic question: could I use Robin Hood Hashing
+and get a boost in performance? In particular, how would it perform on the JVM,
+where I do most of my work these days?&lt;/p&gt;
+&lt;p&gt;I implemented two versions of the algorithm (&lt;a href=&quot;https://github.com/ncellar/robinmap&quot;&gt;source&lt;/a&gt;). The first versions
+stores entry objects in the table (hence requiring an extra indirection for each
+probed slot). The second version used two tables: the first one was an array of
+integers, where each table entry occupies two array entries. The first array
+entry is the hash, the second is the displacement. The second table is an array
+of objects. Here too, each table entry occupies two array entry. The first array
+entry is the key, the second is the value. The theory is that most of the time,
+when probing, you only need to check the hash and the displacement. Having those
+in the primary table avoids extra indirection (and hence cache misses).&lt;/p&gt;
+&lt;p&gt;Disappointingly enough, the performance delta between both techniques is too
+small to be meaningful. In general however, the technique is almost as fast as
+Java&amp;#39;s &lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html&quot;&gt;&lt;code&gt;HashMap&lt;/code&gt;&lt;/a&gt; implementation. With some performance tweaking, I
+believe it would be possible to close the gap. Be warned that my measurements
+are very wonky. Nevertheless they gave me confidence enough to come to two
+conclusions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Robin Hood Hashing is practical and fast enough to rival separate-chaining
+hash table implementation (like Java&amp;#39;s &lt;code&gt;HashMap&lt;/code&gt;) on the JVM.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;However, it is not significantly faster either, and so it&amp;#39;s probably not worth
+the trouble of maintaining my own implementation.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Note this says nothing about the relative performance of Robin Hood Hashing and
+separate-chaining on other platforms than the JVM.&lt;/p&gt;
+&lt;p&gt;And off course, you should totally perform you own measurements. You can get
+started from &lt;a href=&quot;https://github.com/ncellar/robinmap&quot;&gt;my own code&lt;/a&gt;. If anyone has more data to add to the
+discussion, make sure to share it in the comments.&lt;/p&gt;
+      </description>
+      <pubDate>2016-10-09T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/robin-hood-hashing-jvm</link>
+      <guid isPermaLink="true">http://norswap.com/robin-hood-hashing-jvm</guid>
+    </item>
+    <item>
       <title>Learned Optimism</title>
       <description>
 &lt;p&gt;Summary of &lt;a href=&quot;https://github.com/raganwald/presentations/blob/master/optimism.md&quot;&gt;Reginald Braithwaite&amp;#39;s presentation&lt;/a&gt; at Nordic Ruby 2016.&lt;/p&gt;
@@ -429,39 +490,6 @@ of mankind. I just want to talk about how to fix a motorcycle.&lt;/p&gt;
       <pubDate>2016-07-22T22:00:00.000Z</pubDate>
       <link>http://norswap.com/peace-of-mind</link>
       <guid isPermaLink="true">http://norswap.com/peace-of-mind</guid>
-    </item>
-    <item>
-      <title>Building a static website with Ribosome and Node.js</title>
-      <description>
-&lt;p&gt;I&amp;#39;ve transitioned the website from &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; to a custom system based on
-&lt;a href=&quot;http://ribosome.ch/&quot;&gt;Ribosome&lt;/a&gt;. I wasn&amp;#39;t updating the website very regularly, and each
-time I picked it up again, I had to spend an hour or so battling the
-particularly horrible Ruby dependencies on Windows.&lt;/p&gt;
-&lt;p&gt;Ribosome is essentially a templating engine driven by a script language
-(JavaScript, Python or Ruby &amp;mdash; I went with Javascript). It takes a js/py/rb
-script as input, which also contains lines starting with a dot. The script is
-run, but whenever a dotted line is encountered, it is sent to an output file. It
-supports embedded expression within dotted lines, special directives to change
-the file to which the output is redirected and include other files. This makes
-it possible to generate your whole website from a single script
-(&lt;a href=&quot;https://github.com/norswap/norswap.github.io/blob/master/.factory/generate.js&quot;&gt;have a look at mine&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Something I really like about Ribosome is how it respects whitespace, resulting
-in really nice-looking output, unlike most templating engines (&lt;strike&gt;have a look at
-the html for this page&lt;/strike&gt; [1]). It&amp;#39;s &lt;a href=&quot;http://ribosome.ch/documentation.html#advanced-layout-management&quot;&gt;block layouting&lt;/a&gt; capability is also quite
-handy.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m also very pleased about the Node.js ecosystem. I was really easy to find
-libraries to &lt;a href=&quot;https://www.npmjs.com/package/gray-matter&quot;&gt;parse YAML front matter&lt;/a&gt;, &lt;a href=&quot;https://www.npmjs.com/package/marked&quot;&gt;parse Markdown&lt;/a&gt;,
-&lt;a href=&quot;http://momentjs.com/&quot;&gt;manipulate dates&lt;/a&gt;, &lt;a href=&quot;https://www.npmjs.com/package/escape-html&quot;&gt;escaping html&lt;/a&gt; and
-&lt;a href=&quot;https://www.npmjs.com/package/tmp&quot;&gt;create temporary files&lt;/a&gt;. They were easy to use too.&lt;/p&gt;
-&lt;p&gt;All in all, updating the website was a surprisingly pleasant experience.
-Ribosome in particular is great, I encourage you to try it.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;[1]: I was forced to flush the content to the left, otherwise &lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt; tags would
-pick up additional whitespace. HTML sucks.&lt;/p&gt;
-      </description>
-      <pubDate>2016-07-12T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/ribosome-static-site</link>
-      <guid isPermaLink="true">http://norswap.com/ribosome-static-site</guid>
     </item>
   </channel>
 </rss>

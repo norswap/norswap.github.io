@@ -6,6 +6,32 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Deep Neural Pathways</title>
+      <description>
+&lt;p&gt;I sometimes worry that by specializing in certain of tasks at the exclusion of
+others, I will lose the ability to learn new abilities; that my neural pathways
+will get frozen in a certain configuration, baking my current skillset into my
+brain.&lt;/p&gt;
+&lt;p&gt;But maybe it isn&amp;#39;t that bad. You lose flexibility, but you gain efficiency.
+People who are great at their job do have it &amp;quot;wired&amp;quot; in them in some sense. They
+see what is relevant from so far, it&amp;#39;s eerie. Maybe it&amp;#39;s because they ONLY see
+what is relevant to their area of expertise.&lt;/p&gt;
+&lt;p&gt;Of course, one should thrive to bake in the &lt;em&gt;right&lt;/em&gt; sets of defaults. And to
+know when to reconfigure.&lt;/p&gt;
+&lt;p&gt;Yesterday on Slack, a colleague (Simon) linked a video of
+&lt;a href=&quot;https://www.youtube.com/watch?v=MFzDaBzBlL0&quot;&gt;a guy learning to ride an inverse bicycle&lt;/a&gt; that turns right when you
+steer left and vice-versa. Turns out it&amp;#39;s amazingly hard. But after eight
+months, he got it. And guess what: after a while he couldn&amp;#39;t ride the normal
+bicycle anymore -- he had to try 20 minutes for it to come bad.&lt;/p&gt;
+&lt;p&gt;So what he did was not that he became more flexible: he overwrote a set of baked
+circuitry with another set. I don&amp;#39;t know what the moral is, but it certainly
+makes you think.&lt;/p&gt;
+      </description>
+      <pubDate>2016-11-08T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/deep-neural-pathways</link>
+      <guid isPermaLink="true">http://norswap.com/deep-neural-pathways</guid>
+    </item>
+    <item>
       <title>Robin Hood Hashing on the JVM</title>
       <description>
 &lt;p&gt;Robin Hood Hashing, despite its name, isn&amp;#39;t a hashing technique, but rather a
@@ -394,102 +420,6 @@ facts with harmony and mathematical beauty in mind.&lt;/p&gt;
       <pubDate>2016-08-12T22:00:00.000Z</pubDate>
       <link>http://norswap.com/stuckness-and-understanding</link>
       <guid isPermaLink="true">http://norswap.com/stuckness-and-understanding</guid>
-    </item>
-    <item>
-      <title>Good Work is Peace of Mind</title>
-      <description>
-&lt;blockquote&gt;
-&lt;p&gt;I&amp;#39;ve a set of instructions at home which open up great realms for the
-improvement of technical writing. They begin, &amp;#39;Assembly of Japanese bicycle
-require great peace of mind.&amp;#39;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Over the past few months, I have been reading
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Zen_and_the_Art_of_Motorcycle_Maintenance&quot;&gt;Zen and the Art of Motorcycle Maintenance&lt;/a&gt; by Robert Pirsig. This post
-collects a few quotes on one of the big idea I got out of the book, namely that
-doing good work is synonymous with tending to your peace of mind.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Peace of mind isn&amp;#39;t at all superficial [...] It&amp;#39;s the whole thing. That which
-produces it is good maintenance; that which disturbs it is poor maintenance.
-[...] The ultimate test&amp;#39;s always your own serenity. If you don&amp;#39;t have this
-when you start and maintain it while you&amp;#39;re working you&amp;#39;re likely to build
-your personal problems right into the machine itself.&lt;/p&gt;
-&lt;p&gt;The test of the machine is the satisfaction it gives you. [...] If the machine
-produces tranquility it&amp;#39;s right. If it disturbs you it&amp;#39;s wrong until either
-the machine or your mind is changed. The test of the machine&amp;#39;s always your own
-mind. There isn&amp;#39;t any other test.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Sometime look at a novice workman or a bad workman and compare his expression
-with that of a craftsman whose work you know is excellent and you&amp;#39;ll see the
-difference. The craftsman isn&amp;#39;t ever following a single line of instruction.
-He&amp;#39;s making decisions as he goes along. For that reason he&amp;#39;ll be absorbed and
-attentive to what he&amp;#39;s doing even though he doesn&amp;#39;t deliberately contrive this.
-His motions and the machine are in a kind of harmony. He isn&amp;#39;t following any set
-of written instructions because the nature of the material at hand determines
-his thoughts and motions, which simultaneously change the nature of the material
-at hand. The material and his thoughts are changing together in a progression of
-changes until his mind&amp;#39;s at rest at the same time the material&amp;#39;s right.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I say inner peace of mind. It has no direct relationship to external
-circumstances. It can occur to a monk in meditation, to a soldier in heavy
-combat or to a machinist taking off that last ten-thousandth of an inch. It
-involves unselfconsciousness, which produces a complete identification with
-one&amp;#39;s circumstances, and there are levels and levels of this identification
-and levels and levels of quietness quite as profound and difficult of
-attainment as the more familiar levels of activity.&lt;/p&gt;
-&lt;p&gt;This inner peace of mind occurs on three levels of understanding. Physical
-quietness seems the easiest to achieve, although there are levels and levels of
-this too, as attested by the ability of Hindu mystics to live buried alive for
-many days. Mental quietness, in which one has no wandering thoughts at all,
-seems more difficult, but can be achieved. But value quietness, in which one has
-no wandering desires at all but simply performs the acts of his life without
-desire, that seems the hardest.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve sometimes thought this inner peace of mind, this quietness is similar to if
-not identical with the sort of calm you sometimes get when going fishing, which
-accounts for much of the popularity of this sport. Just to sit with the line in
-the water, not moving, not really thinking about anything, not really caring
-about anything either, seems to draw out the inner tensions and frustrations
-that have prevented you from solving problems you couldn&amp;#39;t solve before and
-introduced ugliness and clumsiness into your actions and thoughts.&lt;/p&gt;
-&lt;p&gt;You don&amp;#39;t have to go fishing, of course, to fix your motorcycle. A cup of
-coffee, a walk around the block, sometimes just putting off the job for five
-minutes of silence is enough. When you do you can almost feel yourself grow
-toward that inner peace of mind that reveals it all. That which turns its back
-on this inner calm and the Quality it reveals is bad maintenance. That which
-turns toward it is good. The forms of turning away and toward are infinite but
-the goal is always the same.&lt;/p&gt;
-&lt;p&gt;[...]&lt;/p&gt;
-&lt;p&gt;Zen Buddhists talk about &amp;quot;just sitting,&amp;quot; a meditative practice in which the idea
-of a duality of self and object does not dominate one&amp;#39;s consciousness. What I&amp;#39;m
-talking about here in motorcyele maintenance is ``just fixing,&amp;#39;&amp;#39; in which the
-idea of a duality of self and object doesn&amp;#39;t dominate one&amp;#39;s consciousness. When
-one isn&amp;#39;t dominated by feelings of separateness from what he&amp;#39;s working on, then
-one can be said to &amp;quot;care&amp;quot; about what he&amp;#39;s doing. That is what caring really is,
-a feeling of identification with what one&amp;#39;s doing.&lt;/p&gt;
-&lt;p&gt;So the thing to do when working on a motorcycle, as in any other task, is to
-cultivate the peace of mind which does not separate one&amp;#39;s self from one&amp;#39;s
-surroundings. When that is done successfully then everything else follows
-naturally. Peace of mind produces right values, right values produce right
-thoughts. Right thoughts produce right actions and right actions produce work
-which will be a material reflection for others to see of the serenity at the
-center of it all.&lt;/p&gt;
-&lt;p&gt;[...]&lt;/p&gt;
-&lt;p&gt;The social values are right only if the individual values are right. The place
-to improve the world is first in one&amp;#39;s own heart and head and hands, and then
-work outward from there. other people can talk about how to expand the destiny
-of mankind. I just want to talk about how to fix a motorcycle.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The real cycle you&amp;#39;re working on is yourself.&lt;/p&gt;
-&lt;/blockquote&gt;
-      </description>
-      <pubDate>2016-07-22T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/peace-of-mind</link>
-      <guid isPermaLink="true">http://norswap.com/peace-of-mind</guid>
     </item>
   </channel>
 </rss>

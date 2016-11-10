@@ -4,7 +4,7 @@ layout: post
 ---
 
 I sometimes worry that by specializing in certain of tasks at the exclusion of
-others, I will lose the ability to learn new abilities; that my neural pathways
+others, I will lose the ability to learn new skills; that my neural pathways
 will get frozen in a certain configuration, baking my current skillset into my
 brain.
 
@@ -20,10 +20,10 @@ Yesterday on Slack, a colleague (Simon) linked a video of
 [a guy learning to ride an inverse bicycle][bicycle] that turns right when you
 steer left and vice-versa. Turns out it's amazingly hard. But after eight
 months, he got it. And guess what: after a while he couldn't ride the normal
-bicycle anymore -- he had to try 20 minutes for it to come bad.
+bicycle anymore -- he had to try 20 minutes for it to come back.
 
 [bicycle]: https://www.youtube.com/watch?v=MFzDaBzBlL0
 
 So what he did was not that he became more flexible: he overwrote a set of baked
-circuitry with another set. I don't know what the moral is, but it certainly
-makes you think.
+circuitry with another set. I don't know what the moral of the story is, but it
+certainly makes you think.

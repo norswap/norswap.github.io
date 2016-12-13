@@ -6,6 +6,18 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>briefly</title>
+      <description>
+&lt;p&gt;I made a small Tweeter bot that tweets one Japanese Kana every hour.
+It&amp;#39;s written in Node.js and deployed to Heroku. It turned out easier than
+expected.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/kanatweeter&quot;&gt;https://twitter.com/kanatweeter&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://github.com/norswap/kana-tweeter&quot;&gt;https://github.com/norswap/kana-tweeter&lt;/a&gt;&lt;/p&gt;
+      </description>
+      <pubDate>2016-12-13T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/kana-tweeter-announce</link>
+      <guid isPermaLink="true">http://norswap.com/kana-tweeter-announce</guid>
+    </item>
+    <item>
       <title>Deep Neural Pathways</title>
       <description>
 &lt;p&gt;I sometimes worry that by specializing in certain of tasks at the exclusion of
@@ -372,54 +384,6 @@ itself.&lt;/p&gt;
       <pubDate>2016-09-16T22:00:00.000Z</pubDate>
       <link>http://norswap.com/pub-context-sensitive</link>
       <guid isPermaLink="true">http://norswap.com/pub-context-sensitive</guid>
-    </item>
-    <item>
-      <title>Stuckness and Understanding</title>
-      <description>
-&lt;p&gt;The second big idea (1) I got out of reading
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Zen_and_the_Art_of_Motorcycle_Maintenance&quot;&gt;Zen and the Art of Motorcycle Maintenance&lt;/a&gt; is how getting stuck is a
-common part of most work processes, and how to deal with it. The tidbits below
-are from my own notes, with some phrases lifted or paraphrased from Pirsig.&lt;/p&gt;
-&lt;p&gt;(1) &lt;a href=&quot;/peace-of-mind&quot;&gt;First one here&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Getting stuck is common. Getting stuck is trying to do too many things at once.
-To get unstuck, separate the things and do them one at a time. Separate thinking
-about what to say and saying things. Make a list of things to say in any order.
-If there are too many, pick the best things.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Hypotheses generation is the realm of quality. The difference between a good and
-a bad mathematician or mechanic is the ability to select the good facts from the
-bad ones on the basis of quality. The scientific method operates only after you
-have an hypothesis.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Stuckness isn&amp;#39;t the worst of all possible situations: zen buddhists go to much
-throuble to induce it (through koans, meditation, etc). It&amp;#39;s called &amp;quot;begginer&amp;#39;s
-mind&amp;quot;. This moment is not to be feared but cultivated. If your mind is truly
-stuck, you might be much better off than when it was loaded with ideas.&lt;/p&gt;
-&lt;p&gt;If you try to hold onto the stuckness, it is bound to disappear. Your mind will
-naturally and freely move toward a solution. The longer you stay stuck, the more
-you see quality and it gets you unstuck every time. What&amp;#39;s getting you stuck is
-frantically trying to get unstuck by rummaging through your knowledge.&lt;/p&gt;
-&lt;p&gt;Stuckness is the psychic predecessor of all understanding. An egoless acceptance
-of it is key to understanding quality. Self-taught mechanics are often superior
-to instructed ones because they can handle new situations.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Harry Truman on adminstration programs:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;We&amp;#39;ll just try them - and if they don&amp;#39;t work &amp;mdash; why then we&amp;#39;ll just try
-something else.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;The skill of the inventor is to choose the convenient facts. There is an
-inconscient selection (subliminal self) where many possible but useless
-facts/conventions are rejected.&lt;/p&gt;
-&lt;p&gt;Look at things that ties up with the theory... then looks at things that are
-very different, to gain insight. Maybe they are the same, maybe not. Select
-facts with harmony and mathematical beauty in mind.&lt;/p&gt;
-      </description>
-      <pubDate>2016-08-12T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/stuckness-and-understanding</link>
-      <guid isPermaLink="true">http://norswap.com/stuckness-and-understanding</guid>
     </item>
   </channel>
 </rss>

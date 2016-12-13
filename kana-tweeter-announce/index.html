@@ -5,7 +5,7 @@
   <!-- https://css-tricks.com/probably-use-initial-scale1/-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-       norswap
+       norswap &middot; 
   </title>
   <link rel="stylesheet" href="/assets/poole.css">
   <link rel="stylesheet" href="/assets/syntax.css">
@@ -42,49 +42,28 @@
     </div>
   </div>
   <div class="content container">
-<style scoped>
-.posts { border-bottom: solid 1px #CCC; list-style-type: none; padding-left: 0; }
-.posts > li { border-top: solid 1px #CCC; padding: 20px 0; clear: both; }
-.posts > li .post-content { font-size: 90%; }
-.posts > li > .date-link  { color: inherit; display: block; font-size: 80%; float: right; padding: 3px 0 20px; }
-.posts > li > .title-link { color: inherit; font-weight: bold; }
-.pagination { color: #AAA; margin-top: 10px; }
-</style>
-<ul class="posts">
-  <li>
-    <div class="post-content">
-<p>I just released <a href="https://github.com/norswap/violin">violin</a>, a small Kotlin utility library that features
-simple streams and some other stuff too.</p>
+    <div class="post">
+      <h1 class="post-title"></h1>
+      <span class="post-date">14 Dec 2016</span>
+<p>I made a small Tweeter bot that tweets one Japanese Kana every hour.
+It&#39;s written in Node.js and deployed to Heroku. It turned out easier than
+expected.</p>
+<p><a href="https://twitter.com/kanatweeter">https://twitter.com/kanatweeter</a><br><a href="https://github.com/norswap/kana-tweeter">https://github.com/norswap/kana-tweeter</a></p>
     </div>
-    <a class="date-link" href="/violin-release">09 Jul 2016</a>
-  </li>
-  <li>
-    <div class="post-content">
-<blockquote>
-<p>The path to wisdom is like this: each time you get one step closer, the target
-moves two steps away.</p>
-</blockquote>
-    </div>
-    <a class="date-link" href="/path-to-wisdom">08 Jul 2016</a>
-  </li>
-  <li>
-    <a class="title-link" href="/checked-exceptions">In Defence of Checked Exceptions</a>
-    <a class="date-link" href="/checked-exceptions">03 Oct 2015</a>
-  </li>
-  <li>
-    <a class="title-link" href="/java_caster">The Most Useful Java Function</a>
-    <a class="date-link" href="/java_caster">24 Feb 2015</a>
-  </li>
-  <li>
-    <a class="title-link" href="/c_scope_duration_linkage">C: Scope, Duration &amp; Linkage</a>
-    <a class="date-link" href="/c_scope_duration_linkage">26 Jan 2015</a>
-  </li>
-</ul>
-<div class="pagination">
-  <a href="/" class="previous">Previous</a>
-  |
-  <span>Next</span>
-</div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/kana-tweeter-announce";
+        this.page.identifier = "kana-tweeter-announce";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

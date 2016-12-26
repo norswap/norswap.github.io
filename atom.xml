@@ -6,6 +6,69 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Sync Your IntelliJ Settings Between Machines</title>
+      <description>
+&lt;p&gt;I recently learned that it was possible to share one&amp;#39;s IntelliJ settings between
+multiple machines.&lt;/p&gt;
+&lt;h2 id=&quot;basic-setup&quot;&gt;Basic Setup&lt;/h2&gt;
+&lt;p&gt;To do so, first install the &lt;a href=&quot;https://plugins.jetbrains.com/idea/plugin/7566-settings-repository&quot;&gt;Settings Repository plugin&lt;/a&gt;. Then, follow
+these &lt;a href=&quot;https://www.jetbrains.com/help/idea/2016.3/sharing-your-ide-settings.html&quot;&gt;instructions&lt;/a&gt;. &lt;strong&gt;However&lt;/strong&gt;, do not complete step 3 (which seems
+inconsistent with the actual UI), but instead, redo step 2 on each machine on
+which you want to sync your settings (except you should use &amp;quot;overwrite local&amp;quot; or
+&amp;quot;merge&amp;quot; instead of &amp;quot;overwrite remote&amp;quot;).&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s done! The settings should sync automatically, but you can force a re-sync
+by using an action of the &lt;code&gt;VCS &amp;gt; Sync Settings&lt;/code&gt; menu.&lt;/p&gt;
+&lt;h2 id=&quot;keybinding-troubles&quot;&gt;Keybinding Troubles&lt;/h2&gt;
+&lt;p&gt;I use IntelliJ on both Windows and MacOS. &lt;/p&gt;
+&lt;p&gt;As you may know, Macs keyboard have this layout on the bottom left of the last row:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fn | control | alt | command
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;On the other hand, classical IBM-style keyboard (which I use on my Windows
+ machine) have this layout:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;control | win | alt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Moreover, in MacOS, most shortcuts where &lt;code&gt;control&lt;/code&gt; is used on Windows use
+&lt;code&gt;command&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;I like to keep things as similar as possible, which is why I inverted &lt;code&gt;command&lt;/code&gt;
+and &lt;code&gt;control&lt;/code&gt;on MacOS (in &lt;code&gt;System Preferences &amp;gt; Keyboard &amp;gt; Modifier Keys...&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;But now I have an issue in IntelliJ: I want keybinds that use &lt;code&gt;control&lt;/code&gt; on
+Windows to use &lt;code&gt;command&lt;/code&gt; on MacOS, and vice-versa. IntelliJ is not able to make
+this conversion for me.&lt;/p&gt;
+&lt;p&gt;What I ended up doing was building two scripts: &lt;code&gt;kbd_mac_to_win.sh&lt;/code&gt; and
+&lt;code&gt;kbd_win_to_mac.sh&lt;/code&gt; (you can find them along with my IntelliJ
+config &lt;a href=&quot;https://github.com/norswap/intellij-settings&quot;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;These scripts take the MacOS / Windows version of the keymap file, and convert
+it to the equivalent in the other OS by converting between &lt;code&gt;control&lt;/code&gt; and
+&lt;code&gt;command&lt;/code&gt; keys (note that internally, IntelliJ calls the &lt;code&gt;command&lt;/code&gt; key &lt;code&gt;meta&lt;/code&gt;).&lt;/p&gt;
+&lt;h2 id=&quot;a-failed-attempt-to-automate-things&quot;&gt;A Failed Attempt to Automate Things&lt;/h2&gt;
+&lt;p&gt;This is good and well, but running these commands each time I make a change to
+my keybindings gets tiresome quickly.&lt;/p&gt;
+&lt;p&gt;So I tried to automate it using git hooks. I succeeded, but only when using
+&lt;code&gt;git&lt;/code&gt; on the command line. My suspicion is that IntelliJ uses some kind of
+library that do not execute hooks.&lt;/p&gt;
+&lt;p&gt;Nevertheless, I wrote the explanation while developing it on the command line,
+so here it is anyway. It at least taught me how git hooks work, as well as the
+&lt;a href=&quot;https://git-scm.com/book/en/v2/Customizing-Git-Git-Attributes#Keyword-Expansion&quot;&gt;smudge / clean&lt;/a&gt; feature (which I didn&amp;#39;t end up using).&lt;/p&gt;
+&lt;h3 id=&quot;automating-with-git-hooks&quot;&gt;Automating with Git Hooks&lt;/h3&gt;
+&lt;p&gt;I use a pre-commit and a post-commit hook. This was based off an idea I found
+&lt;a href=&quot;http://stackoverflow.com/a/12802592/298664&quot;&gt;on Stack Overflow&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve pushed the hooks to the &lt;a href=&quot;https://github.com/norswap/intellij-settings&quot;&gt;same repository&lt;/a&gt; as my settings (look for
+the files named &lt;code&gt;pre-commit&lt;/code&gt; and &lt;code&gt;post-commit&lt;/code&gt;). To install them, you need to
+copy or symlink them to the &lt;code&gt;.git/hooks&lt;/code&gt; directory of your repository.&lt;/p&gt;
+&lt;p&gt;The solution is not perfect. Namely if both the Windows and the Mac keymap have
+changed, the script will give up and ask you to resolve the conflict manually.
+Still, it works well enough for my purposes.&lt;/p&gt;
+&lt;h3 id=&quot;locating-the-intellij-settings-repository&quot;&gt;Locating the IntelliJ Settings Repository&lt;/h3&gt;
+&lt;p&gt;To install this stuff, you&amp;#39;ll need to locate your settings repository.&lt;/p&gt;
+&lt;p&gt;For IntelliJ 2016.3 (and presumably, it&amp;#39;s similar for most other versions)
+lives in
+&lt;code&gt;C:\Users\&amp;lt;USERNAME&amp;gt;\.IdeaIC2016.3\config\settingsRepository\repository&lt;/code&gt; on
+Windows.&lt;/p&gt;
+&lt;p&gt;On MacOS, it&amp;#39;s &lt;code&gt;/Users/&amp;lt;USERNAME&amp;gt;/Library/IdeaIC2016.3/settingsRepository/repository&lt;/code&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2016-12-25T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/intellij-sync</link>
+      <guid isPermaLink="true">http://norswap.com/intellij-sync</guid>
+    </item>
+    <item>
       <title>briefly</title>
       <description>
 &lt;p&gt;I made a small Tweeter bot that tweets one Japanese Kana every hour.
@@ -374,16 +437,6 @@ itself.&lt;/p&gt;
       <pubDate>2016-09-19T22:00:00.000Z</pubDate>
       <link>http://norswap.com/gumption-arete</link>
       <guid isPermaLink="true">http://norswap.com/gumption-arete</guid>
-    </item>
-    <item>
-      <title>New Publication</title>
-      <description>
-&lt;p&gt;&lt;strong&gt;Context-Sensitive Languages with Principled Stateful Parsing&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;To appear at &lt;a href=&quot;http://conf.researchr.org/track/sle-2016/sle-2016-papers&quot;&gt;SLE 2016&lt;/a&gt;.&lt;br&gt;&lt;a href=&quot;http://norswap.com/pubs/sle2016.pdf&quot;&gt;Pre-print here&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2016-09-16T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/pub-context-sensitive</link>
-      <guid isPermaLink="true">http://norswap.com/pub-context-sensitive</guid>
     </item>
   </channel>
 </rss>

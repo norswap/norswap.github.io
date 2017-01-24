@@ -16,7 +16,7 @@ Here's a copy of the list for posterity:
 - [Derek Sivers' Books Read](https://sivers.org/book)
 - [Farnam Street](https://www.farnamstreetblog.com/)
 - [4 Minute Books](http://fourminutebooks.com/all-summaries/)
-- [Actionable Books](www.actionablebooks.com/en-ca/summaries/)
+- [Actionable Books](http://www.actionablebooks.com/en-ca/summaries/)
 - [Blinkist (paid)](https://app.blinkist.com/en/library/)
 
 The first four websites are great, but the selection is limited.

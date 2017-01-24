@@ -6,6 +6,168 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>The Ultimate PATH Management Guide</title>
+      <description>
+&lt;h2 id=&quot;basics-of-environment-variables-and-path&quot;&gt;Basics of Environment Variables and PATH&lt;/h2&gt;
+&lt;p&gt;Each process has an &lt;em&gt;environment&lt;/em&gt;, a set of variables that the process can read
+or write. When the process spawns another process, the new process inherits the
+environment of its parent. These values are nevertheless &lt;em&gt;local&lt;/em&gt;: the child
+inherits a copy of the variables of the parent at creation-time. If the parent
+later changes his variables, the change will not be reflected on the child&amp;#39;s
+variables.&lt;/p&gt;
+&lt;p&gt;One particularly interesting environment variable is called &lt;code&gt;PATH&lt;/code&gt;: it defines
+the paths to search to find an executable specified by name. The value of this
+variable is a list of paths separated by a separator (&lt;code&gt;:&lt;/code&gt; on Unix-base OSes like
+Mac OS X and Linux, &lt;code&gt;;&lt;/code&gt; on Windows).&lt;/p&gt;
+&lt;p&gt;This is particularly relevant on the command line: when you type the name of a
+program (for instance &lt;code&gt;ls&lt;/code&gt; in Unix), it will search the paths listed in the
+&lt;code&gt;PATH&lt;/code&gt; variable (from left to right) until it finds one containing a &lt;code&gt;ls&lt;/code&gt;
+executable.&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ll now see how each OS handles environment variables and the &lt;code&gt;PATH&lt;/code&gt;. One
+particular question that will interest us is how the &amp;quot;default&amp;quot; value for the
+environment variables (and the &lt;code&gt;PATH&lt;/code&gt; in particular) are set.&lt;/p&gt;
+&lt;h2 id=&quot;windows&quot;&gt;Windows&lt;/h2&gt;
+&lt;p&gt;In Windows, the initial values for environment variables are stored in the
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Windows_Registry&quot;&gt;registry&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;These are separated between system values and user values. If a variable has
+both a system and user value, the user value takes precedence, &lt;strong&gt;excepted&lt;/strong&gt; for
+the PATH, where both values get concatenated (user PATH, &lt;code&gt;;&lt;/code&gt;, system PATH).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;User environment variables are stored in &lt;code&gt;HKEY_CURRENT_USER\Environment&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;System environment variables are stored in
+&lt;code&gt;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session
+Manager\Environment&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;explorer.exe&lt;/code&gt; will immediately reflect any change to these values, and any
+program launched by it will inherit these values.&lt;/p&gt;
+&lt;p&gt;All other programs, on the other hand, need to be restarted. A few comments
+about programs of interest:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The &lt;a href=&quot;http://www.launchy.net/&quot;&gt;Launchy&lt;/a&gt; app launcher automatically updates the
+environment before launching a program.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The &lt;a href=&quot;https://conemu.github.io/&quot;&gt;ConEmu&lt;/a&gt; console emulator is by default
+configured to hijack the opening of new consoles and open them in the existing
+ConEmu window instead (this is a good thing). The problem that is when
+intercepting consoles opened by &lt;code&gt;explorer.exe&lt;/code&gt;, the environment seems to be set to
+that of the ConEmu window (i.e. the environment when a console was first
+launched). See &lt;a href=&quot;https://github.com/Maximus5/ConEmu/issues/468&quot;&gt;this issue&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;How to change the environment&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Locally in a console: use the built-in &lt;a href=&quot;http://ss64.com/nt/set.html&quot;&gt;set&lt;/a&gt; command.
+You can clear a variable by assigning it nothing: &lt;code&gt;set X=&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Globally in a console: use &lt;a href=&quot;http://ss64.com/nt/setx.html&quot;&gt;setx&lt;/a&gt; (built-in Windows
+7+, &lt;a href=&quot;https://www.microsoft.com/en-us/download/details.aspx?id=18546&quot;&gt;download&lt;/a&gt; for previous versions)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;From the explorer, &lt;a href=&quot;https://www.java.com/en/download/help/path.xml&quot;&gt;follow these instructions&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use the excellent &lt;a href=&quot;https://www.rapidee.com/en/about&quot;&gt;Rapid Environment Editor&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Running scripts on the command line&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;On Windows, it is customary to append an extension to executables binaries
+(&lt;code&gt;.exe&lt;/code&gt;) and scripts (&lt;code&gt;.bat&lt;/code&gt;, &lt;code&gt;.sh&lt;/code&gt;, &lt;code&gt;.py&lt;/code&gt;, ...). However, typing this extension
+to run the program is not very desirable.&lt;/p&gt;
+&lt;p&gt;There is an environment variable called &lt;code&gt;PATHEXT&lt;/code&gt; which holds a list of all
+extensions that can be run on the command line. Basically, if a file has its
+extension in this list, you can type its name ommitting the extension and it
+will run as though you double clicked it. There might be some additional finesse
+here, but it will be like this most of the time. The order of the extensions
+inside &lt;code&gt;PATHEXT&lt;/code&gt; is important if there are two files with the same name but
+different extensions. Extensions earlier in the list have more priority.&lt;/p&gt;
+&lt;h2 id=&quot;unix&quot;&gt;Unix&lt;/h2&gt;
+&lt;p&gt;Both Mac OS X and Linux are Unix-based OSes. As such, the basic principles of
+how environment variables are handled is similar. I&amp;#39;ll explain this here before
+talking about the peculiarities of each OS.&lt;/p&gt;
+&lt;p&gt;In Unix, a process does not automatically inherit all the environment variables
+of its parents. It only inherits those that are explicitly exported.&lt;/p&gt;
+&lt;p&gt;In a shell script, or on the command line, we can mark a variable &lt;code&gt;X&lt;/code&gt; for export
+by writing &lt;code&gt;export X&lt;/code&gt;. This can also be combined with the definition of the
+variable: &lt;code&gt;export X=&amp;quot;some stuff&amp;quot;&lt;/code&gt;. You can un-export something with &lt;code&gt;export -n&lt;/code&gt;.
+Removing purely and simply a variable is done with &lt;code&gt;unset&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;On Unix, environment variables are initialized by shell scripts. Some scripts
+are executed each time a shell is run. Which scripts are run depends on whether
+the shell is a &lt;em&gt;login shell&lt;/em&gt; and wether it is &lt;em&gt;interactive&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The rules are rather complex,
+but &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;this page does a good job at summarizing them&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Also beware that your scripts may source other files, including those that
+mentionned in that guide.&lt;/p&gt;
+&lt;p&gt;When taking inheritance into account, usually the right thing to do is to define
+your environment variables in &lt;code&gt;~/.profile&lt;/code&gt; or equivalent. One caveat: the file
+won&amp;#39;t get sourced when running a command remotely via SSH (that is, when running
+a command through &lt;code&gt;ssh&lt;/code&gt; without creating an interactive shell).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Reloading the environment&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Reloading the environment in an existing shell after you edited &lt;code&gt;.profile&lt;/code&gt; can
+be tricky. One easy solution would be to re-source &lt;code&gt;.profile&lt;/code&gt;, but there are a
+few caveats:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Sourcing your &lt;code&gt;.profile&lt;/code&gt; should not have unwanted side-effects.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Often variables are not just set, but are &lt;em&gt;modified&lt;/em&gt;. This is typically the&lt;/p&gt;
+&lt;p&gt;case for &lt;code&gt;PATH&lt;/code&gt;, where you append to the existing definition.&lt;/p&gt;
+&lt;p&gt;In this case, if you reload the &lt;code&gt;.profile&lt;/code&gt;, you&amp;#39;ll end up with many duplicate
+entries in your PATH, and you&amp;#39;ll fail to clear entries you want removed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Hence: no side-effects; set variables, don&amp;#39;t modify them.&lt;/p&gt;
+&lt;h2 id=&quot;mac-os-x&quot;&gt;Mac OS X&lt;/h2&gt;
+&lt;p&gt;OS X has a fantastic little utility called &lt;code&gt;path_helper&lt;/code&gt; that will help you
+manage the PATH. Basically what it does is read the files in &lt;code&gt;/etc/paths.d&lt;/code&gt; and
+appends their content to the PATH (one entry per line). Files are read in
+lexicographic order, so you can control the order of entries in the PATH.&lt;/p&gt;
+&lt;p&gt;Ironically, &lt;code&gt;path_helper&lt;/code&gt; is not itself on the path, so you must call it through
+its fully qualified name &lt;code&gt;/usr/libexec/path_helper&lt;/code&gt;. The output of &lt;code&gt;path_helper&lt;/code&gt;
+is a shell command to set the PATH. This command must itself be evaluated.&lt;/p&gt;
+&lt;p&gt;I suggest to define the following shell alias for ease of use:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;alias refresh_path=&amp;#39;eval `/usr/libexec/path_helper -s`&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;-s&lt;/code&gt; part is just to ensure a bash-compatible command is generated.&lt;/p&gt;
+&lt;p&gt;By default, OS X calls &lt;code&gt;path_helper&lt;/code&gt; in &lt;code&gt;/etc/profile&lt;/code&gt; so you do not need to add
+it yourself.&lt;/p&gt;
+&lt;p&gt;Oh and by the way, &lt;code&gt;path_helper&lt;/code&gt; does the same thing it does to &lt;code&gt;PATH&lt;/code&gt; to
+&lt;code&gt;MANPATH&lt;/code&gt; (which holds the paths used to find manpages) but with the
+&lt;code&gt;/etc/manpaths.d&lt;/code&gt; directory.&lt;/p&gt;
+&lt;p&gt;Final word of caution: &lt;code&gt;/etc/paths.d&lt;/code&gt; requires root permission to write into.
+However, the files must be readable without root permissions to be used by
+&lt;code&gt;path_helper&lt;/code&gt;. Hence you might need to do a &lt;code&gt;chmod 644&lt;/code&gt; on the files you create
+in that directory.&lt;/p&gt;
+&lt;p&gt;See &lt;a href=&quot;http://www.softec.lu/site/DevelopersCorner/MasteringThePathHelper&quot;&gt;this webpage&lt;/a&gt; for more details about &lt;code&gt;path_helper&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Setting the PATH for GUI applications&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Ways of definin the PATH for GUI applications on OS X have a history of
+breaking. You may read on the net about &lt;code&gt;~/.MacOSX/environment.plist&lt;/code&gt; or
+&lt;code&gt;launchd.conf&lt;/code&gt;, but those no longer works.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/a/26586170&quot;&gt;&amp;quot;The&amp;quot; solution&lt;/a&gt;, at the time of writing, is to create a file
+&lt;code&gt;~/Library/LaunchAgents/environment.plist&lt;/code&gt;, enter a bunch of boilerplate and
+include &lt;code&gt;launchtl setenv&lt;/code&gt; commands to set environment variables.
+See &lt;a href=&quot;http://stackoverflow.com/a/26586170&quot;&gt;this explanation&lt;/a&gt; for details.&lt;/p&gt;
+&lt;p&gt;After a change, you can make it take effect with &lt;code&gt;launchctl load
+~/Library/LaunchAgents/environment.plist&lt;/code&gt; (or wait for a reboot).&lt;/p&gt;
+&lt;p&gt;Once applied, new applications started from the Finder (or Spotlight) will
+inherit the environment variables set in &lt;code&gt;environment.plist&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Note that what &lt;code&gt;environment.plist&lt;/code&gt; does is simply run a script. You could use
+that to actually source your &lt;code&gt;.profile&lt;/code&gt; or invoke &lt;code&gt;path_helper&lt;/code&gt;. Two solutions
+that work with this idea (but doing rather more complicated things) are to be
+found &lt;a href=&quot;http://stackoverflow.com/a/32405815&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;http://superuser.com/a/476960&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The difficulty to achieve something so basic is truly baffling.&lt;/p&gt;
+&lt;h2 id=&quot;linux&quot;&gt;Linux&lt;/h2&gt;
+&lt;p&gt;There are too many desktop managers for Linux to cover. Cursory searches seem to
+indicate that this aspect isn&amp;#39;t too well thought-out however.&lt;/p&gt;
+&lt;p&gt;However, Linux should, &lt;em&gt;in theory&lt;/em&gt;, be more scrupulous than OS X about
+inheriting the PATH, even in GUI applications. Which means that, editing
+&lt;code&gt;.profile&lt;/code&gt; and rebooting &lt;em&gt;should&lt;/em&gt; work as a last resort.&lt;/p&gt;
+&lt;p&gt;Some distributions (notably Debian, Ubuntu, Fedora) have files called
+&lt;code&gt;~/.pam_environment&lt;/code&gt; and &lt;code&gt;/etc/environment&lt;/code&gt; where they recommend you define your
+environment variables. The benefits of this way of doing things are rather
+unclear, since it doesn&amp;#39;t seem to enable anything that couldn&amp;#39;t be done by
+defining variables in &lt;code&gt;.profile&lt;/code&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2017-01-23T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/path-mgmt</link>
+      <guid isPermaLink="true">http://norswap.com/path-mgmt</guid>
+    </item>
+    <item>
       <title>Sync Your IntelliJ Settings Between Machines</title>
       <description>
 &lt;p&gt;I recently learned that it was possible to share one&amp;#39;s IntelliJ settings between
@@ -378,65 +540,6 @@ virtue takes place.&lt;/p&gt;
       <pubDate>2016-09-19T22:00:00.000Z</pubDate>
       <link>http://norswap.com/cruising-blues</link>
       <guid isPermaLink="true">http://norswap.com/cruising-blues</guid>
-    </item>
-    <item>
-      <title>Gumption and Areté</title>
-      <description>
-&lt;p&gt;This post is part 3/3 in a series about Robert Pirsig&amp;#39;s book &lt;a href=&quot;https://en.wikipedia.org/wiki/Zen_and_the_Art_of_Motorcycle_Maintenance&quot;&gt;Zen and the Art of
-motorcycle Maintenance&lt;/a&gt;. See also &lt;a href=&quot;/stuckness-and-understanding&quot;&gt;part 1&lt;/a&gt; and &lt;a href=&quot;/peace-of-mind&quot;&gt;part 2&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This post will talk about two notions that Pirsig puts forward: &lt;em&gt;gumption&lt;/em&gt; and
-&lt;em&gt;areté&lt;/em&gt;. Gumption is originally a Scottish term, meaning &amp;quot;common sense,
-shrewdness&amp;quot;, but also &amp;quot;drive, initiative&amp;quot;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A person filled with gumption doesn&amp;#39;t sit around dissipating and stewing about
-things. He&amp;#39;s at the front of the train of his own awareness, watching to see
-what&amp;#39;s up the track and meeting it when it comes.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Gumption-filling occurs when one is quiet long enough to see, hear and feel the
-real universe, not just one&amp;#39;s own stale opinions about it.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s common in people returning from long fishing trips. They seemingly have put
-a lot of time for nothing, but in reality they come back with an abundance of
-gumption, usually for the very same things they were sick to death of a few
-weeks before. It&amp;#39;s not wasted time.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&amp;quot;Gumption is the psychic gasoline that keeps the whole thing going.&amp;quot; It is
-necessary to all psychic tasks of interest. If you don&amp;#39;t have it, you might as
-well not start. Similarly, its level must be monitored at all times.&lt;/p&gt;
-&lt;p&gt;When gumption loss occur: take a long break, don&amp;#39;t rush in to make up for lost
-gumption.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;One of the gumption &lt;em&gt;traps&lt;/em&gt; is ego:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;To the untrained eye ego-climbing and selfless climbing may appear identical.
-Both kinds of climbers place one foot in front of the other. Both breathe in
-and out at the same rate. Both stop when tired. Both go forward when rested.
-But what a difference! The ego-climber is like an instrument that’s out of
-adjustment. He puts his foot down an instant too soon or too late. He’s likely
-to miss a beautiful passage of sunlight through the trees. He goes on when the
-sloppiness of his step shows he’s tired. He rests at odd times. He looks up
-the trail trying to see what’s ahead even when he knows what’s ahead because
-he just looked a second before. He goes too fast or too slow for the
-conditions and when he talks his talk is forever about somewhere else,
-something else. He’s here but he’s not here. He rejects the here, he’s unhappy
-with it, wants to be farther up the trail but when he gets there will be just
-as unhappy because then it will be “here”. What he’s looking for, what he
-wants, is all around him, but he doesn’t want that because it is all around
-him. Every step’s an effort, both physically and spiritually, because he
-imagines his goal to be external and distant.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;(Thanks to my friend Stanislav for bringing this quote to my attention.)&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;em&gt;Areté&lt;/em&gt; is a greek notion that refers to excellence, acquired not as a duty to
-others but to oneself.&lt;/p&gt;
-&lt;p&gt;Areté implies excelling in many domains in life, a respect for the wholeness of
-one&amp;#39;s life. It implies contempt for efficiency, or rather a higher idea for
-efficiency, an efficiency which exists not in one department of life but in life
-itself.&lt;/p&gt;
-      </description>
-      <pubDate>2016-09-19T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/gumption-arete</link>
-      <guid isPermaLink="true">http://norswap.com/gumption-arete</guid>
     </item>
   </channel>
 </rss>

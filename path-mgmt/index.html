@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; The Ultimate PATH Management Guide
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">The Ultimate PATH Management Guide</h1>
+      <span class="post-date">24 Jan 2017</span>
+<h2 id="basics-of-environment-variables-and-path">Basics of Environment Variables and PATH</h2>
+<p>Each process has an <em>environment</em>, a set of variables that the process can read
+or write. When the process spawns another process, the new process inherits the
+environment of its parent. These values are nevertheless <em>local</em>: the child
+inherits a copy of the variables of the parent at creation-time. If the parent
+later changes his variables, the change will not be reflected on the child&#39;s
+variables.</p>
+<p>One particularly interesting environment variable is called <code>PATH</code>: it defines
+the paths to search to find an executable specified by name. The value of this
+variable is a list of paths separated by a separator (<code>:</code> on Unix-base OSes like
+Mac OS X and Linux, <code>;</code> on Windows).</p>
+<p>This is particularly relevant on the command line: when you type the name of a
+program (for instance <code>ls</code> in Unix), it will search the paths listed in the
+<code>PATH</code> variable (from left to right) until it finds one containing a <code>ls</code>
+executable.</p>
+<p>We&#39;ll now see how each OS handles environment variables and the <code>PATH</code>. One
+particular question that will interest us is how the &quot;default&quot; value for the
+environment variables (and the <code>PATH</code> in particular) are set.</p>
+<h2 id="windows">Windows</h2>
+<p>In Windows, the initial values for environment variables are stored in the
+<a href="https://en.wikipedia.org/wiki/Windows_Registry">registry</a>.</p>
+<p>These are separated between system values and user values. If a variable has
+both a system and user value, the user value takes precedence, <strong>excepted</strong> for
+the PATH, where both values get concatenated (user PATH, <code>;</code>, system PATH).</p>
+<ul>
+<li>User environment variables are stored in <code>HKEY_CURRENT_USER\Environment</code>.</li>
+<li>System environment variables are stored in
+<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session
+Manager\Environment</code>.</li>
+</ul>
+<p><code>explorer.exe</code> will immediately reflect any change to these values, and any
+program launched by it will inherit these values.</p>
+<p>All other programs, on the other hand, need to be restarted. A few comments
+about programs of interest:</p>
+<ul>
+<li><p>The <a href="http://www.launchy.net/">Launchy</a> app launcher automatically updates the
+environment before launching a program.</p>
+</li>
+<li><p>The <a href="https://conemu.github.io/">ConEmu</a> console emulator is by default
+configured to hijack the opening of new consoles and open them in the existing
+ConEmu window instead (this is a good thing). The problem that is when
+intercepting consoles opened by <code>explorer.exe</code>, the environment seems to be set to
+that of the ConEmu window (i.e. the environment when a console was first
+launched). See <a href="https://github.com/Maximus5/ConEmu/issues/468">this issue</a>.</p>
+</li>
+</ul>
+<p><strong>How to change the environment</strong></p>
+<ul>
+<li><p>Locally in a console: use the built-in <a href="http://ss64.com/nt/set.html">set</a> command.
+You can clear a variable by assigning it nothing: <code>set X=</code>.</p>
+</li>
+<li><p>Globally in a console: use <a href="http://ss64.com/nt/setx.html">setx</a> (built-in Windows
+7+, <a href="https://www.microsoft.com/en-us/download/details.aspx?id=18546">download</a> for previous versions)</p>
+</li>
+<li><p>From the explorer, <a href="https://www.java.com/en/download/help/path.xml">follow these instructions</a>.</p>
+</li>
+<li><p>Use the excellent <a href="https://www.rapidee.com/en/about">Rapid Environment Editor</a></p>
+</li>
+</ul>
+<p><strong>Running scripts on the command line</strong></p>
+<p>On Windows, it is customary to append an extension to executables binaries
+(<code>.exe</code>) and scripts (<code>.bat</code>, <code>.sh</code>, <code>.py</code>, ...). However, typing this extension
+to run the program is not very desirable.</p>
+<p>There is an environment variable called <code>PATHEXT</code> which holds a list of all
+extensions that can be run on the command line. Basically, if a file has its
+extension in this list, you can type its name ommitting the extension and it
+will run as though you double clicked it. There might be some additional finesse
+here, but it will be like this most of the time. The order of the extensions
+inside <code>PATHEXT</code> is important if there are two files with the same name but
+different extensions. Extensions earlier in the list have more priority.</p>
+<h2 id="unix">Unix</h2>
+<p>Both Mac OS X and Linux are Unix-based OSes. As such, the basic principles of
+how environment variables are handled is similar. I&#39;ll explain this here before
+talking about the peculiarities of each OS.</p>
+<p>In Unix, a process does not automatically inherit all the environment variables
+of its parents. It only inherits those that are explicitly exported.</p>
+<p>In a shell script, or on the command line, we can mark a variable <code>X</code> for export
+by writing <code>export X</code>. This can also be combined with the definition of the
+variable: <code>export X=&quot;some stuff&quot;</code>. You can un-export something with <code>export -n</code>.
+Removing purely and simply a variable is done with <code>unset</code>.</p>
+<p>On Unix, environment variables are initialized by shell scripts. Some scripts
+are executed each time a shell is run. Which scripts are run depends on whether
+the shell is a <em>login shell</em> and wether it is <em>interactive</em>.</p>
+<p>The rules are rather complex,
+but <a href="https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization">this page does a good job at summarizing them</a>.</p>
+<p>Also beware that your scripts may source other files, including those that
+mentionned in that guide.</p>
+<p>When taking inheritance into account, usually the right thing to do is to define
+your environment variables in <code>~/.profile</code> or equivalent. One caveat: the file
+won&#39;t get sourced when running a command remotely via SSH (that is, when running
+a command through <code>ssh</code> without creating an interactive shell).</p>
+<p><strong>Reloading the environment</strong></p>
+<p>Reloading the environment in an existing shell after you edited <code>.profile</code> can
+be tricky. One easy solution would be to re-source <code>.profile</code>, but there are a
+few caveats:</p>
+<ul>
+<li><p>Sourcing your <code>.profile</code> should not have unwanted side-effects.</p>
+</li>
+<li><p>Often variables are not just set, but are <em>modified</em>. This is typically the</p>
+<p>case for <code>PATH</code>, where you append to the existing definition.</p>
+<p>In this case, if you reload the <code>.profile</code>, you&#39;ll end up with many duplicate
+entries in your PATH, and you&#39;ll fail to clear entries you want removed.</p>
+</li>
+</ul>
+<p>Hence: no side-effects; set variables, don&#39;t modify them.</p>
+<h2 id="mac-os-x">Mac OS X</h2>
+<p>OS X has a fantastic little utility called <code>path_helper</code> that will help you
+manage the PATH. Basically what it does is read the files in <code>/etc/paths.d</code> and
+appends their content to the PATH (one entry per line). Files are read in
+lexicographic order, so you can control the order of entries in the PATH.</p>
+<p>Ironically, <code>path_helper</code> is not itself on the path, so you must call it through
+its fully qualified name <code>/usr/libexec/path_helper</code>. The output of <code>path_helper</code>
+is a shell command to set the PATH. This command must itself be evaluated.</p>
+<p>I suggest to define the following shell alias for ease of use:</p>
+<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;
+</code></pre><p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
+<p>By default, OS X calls <code>path_helper</code> in <code>/etc/profile</code> so you do not need to add
+it yourself.</p>
+<p>Oh and by the way, <code>path_helper</code> does the same thing it does to <code>PATH</code> to
+<code>MANPATH</code> (which holds the paths used to find manpages) but with the
+<code>/etc/manpaths.d</code> directory.</p>
+<p>Final word of caution: <code>/etc/paths.d</code> requires root permission to write into.
+However, the files must be readable without root permissions to be used by
+<code>path_helper</code>. Hence you might need to do a <code>chmod 644</code> on the files you create
+in that directory.</p>
+<p>See <a href="http://www.softec.lu/site/DevelopersCorner/MasteringThePathHelper">this webpage</a> for more details about <code>path_helper</code></p>
+<p><strong>Setting the PATH for GUI applications</strong></p>
+<p>Ways of definin the PATH for GUI applications on OS X have a history of
+breaking. You may read on the net about <code>~/.MacOSX/environment.plist</code> or
+<code>launchd.conf</code>, but those no longer works.</p>
+<p><a href="http://stackoverflow.com/a/26586170">&quot;The&quot; solution</a>, at the time of writing, is to create a file
+<code>~/Library/LaunchAgents/environment.plist</code>, enter a bunch of boilerplate and
+include <code>launchtl setenv</code> commands to set environment variables.
+See <a href="http://stackoverflow.com/a/26586170">this explanation</a> for details.</p>
+<p>After a change, you can make it take effect with <code>launchctl load
+~/Library/LaunchAgents/environment.plist</code> (or wait for a reboot).</p>
+<p>Once applied, new applications started from the Finder (or Spotlight) will
+inherit the environment variables set in <code>environment.plist</code>.</p>
+<p>Note that what <code>environment.plist</code> does is simply run a script. You could use
+that to actually source your <code>.profile</code> or invoke <code>path_helper</code>. Two solutions
+that work with this idea (but doing rather more complicated things) are to be
+found <a href="http://stackoverflow.com/a/32405815">here</a> and <a href="http://superuser.com/a/476960">here</a>.</p>
+<p>The difficulty to achieve something so basic is truly baffling.</p>
+<h2 id="linux">Linux</h2>
+<p>There are too many desktop managers for Linux to cover. Cursory searches seem to
+indicate that this aspect isn&#39;t too well thought-out however.</p>
+<p>However, Linux should, <em>in theory</em>, be more scrupulous than OS X about
+inheriting the PATH, even in GUI applications. Which means that, editing
+<code>.profile</code> and rebooting <em>should</em> work as a last resort.</p>
+<p>Some distributions (notably Debian, Ubuntu, Fedora) have files called
+<code>~/.pam_environment</code> and <code>/etc/environment</code> where they recommend you define your
+environment variables. The benefits of this way of doing things are rather
+unclear, since it doesn&#39;t seem to enable anything that couldn&#39;t be done by
+defining variables in <code>.profile</code>.</p>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/path-mgmt";
+        this.page.identifier = "path-mgmt";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

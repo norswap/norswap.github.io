@@ -6,6 +6,81 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Music Piracy Miniguide</title>
+      <description>
+&lt;p&gt;Nowadays, it is easier than ever to listen to music: just use &lt;a href=&quot;https://play.spotify.com&quot;&gt;Spotify&lt;/a&gt; or
+&lt;a href=&quot;http://www.deezer.com/&quot;&gt;Deezer&lt;/a&gt;, amongst others.&lt;/p&gt;
+&lt;p&gt;Call me old-fashioned, but I don&amp;#39;t like to be dependent on an internet connection.
+I&amp;#39;m also a bit of a pirate at heart &lt;code&gt;P)&lt;/code&gt;. So let&amp;#39;s get started.&lt;/p&gt;
+&lt;h2 id=&quot;single-tracks&quot;&gt;Single Tracks&lt;/h2&gt;
+&lt;h3 id=&quot;youtube&quot;&gt;Youtube&lt;/h3&gt;
+&lt;p&gt;This is the option I use most often, because it is so damn easy. Go on &lt;a href=&quot;http://www.deezer.com/en/&quot;&gt;YouTube&lt;/a&gt;,
+then use the website &lt;a href=&quot;http://www.flvto.biz/&quot;&gt;flvto&lt;/a&gt;. Or even better, download
+their &lt;a href=&quot;http://www.flvto.biz/youtube-downloader/&quot;&gt;desktop app&lt;/a&gt; for Windows/OSX which enables HD downloads,
+and automatic detection of YouTube URLs in the clipboard. They also
+have &lt;a href=&quot;http://www.flvto.biz/addon/&quot;&gt;addons&lt;/a&gt; for most browsers.&lt;/p&gt;
+&lt;p&gt;Another alternative is &lt;a href=&quot;http://www.youtube-mp3.org&quot;&gt;youtube-mp3&lt;/a&gt;, which also has Firefox and Chrome &lt;a href=&quot;http://www.youtube-mp3.org/addons&quot;&gt;addons&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The downside of downloading from YouTube is that quality tends to be somewhat
+variable. I&amp;#39;m no audiophile and so if it sounds good to me, I download it.&lt;/p&gt;
+&lt;h3 id=&quot;songr&quot;&gt;Songr&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.xamasoft.com/songr/&quot;&gt;Songr&lt;/a&gt; is an app that searches a bunch of websites (include &lt;a href=&quot;http://groovesharks.org/&quot;&gt;Grooveshark&lt;/a&gt; and
+&lt;a href=&quot;http://pleer.net/&quot;&gt;Prostopleer&lt;/a&gt;) for MP3 downloads. I don&amp;#39;t use it very much, YouTube + flvto is
+easier, and the options in the next section are more comprehensive. Nevertheless
+it has been around for a while, and it&amp;#39;s good to know that it is available.&lt;/p&gt;
+&lt;h2 id=&quot;full-albums-single-tracks-&quot;&gt;Full Albums (&amp;amp; Single Tracks)&lt;/h2&gt;
+&lt;h3 id=&quot;spotiload-formerly-spotify-vk-downloader-&quot;&gt;Spotiload (formerly Spotify VK Downloader)&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://chrome.google.com/webstore/detail/spotiload-former-spotify/baggnalhgbpeanbhedjlbndhjgmimmhl&quot;&gt;Spotiload&lt;/a&gt; is a chrome extension that lets you download songs from Spotify.
+Except it doesn&amp;#39;t, really. Instead, you have to be logged on the Russian social
+network &lt;a href=&quot;https://vk.com/&quot;&gt;VK.com&lt;/a&gt;, which for some reason holds a huge collection of MP3s. You&amp;#39;ll
+then be able to search for the music you&amp;#39;re listening to on Spotify and download
+it from VK.&lt;/p&gt;
+&lt;p&gt;A small pain point is that you can only download songs 4 at at time, so you
+cannot leave you album download unattended. It has also happened to me that
+Spotiload couldn&amp;#39;t find some songs on VK (the song wasn&amp;#39;t on YouTube either, but
+I finally got it from Deezer). That should be exceedingly rare however.&lt;/p&gt;
+&lt;p&gt;There doesn&amp;#39;t seem to be any reliable way to download music from Spotify itself
+at the time of writing. VK, howver, doesn&amp;#39;t seem very intent to crack down on
+illegal downloads, so this seems like a good option for now.&lt;/p&gt;
+&lt;h3 id=&quot;deezer-downloader&quot;&gt;Deezer Downloader&lt;/h3&gt;
+&lt;p&gt;While searching for a song I couldn&amp;#39;t find by any other means, I stumbled on
+&lt;a href=&quot;https://www.reddit.com/r/Piracy/comments/5i33o1/yet_another_downloader_for_deezer/&quot;&gt;this reddit conversation&lt;/a&gt; introducing a Deezer desktop
+downloader. It works really well.&lt;/p&gt;
+&lt;p&gt;The caveat is that I&amp;#39;m not too confident about it being able to work for long.
+Like Spotify, Deezer is intent on cracking down on downloads. There seems to be
+a few other Deezer downloaders around, so who knows.&lt;/p&gt;
+&lt;p&gt;PS: I goes without saying that if you&amp;#39;re looking to replace anything on this
+guide, the &lt;a href=&quot;https://www.reddit.com/r/Piracy/&quot;&gt;Piracy sub-reddit&lt;/a&gt; is a good place to start looking.&lt;/p&gt;
+&lt;h3 id=&quot;private-bittorrent-trackers&quot;&gt;Private BitTorrent Trackers&lt;/h3&gt;
+&lt;p&gt;In general, BitTorrent is lousy for album downloads. However, there exist
+specialized trackers where you can find all the music you want. If only it was
+that easy...&lt;/p&gt;
+&lt;p&gt;First, these trackers usually require you to be invited by an existing member.
+Sometimes, you can pass an &lt;a href=&quot;https://interview.passtheheadphones.me/index.shtml&quot;&gt;interview&lt;/a&gt; (I kid you not) to be invited.&lt;/p&gt;
+&lt;p&gt;Once you&amp;#39;re invited, you&amp;#39;re required to maintain a positive seed ratio (upload
+as much as you download). That doesn&amp;#39;t seem like much, but it can actually be
+pretty challenging. First because everyone is trying to maintain/improve their
+ratio, so there is more upload capacity than demand. Second, because when you
+are starting out, you will have nothing to upload! Usually you can download
+without uploading at the beginning, to get a starting stash. Still, that doesn&amp;#39;t
+always suffice. Some trackers have &lt;em&gt;freeleech&lt;/em&gt; albums where downloads don&amp;#39;t count
+towards your ratio, but uploads do, the goal being to generate some easy upload
+for users. Incidentally this is also why many people use &lt;em&gt;seeboxes&lt;/em&gt; (servers
+dedicated to torrenting): those have high upload bandwidth, so you can increase
+your upload faster.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s a bit of a crazy world, and I haven&amp;#39;t found the need to engage in this
+sillyness so far, but you never know.&lt;/p&gt;
+&lt;p&gt;It seems that the best option currently is &lt;a href=&quot;https://passtheheadphones.me/&quot;&gt;Pass The Headphones&lt;/a&gt; and &lt;a href=&quot;https://apollo.rip/&quot;&gt;Apollo&lt;/a&gt;
+(formerly Xanax). Over the years, the best options have been OiNK, What.cd and
+Waffles.cd. Some of these grew quite famous, but ultimately they all closed or
+were closed.&lt;/p&gt;
+&lt;p&gt;The definitive source of info about private trackers is the &lt;a href=&quot;https://www.reddit.com/r/trackers/&quot;&gt;Trackers
+sub-reddit&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2017-01-24T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/music-piracy-miniguide</link>
+      <guid isPermaLink="true">http://norswap.com/music-piracy-miniguide</guid>
+    </item>
+    <item>
       <title>The Ultimate PATH Management Guide</title>
       <description>
 &lt;h2 id=&quot;basics-of-environment-variables-and-path&quot;&gt;Basics of Environment Variables and PATH&lt;/h2&gt;
@@ -17,8 +92,8 @@ later changes his variables, the change will not be reflected on the child&amp;#
 variables.&lt;/p&gt;
 &lt;p&gt;One particularly interesting environment variable is called &lt;code&gt;PATH&lt;/code&gt;: it defines
 the paths to search to find an executable specified by name. The value of this
-variable is a list of paths separated by a separator (&lt;code&gt;:&lt;/code&gt; on Unix-base OSes like
-Mac OS X and Linux, &lt;code&gt;;&lt;/code&gt; on Windows).&lt;/p&gt;
+variable is a list of paths separated by a separator (&lt;code&gt;:&lt;/code&gt; on Unix-based OSes
+like Mac OS X and Linux, &lt;code&gt;;&lt;/code&gt; on Windows).&lt;/p&gt;
 &lt;p&gt;This is particularly relevant on the command line: when you type the name of a
 program (for instance &lt;code&gt;ls&lt;/code&gt; in Unix), it will search the paths listed in the
 &lt;code&gt;PATH&lt;/code&gt; variable (from left to right) until it finds one containing a &lt;code&gt;ls&lt;/code&gt;
@@ -135,7 +210,7 @@ However, the files must be readable without root permissions to be used by
 in that directory.&lt;/p&gt;
 &lt;p&gt;See &lt;a href=&quot;http://www.softec.lu/site/DevelopersCorner/MasteringThePathHelper&quot;&gt;this webpage&lt;/a&gt; for more details about &lt;code&gt;path_helper&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Setting the PATH for GUI applications&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Ways of definin the PATH for GUI applications on OS X have a history of
+&lt;p&gt;Ways of defining the PATH for GUI applications on OS X have a history of
 breaking. You may read on the net about &lt;code&gt;~/.MacOSX/environment.plist&lt;/code&gt; or
 &lt;code&gt;launchd.conf&lt;/code&gt;, but those no longer works.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/a/26586170&quot;&gt;&amp;quot;The&amp;quot; solution&lt;/a&gt;, at the time of writing, is to create a file
@@ -425,7 +500,7 @@ a large range of books in the topics that interest me.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&quot;https://sivers.org/book&quot;&gt;Derek Sivers&amp;#39; Books Read&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.farnamstreetblog.com/&quot;&gt;Farnam Street&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://fourminutebooks.com/all-summaries/&quot;&gt;4 Minute Books&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;www.actionablebooks.com/en-ca/summaries/&quot;&gt;Actionable Books&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.actionablebooks.com/en-ca/summaries/&quot;&gt;Actionable Books&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://app.blinkist.com/en/library/&quot;&gt;Blinkist (paid)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The first four websites are great, but the selection is limited.&lt;/p&gt;
@@ -478,68 +553,6 @@ them and publish them with &lt;code&gt;git push&lt;/code&gt;.&lt;/p&gt;
       <pubDate>2016-09-21T22:00:00.000Z</pubDate>
       <link>http://norswap.com/github-pages</link>
       <guid isPermaLink="true">http://norswap.com/github-pages</guid>
-    </item>
-    <item>
-      <title>Cruising Blues</title>
-      <description>
-&lt;p&gt;Completing my series of posts about Robert Pirsig&amp;#39;s
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Zen_and_the_Art_of_Motorcycle_Maintenance&quot;&gt;Zen and the Art of motorcycle Maintenance&lt;/a&gt; (&lt;a href=&quot;/stuckness-and-understanding&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;/peace-of-mind&quot;&gt;2&lt;/a&gt;, &lt;a href=&quot;/gumption-arete&quot;&gt;3&lt;/a&gt;), here&amp;#39;s a
-fantastic expert from an article of Pirsig, titled
-&lt;a href=&quot;http://www.moq.org/forum/Pirsig/cruisingblues.html&quot;&gt;Cruising Blues and Their Cure&lt;/a&gt; and published in Esquire in 1977.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Virtue here comes from childhood reading about the old days of sailing ships
-when young men were sent to sea to learn manliness and virtue. I remember being
-skeptical about this. &amp;quot;How could a monotonous passage across a pile of water
-produce virtue?&amp;quot; I wondered. I figured that maybe a few bad storms would scare
-hell out of the young men and this would make them humble and manly and virtuous
-and appreciative of life ever afterward, but it seemed like a dubious
-curriculum. There were cheaper and quicker ways to scare people than that.&lt;/p&gt;
-&lt;p&gt;Now, however, with a boat of my own and some time at sea, I begin to see the
-learning of virtue another way. It has something to do with the way the sea and
-sun and wind and sky go on and on day after day, week after week, and the boat
-and you have to go on with it. You must take the helm and change the sails and
-take sights of the stars and work out their reductions and sleep and cook and
-eat and repair things as they break and do most of these things in stormy
-weather as well as fair, depressed as well as elated, because there&amp;#39;s no choice.
-You get used to it; it becomes habit-forming and produces a certain change in
-values. Old gear that has been through a storm or two without failure becomes
-more precious than it was when you bought it because you know you can trust it.
-The same becomes true of fellow crewmen and ultimately becomes true of things
-about yourself. Good first appearances count for less than they ever did, and
-real virtue - which comes from an ability to separate what merely looks good
-from what lasts and the acquisition of those characteristics in one&amp;#39;s self - is
-strengthened.&lt;/p&gt;
-&lt;p&gt;Self-discovery is as much a philosopher&amp;#39;s imponderable as reality, but when one
-takes away the external stimuli of civilization during long ocean hours at the
-helm far from any land, and particularly on overcast nights, every cruising
-sailor knows that what occurs is not an evening of complete blankness. Instead
-comes a flow of thought drawn forth by the emptiness of the night. Occurrences
-of the previous day, meager as they may have been, rise and are thought about
-for a while, and then die away to return again later, a little less compelling,
-and perhaps another time even weaker, until they die away completely and are not
-thought of again. Then older memories appear, of a week past, a month past, of
-years past, and these are thought about and sometimes interrelated with new
-insights. A problem that has been baffling in the past is now understood
-quickly. New ideas for things seem to pop up from nowhere because the rigid
-patterns of thought that inhibited them are now weakened by emptiness and
-depression. Then in time these new thoughts wear town too, and the empty night
-dredges deeper into the subconscious to tug at, loosen and dislodge old
-forgotten thoughts that were repressed years ago. Old injustices that one has
-had to absorb, old faces now gone, ancient feelings of personal doubt, remorse,
-hatred and fear, are suddenly loose and at you. You must face them again and
-again until they die away like the thoughts preceding them. This self that one
-discovers is in many ways a person one would not like one&amp;#39;s friends to know
-about; a person one may have been avoiding for years, full of vanity, cowardice,
-boredom, self-pity, laziness, blamingness, weak when he should be strong,
-aggressive when he should be gentle, a person who will do anything not to know
-these things about himself - the very same fellow who has been having problems
-with cruising depression all this time. I think it&amp;#39;s in the day-after-day,
-week-after-week confrontation of this person that the most valuable learning of
-virtue takes place.&lt;/p&gt;
-      </description>
-      <pubDate>2016-09-19T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/cruising-blues</link>
-      <guid isPermaLink="true">http://norswap.com/cruising-blues</guid>
     </item>
   </channel>
 </rss>

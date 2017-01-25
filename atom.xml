@@ -231,7 +231,7 @@ found &lt;a href=&quot;http://stackoverflow.com/a/32405815&quot;&gt;here&lt;/a&g
 indicate that this aspect isn&amp;#39;t too well thought-out however.&lt;/p&gt;
 &lt;p&gt;However, Linux should, &lt;em&gt;in theory&lt;/em&gt;, be more scrupulous than OS X about
 inheriting the PATH, even in GUI applications. Which means that, editing
-&lt;code&gt;.profile&lt;/code&gt; and rebooting &lt;em&gt;should&lt;/em&gt; work as a last resort.&lt;/p&gt;
+&lt;code&gt;.profile&lt;/code&gt; then login out and login in &lt;em&gt;should&lt;/em&gt; work as a last resort.&lt;/p&gt;
 &lt;p&gt;Some distributions (notably Debian, Ubuntu, Fedora) have files called
 &lt;code&gt;~/.pam_environment&lt;/code&gt; and &lt;code&gt;/etc/environment&lt;/code&gt; where they recommend you define your
 environment variables. The benefits of this way of doing things are rather

@@ -6,6 +6,54 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Action and Expectations</title>
+      <description>
+&lt;blockquote&gt;
+&lt;p&gt;Mindfulness is the art of “just doing”. The problem with expectation is that
+  it adds a layer of unnecessary complication to doing, a layer that is
+  potentially self-defeating. If you do a thing with an expectation, and it
+  doesn’t live up to your desire (as so often is the case) you experience fear,
+  failure, detachment and laziness.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!----&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The reason people are lazy is simultaneously the reason they are ambitious—
+  they associate action with expectation. If they don’t act, they don’t expect,
+  and thus don’t suffer. If they do act, they expect, and often do suffer.
+  Projecting idealizations onto an uncaring and inhuman world doesn’t make good
+  things more likely to happen. It often just causes you trouble.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/@dailyzen/expectation-and-delusion-2cb7edff6239#.tfut0y1au&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It’s important to see that it’s not life that causes suffering but our
+  expectation that life should be the way we want. We can’t live without
+  expectation, but if we can handle the feelings caused by the difference
+  between our expectations and reality, that’s liberation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/@dailyzen/zen-masters-101-kodo-sawaki-fc09dc251e00#.k457qrlnj&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Having a positive outlook on the future (optimism) seems like a pre-requisite
+for happiness. On the other hand, expecting the worst not to be disappointed is
+a common technique to avoid unhappiness. The technique is closely related to
+stoic philosophy. Zen masters, on the other hand, advocat not expecting anything
+at all.&lt;/p&gt;
+&lt;p&gt;There seems like there is a contradiction there. And indeed, there is. These
+examples are representative of a broader trade-off between a radical acceptance
+of the present moment, and the kind of positive visualisation that often is the
+impetus for action.&lt;/p&gt;
+&lt;p&gt;What&amp;#39;s the answer then? I think it&amp;#39;s to transcend the trade-off.&lt;br&gt;Act without expectations.&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Success consists of going from failure to failure without loss of enthusiasm.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Winston Churchill&lt;/p&gt;
+      </description>
+      <pubDate>2017-01-27T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/expectations</link>
+      <guid isPermaLink="true">http://norswap.com/expectations</guid>
+    </item>
+    <item>
       <title>Music Piracy Miniguide</title>
       <description>
 &lt;p&gt;Nowadays, it is easier than ever to listen to music: just use &lt;a href=&quot;https://play.spotify.com&quot;&gt;Spotify&lt;/a&gt; or
@@ -524,35 +572,6 @@ Prefix-tree) data structure in Kotlin.
       <pubDate>2016-09-22T22:00:00.000Z</pubDate>
       <link>http://norswap.com/triemap-champ</link>
       <guid isPermaLink="true">http://norswap.com/triemap-champ</guid>
-    </item>
-    <item>
-      <title>A website for your project with Github</title>
-      <description>
-&lt;p&gt;Github has a thing called &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; that lets you publish a static HTML
-website directly from your github repository. It&amp;#39;s quite handy, but I&amp;#39;m not
-really convinced with the documentation. So here goes the super-duper easy guide
-on how to add Github Pages to your existing project and manage it easily.&lt;/p&gt;
-&lt;p&gt;Run the following commands:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;mkdir pages
-cd pages
-git init .
-git remote add origin git@github.com:USERNAME/REPO.git
-git checkout --orphan gh-pages
-git commit --allow-empty -m &amp;quot;initial empty commit (pages)&amp;quot;
-git push -u origin gh-pages
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Finally, add &lt;code&gt;/pages/&lt;/code&gt; to the &lt;code&gt;.gitignore&lt;/code&gt; file for your project.&lt;/p&gt;
-&lt;p&gt;What it does: basically it clones your repo inside the &lt;code&gt;pages&lt;/code&gt; directory and
-immediately switches to an empty, commit-less branch called &lt;code&gt;gh-pages&lt;/code&gt; (as
-required by Github).&lt;/p&gt;
-&lt;p&gt;Github simply serves any file within the &lt;code&gt;gh-pages&lt;/code&gt; branch to the brower through
-&lt;code&gt;USERNAME.github.io/PROJECT/&lt;/code&gt;. If you&amp;#39;ve set up a custom domain name with
-Github, this domain will be used instead of &lt;code&gt;USERNAME.github.io&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;When inside the &lt;code&gt;page&lt;/code&gt; directory, you can make changes to your website, commit
-them and publish them with &lt;code&gt;git push&lt;/code&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2016-09-21T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/github-pages</link>
-      <guid isPermaLink="true">http://norswap.com/github-pages</guid>
     </item>
   </channel>
 </rss>

@@ -6,6 +6,399 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Ruby Methods, Procs and Blocks</title>
+      <description>
+&lt;p&gt;This is the first article in the &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt; series.&lt;/p&gt;
+&lt;p&gt;Here are a few question this article will try to answer:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;What combination of parameters are legal in method definition?&lt;/li&gt;
+&lt;li&gt;How are arguments assigned to parameters when calling a method?&lt;/li&gt;
+&lt;li&gt;How do blocks differ from procs?&lt;/li&gt;
+&lt;li&gt;What are the differences between lambdas and procs?&lt;/li&gt;
+&lt;li&gt;What is the difference between &lt;code&gt;{ ... }&lt;/code&gt; and &lt;code&gt;do ... end&lt;/code&gt;?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;declaring-parameters&quot;&gt;Declaring Parameters&lt;/h2&gt;
+&lt;p&gt;In everything that follows we make the distinction between &lt;em&gt;parameters&lt;/em&gt; (or
+&lt;em&gt;formal parameters&lt;/em&gt;): the parameters as they appear in method definitions; and
+&lt;em&gt;arguments&lt;/em&gt; (or &lt;em&gt;actual parameters&lt;/em&gt;): the value passed to method calls.&lt;/p&gt;
+&lt;p&gt;A method definition admits the following types of parameters:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;type&lt;/th&gt;
+&lt;th&gt;example&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;regular&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;a&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;default&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;b = 2&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;array decomposition&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(c, d*)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;splat&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;*e&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;keyword&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;f:&lt;/code&gt;, &lt;code&gt;g: 7&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;double splat&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;**h&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;block&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;&amp;amp;i&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;A kitchen sink example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;def foo a, (b, c), d = 1, *e, f:, g: 7, **h, &amp;amp;i; end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here are quick explanations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Default parameters can have a default value.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Array decomposition parameters are regular parameters that decompose an array
+argument into parts. Here are some examples, assuming the argument is &lt;code&gt;[[1,
+2], 3]&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(a*)          a = [[1, 2], 3]
+(a, b)        a = [1, 2], b = 3
+(a, b*)       a = [1, 2], b = [3]
+(a, b, c*)    a = [1, 2], b = 3,   c = []
+((a, b), c)   a = 1,      b = 2,   c = 3
+((a, b*), c)  a = 1,      b = [2], c = 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The splat parameter enables variable length argument lists and receives all
+extra arguments.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Keyword operators have to be named explicitly when calling the method:
+&lt;code&gt;foo(f: 6)&lt;/code&gt;. They can have default values.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The double splat parameter acts like the splat parameter, but for extra
+keyword arguments.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The block parameter gives a name to the block passed to the method, allowing
+you to pass it to other methods, and call it by name instead of through
+&lt;code&gt;yield&lt;/code&gt;. See more on blocks in the section on &lt;a href=&quot;#blocks-and-procs&quot;&gt;Blocks and Procs&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;ordering&quot;&gt;Ordering&lt;/h3&gt;
+&lt;p&gt;You can&amp;#39;t mix match these parameters as you please. All types of parameters are
+optional, but those that are present must respect the following ordering:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;regular parameters, default parameters, and splat parameter (at most one)&lt;/li&gt;
+&lt;li&gt;keyword parameters&lt;/li&gt;
+&lt;li&gt;double splat parameter (at most one)&lt;/li&gt;
+&lt;li&gt;block parameter (at most one)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;best-practices&quot;&gt;Best Practices&lt;/h3&gt;
+&lt;p&gt;Put the parameters in the following order:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;regular parameters&lt;/li&gt;
+&lt;li&gt;default parameters&lt;/li&gt;
+&lt;li&gt;splat parameters&lt;/li&gt;
+&lt;li&gt;keyword parameters&lt;/li&gt;
+&lt;li&gt;double splat parameter&lt;/li&gt;
+&lt;li&gt;block parameter&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You should not mix the ordering of regular, default and splat parameters, it
+makes it very unintuitive which parameters gets assigned which argument.&lt;/p&gt;
+&lt;h2 id=&quot;assigning-arguments-to-parameters&quot;&gt;Assigning Arguments to Parameters&lt;/h2&gt;
+&lt;p&gt;The real complexity of Ruby&amp;#39;s methods is determining how arguments are mapped to
+parameters.&lt;/p&gt;
+&lt;p&gt;Here are the different types of arguments you can pass to a method call:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;type&lt;/th&gt;
+&lt;th&gt;example&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;regular&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;v&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;keyword&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;b: v&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;hash argument&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;:c =&amp;gt; v&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;splat&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;*v&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;double splat&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;**v&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;block conversion&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;&amp;amp;v&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;block&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{ .. }&lt;/code&gt; or &lt;code&gt;do .. end&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;You can substitute &lt;code&gt;v&lt;/code&gt; with almost any expression, as long as you respect
+operator precedence.&lt;/p&gt;
+&lt;p&gt;A kitchen sink example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;foo 1, *array, 2, c: 3, :d =&amp;gt; 4, **hash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here are quick explanations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Keyword and hash arguments are always treated the same. You should prefer the
+keyword syntax. They match keyword parameters.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If the splat argument is an &lt;code&gt;Array&lt;/code&gt; or an object that supported the &lt;code&gt;to_a&lt;/code&gt;
+method, it is expanded inside the method call: &lt;code&gt;foo(1, *[2, 3], 3)&lt;/code&gt; is
+equivalent to &lt;code&gt;foo(1, 2, 3, 4)&lt;/code&gt;. Otherwise the splat expands to a regular
+argument.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A double splat works the same, but for hashes: &lt;code&gt;foo(a: 1, **{b: 2, c: 3}, e:
+4)&lt;/code&gt; is equivalent to &lt;code&gt;foo(a: 1, b: 2, c: 3, d: 4)&lt;/code&gt;. It performs implicit
+conversion to &lt;code&gt;Hash&lt;/code&gt; for objects that support the &lt;code&gt;to_hash&lt;/code&gt; method. Note in
+passing that by convention &lt;code&gt;to_hash&lt;/code&gt; represents implicit conversion to a
+&lt;code&gt;Hash&lt;/code&gt;, while &lt;code&gt;to_h&lt;/code&gt; represents explicit (on-demand only) conversion.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A block conversion argument must be a &lt;code&gt;Proc&lt;/code&gt;, or an object that can implicitly
+converted to one via &lt;code&gt;to_proc&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Finally, a method can be passed a block explicitly. The block will appear
+after the argument list. We&amp;#39;ll touch on the difference between the two block
+syntaxes in the &lt;a href=&quot;#blocks-and-procs&quot;&gt;section about blocks&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;ordering&quot;&gt;Ordering&lt;/h3&gt;
+&lt;p&gt;Again, arguments cannot be supplied in any order. All regular and splat
+arguments must appear before any keyword and double splat arguments. A block
+conversion or block argument (only one allowed) must appear last.&lt;/p&gt;
+&lt;p&gt;If the order is not respected, an error ensues.&lt;/p&gt;
+&lt;h3 id=&quot;assigning-arguments-to-parameters&quot;&gt;Assigning Arguments to Parameters&lt;/h3&gt;
+&lt;p&gt;Below we say &amp;quot;keyword argument&amp;quot; to mean &amp;quot;keyword or hash argument&amp;quot;, as those are
+always treated identically.&lt;/p&gt;
+&lt;p&gt;Where an error is mentionned, it is most likely an &lt;code&gt;ArgumentError&lt;/code&gt;. I haven&amp;#39;t
+re-checked everything, but it should always be the case.&lt;/p&gt;
+&lt;p&gt;Here is the full procedure for figuring out how arguments are assigned to
+parameters:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Expand any splat or double splat arguments. The expanded content is taken
+into account when we talk about regular or keyword arguments later on.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Let &lt;code&gt;n&lt;/code&gt; be the number of regular parameters&lt;br&gt;Let &lt;code&gt;m&lt;/code&gt; be the number of regular and default parameters&lt;br&gt;Let &lt;code&gt;x&lt;/code&gt; be the number of regular arguments&lt;/p&gt;
+&lt;p&gt;Depending on the value of &lt;code&gt;x&lt;/code&gt; (pick the first case that matches):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;lt; n-1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;There aren&amp;#39;t enough regular arguments, an error ensues.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;x == n-1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If there aren&amp;#39;t any keyword arguments, an error ensues.&lt;/p&gt;
+&lt;p&gt;Otherwise, the last regular parameter will receive a hash that will
+collect all keyword arguments.&lt;/p&gt;
+&lt;p&gt;If there were any keyword parameter without default value, an error
+ensues. If there was a double splat parameter, it will receive an empty
+hash.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first regular
+parameters.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;lt; m&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The first &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first regular
+and/or keyword parameters. The last &lt;code&gt;m-x&lt;/code&gt; default parameters get assigned
+their default values.&lt;/p&gt;
+&lt;p&gt;However, a special case arises if there are keyword arguments but no
+keyword or double splat parameters. In this case, the keyword arguments
+will be collected in a hash, and assigned to the first default parameter
+who has a hash as default value. If none have, the hash is assigned to the
+first regular or default parameter instead. The assignment from arguments
+to parameters is shifted, of course (i.e. no arguments is lost because of
+this).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;gt; m&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;m&lt;/code&gt; first arguments are assigned to the &lt;code&gt;m&lt;/code&gt; first regular and/or
+default parameters.&lt;/p&gt;
+&lt;p&gt;If there is at least a keyword or double splat parameter, but there are no
+keyword arguments, and if the last regular argument is a &lt;code&gt;Hash&lt;/code&gt; or can be
+converted to one with &lt;code&gt;to_hash&lt;/code&gt;, consider it is a double splat argument and
+expand it.&lt;/p&gt;
+&lt;p&gt;All other arguments (&lt;code&gt;x-m&lt;/code&gt; or &lt;code&gt;x-m-1&lt;/code&gt; of them) are collected in an array
+and assigned to the splat parameter if it exists. If there is no splat
+parameter and there more than 0 such arguments, an error ensues.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Assuming the keyword argument weren&amp;#39;t captured in either the &lt;code&gt;x == n-1&lt;/code&gt; or &lt;code&gt;x
+&amp;lt; m&lt;/code&gt; cases in step 2, three situations are possible:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The are keyword or double plat parameters.&lt;/p&gt;
+&lt;p&gt;The keywords arguments are assigned to the corresponding keyword parameter.
+If a keyword parameter without default value is not filled, an error ensued.&lt;/p&gt;
+&lt;p&gt;If two values are supplied for the same key, the last one wins. However, if
+the two values are visible in the method call (e.g. &lt;code&gt;foo(a: 1, **{a: 2})&lt;/code&gt;),
+a warning is emitted.&lt;/p&gt;
+&lt;p&gt;If any keyword arguments remain, they are collected inside a hash and
+assigned to the double splat parameter if it exists. If it doesn&amp;#39;t and any
+keyword argument remain, an error ensues.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There are no keyword or double splat parameters, but there is a splat
+parameter.&lt;/p&gt;
+&lt;p&gt;All keyword arguments are collected in a hash, which is added to the array
+assigned to the splat parameter.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;There are no keyword, double splat or splat parameters. If there are any
+keyword arguments, an error ensues.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If a block or block conversion argument is passed, assign it to the block
+parameter if any, otherwise it becomes the implicit block parameter.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;blocks-and-procs&quot;&gt;Blocks and Procs&lt;/h2&gt;
+&lt;p&gt;The following is in general much better understood than assignment from
+arguments to parameters.&lt;/p&gt;
+&lt;h3 id=&quot;procs-vs-blocks&quot;&gt;Procs vs Blocks&lt;/h3&gt;
+&lt;p&gt;Blocks are what you pass at the end of a method call, while procs are what you
+create using &lt;code&gt;proc&lt;/code&gt;, &lt;code&gt;Proc.new&lt;/code&gt;, &lt;code&gt;lambda&lt;/code&gt; or &lt;code&gt;-&amp;gt;&lt;/code&gt;. Any function can accept a
+block, either implicitly, or explicitly via a block argument. Procs can be
+passed to any parameter, or to the block parameter if converted via &lt;code&gt;&amp;amp;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This is less known, but you can convert a block to a proc, by calling &lt;code&gt;Proc.new&lt;/code&gt;
+or &lt;code&gt;proc&lt;/code&gt; without any parameter.&lt;/p&gt;
+&lt;h3 id=&quot;procs-vs-lambdas&quot;&gt;Procs vs Lambdas&lt;/h3&gt;
+&lt;p&gt;Lambdas are special, stricter kind of procs.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Regular procs can perform non-local control flow: if a proc uses &lt;code&gt;retry&lt;/code&gt;,
+&lt;code&gt;return&lt;/code&gt;, &lt;code&gt;break&lt;/code&gt;, &lt;code&gt;next&lt;/code&gt; or &lt;code&gt;redo&lt;/code&gt;, those will be interpreted as though the
+proc&amp;#39;s code had been inlined at the point where the proc was called. This can
+only happen in the method in which the proc was originally defined. If called
+outside the method, a proc that performs non-local control flow will cause a
+&lt;code&gt;LocalJumpError&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If regular procs are passed too many arguments, the extra arguments are
+ignored instead of causing an error (the behaviour is otherwise the same as
+for methods, as outlined above). Lambda behave like methods for parameter
+assignment.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You create a regular proc with &lt;code&gt;proc&lt;/code&gt; or &lt;code&gt;Proc.new&lt;/code&gt;, while lambda are created
+with &lt;code&gt;lambda&lt;/code&gt; or the &lt;code&gt;-&amp;gt;&lt;/code&gt; notation (&lt;em&gt;lambda literal&lt;/em&gt; or &lt;em&gt;dash rocket&lt;/em&gt; or &lt;em&gt;stab
+operator&lt;/em&gt;). While the three first forms simply take a block argument, the &lt;code&gt;-&amp;gt;&lt;/code&gt;
+notation works like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;-&amp;gt; (a, b) { ... }
+-&amp;gt; (a, b) do .. end
+-&amp;gt; { ... }
+-&amp;gt; do .. end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;curly-brackets-vs-do-end-&quot;&gt;Curly Brackets (&lt;code&gt;{}&lt;/code&gt;) vs &lt;code&gt;do .. end&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;There is not semantic difference between both forms.&lt;/p&gt;
+&lt;p&gt;There is one syntactic difference because the two forms have different
+precedences:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;foo bar { ... }     # foo(bar { ... })
+foo bar do ... end  # foo(bar) { ... }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you don&amp;#39;t need to use this particularity, there are two popular ways to
+choose on form over the other:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Use curlies for single-line blocks, &lt;code&gt;do ... end&lt;/code&gt; for multi-line blocks.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use curlies when the return value is used, &lt;code&gt;do ... end&lt;/code&gt; when only the
+side-effects matter.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;calling-procs-and-blocks&quot;&gt;Calling Procs and Blocks&lt;/h3&gt;
+&lt;p&gt;As we said above, procs work like method for assigning arguments to parameters,
+but extra arguments are ignored for regular procs (not for lambdas).&lt;/p&gt;
+&lt;p&gt;Blocks acts like regular procs: extra arguments are ignored.&lt;/p&gt;
+&lt;p&gt;Blocks cannot be passed a block of their own!&lt;/p&gt;
+&lt;p&gt;You can call an implicit or explicit block using &lt;code&gt;yield&lt;/code&gt;. An explicit block or
+proc named &lt;code&gt;x&lt;/code&gt; can be called using &lt;code&gt;x.call(1, 2)&lt;/code&gt;, &lt;code&gt;x.(1, 2)&lt;/code&gt; or &lt;code&gt;x[1, 2]&lt;/code&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2017-02-08T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/ruby-methods</link>
+      <guid isPermaLink="true">http://norswap.com/ruby-methods</guid>
+    </item>
+    <item>
+      <title>Ruby&#39;s Specification Problem</title>
+      <description>
+&lt;p&gt;I&amp;#39;m start a series of post about &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt;. Here I
+would like to talk about the reason for these posts: that despite its
+popularity, Ruby is thoroughly under-documented.&lt;/p&gt;
+&lt;p&gt;Here is a look at some questions I&amp;#39;m answering in my &lt;a href=&quot;/ruby-dark-corners&quot;&gt;dark corners&lt;/a&gt; series:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;What combination of parameters are legal in method definition?&lt;/li&gt;
+&lt;li&gt;How are arguments assigned to parameters when calling a method?&lt;/li&gt;
+&lt;li&gt;How are ancestors ordered when using &lt;code&gt;include&lt;/code&gt;?&lt;/li&gt;
+&lt;li&gt;How do we know what name refers to?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It looks like stuff that should be well-understood, but it isn&amp;#39;t. The &lt;a href=&quot;http://ruby-doc.org/core-2.4.0/&quot;&gt;official
+documentation&lt;/a&gt; doesn&amp;#39;t cover these topics and doesn&amp;#39;t do so in enough depth.
+Sometimes, it is even downright misleading. For each these topics them, I
+couln&amp;#39;t find any blog article that was even remotely close from telling the
+whole story.&lt;/p&gt;
+&lt;p&gt;The behaviour of Ruby is very much implementation-defined. An &lt;a href=&quot;https://www.ipa.go.jp/files/000011432.pdf&quot;&gt;ISO standard&lt;/a&gt; is
+available, but it covers Ruby 1.8, which is at this point rather old (the
+current version is 2.4). For each of the three topics I&amp;#39;m covering, new versions
+change the semantics and/or bring new details to the story. Another artifact of
+importance is the &lt;a href=&quot;https://github.com/ruby/spec&quot;&gt;Ruby Spec Suite&lt;/a&gt;, a test suite that is used by alternative
+implementations to verify they comply with the official implementation. A test
+suite is just what it is however, I haven&amp;#39;t found it very useful as a tool to
+understand how things work (e.g. try to understand linearization by reading
+&lt;a href=&quot;https://github.com/ruby/spec/blob/master/language/super_spec.rb&quot;&gt;&lt;code&gt;super_spec.rb&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;https://github.com/ruby/spec/blob/master/core/module/include_spec.rb&quot;&gt;&lt;code&gt;include_spec.rb&lt;/code&gt;&lt;/a&gt;). Popular books like &lt;em&gt;Ruby under a
+Microscope&lt;/em&gt; and &lt;em&gt;Metaprogramming in Ruby&lt;/em&gt; don&amp;#39;t have the answers either.&lt;/p&gt;
+&lt;p&gt;Ultimately, there are two sources of truth: dive in the source code of &lt;a href=&quot;https://github.com/ruby/ruby&quot;&gt;MRI&lt;/a&gt;
+(Matz&amp;#39; Ruby Implementation — the official implementation) or experiment with the
+interpreter. I chose the later, more as a matter of fact than as a well-planned
+strategy. It is entirely possible I made some mistake in the way I interpreted
+the rules, but it will put you closer to the truth than anything you can find
+online.&lt;/p&gt;
+&lt;p&gt;As a concluding remark, I want to emphasize that I&amp;#39;m not picking on Ruby. It&amp;#39;s a
+language I really like, and the situation is much the same in many other
+languages. Nevertheless that&amp;#39;s not a reason to be satisfied with the status quo,
+and my &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corner&lt;/a&gt; series is my humble contribution to
+that.&lt;/p&gt;
+      </description>
+      <pubDate>2017-02-08T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/ruby-specification-problem</link>
+      <guid isPermaLink="true">http://norswap.com/ruby-specification-problem</guid>
+    </item>
+    <item>
+      <title>Ruby&#39;s Dark Corners</title>
+      <description>
+&lt;p&gt;Recently, I&amp;#39;ve been immersing myself in the Ruby language for the need of our
+new programming language paradigms course. Ruby is there to showcase run-time
+metaprogramming.&lt;/p&gt;
+&lt;p&gt;I have been surprised by how some language features are governed by byzantine
+rules. Most practitionners know and use these features, supported by an
+heuristic undertanding of them that is serviceable in most situations. However,
+itt turns out almost no-one understand the precise semantics.&lt;/p&gt;
+&lt;p&gt;After investing some time to understand these features, I thought I would go the
+extra mile and publish my findings. Here are the topics I will cover:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;/ruby-methods&quot;&gt;Ruby&amp;#39;s Methods, Procs and Blocks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Ruby&amp;#39;s Module Linearization (soon)&lt;/li&gt;
+&lt;li&gt;Ruby&amp;#39;s Lookups and Scopes (soon)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you think all of this is documented elsewhere, read &lt;a href=&quot;/ruby-specification-problem&quot;&gt;Ruby&amp;#39;s Specification
+Problem&lt;/a&gt; and think again.&lt;/p&gt;
+      </description>
+      <pubDate>2017-02-08T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/ruby-dark-corners</link>
+      <guid isPermaLink="true">http://norswap.com/ruby-dark-corners</guid>
+    </item>
+    <item>
       <title>Action and Expectations</title>
       <description>
 &lt;blockquote&gt;
@@ -451,127 +844,6 @@ discussion, make sure to share it in the comments.&lt;/p&gt;
       <pubDate>2016-10-09T22:00:00.000Z</pubDate>
       <link>http://norswap.com/robin-hood-hashing-jvm</link>
       <guid isPermaLink="true">http://norswap.com/robin-hood-hashing-jvm</guid>
-    </item>
-    <item>
-      <title>Learned Optimism</title>
-      <description>
-&lt;p&gt;Summary of &lt;a href=&quot;https://github.com/raganwald/presentations/blob/master/optimism.md&quot;&gt;Reginald Braithwaite&amp;#39;s presentation&lt;/a&gt; at Nordic Ruby 2016.&lt;/p&gt;
-&lt;p&gt;Learned Optimism is a book by Dr. Martin Seligman.&lt;/p&gt;
-&lt;p&gt;The book exposes a theory about how people explain things to themselves. We all
-do this, it&amp;#39;s part of the whole sentience thing we have going on. Something
-happens, and we make up a little theory about why it happened.&lt;/p&gt;
-&lt;p&gt;The explanations you produce are classified along the following axis:&lt;/p&gt;
-&lt;dl&gt;
-
-  &lt;dt&gt;Personal vs Impersonal&lt;/dt&gt;
-
-  &lt;dd&gt;Whether the explanation makes you responsible for the thing that happened
-  (personal) or not (impersonal).&lt;/dd&gt;
-
-  &lt;dt&gt;Specific vs General&lt;/dt&gt;
-
-  &lt;dd&gt;Is the explanation about the thing that happened (specific), or are they
-  about you, your beliefs, your methods, ... (general).&lt;/dd&gt;
-
-  &lt;dt&gt;Temporary vs Permanent&lt;/dt&gt;
-
-  &lt;dd&gt;Is the thing that happened temporary? Or is it permanent? Did it happen
-  just one time, or is it a pattern that will repeat itself?&lt;/dd&gt;
-
-&lt;/dl&gt;
-
-&lt;p&gt;Seligman research showed that explanations differ depending on whether the
-explainer is an optimist or a pessimist, and whether the thing that happened is
-good or bad.&lt;/p&gt;
-&lt;dl&gt;
-    &lt;dt&gt;Optimists&lt;/dt&gt;
-
-    &lt;dd&gt;
-    &lt;ul&gt;
-    &lt;li&gt;Good things are personal, general, and permanent.&lt;/li&gt;
-    &lt;li&gt;Bad things are impersonal, specific, and temporary.&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;/dd&gt;
-
-    &lt;dt&gt;Pessimists&lt;/dt&gt;
-
-    &lt;dd&gt;
-    &lt;ul&gt;
-    &lt;li&gt;Good things are impersonal, specific, and temporary.&lt;/li&gt;
-    &lt;li&gt;Bad things are personal, general, and permanent.&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;/dd&gt;
-&lt;/dl&gt;
-
-&lt;p&gt;Both optimists are pessimists are inconsistent in their explanations, but in a
-different way.&lt;/p&gt;
-&lt;p&gt;This is a simplified model, and may even seem silly; but if you&amp;#39;re like me
-(norswap), it&amp;#39;s hard not to recognize that you flog yourself over your mistakes
-more often than you pat yourself on the back for your achievements.&lt;/p&gt;
-&lt;p&gt;Seligman says you can train yourself to become an optimist, and this implies
-changing the patterns of your explanations. He claims this changes your mood and
-your productivity.&lt;/p&gt;
-&lt;p&gt;It is not controversial to say that our moods affect the explanations we make up
-for things that happen in our lives. Explanatory Theory takes it a step further
-and says that the explanations we make up for things also affect our moods and
-behaviour.&lt;/p&gt;
-&lt;p&gt;To train yourself to become an optimist:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;You train yourself to make a note of your explanations, every day. Repetition
-and consistency matters.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You analyze whether your explanations for good things are personal, general,
-and permanent. You analyze whether your explanations for bad things are
-impersonal, specific, and temporary.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You correct your explanations to make them optimistic. And you track your
-progress, just as you would track your progress for anything else you are
-trying to change in your life.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-      </description>
-      <pubDate>2016-09-26T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/learned-optimism</link>
-      <guid isPermaLink="true">http://norswap.com/learned-optimism</guid>
-    </item>
-    <item>
-      <title>Book Summaries</title>
-      <description>
-&lt;p&gt;I like to read a lot, notably books about psychology, philosophy, and other
-actionable topics. However, I often feel that these book dilute their ideas too
-much, in order to make a &amp;quot;proper&amp;quot; (fat) book out of it.&lt;/p&gt;
-&lt;p&gt;But now, I have the cure. &lt;a href=&quot;https://www.quora.com/What-are-the-best-book-summary-websites&quot;&gt;This list of book summary websites&lt;/a&gt; covers
-a large range of books in the topics that interest me.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a copy of the list for posterity:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.deconstructingexcellence.com/&quot;&gt;Deconstructing Excellence&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://sivers.org/book&quot;&gt;Derek Sivers&amp;#39; Books Read&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.farnamstreetblog.com/&quot;&gt;Farnam Street&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://fourminutebooks.com/all-summaries/&quot;&gt;4 Minute Books&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.actionablebooks.com/en-ca/summaries/&quot;&gt;Actionable Books&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://app.blinkist.com/en/library/&quot;&gt;Blinkist (paid)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The first four websites are great, but the selection is limited.&lt;/p&gt;
-&lt;p&gt;Actionable Books has a lot of things, but the summaries only include 3/4 bullet
-points and sometimes fail to capture the essence of the book, as far as I&amp;#39;ve
-seen.&lt;/p&gt;
-&lt;p&gt;Blinkist seemed like the most well-rounded option. I made a trial account and
-was quite satisfied with the two summaries I read.&lt;/p&gt;
-      </description>
-      <pubDate>2016-09-23T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/book-summaries</link>
-      <guid isPermaLink="true">http://norswap.com/book-summaries</guid>
-    </item>
-    <item>
-      <title>briefly</title>
-      <description>
-&lt;p&gt;As a learning exercise, I implemented the CHAMP (Compressed Hash-Array Mapped
-Prefix-tree) data structure in Kotlin.
-&lt;a href=&quot;https://github.com/norswap/triemap&quot;&gt;Check it here.&lt;/a&gt;&lt;/p&gt;
-      </description>
-      <pubDate>2016-09-22T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/triemap-champ</link>
-      <guid isPermaLink="true">http://norswap.com/triemap-champ</guid>
     </item>
   </channel>
 </rss>

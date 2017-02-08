@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Ruby Methods, Procs and Blocks
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Ruby Methods, Procs and Blocks</h1>
+      <span class="post-date">09 Feb 2017</span>
+<p>This is the first article in the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series.</p>
+<p>Here are a few question this article will try to answer:</p>
+<ul>
+<li>What combination of parameters are legal in method definition?</li>
+<li>How are arguments assigned to parameters when calling a method?</li>
+<li>How do blocks differ from procs?</li>
+<li>What are the differences between lambdas and procs?</li>
+<li>What is the difference between <code>{ ... }</code> and <code>do ... end</code>?</li>
+</ul>
+<h2 id="declaring-parameters">Declaring Parameters</h2>
+<p>In everything that follows we make the distinction between <em>parameters</em> (or
+<em>formal parameters</em>): the parameters as they appear in method definitions; and
+<em>arguments</em> (or <em>actual parameters</em>): the value passed to method calls.</p>
+<p>A method definition admits the following types of parameters:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>regular</td>
+<td><code>a</code></td>
+</tr>
+<tr>
+<td>default</td>
+<td><code>b = 2</code></td>
+</tr>
+<tr>
+<td>array decomposition</td>
+<td><code>(c, d*)</code></td>
+</tr>
+<tr>
+<td>splat</td>
+<td><code>*e</code></td>
+</tr>
+<tr>
+<td>keyword</td>
+<td><code>f:</code>, <code>g: 7</code></td>
+</tr>
+<tr>
+<td>double splat</td>
+<td><code>**h</code></td>
+</tr>
+<tr>
+<td>block</td>
+<td><code>&amp;i</code></td>
+</tr>
+</tbody>
+</table>
+<p>A kitchen sink example:</p>
+<pre><code class="lang-ruby">def foo a, (b, c), d = 1, *e, f:, g: 7, **h, &amp;i; end
+</code></pre>
+<p>Here are quick explanations:</p>
+<ul>
+<li><p>Default parameters can have a default value.</p>
+</li>
+<li><p>Array decomposition parameters are regular parameters that decompose an array
+argument into parts. Here are some examples, assuming the argument is <code>[[1,
+2], 3]</code>:</p>
+<pre><code>(a*)          a = [[1, 2], 3]
+(a, b)        a = [1, 2], b = 3
+(a, b*)       a = [1, 2], b = [3]
+(a, b, c*)    a = [1, 2], b = 3,   c = []
+((a, b), c)   a = 1,      b = 2,   c = 3
+((a, b*), c)  a = 1,      b = [2], c = 3
+</code></pre></li>
+<li><p>The splat parameter enables variable length argument lists and receives all
+extra arguments.</p>
+</li>
+<li><p>Keyword operators have to be named explicitly when calling the method:
+<code>foo(f: 6)</code>. They can have default values.</p>
+</li>
+<li><p>The double splat parameter acts like the splat parameter, but for extra
+keyword arguments.</p>
+</li>
+<li><p>The block parameter gives a name to the block passed to the method, allowing
+you to pass it to other methods, and call it by name instead of through
+<code>yield</code>. See more on blocks in the section on <a href="#blocks-and-procs">Blocks and Procs</a>.</p>
+</li>
+</ul>
+<h3 id="ordering">Ordering</h3>
+<p>You can&#39;t mix match these parameters as you please. All types of parameters are
+optional, but those that are present must respect the following ordering:</p>
+<ol>
+<li>regular parameters, default parameters, and splat parameter (at most one)</li>
+<li>keyword parameters</li>
+<li>double splat parameter (at most one)</li>
+<li>block parameter (at most one)</li>
+</ol>
+<h3 id="best-practices">Best Practices</h3>
+<p>Put the parameters in the following order:</p>
+<ol>
+<li>regular parameters</li>
+<li>default parameters</li>
+<li>splat parameters</li>
+<li>keyword parameters</li>
+<li>double splat parameter</li>
+<li>block parameter</li>
+</ol>
+<p>You should not mix the ordering of regular, default and splat parameters, it
+makes it very unintuitive which parameters gets assigned which argument.</p>
+<h2 id="assigning-arguments-to-parameters">Assigning Arguments to Parameters</h2>
+<p>The real complexity of Ruby&#39;s methods is determining how arguments are mapped to
+parameters.</p>
+<p>Here are the different types of arguments you can pass to a method call:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>regular</td>
+<td><code>v</code></td>
+</tr>
+<tr>
+<td>keyword</td>
+<td><code>b: v</code></td>
+</tr>
+<tr>
+<td>hash argument</td>
+<td><code>:c =&gt; v</code></td>
+</tr>
+<tr>
+<td>splat</td>
+<td><code>*v</code></td>
+</tr>
+<tr>
+<td>double splat</td>
+<td><code>**v</code></td>
+</tr>
+<tr>
+<td>block conversion</td>
+<td><code>&amp;v</code></td>
+</tr>
+<tr>
+<td>block</td>
+<td><code>{ .. }</code> or <code>do .. end</code></td>
+</tr>
+</tbody>
+</table>
+<p>You can substitute <code>v</code> with almost any expression, as long as you respect
+operator precedence.</p>
+<p>A kitchen sink example:</p>
+<pre><code class="lang-ruby">foo 1, *array, 2, c: 3, :d =&gt; 4, **hash
+</code></pre>
+<p>Here are quick explanations:</p>
+<ul>
+<li><p>Keyword and hash arguments are always treated the same. You should prefer the
+keyword syntax. They match keyword parameters.</p>
+</li>
+<li><p>If the splat argument is an <code>Array</code> or an object that supported the <code>to_a</code>
+method, it is expanded inside the method call: <code>foo(1, *[2, 3], 3)</code> is
+equivalent to <code>foo(1, 2, 3, 4)</code>. Otherwise the splat expands to a regular
+argument.</p>
+</li>
+<li><p>A double splat works the same, but for hashes: <code>foo(a: 1, **{b: 2, c: 3}, e:
+4)</code> is equivalent to <code>foo(a: 1, b: 2, c: 3, d: 4)</code>. It performs implicit
+conversion to <code>Hash</code> for objects that support the <code>to_hash</code> method. Note in
+passing that by convention <code>to_hash</code> represents implicit conversion to a
+<code>Hash</code>, while <code>to_h</code> represents explicit (on-demand only) conversion.</p>
+</li>
+<li><p>A block conversion argument must be a <code>Proc</code>, or an object that can implicitly
+converted to one via <code>to_proc</code>.</p>
+</li>
+<li><p>Finally, a method can be passed a block explicitly. The block will appear
+after the argument list. We&#39;ll touch on the difference between the two block
+syntaxes in the <a href="#blocks-and-procs">section about blocks</a>.</p>
+</li>
+</ul>
+<h3 id="ordering">Ordering</h3>
+<p>Again, arguments cannot be supplied in any order. All regular and splat
+arguments must appear before any keyword and double splat arguments. A block
+conversion or block argument (only one allowed) must appear last.</p>
+<p>If the order is not respected, an error ensues.</p>
+<h3 id="assigning-arguments-to-parameters">Assigning Arguments to Parameters</h3>
+<p>Below we say &quot;keyword argument&quot; to mean &quot;keyword or hash argument&quot;, as those are
+always treated identically.</p>
+<p>Where an error is mentionned, it is most likely an <code>ArgumentError</code>. I haven&#39;t
+re-checked everything, but it should always be the case.</p>
+<p>Here is the full procedure for figuring out how arguments are assigned to
+parameters:</p>
+<ol>
+<li><p>Expand any splat or double splat arguments. The expanded content is taken
+into account when we talk about regular or keyword arguments later on.</p>
+</li>
+<li><p>Let <code>n</code> be the number of regular parameters<br>Let <code>m</code> be the number of regular and default parameters<br>Let <code>x</code> be the number of regular arguments</p>
+<p>Depending on the value of <code>x</code> (pick the first case that matches):</p>
+<ul>
+<li><p><code>x &lt; n-1</code></p>
+<p>There aren&#39;t enough regular arguments, an error ensues.</p>
+</li>
+<li><p><code>x == n-1</code></p>
+<p>If there aren&#39;t any keyword arguments, an error ensues.</p>
+<p>Otherwise, the last regular parameter will receive a hash that will
+collect all keyword arguments.</p>
+<p>If there were any keyword parameter without default value, an error
+ensues. If there was a double splat parameter, it will receive an empty
+hash.</p>
+<p>The <code>x</code> regular arguments are assigned to the <code>x</code> first regular
+parameters.</p>
+</li>
+<li><p><code>x &lt; m</code></p>
+<p>The first <code>x</code> regular arguments are assigned to the <code>x</code> first regular
+and/or keyword parameters. The last <code>m-x</code> default parameters get assigned
+their default values.</p>
+<p>However, a special case arises if there are keyword arguments but no
+keyword or double splat parameters. In this case, the keyword arguments
+will be collected in a hash, and assigned to the first default parameter
+who has a hash as default value. If none have, the hash is assigned to the
+first regular or default parameter instead. The assignment from arguments
+to parameters is shifted, of course (i.e. no arguments is lost because of
+this).</p>
+</li>
+<li><p><code>x &gt; m</code></p>
+<p>The <code>m</code> first arguments are assigned to the <code>m</code> first regular and/or
+default parameters.</p>
+<p>If there is at least a keyword or double splat parameter, but there are no
+keyword arguments, and if the last regular argument is a <code>Hash</code> or can be
+converted to one with <code>to_hash</code>, consider it is a double splat argument and
+expand it.</p>
+<p>All other arguments (<code>x-m</code> or <code>x-m-1</code> of them) are collected in an array
+and assigned to the splat parameter if it exists. If there is no splat
+parameter and there more than 0 such arguments, an error ensues.</p>
+</li>
+</ul>
+</li>
+<li><p>Assuming the keyword argument weren&#39;t captured in either the <code>x == n-1</code> or <code>x
+&lt; m</code> cases in step 2, three situations are possible:</p>
+<ul>
+<li><p>The are keyword or double plat parameters.</p>
+<p>The keywords arguments are assigned to the corresponding keyword parameter.
+If a keyword parameter without default value is not filled, an error ensued.</p>
+<p>If two values are supplied for the same key, the last one wins. However, if
+the two values are visible in the method call (e.g. <code>foo(a: 1, **{a: 2})</code>),
+a warning is emitted.</p>
+<p>If any keyword arguments remain, they are collected inside a hash and
+assigned to the double splat parameter if it exists. If it doesn&#39;t and any
+keyword argument remain, an error ensues.</p>
+</li>
+<li><p>There are no keyword or double splat parameters, but there is a splat
+parameter.</p>
+<p>All keyword arguments are collected in a hash, which is added to the array
+assigned to the splat parameter.</p>
+</li>
+<li><p>There are no keyword, double splat or splat parameters. If there are any
+keyword arguments, an error ensues.</p>
+</li>
+<li><p>If a block or block conversion argument is passed, assign it to the block
+parameter if any, otherwise it becomes the implicit block parameter.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="blocks-and-procs">Blocks and Procs</h2>
+<p>The following is in general much better understood than assignment from
+arguments to parameters.</p>
+<h3 id="procs-vs-blocks">Procs vs Blocks</h3>
+<p>Blocks are what you pass at the end of a method call, while procs are what you
+create using <code>proc</code>, <code>Proc.new</code>, <code>lambda</code> or <code>-&gt;</code>. Any function can accept a
+block, either implicitly, or explicitly via a block argument. Procs can be
+passed to any parameter, or to the block parameter if converted via <code>&amp;</code>.</p>
+<p>This is less known, but you can convert a block to a proc, by calling <code>Proc.new</code>
+or <code>proc</code> without any parameter.</p>
+<h3 id="procs-vs-lambdas">Procs vs Lambdas</h3>
+<p>Lambdas are special, stricter kind of procs.</p>
+<ul>
+<li><p>Regular procs can perform non-local control flow: if a proc uses <code>retry</code>,
+<code>return</code>, <code>break</code>, <code>next</code> or <code>redo</code>, those will be interpreted as though the
+proc&#39;s code had been inlined at the point where the proc was called. This can
+only happen in the method in which the proc was originally defined. If called
+outside the method, a proc that performs non-local control flow will cause a
+<code>LocalJumpError</code>.</p>
+</li>
+<li><p>If regular procs are passed too many arguments, the extra arguments are
+ignored instead of causing an error (the behaviour is otherwise the same as
+for methods, as outlined above). Lambda behave like methods for parameter
+assignment.</p>
+</li>
+</ul>
+<p>You create a regular proc with <code>proc</code> or <code>Proc.new</code>, while lambda are created
+with <code>lambda</code> or the <code>-&gt;</code> notation (<em>lambda literal</em> or <em>dash rocket</em> or <em>stab
+operator</em>). While the three first forms simply take a block argument, the <code>-&gt;</code>
+notation works like this:</p>
+<pre><code class="lang-ruby">-&gt; (a, b) { ... }
+-&gt; (a, b) do .. end
+-&gt; { ... }
+-&gt; do .. end
+</code></pre>
+<h3 id="curly-brackets-vs-do-end-">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
+<p>There is not semantic difference between both forms.</p>
+<p>There is one syntactic difference because the two forms have different
+precedences:</p>
+<pre><code class="lang-ruby">foo bar { ... }     # foo(bar { ... })
+foo bar do ... end  # foo(bar) { ... }
+</code></pre>
+<p>If you don&#39;t need to use this particularity, there are two popular ways to
+choose on form over the other:</p>
+<ul>
+<li><p>Use curlies for single-line blocks, <code>do ... end</code> for multi-line blocks.</p>
+</li>
+<li><p>Use curlies when the return value is used, <code>do ... end</code> when only the
+side-effects matter.</p>
+</li>
+</ul>
+<h3 id="calling-procs-and-blocks">Calling Procs and Blocks</h3>
+<p>As we said above, procs work like method for assigning arguments to parameters,
+but extra arguments are ignored for regular procs (not for lambdas).</p>
+<p>Blocks acts like regular procs: extra arguments are ignored.</p>
+<p>Blocks cannot be passed a block of their own!</p>
+<p>You can call an implicit or explicit block using <code>yield</code>. An explicit block or
+proc named <code>x</code> can be called using <code>x.call(1, 2)</code>, <code>x.(1, 2)</code> or <code>x[1, 2]</code>.</p>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/ruby-methods";
+        this.page.identifier = "ruby-methods";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

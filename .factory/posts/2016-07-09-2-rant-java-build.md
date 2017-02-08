@@ -21,7 +21,8 @@ confusing. Understanding Gradle is not the work of an afternoon but of weeks.
 Scala is not served better. To think sbt once stood for "simple build
 tool" (now retconned to "scala build tool") is enough to choke on the irony.
 
-[One might as well build Java using Make.](/build-java-with-make)
+One might as well build Java using Make, which is exactly when I'm doing for the
+moment.
 
 ## Hope?
 

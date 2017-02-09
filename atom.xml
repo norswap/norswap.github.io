@@ -269,8 +269,9 @@ keyword arguments, an error ensues.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If a block or block conversion argument is passed, assign it to the block
-parameter if any, otherwise it becomes the implicit block parameter.&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;If a block or block conversion argument is passed, make a proc from it and
+assign it to the block parameter, if any — otherwise it becomes the implicit
+block parameter.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&quot;blocks-and-procs&quot;&gt;Blocks and Procs&lt;/h2&gt;

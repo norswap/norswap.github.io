@@ -90,6 +90,10 @@ optional, but those that are present must respect the following ordering:
 3. double splat parameter (at most one)
 4. block parameter (at most one)
 
+Actually, required parameters that appear after the splat parameter are named
+"post-required parameters". I was told this by two persons but it's pretty much
+un-googlable. The distinction does not affect the semantics in any way.
+
 ### Best Practices
 
 Put the parameters in the following order:

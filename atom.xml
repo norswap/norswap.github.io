@@ -31,16 +31,16 @@
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;regular&lt;/td&gt;
+&lt;td&gt;required&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;a&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;default&lt;/td&gt;
+&lt;td&gt;optional&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;b = 2&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;array decomposition&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;(c, d*)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;(c, *d)&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;splat&lt;/td&gt;
@@ -65,17 +65,17 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here are quick explanations:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Default parameters can have a default value.&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Optional parameters can have a default value.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Array decomposition parameters are regular parameters that decompose an array
+&lt;li&gt;&lt;p&gt;Array decomposition parameters are required parameters that decompose an array
 argument into parts. Here are some examples, assuming the argument is &lt;code&gt;[[1,
 2], 3]&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(a*)          a = [[1, 2], 3]
+&lt;pre&gt;&lt;code&gt;(*a)          a = [[1, 2], 3]
 (a, b)        a = [1, 2], b = 3
-(a, b*)       a = [1, 2], b = [3]
-(a, b, c*)    a = [1, 2], b = 3,   c = []
+(a, *b)       a = [1, 2], b = [3]
+(a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
-((a, b*), c)  a = 1,      b = [2], c = 3
+((a, *b), c)  a = 1,      b = [2], c = 3
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;The splat parameter enables variable length argument lists and receives all
 extra arguments.&lt;/p&gt;
@@ -91,11 +91,17 @@ you to pass it to other methods, and call it by name instead of through
 &lt;code&gt;yield&lt;/code&gt;. See more on blocks in the section on &lt;a href=&quot;#blocks-and-procs&quot;&gt;Blocks and Procs&lt;/a&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;You can get a list of a method&amp;#39;s parameters with &lt;code&gt;Method#parameters&lt;/code&gt;, which will
+show the type of each parameter. Here it is, running over our &lt;code&gt;foo&lt;/code&gt; method.
+Notice the glitch for the array decomposition parameter!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;method(:foo).parameters
+# [[:req, :a], [:req], [:opt, :d], [:rest, :e], [:keyreq, :f], [:key, :g], [:keyrest, :h], [:block, :i]]
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h3 id=&quot;ordering&quot;&gt;Ordering&lt;/h3&gt;
 &lt;p&gt;You can&amp;#39;t mix match these parameters as you please. All types of parameters are
 optional, but those that are present must respect the following ordering:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;regular parameters, default parameters, and splat parameter (at most one)&lt;/li&gt;
+&lt;li&gt;required parameters, optional parameters, and splat parameter (at most one)&lt;/li&gt;
 &lt;li&gt;keyword parameters&lt;/li&gt;
 &lt;li&gt;double splat parameter (at most one)&lt;/li&gt;
 &lt;li&gt;block parameter (at most one)&lt;/li&gt;
@@ -103,14 +109,14 @@ optional, but those that are present must respect the following ordering:&lt;/p&
 &lt;h3 id=&quot;best-practices&quot;&gt;Best Practices&lt;/h3&gt;
 &lt;p&gt;Put the parameters in the following order:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;regular parameters&lt;/li&gt;
-&lt;li&gt;default parameters&lt;/li&gt;
+&lt;li&gt;required parameters&lt;/li&gt;
+&lt;li&gt;optional parameters&lt;/li&gt;
 &lt;li&gt;splat parameters&lt;/li&gt;
 &lt;li&gt;keyword parameters&lt;/li&gt;
 &lt;li&gt;double splat parameter&lt;/li&gt;
 &lt;li&gt;block parameter&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;You should not mix the ordering of regular, default and splat parameters, it
+&lt;p&gt;You should not mix the ordering of required, optional and splat parameters, it
 makes it very unintuitive which parameters gets assigned which argument.&lt;/p&gt;
 &lt;h2 id=&quot;assigning-arguments-to-parameters&quot;&gt;Assigning Arguments to Parameters&lt;/h2&gt;
 &lt;p&gt;The real complexity of Ruby&amp;#39;s methods is determining how arguments are mapped to
@@ -199,7 +205,7 @@ parameters:&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;Expand any splat or double splat arguments. The expanded content is taken
 into account when we talk about regular or keyword arguments later on.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Let &lt;code&gt;n&lt;/code&gt; be the number of regular parameters&lt;br&gt;Let &lt;code&gt;m&lt;/code&gt; be the number of regular and default parameters&lt;br&gt;Let &lt;code&gt;x&lt;/code&gt; be the number of regular arguments&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Let &lt;code&gt;n&lt;/code&gt; be the number of required parameters&lt;br&gt;Let &lt;code&gt;m&lt;/code&gt; be the number of required and optional parameters&lt;br&gt;Let &lt;code&gt;x&lt;/code&gt; be the number of regular arguments&lt;/p&gt;
 &lt;p&gt;Depending on the value of &lt;code&gt;x&lt;/code&gt; (pick the first case that matches):&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;lt; n-1&lt;/code&gt;&lt;/p&gt;
@@ -207,29 +213,29 @@ into account when we talk about regular or keyword arguments later on.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;x == n-1&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;If there aren&amp;#39;t any keyword arguments, an error ensues.&lt;/p&gt;
-&lt;p&gt;Otherwise, the last regular parameter will receive a hash that will
+&lt;p&gt;Otherwise, the last required parameter will receive a hash that will
 collect all keyword arguments.&lt;/p&gt;
 &lt;p&gt;If there were any keyword parameter without default value, an error
 ensues. If there was a double splat parameter, it will receive an empty
 hash.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first regular
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first required
 parameters.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;lt; m&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The first &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first regular
-and/or keyword parameters. The last &lt;code&gt;m-x&lt;/code&gt; default parameters get assigned
+&lt;p&gt;The first &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first required
+and/or keyword parameters. The last &lt;code&gt;m-x&lt;/code&gt; optional parameters get assigned
 their default values.&lt;/p&gt;
 &lt;p&gt;However, a special case arises if there are keyword arguments but no
 keyword or double splat parameters. In this case, the keyword arguments
-will be collected in a hash, and assigned to the first default parameter
+will be collected in a hash, and assigned to the first optional parameter
 who has a hash as default value. If none have, the hash is assigned to the
-first regular or default parameter instead. The assignment from arguments
+first required or optional parameter instead. The assignment from arguments
 to parameters is shifted, of course (i.e. no arguments is lost because of
 this).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;gt; m&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;m&lt;/code&gt; first arguments are assigned to the &lt;code&gt;m&lt;/code&gt; first regular and/or
-default parameters.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;m&lt;/code&gt; first arguments are assigned to the &lt;code&gt;m&lt;/code&gt; first required and/or
+optional parameters.&lt;/p&gt;
 &lt;p&gt;If there is at least a keyword or double splat parameter, but there are no
 keyword arguments, and if the last regular argument is a &lt;code&gt;Hash&lt;/code&gt; or can be
 converted to one with &lt;code&gt;to_hash&lt;/code&gt;, consider it is a double splat argument and
@@ -243,7 +249,7 @@ parameter and there more than 0 such arguments, an error ensues.&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;Assuming the keyword argument weren&amp;#39;t captured in either the &lt;code&gt;x == n-1&lt;/code&gt; or &lt;code&gt;x
 &amp;lt; m&lt;/code&gt; cases in step 2, three situations are possible:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;The are keyword or double plat parameters.&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;The are keyword or double splat parameters.&lt;/p&gt;
 &lt;p&gt;The keywords arguments are assigned to the corresponding keyword parameter.
 If a keyword parameter without default value is not filled, an error ensued.&lt;/p&gt;
 &lt;p&gt;If two values are supplied for the same key, the last one wins. However, if
@@ -261,22 +267,36 @@ assigned to the splat parameter.&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;There are no keyword, double splat or splat parameters. If there are any
 keyword arguments, an error ensues.&lt;/p&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;If a block or block conversion argument is passed, assign it to the block
 parameter if any, otherwise it becomes the implicit block parameter.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&quot;blocks-and-procs&quot;&gt;Blocks and Procs&lt;/h2&gt;
 &lt;p&gt;The following is in general much better understood than assignment from
 arguments to parameters.&lt;/p&gt;
-&lt;h3 id=&quot;procs-vs-blocks&quot;&gt;Procs vs Blocks&lt;/h3&gt;
-&lt;p&gt;Blocks are what you pass at the end of a method call, while procs are what you
-create using &lt;code&gt;proc&lt;/code&gt;, &lt;code&gt;Proc.new&lt;/code&gt;, &lt;code&gt;lambda&lt;/code&gt; or &lt;code&gt;-&amp;gt;&lt;/code&gt;. Any function can accept a
-block, either implicitly, or explicitly via a block argument. Procs can be
-passed to any parameter, or to the block parameter if converted via &lt;code&gt;&amp;amp;&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;This is less known, but you can convert a block to a proc, by calling &lt;code&gt;Proc.new&lt;/code&gt;
-or &lt;code&gt;proc&lt;/code&gt; without any parameter.&lt;/p&gt;
+&lt;p&gt;Procs are &lt;a href=&quot;https://en.wikipedia.org/wiki/Higher-order_function&quot;&gt;higher-order functions&lt;/a&gt;, while blocks are a syntactic
+notation to pass a proc to a method. It&amp;#39;s not &lt;em&gt;quite&lt;/em&gt; that simple however. You
+can pass procs as regular arguments, but the block parameter is special. All
+methods can accept a block implicitly, or explicitly via a block a parameter.
+This parameter must be assigned a (syntactic) block (which becomes a proc) or a
+&amp;quot;regular&amp;quot; proc marked with &lt;code&gt;&amp;amp;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Other than with blocks, procs can be instantiated with &lt;code&gt;proc&lt;/code&gt;, &lt;code&gt;Proc.new&lt;/code&gt;,
+&lt;code&gt;lambda&lt;/code&gt; or &lt;code&gt;-&amp;gt;&lt;/code&gt; (&lt;em&gt;lambda literal&lt;/em&gt; or &lt;em&gt;dash rocket&lt;/em&gt; or &lt;em&gt;stab operator&lt;/em&gt;). The
+tree first forms simply take a block argument, while the last form looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;-&amp;gt; (a, b) { ... }
+-&amp;gt; (a, b) do .. end
+-&amp;gt; { ... }
+-&amp;gt; do .. end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When a method accepts an implicit block, you can call it with &lt;code&gt;yield&lt;/code&gt; (you can
+also call the explicit block parameter with &lt;code&gt;yield&lt;/code&gt;). Somewhat peculiarly, the
+&lt;code&gt;yield&lt;/code&gt; notation cannot be passed a block of its own. A proc or block parameter
+named &lt;code&gt;x&lt;/code&gt; can be called using &lt;code&gt;x.call(1, 2)&lt;/code&gt;, &lt;code&gt;x.(1, 2)&lt;/code&gt; or &lt;code&gt;x[1, 2]&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;A less known trick is that you can also get a reference to the proc backing the
+block argument by using &lt;code&gt;proc&lt;/code&gt; or &lt;code&gt;Proc.new&lt;/code&gt; (without passing them a block)
+inside the method.&lt;/p&gt;
 &lt;h3 id=&quot;procs-vs-lambdas&quot;&gt;Procs vs Lambdas&lt;/h3&gt;
 &lt;p&gt;Lambdas are special, stricter kind of procs.&lt;/p&gt;
 &lt;ul&gt;
@@ -293,15 +313,8 @@ for methods, as outlined above). Lambda behave like methods for parameter
 assignment.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;You create a regular proc with &lt;code&gt;proc&lt;/code&gt; or &lt;code&gt;Proc.new&lt;/code&gt;, while lambda are created
-with &lt;code&gt;lambda&lt;/code&gt; or the &lt;code&gt;-&amp;gt;&lt;/code&gt; notation (&lt;em&gt;lambda literal&lt;/em&gt; or &lt;em&gt;dash rocket&lt;/em&gt; or &lt;em&gt;stab
-operator&lt;/em&gt;). While the three first forms simply take a block argument, the &lt;code&gt;-&amp;gt;&lt;/code&gt;
-notation works like this:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;-&amp;gt; (a, b) { ... }
--&amp;gt; (a, b) do .. end
--&amp;gt; { ... }
--&amp;gt; do .. end
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;proc&lt;/code&gt; and &lt;code&gt;Proc.new&lt;/code&gt; are used to create regular procs, while &lt;code&gt;lambda&lt;/code&gt; and &lt;code&gt;-&amp;gt;&lt;/code&gt;
+create lambdas.&lt;/p&gt;
 &lt;h3 id=&quot;curly-brackets-vs-do-end-&quot;&gt;Curly Brackets (&lt;code&gt;{}&lt;/code&gt;) vs &lt;code&gt;do .. end&lt;/code&gt;&lt;/h3&gt;
 &lt;p&gt;There is not semantic difference between both forms.&lt;/p&gt;
 &lt;p&gt;There is one syntactic difference because the two forms have different
@@ -318,13 +331,12 @@ choose on form over the other:&lt;/p&gt;
 side-effects matter.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&quot;calling-procs-and-blocks&quot;&gt;Calling Procs and Blocks&lt;/h3&gt;
-&lt;p&gt;As we said above, procs work like method for assigning arguments to parameters,
-but extra arguments are ignored for regular procs (not for lambdas).&lt;/p&gt;
-&lt;p&gt;Blocks acts like regular procs: extra arguments are ignored.&lt;/p&gt;
-&lt;p&gt;Blocks cannot be passed a block of their own!&lt;/p&gt;
-&lt;p&gt;You can call an implicit or explicit block using &lt;code&gt;yield&lt;/code&gt;. An explicit block or
-proc named &lt;code&gt;x&lt;/code&gt; can be called using &lt;code&gt;x.call(1, 2)&lt;/code&gt;, &lt;code&gt;x.(1, 2)&lt;/code&gt; or &lt;code&gt;x[1, 2]&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;edits&quot;&gt;Edits&lt;/h2&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://twitter.com/eregontp&quot;&gt;Benoit Daloze&lt;/a&gt;, who pointed out many small mistakes in the article,
+as well as the fact that the proper names for what I called &lt;em&gt;regular&lt;/em&gt; and
+&lt;em&gt;default&lt;/em&gt; parameters were &lt;em&gt;required&lt;/em&gt; and &lt;em&gt;optional&lt;/em&gt; parameters. He also
+mentionned &lt;code&gt;Method#parameters&lt;/code&gt;, and inspired me to improve the section on blocks
+and procs.&lt;/p&gt;
       </description>
       <pubDate>2017-02-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/ruby-methods</link>

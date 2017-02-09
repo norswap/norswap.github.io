@@ -25,9 +25,9 @@ A method definition admits the following types of parameters:
 
 | type | example |
 |------|---------|
-| regular               | `a`           |
-| default               | `b = 2`       |
-| array decomposition   | `(c, d*)`     |
+| required              | `a`           |
+| optional              | `b = 2`       |
+| array decomposition   | `(c, *d)`     |
 | splat                 | `*e`          |
 | keyword               | `f:`, `g: 7`  |
 | double splat          | `**h`         |
@@ -41,19 +41,19 @@ def foo a, (b, c), d = 1, *e, f:, g: 7, **h, &i; end
 
 Here are quick explanations:
 
-- Default parameters can have a default value.
+- Optional parameters can have a default value.
 
-- Array decomposition parameters are regular parameters that decompose an array
+- Array decomposition parameters are required parameters that decompose an array
   argument into parts. Here are some examples, assuming the argument is `[[1,
   2], 3]`:
   
   ```
-  (a*)          a = [[1, 2], 3]
+  (*a)          a = [[1, 2], 3]
   (a, b)        a = [1, 2], b = 3
-  (a, b*)       a = [1, 2], b = [3]
-  (a, b, c*)    a = [1, 2], b = 3,   c = []
+  (a, *b)       a = [1, 2], b = [3]
+  (a, b, *c)    a = [1, 2], b = 3,   c = []
   ((a, b), c)   a = 1,      b = 2,   c = 3
-  ((a, b*), c)  a = 1,      b = [2], c = 3
+  ((a, *b), c)  a = 1,      b = [2], c = 3
   ```
   
 - The splat parameter enables variable length argument lists and receives all
@@ -71,12 +71,21 @@ Here are quick explanations:
   
 [Blocks and Procs]: #blocks-and-procs
 
+You can get a list of a method's parameters with `Method#parameters`, which will
+show the type of each parameter. Here it is, running over our `foo` method.
+Notice the glitch for the array decomposition parameter!
+
+```ruby
+method(:foo).parameters
+# [[:req, :a], [:req], [:opt, :d], [:rest, :e], [:keyreq, :f], [:key, :g], [:keyrest, :h], [:block, :i]]
+```
+
 ### Ordering
 
 You can't mix match these parameters as you please. All types of parameters are
 optional, but those that are present must respect the following ordering:
 
-1. regular parameters, default parameters, and splat parameter (at most one)
+1. required parameters, optional parameters, and splat parameter (at most one)
 2. keyword parameters
 3. double splat parameter (at most one)
 4. block parameter (at most one)
@@ -85,14 +94,14 @@ optional, but those that are present must respect the following ordering:
 
 Put the parameters in the following order:
 
-1. regular parameters
-2. default parameters
+1. required parameters
+2. optional parameters
 3. splat parameters
 4. keyword parameters
 5. double splat parameter
 6. block parameter
 
-You should not mix the ordering of regular, default and splat parameters, it
+You should not mix the ordering of required, optional and splat parameters, it
 makes it very unintuitive which parameters gets assigned which argument.
 
 ## Assigning Arguments to Parameters
@@ -104,7 +113,7 @@ Here are the different types of arguments you can pass to a method call:
 
 | type | example |
 |------|---------|
-| regular               | `v`           |
+| regular              | `v`           |
 | keyword               | `b: v`        |
 | hash argument         | `:c => v`     |
 | splat                 | `*v`          |
@@ -166,8 +175,8 @@ parameters:
 1. Expand any splat or double splat arguments. The expanded content is taken
    into account when we talk about regular or keyword arguments later on.
 
-2. Let `n` be the number of regular parameters  
-   Let `m` be the number of regular and default parameters  
+2. Let `n` be the number of required parameters  
+   Let `m` be the number of required and optional parameters  
    Let `x` be the number of regular arguments
    
    Depending on the value of `x` (pick the first case that matches):
@@ -180,34 +189,34 @@ parameters:
    
      If there aren't any keyword arguments, an error ensues.
      
-     Otherwise, the last regular parameter will receive a hash that will
+     Otherwise, the last required parameter will receive a hash that will
      collect all keyword arguments.
      
      If there were any keyword parameter without default value, an error
      ensues. If there was a double splat parameter, it will receive an empty
      hash.
      
-     The `x` regular arguments are assigned to the `x` first regular
+     The `x` regular arguments are assigned to the `x` first required
      parameters.
    
    - `x < m`
    
-     The first `x` regular arguments are assigned to the `x` first regular
-     and/or keyword parameters. The last `m-x` default parameters get assigned
+     The first `x` regular arguments are assigned to the `x` first required
+     and/or keyword parameters. The last `m-x` optional parameters get assigned
      their default values.
      
      However, a special case arises if there are keyword arguments but no
      keyword or double splat parameters. In this case, the keyword arguments
-     will be collected in a hash, and assigned to the first default parameter
+     will be collected in a hash, and assigned to the first optional parameter
      who has a hash as default value. If none have, the hash is assigned to the
-     first regular or default parameter instead. The assignment from arguments
+     first required or optional parameter instead. The assignment from arguments
      to parameters is shifted, of course (i.e. no arguments is lost because of
      this).
      
    - `x > m`
    
-     The `m` first arguments are assigned to the `m` first regular and/or
-     default parameters.
+     The `m` first arguments are assigned to the `m` first required and/or
+     optional parameters.
    
      If there is at least a keyword or double splat parameter, but there are no
      keyword arguments, and if the last regular argument is a `Hash` or can be
@@ -221,7 +230,7 @@ parameters:
 3. Assuming the keyword argument weren't captured in either the `x == n-1` or `x
    < m` cases in step 2, three situations are possible:
    
-   - The are keyword or double plat parameters.
+   - The are keyword or double splat parameters.
    
      The keywords arguments are assigned to the corresponding keyword parameter.
      If a keyword parameter without default value is not filled, an error ensued.
@@ -243,23 +252,43 @@ parameters:
    - There are no keyword, double splat or splat parameters. If there are any
      keyword arguments, an error ensues.
      
- 4. If a block or block conversion argument is passed, assign it to the block
-    parameter if any, otherwise it becomes the implicit block parameter.
+4. If a block or block conversion argument is passed, make a proc from it and
+   assign it to the block parameter, if any — otherwise it becomes the implicit
+   block parameter.
 
 ## Blocks and Procs
 
 The following is in general much better understood than assignment from
 arguments to parameters.
 
-### Procs vs Blocks
+Procs are [higher-order functions][hofunc], while blocks are a syntactic
+notation to pass a proc to a method. It's not *quite* that simple however. You
+can pass procs as regular arguments, but the block parameter is special. All
+methods can accept a block implicitly, or explicitly via a block a parameter.
+This parameter must be assigned a (syntactic) block (which becomes a proc) or a
+"regular" proc marked with `&`.
 
-Blocks are what you pass at the end of a method call, while procs are what you
-create using `proc`, `Proc.new`, `lambda` or `->`. Any function can accept a
-block, either implicitly, or explicitly via a block argument. Procs can be
-passed to any parameter, or to the block parameter if converted via `&`.
+Other than with blocks, procs can be instantiated with `proc`, `Proc.new`,
+`lambda` or `->` (*lambda literal* or *dash rocket* or *stab operator*). The
+tree first forms simply take a block argument, while the last form looks like this:
 
-This is less known, but you can convert a block to a proc, by calling `Proc.new`
-or `proc` without any parameter.
+```ruby
+-> (a, b) { ... }
+-> (a, b) do .. end
+-> { ... }
+-> do .. end
+```
+
+When a method accepts an implicit block, you can call it with `yield` (you can
+also call the explicit block parameter with `yield`). Somewhat peculiarly, the
+`yield` notation cannot be passed a block of its own. A proc or block parameter
+named `x` can be called using `x.call(1, 2)`, `x.(1, 2)` or `x[1, 2]`.
+
+A less known trick is that you can also get a reference to the proc backing the
+block argument by using `proc` or `Proc.new` (without passing them a block)
+inside the method.
+
+[hofunc]: https://en.wikipedia.org/wiki/Higher-order_function
 
 ### Procs vs Lambdas
 
@@ -277,17 +306,8 @@ Lambdas are special, stricter kind of procs.
   for methods, as outlined above). Lambda behave like methods for parameter
   assignment.
   
-You create a regular proc with `proc` or `Proc.new`, while lambda are created
-with `lambda` or the `->` notation (*lambda literal* or *dash rocket* or *stab
-operator*). While the three first forms simply take a block argument, the `->`
-notation works like this:
-
-```ruby
--> (a, b) { ... }
--> (a, b) do .. end
--> { ... }
--> do .. end
-```
+`proc` and `Proc.new` are used to create regular procs, while `lambda` and `->`
+create lambdas.
 
 ### Curly Brackets (`{}`) vs `do .. end`
 
@@ -308,15 +328,13 @@ choose on form over the other:
 
 - Use curlies when the return value is used, `do ... end` when only the
   side-effects matter.
-  
-### Calling Procs and Blocks
 
-As we said above, procs work like method for assigning arguments to parameters,
-but extra arguments are ignored for regular procs (not for lambdas).
+## Edits
 
-Blocks acts like regular procs: extra arguments are ignored.
+Thanks to [Benoit Daloze], who pointed out many small mistakes in the article,
+as well as the fact that the proper names for what I called *regular* and
+*default* parameters were *required* and *optional* parameters. He also
+mentionned `Method#parameters`, and inspired me to improve the section on blocks
+and procs.
 
-Blocks cannot be passed a block of their own!
-
-You can call an implicit or explicit block using `yield`. An explicit block or
-proc named `x` can be called using `x.call(1, 2)`, `x.(1, 2)` or `x[1, 2]`.
+[Benoit Daloze]: https://twitter.com/eregontp

@@ -68,16 +68,16 @@
 </thead>
 <tbody>
 <tr>
-<td>regular</td>
+<td>required</td>
 <td><code>a</code></td>
 </tr>
 <tr>
-<td>default</td>
+<td>optional</td>
 <td><code>b = 2</code></td>
 </tr>
 <tr>
 <td>array decomposition</td>
-<td><code>(c, d*)</code></td>
+<td><code>(c, *d)</code></td>
 </tr>
 <tr>
 <td>splat</td>
@@ -102,17 +102,17 @@
 </code></pre>
 <p>Here are quick explanations:</p>
 <ul>
-<li><p>Default parameters can have a default value.</p>
+<li><p>Optional parameters can have a default value.</p>
 </li>
-<li><p>Array decomposition parameters are regular parameters that decompose an array
+<li><p>Array decomposition parameters are required parameters that decompose an array
 argument into parts. Here are some examples, assuming the argument is <code>[[1,
 2], 3]</code>:</p>
-<pre><code>(a*)          a = [[1, 2], 3]
+<pre><code>(*a)          a = [[1, 2], 3]
 (a, b)        a = [1, 2], b = 3
-(a, b*)       a = [1, 2], b = [3]
-(a, b, c*)    a = [1, 2], b = 3,   c = []
+(a, *b)       a = [1, 2], b = [3]
+(a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
-((a, b*), c)  a = 1,      b = [2], c = 3
+((a, *b), c)  a = 1,      b = [2], c = 3
 </code></pre></li>
 <li><p>The splat parameter enables variable length argument lists and receives all
 extra arguments.</p>
@@ -128,11 +128,17 @@ you to pass it to other methods, and call it by name instead of through
 <code>yield</code>. See more on blocks in the section on <a href="#blocks-and-procs">Blocks and Procs</a>.</p>
 </li>
 </ul>
+<p>You can get a list of a method&#39;s parameters with <code>Method#parameters</code>, which will
+show the type of each parameter. Here it is, running over our <code>foo</code> method.
+Notice the glitch for the array decomposition parameter!</p>
+<pre><code class="lang-ruby">method(:foo).parameters
+# [[:req, :a], [:req], [:opt, :d], [:rest, :e], [:keyreq, :f], [:key, :g], [:keyrest, :h], [:block, :i]]
+</code></pre>
 <h3 id="ordering">Ordering</h3>
 <p>You can&#39;t mix match these parameters as you please. All types of parameters are
 optional, but those that are present must respect the following ordering:</p>
 <ol>
-<li>regular parameters, default parameters, and splat parameter (at most one)</li>
+<li>required parameters, optional parameters, and splat parameter (at most one)</li>
 <li>keyword parameters</li>
 <li>double splat parameter (at most one)</li>
 <li>block parameter (at most one)</li>
@@ -140,14 +146,14 @@ optional, but those that are present must respect the following ordering:</p>
 <h3 id="best-practices">Best Practices</h3>
 <p>Put the parameters in the following order:</p>
 <ol>
-<li>regular parameters</li>
-<li>default parameters</li>
+<li>required parameters</li>
+<li>optional parameters</li>
 <li>splat parameters</li>
 <li>keyword parameters</li>
 <li>double splat parameter</li>
 <li>block parameter</li>
 </ol>
-<p>You should not mix the ordering of regular, default and splat parameters, it
+<p>You should not mix the ordering of required, optional and splat parameters, it
 makes it very unintuitive which parameters gets assigned which argument.</p>
 <h2 id="assigning-arguments-to-parameters">Assigning Arguments to Parameters</h2>
 <p>The real complexity of Ruby&#39;s methods is determining how arguments are mapped to
@@ -236,7 +242,7 @@ parameters:</p>
 <li><p>Expand any splat or double splat arguments. The expanded content is taken
 into account when we talk about regular or keyword arguments later on.</p>
 </li>
-<li><p>Let <code>n</code> be the number of regular parameters<br>Let <code>m</code> be the number of regular and default parameters<br>Let <code>x</code> be the number of regular arguments</p>
+<li><p>Let <code>n</code> be the number of required parameters<br>Let <code>m</code> be the number of required and optional parameters<br>Let <code>x</code> be the number of regular arguments</p>
 <p>Depending on the value of <code>x</code> (pick the first case that matches):</p>
 <ul>
 <li><p><code>x &lt; n-1</code></p>
@@ -244,29 +250,29 @@ into account when we talk about regular or keyword arguments later on.</p>
 </li>
 <li><p><code>x == n-1</code></p>
 <p>If there aren&#39;t any keyword arguments, an error ensues.</p>
-<p>Otherwise, the last regular parameter will receive a hash that will
+<p>Otherwise, the last required parameter will receive a hash that will
 collect all keyword arguments.</p>
 <p>If there were any keyword parameter without default value, an error
 ensues. If there was a double splat parameter, it will receive an empty
 hash.</p>
-<p>The <code>x</code> regular arguments are assigned to the <code>x</code> first regular
+<p>The <code>x</code> regular arguments are assigned to the <code>x</code> first required
 parameters.</p>
 </li>
 <li><p><code>x &lt; m</code></p>
-<p>The first <code>x</code> regular arguments are assigned to the <code>x</code> first regular
-and/or keyword parameters. The last <code>m-x</code> default parameters get assigned
+<p>The first <code>x</code> regular arguments are assigned to the <code>x</code> first required
+and/or keyword parameters. The last <code>m-x</code> optional parameters get assigned
 their default values.</p>
 <p>However, a special case arises if there are keyword arguments but no
 keyword or double splat parameters. In this case, the keyword arguments
-will be collected in a hash, and assigned to the first default parameter
+will be collected in a hash, and assigned to the first optional parameter
 who has a hash as default value. If none have, the hash is assigned to the
-first regular or default parameter instead. The assignment from arguments
+first required or optional parameter instead. The assignment from arguments
 to parameters is shifted, of course (i.e. no arguments is lost because of
 this).</p>
 </li>
 <li><p><code>x &gt; m</code></p>
-<p>The <code>m</code> first arguments are assigned to the <code>m</code> first regular and/or
-default parameters.</p>
+<p>The <code>m</code> first arguments are assigned to the <code>m</code> first required and/or
+optional parameters.</p>
 <p>If there is at least a keyword or double splat parameter, but there are no
 keyword arguments, and if the last regular argument is a <code>Hash</code> or can be
 converted to one with <code>to_hash</code>, consider it is a double splat argument and
@@ -280,7 +286,7 @@ parameter and there more than 0 such arguments, an error ensues.</p>
 <li><p>Assuming the keyword argument weren&#39;t captured in either the <code>x == n-1</code> or <code>x
 &lt; m</code> cases in step 2, three situations are possible:</p>
 <ul>
-<li><p>The are keyword or double plat parameters.</p>
+<li><p>The are keyword or double splat parameters.</p>
 <p>The keywords arguments are assigned to the corresponding keyword parameter.
 If a keyword parameter without default value is not filled, an error ensued.</p>
 <p>If two values are supplied for the same key, the last one wins. However, if
@@ -298,22 +304,36 @@ assigned to the splat parameter.</p>
 <li><p>There are no keyword, double splat or splat parameters. If there are any
 keyword arguments, an error ensues.</p>
 </li>
+</ul>
+</li>
 <li><p>If a block or block conversion argument is passed, assign it to the block
 parameter if any, otherwise it becomes the implicit block parameter.</p>
-</li>
-</ul>
 </li>
 </ol>
 <h2 id="blocks-and-procs">Blocks and Procs</h2>
 <p>The following is in general much better understood than assignment from
 arguments to parameters.</p>
-<h3 id="procs-vs-blocks">Procs vs Blocks</h3>
-<p>Blocks are what you pass at the end of a method call, while procs are what you
-create using <code>proc</code>, <code>Proc.new</code>, <code>lambda</code> or <code>-&gt;</code>. Any function can accept a
-block, either implicitly, or explicitly via a block argument. Procs can be
-passed to any parameter, or to the block parameter if converted via <code>&amp;</code>.</p>
-<p>This is less known, but you can convert a block to a proc, by calling <code>Proc.new</code>
-or <code>proc</code> without any parameter.</p>
+<p>Procs are <a href="https://en.wikipedia.org/wiki/Higher-order_function">higher-order functions</a>, while blocks are a syntactic
+notation to pass a proc to a method. It&#39;s not <em>quite</em> that simple however. You
+can pass procs as regular arguments, but the block parameter is special. All
+methods can accept a block implicitly, or explicitly via a block a parameter.
+This parameter must be assigned a (syntactic) block (which becomes a proc) or a
+&quot;regular&quot; proc marked with <code>&amp;</code>.</p>
+<p>Other than with blocks, procs can be instantiated with <code>proc</code>, <code>Proc.new</code>,
+<code>lambda</code> or <code>-&gt;</code> (<em>lambda literal</em> or <em>dash rocket</em> or <em>stab operator</em>). The
+tree first forms simply take a block argument, while the last form looks like this:</p>
+<pre><code class="lang-ruby">-&gt; (a, b) { ... }
+-&gt; (a, b) do .. end
+-&gt; { ... }
+-&gt; do .. end
+</code></pre>
+<p>When a method accepts an implicit block, you can call it with <code>yield</code> (you can
+also call the explicit block parameter with <code>yield</code>). Somewhat peculiarly, the
+<code>yield</code> notation cannot be passed a block of its own. A proc or block parameter
+named <code>x</code> can be called using <code>x.call(1, 2)</code>, <code>x.(1, 2)</code> or <code>x[1, 2]</code>.</p>
+<p>A less known trick is that you can also get a reference to the proc backing the
+block argument by using <code>proc</code> or <code>Proc.new</code> (without passing them a block)
+inside the method.</p>
 <h3 id="procs-vs-lambdas">Procs vs Lambdas</h3>
 <p>Lambdas are special, stricter kind of procs.</p>
 <ul>
@@ -330,15 +350,8 @@ for methods, as outlined above). Lambda behave like methods for parameter
 assignment.</p>
 </li>
 </ul>
-<p>You create a regular proc with <code>proc</code> or <code>Proc.new</code>, while lambda are created
-with <code>lambda</code> or the <code>-&gt;</code> notation (<em>lambda literal</em> or <em>dash rocket</em> or <em>stab
-operator</em>). While the three first forms simply take a block argument, the <code>-&gt;</code>
-notation works like this:</p>
-<pre><code class="lang-ruby">-&gt; (a, b) { ... }
--&gt; (a, b) do .. end
--&gt; { ... }
--&gt; do .. end
-</code></pre>
+<p><code>proc</code> and <code>Proc.new</code> are used to create regular procs, while <code>lambda</code> and <code>-&gt;</code>
+create lambdas.</p>
 <h3 id="curly-brackets-vs-do-end-">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
 <p>There is not semantic difference between both forms.</p>
 <p>There is one syntactic difference because the two forms have different
@@ -355,13 +368,12 @@ choose on form over the other:</p>
 side-effects matter.</p>
 </li>
 </ul>
-<h3 id="calling-procs-and-blocks">Calling Procs and Blocks</h3>
-<p>As we said above, procs work like method for assigning arguments to parameters,
-but extra arguments are ignored for regular procs (not for lambdas).</p>
-<p>Blocks acts like regular procs: extra arguments are ignored.</p>
-<p>Blocks cannot be passed a block of their own!</p>
-<p>You can call an implicit or explicit block using <code>yield</code>. An explicit block or
-proc named <code>x</code> can be called using <code>x.call(1, 2)</code>, <code>x.(1, 2)</code> or <code>x[1, 2]</code>.</p>
+<h2 id="edits">Edits</h2>
+<p>Thanks to <a href="https://twitter.com/eregontp">Benoit Daloze</a>, who pointed out many small mistakes in the article,
+as well as the fact that the proper names for what I called <em>regular</em> and
+<em>default</em> parameters were <em>required</em> and <em>optional</em> parameters. He also
+mentionned <code>Method#parameters</code>, and inspired me to improve the section on blocks
+and procs.</p>
     </div>
     <div id="disqus_thread"></div>
     <script>

@@ -13,7 +13,7 @@
 &lt;ul&gt;
 &lt;li&gt;What combination of parameters are legal in method definition?&lt;/li&gt;
 &lt;li&gt;How are arguments assigned to parameters when calling a method?&lt;/li&gt;
-&lt;li&gt;How do blocks differ from procs?&lt;/li&gt;
+&lt;li&gt;What is a proc in relation with a block?&lt;/li&gt;
 &lt;li&gt;What are the differences between lambdas and procs?&lt;/li&gt;
 &lt;li&gt;What is the difference between &lt;code&gt;{ ... }&lt;/code&gt; and &lt;code&gt;do ... end&lt;/code&gt;?&lt;/li&gt;
 &lt;/ul&gt;
@@ -44,24 +44,28 @@
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;splat&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;*e&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;*args&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;post-required&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;f&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;keyword&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;f:&lt;/code&gt;, &lt;code&gt;g: 7&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;g:&lt;/code&gt;, &lt;code&gt;h: 7&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;double splat&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;**h&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;**kwargs&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;block&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;&amp;amp;i&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;&amp;amp;blk&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;A kitchen sink example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;def foo a, (b, c), d = 1, *e, f:, g: 7, **h, &amp;amp;i; end
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;def foo a, b = 2, *c, d, e:, f: 7, **g, &amp;amp;blk; end
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here are quick explanations:&lt;/p&gt;
 &lt;ul&gt;
@@ -76,9 +80,15 @@ argument into parts. Here are some examples, assuming the argument is &lt;code&g
 (a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
 ((a, *b), c)  a = 1,      b = [2], c = 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;For seemingly no good reason, you cannot have an array decomposition
+parameter, a splat parameter and a keyword parameter in the same method. Go
+figure.&lt;/p&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;The splat parameter enables variable length argument lists and receives all
 extra arguments.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Post-required parameters are required parameters that occur after a splat
+parameter.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Keyword operators have to be named explicitly when calling the method:
 &lt;code&gt;foo(f: 6)&lt;/code&gt;. They can have default values.&lt;/p&gt;
@@ -92,35 +102,28 @@ you to pass it to other methods, and call it by name instead of through
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;You can get a list of a method&amp;#39;s parameters with &lt;code&gt;Method#parameters&lt;/code&gt;, which will
-show the type of each parameter. Here it is, running over our &lt;code&gt;foo&lt;/code&gt; method.
-Notice the glitch for the array decomposition parameter!&lt;/p&gt;
+show the type of each parameter. Here it is, running over our &lt;code&gt;foo&lt;/code&gt; method.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;method(:foo).parameters
-# [[:req, :a], [:req], [:opt, :d], [:rest, :e], [:keyreq, :f], [:key, :g], [:keyrest, :h], [:block, :i]]
+# [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that this glitches for array decomposition parameters, indicating just
+&lt;code&gt;[:req]&lt;/code&gt;.&lt;/p&gt;
 &lt;h3 id=&quot;ordering&quot;&gt;Ordering&lt;/h3&gt;
 &lt;p&gt;You can&amp;#39;t mix match these parameters as you please. All types of parameters are
 optional, but those that are present must respect the following ordering:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;required parameters, optional parameters, and splat parameter (at most one)&lt;/li&gt;
+&lt;li&gt;required parameters and optional parameters&lt;/li&gt;
+&lt;li&gt;splat parameter (at most one)&lt;/li&gt;
+&lt;li&gt;post-required parameters&lt;/li&gt;
 &lt;li&gt;keyword parameters&lt;/li&gt;
 &lt;li&gt;double splat parameter (at most one)&lt;/li&gt;
 &lt;li&gt;block parameter (at most one)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Actually, required parameters that appear after the splat parameter are named
-&amp;quot;post-required parameters&amp;quot;. I was told this by two persons but it&amp;#39;s pretty much
-un-googlable. The distinction does not affect the semantics in any way.&lt;/p&gt;
-&lt;h3 id=&quot;best-practices&quot;&gt;Best Practices&lt;/h3&gt;
-&lt;p&gt;Put the parameters in the following order:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;required parameters&lt;/li&gt;
-&lt;li&gt;optional parameters&lt;/li&gt;
-&lt;li&gt;splat parameters&lt;/li&gt;
-&lt;li&gt;keyword parameters&lt;/li&gt;
-&lt;li&gt;double splat parameter&lt;/li&gt;
-&lt;li&gt;block parameter&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;You should not mix the ordering of required, optional and splat parameters, it
-makes it very unintuitive which parameters gets assigned which argument.&lt;/p&gt;
+&lt;p&gt;As a matter of best practices, you should not mix required and optional
+parameters: put all required parameters first. You should also avoid
+post-required parameters, and using both optional parameters and a splat
+parameter. If you require default values, use keyword parameters instead.&lt;/p&gt;
+&lt;p&gt;See &lt;a href=&quot;https://github.com/bbatsov/ruby-style-guide/issues/632&quot;&gt;some rationale&lt;/a&gt; for these practices.&lt;/p&gt;
 &lt;h2 id=&quot;assigning-arguments-to-parameters&quot;&gt;Assigning Arguments to Parameters&lt;/h2&gt;
 &lt;p&gt;The real complexity of Ruby&amp;#39;s methods is determining how arguments are mapped to
 parameters.&lt;/p&gt;
@@ -139,11 +142,11 @@ parameters.&lt;/p&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;keyword&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;b: v&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;b:&lt;/code&gt;, &lt;code&gt;b: v&lt;/code&gt; or &lt;code&gt;:b =&amp;gt; v&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;hash argument&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;:c =&amp;gt; v&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;v1 =&amp;gt; v2&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;splat&lt;/td&gt;
@@ -163,15 +166,22 @@ parameters.&lt;/p&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;You can substitute &lt;code&gt;v&lt;/code&gt; with almost any expression, as long as you respect
-operator precedence.&lt;/p&gt;
+&lt;p&gt;You can substitute &lt;code&gt;v&lt;/code&gt; (and &lt;code&gt;v1&lt;/code&gt;, &lt;code&gt;v2&lt;/code&gt;) with almost any expression, as long as
+you respect operator precedence.&lt;/p&gt;
 &lt;p&gt;A kitchen sink example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;foo 1, *array, 2, c: 3, :d =&amp;gt; 4, **hash
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;foo 1, *array, 2, c: 3, &amp;quot;d&amp;quot; =&amp;gt; 4, **hash
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here are quick explanations:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Keyword and hash arguments are always treated the same. You should prefer the
-keyword syntax. They match keyword parameters.&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Keyword arguments are equivalent to hash arguments whose key is a symbol. If
+you are using keyword arguments with the intent to fill keyword parameters,
+you should use the keyword syntax. In what follows, when we say &lt;em&gt;keyword
+arguments&lt;/em&gt; we alway refer to keyword argument &lt;strong&gt;and&lt;/strong&gt; hash arguments with a
+symbol key: the two are indistinguishable.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Hash arguments will be aggregated into a hash that will be assigned to one of
+the method&amp;#39;s parameters. Keywords argument may or may not be added to this
+hash (see below).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;If the splat argument is an &lt;code&gt;Array&lt;/code&gt; or an object that supported the &lt;code&gt;to_a&lt;/code&gt;
 method, it is expanded inside the method call: &lt;code&gt;foo(1, *[2, 3], 3)&lt;/code&gt; is
@@ -198,79 +208,55 @@ arguments must appear before any keyword and double splat arguments. A block
 conversion or block argument (only one allowed) must appear last.&lt;/p&gt;
 &lt;p&gt;If the order is not respected, an error ensues.&lt;/p&gt;
 &lt;h3 id=&quot;assigning-arguments-to-parameters&quot;&gt;Assigning Arguments to Parameters&lt;/h3&gt;
-&lt;p&gt;Below we say &amp;quot;keyword argument&amp;quot; to mean &amp;quot;keyword or hash argument&amp;quot;, as those are
-always treated identically.&lt;/p&gt;
 &lt;p&gt;Where an error is mentionned, it is most likely an &lt;code&gt;ArgumentError&lt;/code&gt;. I haven&amp;#39;t
 re-checked everything, but it should always be the case.&lt;/p&gt;
 &lt;p&gt;Here is the full procedure for figuring out how arguments are assigned to
 parameters:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;Expand any splat or double splat arguments. The expanded content is taken
-into account when we talk about regular or keyword arguments later on.&lt;/p&gt;
+into account when we talk about regular, keyword or hash arguments later on.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Let &lt;code&gt;n&lt;/code&gt; be the number of required parameters&lt;br&gt;Let &lt;code&gt;m&lt;/code&gt; be the number of required and optional parameters&lt;br&gt;Let &lt;code&gt;x&lt;/code&gt; be the number of regular arguments&lt;/p&gt;
-&lt;p&gt;Depending on the value of &lt;code&gt;x&lt;/code&gt; (pick the first case that matches):&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;First, we handle all keywords and hash parameters.&lt;/p&gt;
+&lt;p&gt;If there is exactly one more required parameters than there are regular
+arguments, all keyword and hash arguments are collected into a hash, which is
+assigned to that parameter. If there were any keyword parameter, an error
+ensues. If there was a double splat parameter, it is assigned an empty hash.&lt;/p&gt;
+&lt;p&gt;Otherwise, if all of the following conditions hold, &lt;em&gt;implicit hash conversion&lt;/em&gt; is
+performed.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;lt; n-1&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;There aren&amp;#39;t enough regular arguments, an error ensues.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;x == n-1&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;If there aren&amp;#39;t any keyword arguments, an error ensues.&lt;/p&gt;
-&lt;p&gt;Otherwise, the last required parameter will receive a hash that will
-collect all keyword arguments.&lt;/p&gt;
-&lt;p&gt;If there were any keyword parameter without default value, an error
-ensues. If there was a double splat parameter, it will receive an empty
-hash.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first required
-parameters.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;lt; m&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The first &lt;code&gt;x&lt;/code&gt; regular arguments are assigned to the &lt;code&gt;x&lt;/code&gt; first required
-and/or keyword parameters. The last &lt;code&gt;m-x&lt;/code&gt; optional parameters get assigned
-their default values.&lt;/p&gt;
-&lt;p&gt;However, a special case arises if there are keyword arguments but no
-keyword or double splat parameters. In this case, the keyword arguments
-will be collected in a hash, and assigned to the first optional parameter
-who has a hash as default value. If none have, the hash is assigned to the
-first required or optional parameter instead. The assignment from arguments
-to parameters is shifted, of course (i.e. no arguments is lost because of
-this).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;x &amp;gt; m&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;m&lt;/code&gt; first arguments are assigned to the &lt;code&gt;m&lt;/code&gt; first required and/or
-optional parameters.&lt;/p&gt;
-&lt;p&gt;If there is at least a keyword or double splat parameter, but there are no
-keyword arguments, and if the last regular argument is a &lt;code&gt;Hash&lt;/code&gt; or can be
-converted to one with &lt;code&gt;to_hash&lt;/code&gt;, consider it is a double splat argument and
-expand it.&lt;/p&gt;
-&lt;p&gt;All other arguments (&lt;code&gt;x-m&lt;/code&gt; or &lt;code&gt;x-m-1&lt;/code&gt; of them) are collected in an array
-and assigned to the splat parameter if it exists. If there is no splat
-parameter and there more than 0 such arguments, an error ensues.&lt;/p&gt;
-&lt;/li&gt;
+&lt;li&gt;There are keyword or double splat parameters.&lt;/li&gt;
+&lt;li&gt;There are no keyword or hash arguments.&lt;/li&gt;
+&lt;li&gt;There are more regular arguments than required parameters.&lt;/li&gt;
+&lt;li&gt;The last regular argument is a hash, or can be converted to one via
+&lt;code&gt;to_hash&lt;/code&gt; and that method doesn&amp;#39;t return &lt;code&gt;nil&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;Implicit hash conversion simply consists of treating all the (key, value)
+pairs from the last regular argument as additional keyword or hash arguments.
+These new arguments are taken into account in the rest of the assignment
+procedure.&lt;/p&gt;
+&lt;p&gt;We now assign keyword arguments to the corresponding keyword parameters. If a
+keyword parameter without default value cannot be assigned, an error ensues.&lt;/p&gt;
+&lt;p&gt;If there is double splat parameter, assign it a hash aggregating all
+remaining keyword parameters.&lt;/p&gt;
+&lt;p&gt;If there remains keyword or hash arguments, aggregate them in a hash, which
+is to be treated as the last regular argument.&lt;/p&gt;
+&lt;p&gt;Note: if two values are supplied for the same key, the last one wins and the
+previous one disappears. However, if the two values are visible in the method
+call (e.g. &lt;code&gt;foo(a: 1, **{a: 2})&lt;/code&gt;), a warning is emitted.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Assuming the keyword argument weren&amp;#39;t captured in either the &lt;code&gt;x == n-1&lt;/code&gt; or &lt;code&gt;x
-&amp;lt; m&lt;/code&gt; cases in step 2, three situations are possible:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;The are keyword or double splat parameters.&lt;/p&gt;
-&lt;p&gt;The keywords arguments are assigned to the corresponding keyword parameter.
-If a keyword parameter without default value is not filled, an error ensued.&lt;/p&gt;
-&lt;p&gt;If two values are supplied for the same key, the last one wins. However, if
-the two values are visible in the method call (e.g. &lt;code&gt;foo(a: 1, **{a: 2})&lt;/code&gt;),
-a warning is emitted.&lt;/p&gt;
-&lt;p&gt;If any keyword arguments remain, they are collected inside a hash and
-assigned to the double splat parameter if it exists. If it doesn&amp;#39;t and any
-keyword argument remain, an error ensues.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There are no keyword or double splat parameters, but there is a splat
-parameter.&lt;/p&gt;
-&lt;p&gt;All keyword arguments are collected in a hash, which is added to the array
-assigned to the splat parameter.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;There are no keyword, double splat or splat parameters. If there are any
-keyword arguments, an error ensues.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;We now consider regular arguments, which by now consists of the supplied
+regular arguments (including the result of splat expansion), minus the last
+argument if implicit hash conversion was performed in step 2, plus a final
+argument containing a hash if arguments remained in step 2.&lt;/p&gt;
+&lt;p&gt;If there are less regular arguments than required parameters, an error
+ensues. Otherwise, let &lt;code&gt;x&lt;/code&gt; be the number of regular arguments and &lt;code&gt;n&lt;/code&gt; the
+number of required and optional parameters.&lt;/p&gt;
+&lt;p&gt;If &lt;code&gt;x &amp;lt;= n&lt;/code&gt;, the last &lt;code&gt;n-x&lt;/code&gt; optional parameters get assigned their default
+values, while the remaining &lt;code&gt;x&lt;/code&gt; parameters get assigned the &lt;code&gt;x&lt;/code&gt; regular
+arguments.&lt;/p&gt;
+&lt;p&gt;If &lt;code&gt;x &amp;gt; n&lt;/code&gt;, the &lt;code&gt;n&lt;/code&gt; first arguments are assigned to the &lt;code&gt;n&lt;/code&gt; parameters. The
+&lt;code&gt;x-n&lt;/code&gt; remaining arguments are collected in an array, which is assigned to the
+splat parameter. If there is no splat parameter, an error ensues.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;If a block or block conversion argument is passed, make a proc from it and
 assign it to the block parameter, if any — otherwise it becomes the implicit
@@ -336,11 +322,17 @@ side-effects matter.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;edits&quot;&gt;Edits&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Thanks to &lt;a href=&quot;https://twitter.com/eregontp&quot;&gt;Benoit Daloze&lt;/a&gt;, who pointed out many small mistakes in the article,
 as well as the fact that the proper names for what I called &lt;em&gt;regular&lt;/em&gt; and
 &lt;em&gt;default&lt;/em&gt; parameters were &lt;em&gt;required&lt;/em&gt; and &lt;em&gt;optional&lt;/em&gt; parameters. He also
 mentionned &lt;code&gt;Method#parameters&lt;/code&gt;, and inspired me to improve the section on blocks
 and procs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Following a conversation with &lt;a href=&quot;https://twitter.com/tom_enebo&quot;&gt;Tom Enebo&lt;/a&gt; on Twitter, I realized that I forgot
+to account for hash arguments with non-symbol keys! This lead to some more
+investigation and the uncovering of a few errors. The assignment procedure has
+been revised and is now much simpler.&lt;/p&gt;
       </description>
       <pubDate>2017-02-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/ruby-methods</link>

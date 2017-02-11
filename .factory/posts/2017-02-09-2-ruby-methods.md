@@ -11,7 +11,7 @@ Here are a few question this article will try to answer:
 
 - What combination of parameters are legal in method definition?
 - How are arguments assigned to parameters when calling a method?
-- How do blocks differ from procs?
+- What is a proc in relation with a block?
 - What are the differences between lambdas and procs?
 - What is the difference between `{ ... }` and `do ... end`?
 
@@ -28,15 +28,16 @@ A method definition admits the following types of parameters:
 | required              | `a`           |
 | optional              | `b = 2`       |
 | array decomposition   | `(c, *d)`     |
-| splat                 | `*e`          |
-| keyword               | `f:`, `g: 7`  |
-| double splat          | `**h`         |
-| block                 | `&i`          |
+| splat                 | `*args`       |
+| post-required         | `f`           |
+| keyword               | `g:`, `h: 7`  |
+| double splat          | `**kwargs`    |
+| block                 | `&blk`        |
 
 A kitchen sink example:
 
 ```ruby
-def foo a, (b, c), d = 1, *e, f:, g: 7, **h, &i; end
+def foo a, b = 2, *c, d, e:, f: 7, **g, &blk; end
 ```
 
 Here are quick explanations:
@@ -56,8 +57,15 @@ Here are quick explanations:
   ((a, *b), c)  a = 1,      b = [2], c = 3
   ```
   
+  For seemingly no good reason, you cannot have an array decomposition
+  parameter, a splat parameter and a keyword parameter in the same method. Go
+  figure.
+  
 - The splat parameter enables variable length argument lists and receives all
   extra arguments.
+  
+- Post-required parameters are required parameters that occur after a splat
+  parameter.
   
 - Keyword operators have to be named explicitly when calling the method:
   `foo(f: 6)`. They can have default values.
@@ -73,40 +81,35 @@ Here are quick explanations:
 
 You can get a list of a method's parameters with `Method#parameters`, which will
 show the type of each parameter. Here it is, running over our `foo` method.
-Notice the glitch for the array decomposition parameter!
 
 ```ruby
 method(:foo).parameters
-# [[:req, :a], [:req], [:opt, :d], [:rest, :e], [:keyreq, :f], [:key, :g], [:keyrest, :h], [:block, :i]]
+# [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]
 ```
+
+Note that this glitches for array decomposition parameters, indicating just
+`[:req]`.
 
 ### Ordering
 
 You can't mix match these parameters as you please. All types of parameters are
 optional, but those that are present must respect the following ordering:
 
-1. required parameters, optional parameters, and splat parameter (at most one)
-2. keyword parameters
-3. double splat parameter (at most one)
-4. block parameter (at most one)
-
-Actually, required parameters that appear after the splat parameter are named
-"post-required parameters". I was told this by two persons but it's pretty much
-un-googlable. The distinction does not affect the semantics in any way.
-
-### Best Practices
-
-Put the parameters in the following order:
-
-1. required parameters
-2. optional parameters
-3. splat parameters
+1. required parameters and optional parameters
+2. splat parameter (at most one)
+3. post-required parameters
 4. keyword parameters
-5. double splat parameter
-6. block parameter
+5. double splat parameter (at most one)
+6. block parameter (at most one)
 
-You should not mix the ordering of required, optional and splat parameters, it
-makes it very unintuitive which parameters gets assigned which argument.
+As a matter of best practices, you should not mix required and optional
+parameters: put all required parameters first. You should also avoid
+post-required parameters, and using both optional parameters and a splat
+parameter. If you require default values, use keyword parameters instead.
+
+See [some rationale][style-guide] for these practices.
+
+[style-guide]: https://github.com/bbatsov/ruby-style-guide/issues/632
 
 ## Assigning Arguments to Parameters
 
@@ -117,27 +120,34 @@ Here are the different types of arguments you can pass to a method call:
 
 | type | example |
 |------|---------|
-| regular              | `v`           |
-| keyword               | `b: v`        |
-| hash argument         | `:c => v`     |
-| splat                 | `*v`          |
-| double splat          | `**v`         |
-| block conversion      | `&v`          |
+| regular              | `v`                       |
+| keyword               | `b:`, `b: v` or `:b => v`     |
+| hash argument         | `v1 => v2`              |
+| splat                 | `*v`                    |
+| double splat          | `**v`                   |
+| block conversion      | `&v`                    |
 | block                 | `{ .. }` or `do .. end` |
 
-You can substitute `v` with almost any expression, as long as you respect
-operator precedence.
+You can substitute `v` (and `v1`, `v2`) with almost any expression, as long as
+you respect operator precedence.
 
 A kitchen sink example:
 
 ```ruby
-foo 1, *array, 2, c: 3, :d => 4, **hash
+foo 1, *array, 2, c: 3, "d" => 4, **hash
 ```
 
 Here are quick explanations:
 
-- Keyword and hash arguments are always treated the same. You should prefer the
-  keyword syntax. They match keyword parameters.
+- Keyword arguments are equivalent to hash arguments whose key is a symbol. If
+  you are using keyword arguments with the intent to fill keyword parameters,
+  you should use the keyword syntax. In what follows, when we say *keyword
+  arguments* we alway refer to keyword argument **and** hash arguments with a
+  symbol key: the two are indistinguishable.
+
+- Hash arguments will be aggregated into a hash that will be assigned to one of
+  the method's parameters. Keywords argument may or may not be added to this
+  hash (see below).
 
 - If the splat argument is an `Array` or an object that supported the `to_a`
   method, it is expanded inside the method call: `foo(1, *[2, 3], 3)` is
@@ -167,9 +177,6 @@ If the order is not respected, an error ensues.
 
 ### Assigning Arguments to Parameters
 
-Below we say "keyword argument" to mean "keyword or hash argument", as those are
-always treated identically.
-
 Where an error is mentionned, it is most likely an `ArgumentError`. I haven't
 re-checked everything, but it should always be the case.
 
@@ -177,85 +184,59 @@ Here is the full procedure for figuring out how arguments are assigned to
 parameters:
 
 1. Expand any splat or double splat arguments. The expanded content is taken
-   into account when we talk about regular or keyword arguments later on.
+   into account when we talk about regular, keyword or hash arguments later on.
+   
+2. First, we handle all keywords and hash parameters.
 
-2. Let `n` be the number of required parameters  
-   Let `m` be the number of required and optional parameters  
-   Let `x` be the number of regular arguments
+   If there is exactly one more required parameters than there are regular
+   arguments, all keyword and hash arguments are collected into a hash, which is
+   assigned to that parameter. If there were any keyword parameter, an error
+   ensues. If there was a double splat parameter, it is assigned an empty hash.
    
-   Depending on the value of `x` (pick the first case that matches):
+   Otherwise, if all of the following conditions hold, *implicit hash conversion* is
+   performed.
    
-   - `x < n-1`
+   - There are keyword or double splat parameters.
+   - There are no keyword or hash arguments.
+   - There are more regular arguments than required parameters.
+   - The last regular argument is a hash, or can be converted to one via
+     `to_hash` and that method doesn't return `nil`.
    
-     There aren't enough regular arguments, an error ensues.
+   Implicit hash conversion simply consists of treating all the (key, value)
+   pairs from the last regular argument as additional keyword or hash arguments.
+   These new arguments are taken into account in the rest of the assignment
+   procedure.
+   
+   We now assign keyword arguments to the corresponding keyword parameters. If a
+   keyword parameter without default value cannot be assigned, an error ensues.
+   
+   If there is double splat parameter, assign it a hash aggregating all
+   remaining keyword parameters.
       
-   - `x == n-1`
+   If there remains keyword or hash arguments, aggregate them in a hash, which
+   is to be treated as the last regular argument.
    
-     If there aren't any keyword arguments, an error ensues.
-     
-     Otherwise, the last required parameter will receive a hash that will
-     collect all keyword arguments.
-     
-     If there were any keyword parameter without default value, an error
-     ensues. If there was a double splat parameter, it will receive an empty
-     hash.
-     
-     The `x` regular arguments are assigned to the `x` first required
-     parameters.
-   
-   - `x < m`
-   
-     The first `x` regular arguments are assigned to the `x` first required
-     and/or keyword parameters. The last `m-x` optional parameters get assigned
-     their default values.
-     
-     However, a special case arises if there are keyword arguments but no
-     keyword or double splat parameters. In this case, the keyword arguments
-     will be collected in a hash, and assigned to the first optional parameter
-     who has a hash as default value. If none have, the hash is assigned to the
-     first required or optional parameter instead. The assignment from arguments
-     to parameters is shifted, of course (i.e. no arguments is lost because of
-     this).
-     
-   - `x > m`
-   
-     The `m` first arguments are assigned to the `m` first required and/or
-     optional parameters.
-   
-     If there is at least a keyword or double splat parameter, but there are no
-     keyword arguments, and if the last regular argument is a `Hash` or can be
-     converted to one with `to_hash`, consider it is a double splat argument and
-     expand it.
-   
-     All other arguments (`x-m` or `x-m-1` of them) are collected in an array
-     and assigned to the splat parameter if it exists. If there is no splat
-     parameter and there more than 0 such arguments, an error ensues.
-      
-3. Assuming the keyword argument weren't captured in either the `x == n-1` or `x
-   < m` cases in step 2, three situations are possible:
-   
-   - The are keyword or double splat parameters.
-   
-     The keywords arguments are assigned to the corresponding keyword parameter.
-     If a keyword parameter without default value is not filled, an error ensued.
+   Note: if two values are supplied for the same key, the last one wins and the
+   previous one disappears. However, if the two values are visible in the method
+   call (e.g. `foo(a: 1, **{a: 2})`), a warning is emitted.
 
-     If two values are supplied for the same key, the last one wins. However, if
-     the two values are visible in the method call (e.g. `foo(a: 1, **{a: 2})`),
-     a warning is emitted.
+3. We now consider regular arguments, which by now consists of the supplied
+   regular arguments (including the result of splat expansion), minus the last
+   argument if implicit hash conversion was performed in step 2, plus a final
+   argument containing a hash if arguments remained in step 2.
+   
+   If there are less regular arguments than required parameters, an error
+   ensues. Otherwise, let `x` be the number of regular arguments and `n` the
+   number of required and optional parameters.
+   
+   If `x <= n`, the last `n-x` optional parameters get assigned their default
+   values, while the remaining `x` parameters get assigned the `x` regular
+   arguments.
+   
+   If `x > n`, the `n` first arguments are assigned to the `n` parameters. The
+   `x-n` remaining arguments are collected in an array, which is assigned to the
+   splat parameter. If there is no splat parameter, an error ensues.
 
-     If any keyword arguments remain, they are collected inside a hash and
-     assigned to the double splat parameter if it exists. If it doesn't and any
-     keyword argument remain, an error ensues.
-          
-   - There are no keyword or double splat parameters, but there is a splat
-     parameter.
-     
-     All keyword arguments are collected in a hash, which is added to the array
-     assigned to the splat parameter.
-     
-   - There are no keyword, double splat or splat parameters. If there are any
-     keyword arguments, an error ensues.
-     
 4. If a block or block conversion argument is passed, make a proc from it and
    assign it to the block parameter, if any — otherwise it becomes the implicit
    block parameter.
@@ -335,6 +316,8 @@ choose on form over the other:
 
 ## Edits
 
+**1**
+
 Thanks to [Benoit Daloze], who pointed out many small mistakes in the article,
 as well as the fact that the proper names for what I called *regular* and
 *default* parameters were *required* and *optional* parameters. He also
@@ -342,3 +325,12 @@ mentionned `Method#parameters`, and inspired me to improve the section on blocks
 and procs.
 
 [Benoit Daloze]: https://twitter.com/eregontp
+
+**2**
+
+Following a conversation with [Tom Enebo] on Twitter, I realized that I forgot
+to account for hash arguments with non-symbol keys! This lead to some more
+investigation and the uncovering of a few errors. The assignment procedure has
+been revised and is now much simpler.
+
+[Tom Enebo]: https://twitter.com/tom_enebo

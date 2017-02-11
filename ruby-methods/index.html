@@ -50,7 +50,7 @@
 <ul>
 <li>What combination of parameters are legal in method definition?</li>
 <li>How are arguments assigned to parameters when calling a method?</li>
-<li>How do blocks differ from procs?</li>
+<li>What is a proc in relation with a block?</li>
 <li>What are the differences between lambdas and procs?</li>
 <li>What is the difference between <code>{ ... }</code> and <code>do ... end</code>?</li>
 </ul>
@@ -81,24 +81,28 @@
 </tr>
 <tr>
 <td>splat</td>
-<td><code>*e</code></td>
+<td><code>*args</code></td>
+</tr>
+<tr>
+<td>post-required</td>
+<td><code>f</code></td>
 </tr>
 <tr>
 <td>keyword</td>
-<td><code>f:</code>, <code>g: 7</code></td>
+<td><code>g:</code>, <code>h: 7</code></td>
 </tr>
 <tr>
 <td>double splat</td>
-<td><code>**h</code></td>
+<td><code>**kwargs</code></td>
 </tr>
 <tr>
 <td>block</td>
-<td><code>&amp;i</code></td>
+<td><code>&amp;blk</code></td>
 </tr>
 </tbody>
 </table>
 <p>A kitchen sink example:</p>
-<pre><code class="lang-ruby">def foo a, (b, c), d = 1, *e, f:, g: 7, **h, &amp;i; end
+<pre><code class="lang-ruby">def foo a, b = 2, *c, d, e:, f: 7, **g, &amp;blk; end
 </code></pre>
 <p>Here are quick explanations:</p>
 <ul>
@@ -113,9 +117,15 @@ argument into parts. Here are some examples, assuming the argument is <code>[[1,
 (a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
 ((a, *b), c)  a = 1,      b = [2], c = 3
-</code></pre></li>
+</code></pre><p>For seemingly no good reason, you cannot have an array decomposition
+parameter, a splat parameter and a keyword parameter in the same method. Go
+figure.</p>
+</li>
 <li><p>The splat parameter enables variable length argument lists and receives all
 extra arguments.</p>
+</li>
+<li><p>Post-required parameters are required parameters that occur after a splat
+parameter.</p>
 </li>
 <li><p>Keyword operators have to be named explicitly when calling the method:
 <code>foo(f: 6)</code>. They can have default values.</p>
@@ -129,35 +139,28 @@ you to pass it to other methods, and call it by name instead of through
 </li>
 </ul>
 <p>You can get a list of a method&#39;s parameters with <code>Method#parameters</code>, which will
-show the type of each parameter. Here it is, running over our <code>foo</code> method.
-Notice the glitch for the array decomposition parameter!</p>
+show the type of each parameter. Here it is, running over our <code>foo</code> method.</p>
 <pre><code class="lang-ruby">method(:foo).parameters
-# [[:req, :a], [:req], [:opt, :d], [:rest, :e], [:keyreq, :f], [:key, :g], [:keyrest, :h], [:block, :i]]
+# [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]
 </code></pre>
+<p>Note that this glitches for array decomposition parameters, indicating just
+<code>[:req]</code>.</p>
 <h3 id="ordering">Ordering</h3>
 <p>You can&#39;t mix match these parameters as you please. All types of parameters are
 optional, but those that are present must respect the following ordering:</p>
 <ol>
-<li>required parameters, optional parameters, and splat parameter (at most one)</li>
+<li>required parameters and optional parameters</li>
+<li>splat parameter (at most one)</li>
+<li>post-required parameters</li>
 <li>keyword parameters</li>
 <li>double splat parameter (at most one)</li>
 <li>block parameter (at most one)</li>
 </ol>
-<p>Actually, required parameters that appear after the splat parameter are named
-&quot;post-required parameters&quot;. I was told this by two persons but it&#39;s pretty much
-un-googlable. The distinction does not affect the semantics in any way.</p>
-<h3 id="best-practices">Best Practices</h3>
-<p>Put the parameters in the following order:</p>
-<ol>
-<li>required parameters</li>
-<li>optional parameters</li>
-<li>splat parameters</li>
-<li>keyword parameters</li>
-<li>double splat parameter</li>
-<li>block parameter</li>
-</ol>
-<p>You should not mix the ordering of required, optional and splat parameters, it
-makes it very unintuitive which parameters gets assigned which argument.</p>
+<p>As a matter of best practices, you should not mix required and optional
+parameters: put all required parameters first. You should also avoid
+post-required parameters, and using both optional parameters and a splat
+parameter. If you require default values, use keyword parameters instead.</p>
+<p>See <a href="https://github.com/bbatsov/ruby-style-guide/issues/632">some rationale</a> for these practices.</p>
 <h2 id="assigning-arguments-to-parameters">Assigning Arguments to Parameters</h2>
 <p>The real complexity of Ruby&#39;s methods is determining how arguments are mapped to
 parameters.</p>
@@ -176,11 +179,11 @@ parameters.</p>
 </tr>
 <tr>
 <td>keyword</td>
-<td><code>b: v</code></td>
+<td><code>b:</code>, <code>b: v</code> or <code>:b =&gt; v</code></td>
 </tr>
 <tr>
 <td>hash argument</td>
-<td><code>:c =&gt; v</code></td>
+<td><code>v1 =&gt; v2</code></td>
 </tr>
 <tr>
 <td>splat</td>
@@ -200,15 +203,22 @@ parameters.</p>
 </tr>
 </tbody>
 </table>
-<p>You can substitute <code>v</code> with almost any expression, as long as you respect
-operator precedence.</p>
+<p>You can substitute <code>v</code> (and <code>v1</code>, <code>v2</code>) with almost any expression, as long as
+you respect operator precedence.</p>
 <p>A kitchen sink example:</p>
-<pre><code class="lang-ruby">foo 1, *array, 2, c: 3, :d =&gt; 4, **hash
+<pre><code class="lang-ruby">foo 1, *array, 2, c: 3, &quot;d&quot; =&gt; 4, **hash
 </code></pre>
 <p>Here are quick explanations:</p>
 <ul>
-<li><p>Keyword and hash arguments are always treated the same. You should prefer the
-keyword syntax. They match keyword parameters.</p>
+<li><p>Keyword arguments are equivalent to hash arguments whose key is a symbol. If
+you are using keyword arguments with the intent to fill keyword parameters,
+you should use the keyword syntax. In what follows, when we say <em>keyword
+arguments</em> we alway refer to keyword argument <strong>and</strong> hash arguments with a
+symbol key: the two are indistinguishable.</p>
+</li>
+<li><p>Hash arguments will be aggregated into a hash that will be assigned to one of
+the method&#39;s parameters. Keywords argument may or may not be added to this
+hash (see below).</p>
 </li>
 <li><p>If the splat argument is an <code>Array</code> or an object that supported the <code>to_a</code>
 method, it is expanded inside the method call: <code>foo(1, *[2, 3], 3)</code> is
@@ -235,79 +245,55 @@ arguments must appear before any keyword and double splat arguments. A block
 conversion or block argument (only one allowed) must appear last.</p>
 <p>If the order is not respected, an error ensues.</p>
 <h3 id="assigning-arguments-to-parameters">Assigning Arguments to Parameters</h3>
-<p>Below we say &quot;keyword argument&quot; to mean &quot;keyword or hash argument&quot;, as those are
-always treated identically.</p>
 <p>Where an error is mentionned, it is most likely an <code>ArgumentError</code>. I haven&#39;t
 re-checked everything, but it should always be the case.</p>
 <p>Here is the full procedure for figuring out how arguments are assigned to
 parameters:</p>
 <ol>
 <li><p>Expand any splat or double splat arguments. The expanded content is taken
-into account when we talk about regular or keyword arguments later on.</p>
+into account when we talk about regular, keyword or hash arguments later on.</p>
 </li>
-<li><p>Let <code>n</code> be the number of required parameters<br>Let <code>m</code> be the number of required and optional parameters<br>Let <code>x</code> be the number of regular arguments</p>
-<p>Depending on the value of <code>x</code> (pick the first case that matches):</p>
+<li><p>First, we handle all keywords and hash parameters.</p>
+<p>If there is exactly one more required parameters than there are regular
+arguments, all keyword and hash arguments are collected into a hash, which is
+assigned to that parameter. If there were any keyword parameter, an error
+ensues. If there was a double splat parameter, it is assigned an empty hash.</p>
+<p>Otherwise, if all of the following conditions hold, <em>implicit hash conversion</em> is
+performed.</p>
 <ul>
-<li><p><code>x &lt; n-1</code></p>
-<p>There aren&#39;t enough regular arguments, an error ensues.</p>
-</li>
-<li><p><code>x == n-1</code></p>
-<p>If there aren&#39;t any keyword arguments, an error ensues.</p>
-<p>Otherwise, the last required parameter will receive a hash that will
-collect all keyword arguments.</p>
-<p>If there were any keyword parameter without default value, an error
-ensues. If there was a double splat parameter, it will receive an empty
-hash.</p>
-<p>The <code>x</code> regular arguments are assigned to the <code>x</code> first required
-parameters.</p>
-</li>
-<li><p><code>x &lt; m</code></p>
-<p>The first <code>x</code> regular arguments are assigned to the <code>x</code> first required
-and/or keyword parameters. The last <code>m-x</code> optional parameters get assigned
-their default values.</p>
-<p>However, a special case arises if there are keyword arguments but no
-keyword or double splat parameters. In this case, the keyword arguments
-will be collected in a hash, and assigned to the first optional parameter
-who has a hash as default value. If none have, the hash is assigned to the
-first required or optional parameter instead. The assignment from arguments
-to parameters is shifted, of course (i.e. no arguments is lost because of
-this).</p>
-</li>
-<li><p><code>x &gt; m</code></p>
-<p>The <code>m</code> first arguments are assigned to the <code>m</code> first required and/or
-optional parameters.</p>
-<p>If there is at least a keyword or double splat parameter, but there are no
-keyword arguments, and if the last regular argument is a <code>Hash</code> or can be
-converted to one with <code>to_hash</code>, consider it is a double splat argument and
-expand it.</p>
-<p>All other arguments (<code>x-m</code> or <code>x-m-1</code> of them) are collected in an array
-and assigned to the splat parameter if it exists. If there is no splat
-parameter and there more than 0 such arguments, an error ensues.</p>
-</li>
+<li>There are keyword or double splat parameters.</li>
+<li>There are no keyword or hash arguments.</li>
+<li>There are more regular arguments than required parameters.</li>
+<li>The last regular argument is a hash, or can be converted to one via
+<code>to_hash</code> and that method doesn&#39;t return <code>nil</code>.</li>
 </ul>
+<p>Implicit hash conversion simply consists of treating all the (key, value)
+pairs from the last regular argument as additional keyword or hash arguments.
+These new arguments are taken into account in the rest of the assignment
+procedure.</p>
+<p>We now assign keyword arguments to the corresponding keyword parameters. If a
+keyword parameter without default value cannot be assigned, an error ensues.</p>
+<p>If there is double splat parameter, assign it a hash aggregating all
+remaining keyword parameters.</p>
+<p>If there remains keyword or hash arguments, aggregate them in a hash, which
+is to be treated as the last regular argument.</p>
+<p>Note: if two values are supplied for the same key, the last one wins and the
+previous one disappears. However, if the two values are visible in the method
+call (e.g. <code>foo(a: 1, **{a: 2})</code>), a warning is emitted.</p>
 </li>
-<li><p>Assuming the keyword argument weren&#39;t captured in either the <code>x == n-1</code> or <code>x
-&lt; m</code> cases in step 2, three situations are possible:</p>
-<ul>
-<li><p>The are keyword or double splat parameters.</p>
-<p>The keywords arguments are assigned to the corresponding keyword parameter.
-If a keyword parameter without default value is not filled, an error ensued.</p>
-<p>If two values are supplied for the same key, the last one wins. However, if
-the two values are visible in the method call (e.g. <code>foo(a: 1, **{a: 2})</code>),
-a warning is emitted.</p>
-<p>If any keyword arguments remain, they are collected inside a hash and
-assigned to the double splat parameter if it exists. If it doesn&#39;t and any
-keyword argument remain, an error ensues.</p>
-</li>
-<li><p>There are no keyword or double splat parameters, but there is a splat
-parameter.</p>
-<p>All keyword arguments are collected in a hash, which is added to the array
-assigned to the splat parameter.</p>
-</li>
-<li><p>There are no keyword, double splat or splat parameters. If there are any
-keyword arguments, an error ensues.</p>
-</li>
-</ul>
+<li><p>We now consider regular arguments, which by now consists of the supplied
+regular arguments (including the result of splat expansion), minus the last
+argument if implicit hash conversion was performed in step 2, plus a final
+argument containing a hash if arguments remained in step 2.</p>
+<p>If there are less regular arguments than required parameters, an error
+ensues. Otherwise, let <code>x</code> be the number of regular arguments and <code>n</code> the
+number of required and optional parameters.</p>
+<p>If <code>x &lt;= n</code>, the last <code>n-x</code> optional parameters get assigned their default
+values, while the remaining <code>x</code> parameters get assigned the <code>x</code> regular
+arguments.</p>
+<p>If <code>x &gt; n</code>, the <code>n</code> first arguments are assigned to the <code>n</code> parameters. The
+<code>x-n</code> remaining arguments are collected in an array, which is assigned to the
+splat parameter. If there is no splat parameter, an error ensues.</p>
 </li>
 <li><p>If a block or block conversion argument is passed, make a proc from it and
 assign it to the block parameter, if any — otherwise it becomes the implicit
@@ -373,11 +359,17 @@ side-effects matter.</p>
 </li>
 </ul>
 <h2 id="edits">Edits</h2>
+<p><strong>1</strong></p>
 <p>Thanks to <a href="https://twitter.com/eregontp">Benoit Daloze</a>, who pointed out many small mistakes in the article,
 as well as the fact that the proper names for what I called <em>regular</em> and
 <em>default</em> parameters were <em>required</em> and <em>optional</em> parameters. He also
 mentionned <code>Method#parameters</code>, and inspired me to improve the section on blocks
 and procs.</p>
+<p><strong>2</strong></p>
+<p>Following a conversation with <a href="https://twitter.com/tom_enebo">Tom Enebo</a> on Twitter, I realized that I forgot
+to account for hash arguments with non-symbol keys! This lead to some more
+investigation and the uncovering of a few errors. The assignment procedure has
+been revised and is now much simpler.</p>
     </div>
     <div id="disqus_thread"></div>
     <script>

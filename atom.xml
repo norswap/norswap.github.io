@@ -6,6 +6,222 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Ruby Module Linearization</title>
+      <description>
+&lt;p&gt;This is the second article in the &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt; series.&lt;/p&gt;
+&lt;h2 id=&quot;mixin-modules&quot;&gt;Mixin Modules&lt;/h2&gt;
+&lt;p&gt;In Ruby, classes can only inherit from a single class. However they can
+&lt;em&gt;include&lt;/em&gt; multiple modules.&lt;/p&gt;
+&lt;p&gt;A class that includes a module will be able to use the methods defined in the
+modules. A class doesn&amp;#39;t really &amp;quot;inherit instance variables&amp;quot;. Instance variables
+must not be declared, they exist just by virtue of being accessed. This means
+that if a class and its superclass (or an included module) both access a
+variable &lt;code&gt;@x&lt;/code&gt;, they will access the same variable.&lt;/p&gt;
+&lt;p&gt;This is because of &lt;em&gt;late binding&lt;/em&gt; (aka &lt;em&gt;dynamic dispatch&lt;/em&gt;): both instance
+variables and methods will be looked up from &lt;em&gt;self&lt;/em&gt; at run-time.&lt;/p&gt;
+&lt;p&gt;While here is only a single copy of each instance variable, there could be
+multiple method declarations with the same name. How does Ruby select which one
+to use?&lt;/p&gt;
+&lt;p&gt;The answer is a process called &lt;em&gt;linearization&lt;/em&gt;, which defines how Ruby orders
+all the (transitively) inherited classes and included modules. You can inspect
+this ordering through the &lt;code&gt;Module#ancestors&lt;/code&gt; method. For instance try
+&lt;code&gt;Integer.ancestors&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;More than lookup, linearization also controls the behaviour of calls to super
+methods through &lt;code&gt;super()&lt;/code&gt;. Ruby reorganizes all modules and classes into a
+single inheritance chain (the &lt;em&gt;ancestor chain&lt;/em&gt;) and consecutive calls to
+&lt;code&gt;super()&lt;/code&gt; move up this chain.&lt;/p&gt;
+&lt;h2 id=&quot;confusing-examples&quot;&gt;Confusing Examples&lt;/h2&gt;
+&lt;p&gt;But how does linearization work, exactly?&lt;/p&gt;
+&lt;p&gt;Here are a couple scenarios, what do you think the behaviour for each of this
+scenario is? Each is taylored to show something about the linearization process.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 1
+
+module A1; end
+module B1; end
+module C1
+  include A1
+  include B1
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 2
+
+module A2; end
+module B2; end
+module C2
+  include A2
+end
+module D2
+  include B2
+end
+module E2
+  include C2
+  include D2
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 3
+
+module A3; end
+module C3
+  include A3
+end
+module D3
+  include A3
+end
+module E3
+  include C3
+  include D3
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 4
+
+module A4; end
+module B4; end
+module F4; end
+module C4
+  include B4
+  include A4
+end
+module D4
+  include F4
+  include A4
+end
+module E4
+  include C4
+  include D4
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 5
+
+module A5; end
+module B5; end
+module C5
+  include B5
+  include A5
+end
+module D5
+  include A5
+  include B5
+end
+module E5
+  include C5
+  include D5
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And here are the linearized orderings:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;C1.ancestors    =&amp;gt; [C1, B1, A1]
+E2.ancestors    =&amp;gt; [E2, D2, B2, C2, A2] 
+E3.ancestors    =&amp;gt; [E3, D3, C3, A3]
+# so far, so good
+E4.ancestors    =&amp;gt; [E4, D4, C4, A4, F4, B4]
+E5.ancestors    =&amp;gt; [E5, D5, C5, A5, B5]
+# where is your god now?
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Two things further complicate the situation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;code&gt;prepend&lt;/code&gt; function is a variant of &lt;code&gt;include&lt;/code&gt; with a slightly different
+behaviour.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;include A, B&lt;/code&gt; is the same as &lt;code&gt;include B; include A&lt;/code&gt;. Yep.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;the-algorithm&quot;&gt;The Algorithm&lt;/h2&gt;
+&lt;p&gt;The linearization algorithm is very hard to describe precisely with a few
+sentences, so I&amp;#39;ll just serve you the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;Include = Struct.new :mod
+Prepend = Struct.new :mod
+
+# Returns the ancestry chain of `mod`, given the environment `env`.
+#
+# No distinctions are made between classes and modules: where a class extends
+# another class, that class is treated as the first included module.
+#
+# params:
+# - mod: Symbol
+#   Represents a module.
+# - env: Map&amp;lt;Symbol, Array&amp;lt;Include|Prepend&amp;gt;&amp;gt;
+#   Maps modules to inclusions, in order of apperance.
+
+def ancestors (mod, env)
+  chain = [mod]
+  includes = env[mod]
+  includes.each { |it| insert(mod, it, env, chain) }
+  chain
+end
+
+
+def insert (mod, inclusion, env, chain)
+  i = inclusion.is_a?(Prepend) ? 0 : 1
+  ancestors(inclusion.mod, env).each do |it|
+    raise ArgumentError(&amp;#39;cyclic include detected&amp;#39;) if it == mod
+    j = chain.find_index it
+    if not j.nil?
+      i = j + 1 if j &amp;gt;= i
+      next
+    end
+    chain.insert(i, it)
+    i += 1
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;intuition&quot;&gt;Intuition&lt;/h3&gt;
+&lt;p&gt;Let&amp;#39;s try to get some intuition in there. Let&amp;#39;s start with some observations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If B is included after A, B take precedence over A.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If B extends or includes A, B takes precedences over A.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;When including a module X, the algorithm tries to maintain the ordering
+of the ancestor chain of X.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If there is a conflict of ordering, the algorithm always favors the
+ordering of modules that were included earlier.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The last point highlight the most unintuitive thing about the algorithm: modules
+included later take precedence, but when considering conflicts of ordering, it&amp;#39;s
+modules included earlier that win!&lt;/p&gt;
+&lt;p&gt;The reason is that in Ruby, we may include a module in another at any time. Ruby
+never reorders modules in the ancestor chain, but has no problem inserting
+modules in between existing modules. This does make sense, but leads to puzzling
+linearization behaviour.&lt;/p&gt;
+&lt;p&gt;Making module included earlier take precedence would solve the problem. However
+when we include a module in another at runtime, we usually would like it to take
+precedence on previously included modules!&lt;/p&gt;
+&lt;h3 id=&quot;inheritance-vs-inclusion&quot;&gt;Inheritance vs Inclusion&lt;/h3&gt;
+&lt;p&gt;As mentionned in the comment, there is no difference between inheritance and
+inclusion with regards to linearization. An inherited class is treated as though
+it was the first included module.&lt;/p&gt;
+&lt;h3 id=&quot;merging-ancestor-chains&quot;&gt;Merging Ancestor Chains&lt;/h3&gt;
+&lt;p&gt;If you look at the algorithm, you will see that it is a recursive process: to
+include a module, you need to acquire its ancestor chain, then merge it with the
+current ancestor chain of the includer.&lt;/p&gt;
+&lt;p&gt;The way this is done — for regular includes — is to start just after the class
+then insert the modules one by one. We only diverge from this if a module is
+already present in the ancestor chain. Either it is further ahead in the chain:
+then we skip to that position and continue the process; or it is earlier in the
+chain (signifying there is an ordering conflict between included modules) and we
+remain at the current position (in both cases the module is not re-inserted).&lt;/p&gt;
+&lt;h3 id=&quot;include-vs-prepend&quot;&gt;Include vs Prepend&lt;/h3&gt;
+&lt;p&gt;The only difference between &lt;code&gt;include&lt;/code&gt; and &lt;code&gt;prepend&lt;/code&gt; is that prepend will try
+merging the ancestor chain of its parameter &lt;em&gt;before&lt;/em&gt; the class in the class
+own&amp;#39;s ancestor chain:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;module M; end
+class C; prepend M; end
+C.ancestors =&amp;gt; [M, C, ...]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;doing-better-&quot;&gt;Doing Better?&lt;/h2&gt;
+&lt;p&gt;Despite its idiosyncracies, I would be hard pressed to improve on the algorithm
+without losing some of its nice properties. The key tension is that later calls
+to &lt;code&gt;include&lt;/code&gt; should take precedence (to enable effective run-time
+meta-programming), but re-ordering modules is objectively bad.&lt;/p&gt;
+&lt;p&gt;If you have any idea, make sure to share them!&lt;/p&gt;
+&lt;p&gt;It should also be said that, of course, scenarios such as ordering conflicts
+rarely happen in practice. Most people ignore these rules and are not really
+worse off because of it.&lt;/p&gt;
+      </description>
+      <pubDate>2017-02-22T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/ruby-module-linearization</link>
+      <guid isPermaLink="true">http://norswap.com/ruby-module-linearization</guid>
+    </item>
+    <item>
       <title>Ruby Methods, Procs and Blocks</title>
       <description>
 &lt;p&gt;This is the first article in the &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt; series.&lt;/p&gt;
@@ -791,67 +1007,6 @@ certainly makes you think.&lt;/p&gt;
       <pubDate>2016-11-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/deep-neural-pathways</link>
       <guid isPermaLink="true">http://norswap.com/deep-neural-pathways</guid>
-    </item>
-    <item>
-      <title>Robin Hood Hashing on the JVM</title>
-      <description>
-&lt;p&gt;Robin Hood Hashing, despite its name, isn&amp;#39;t a hashing technique, but rather a
-way to implement &lt;a href=&quot;https://en.wikipedia.org/wiki/Linear_probing&quot;&gt;linear-probing hash tables&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;In the classical linear probing implementation, whenever a hash table slot is
-already taken (due to hash collision), you probe ahead until you find an empty
-slot. When the hash table is highly loaded, this can lead to entries being
-stored far away from their preferred position.&lt;/p&gt;
-&lt;p&gt;Robin Hood Hashing features a notion of &lt;em&gt;displacement&lt;/em&gt;. The displacement of an
-entry is the distance between its actual position and its preferred position.
-Furthermore, we call &lt;em&gt;probe count&lt;/em&gt; the number of probed slots in order to find a
-free slot. When inserting an entry, the final probe count is the diplacement.&lt;/p&gt;
-&lt;p&gt;When inserting an entry A using Robin Hood Hashing, if you encounter an entry B
-whose displacement is smaller than the probe count, you insert A in B&amp;#39;s
-position, and relocate B further in the table (following the same rules).&lt;/p&gt;
-&lt;p&gt;The result is that the displacements of all entries in the map tend to even out.
-The length of the longest displacement tends to increase as the load increase
-but very slowly (around 6 for a load of 0.9 &amp;mdash; see
-&lt;a href=&quot;http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.130.6339&quot;&gt;this paper (pdf)&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;The technique is actually quite old. It was first &lt;a href=&quot;https://cs.uwaterloo.ca/research/tr/1986/CS-86-14.pdf&quot;&gt;published in 1986&lt;/a&gt;.
-As for me, I first become aware of Robin Hood Hashing through
-&lt;a href=&quot;http://www.sebastiansylvan.com/post/robin-hood-hashing-should-be-your-default-hash-table-implementation/&quot;&gt;a post by Sebastian Sylvan&lt;/a&gt;. Emmanuel Goossaert also has two posts
-(&lt;a href=&quot;http://codecapsule.com/2013/11/11/robin-hood-hashing/&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;http://codecapsule.com/2013/11/17/robin-hood-hashing-backward-shift-deletion/&quot;&gt;two&lt;/a&gt;) analyzing and then improving the technique. If you&amp;#39;re
-looking for further information, I highly recommend these posts.&lt;/p&gt;
-&lt;p&gt;I was interesting in a more pragmatic question: could I use Robin Hood Hashing
-and get a boost in performance? In particular, how would it perform on the JVM,
-where I do most of my work these days?&lt;/p&gt;
-&lt;p&gt;I implemented two versions of the algorithm (&lt;a href=&quot;https://github.com/ncellar/robinmap&quot;&gt;source&lt;/a&gt;). The first versions
-stores entry objects in the table (hence requiring an extra indirection for each
-probed slot). The second version used two tables: the first one was an array of
-integers, where each table entry occupies two array entries. The first array
-entry is the hash, the second is the displacement. The second table is an array
-of objects. Here too, each table entry occupies two array entry. The first array
-entry is the key, the second is the value. The theory is that most of the time,
-when probing, you only need to check the hash and the displacement. Having those
-in the primary table avoids extra indirection (and hence cache misses).&lt;/p&gt;
-&lt;p&gt;Disappointingly enough, the performance delta between both techniques is too
-small to be meaningful. In general however, the technique is almost as fast as
-Java&amp;#39;s &lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html&quot;&gt;&lt;code&gt;HashMap&lt;/code&gt;&lt;/a&gt; implementation. With some performance tweaking, I
-believe it would be possible to close the gap. Be warned that my measurements
-are very wonky. Nevertheless they gave me confidence enough to come to two
-conclusions:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Robin Hood Hashing is practical and fast enough to rival separate-chaining
-hash table implementation (like Java&amp;#39;s &lt;code&gt;HashMap&lt;/code&gt;) on the JVM.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;However, it is not significantly faster either, and so it&amp;#39;s probably not worth
-the trouble of maintaining my own implementation.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note this says nothing about the relative performance of Robin Hood Hashing and
-separate-chaining on other platforms than the JVM.&lt;/p&gt;
-&lt;p&gt;And off course, you should totally perform you own measurements. You can get
-started from &lt;a href=&quot;https://github.com/ncellar/robinmap&quot;&gt;my own code&lt;/a&gt;. If anyone has more data to add to the
-discussion, make sure to share it in the comments.&lt;/p&gt;
-      </description>
-      <pubDate>2016-10-09T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/robin-hood-hashing-jvm</link>
-      <guid isPermaLink="true">http://norswap.com/robin-hood-hashing-jvm</guid>
     </item>
   </channel>
 </rss>

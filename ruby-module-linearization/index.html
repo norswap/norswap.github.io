@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Ruby Module Linearization
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Ruby Module Linearization</h1>
+      <span class="post-date">23 Feb 2017</span>
+<p>This is the second article in the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series.</p>
+<h2 id="mixin-modules">Mixin Modules</h2>
+<p>In Ruby, classes can only inherit from a single class. However they can
+<em>include</em> multiple modules.</p>
+<p>A class that includes a module will be able to use the methods defined in the
+modules. A class doesn&#39;t really &quot;inherit instance variables&quot;. Instance variables
+must not be declared, they exist just by virtue of being accessed. This means
+that if a class and its superclass (or an included module) both access a
+variable <code>@x</code>, they will access the same variable.</p>
+<p>This is because of <em>late binding</em> (aka <em>dynamic dispatch</em>): both instance
+variables and methods will be looked up from <em>self</em> at run-time.</p>
+<p>While here is only a single copy of each instance variable, there could be
+multiple method declarations with the same name. How does Ruby select which one
+to use?</p>
+<p>The answer is a process called <em>linearization</em>, which defines how Ruby orders
+all the (transitively) inherited classes and included modules. You can inspect
+this ordering through the <code>Module#ancestors</code> method. For instance try
+<code>Integer.ancestors</code>.</p>
+<p>More than lookup, linearization also controls the behaviour of calls to super
+methods through <code>super()</code>. Ruby reorganizes all modules and classes into a
+single inheritance chain (the <em>ancestor chain</em>) and consecutive calls to
+<code>super()</code> move up this chain.</p>
+<h2 id="confusing-examples">Confusing Examples</h2>
+<p>But how does linearization work, exactly?</p>
+<p>Here are a couple scenarios, what do you think the behaviour for each of this
+scenario is? Each is taylored to show something about the linearization process.</p>
+<pre><code class="lang-ruby"># Scenario 1
+
+module A1; end
+module B1; end
+module C1
+  include A1
+  include B1
+end
+</code></pre>
+<pre><code class="lang-ruby"># Scenario 2
+
+module A2; end
+module B2; end
+module C2
+  include A2
+end
+module D2
+  include B2
+end
+module E2
+  include C2
+  include D2
+end
+</code></pre>
+<pre><code class="lang-ruby"># Scenario 3
+
+module A3; end
+module C3
+  include A3
+end
+module D3
+  include A3
+end
+module E3
+  include C3
+  include D3
+end
+</code></pre>
+<pre><code class="lang-ruby"># Scenario 4
+
+module A4; end
+module B4; end
+module F4; end
+module C4
+  include B4
+  include A4
+end
+module D4
+  include F4
+  include A4
+end
+module E4
+  include C4
+  include D4
+end
+</code></pre>
+<pre><code class="lang-ruby"># Scenario 5
+
+module A5; end
+module B5; end
+module C5
+  include B5
+  include A5
+end
+module D5
+  include A5
+  include B5
+end
+module E5
+  include C5
+  include D5
+end
+</code></pre>
+<p>And here are the linearized orderings:</p>
+<pre><code class="lang-ruby">C1.ancestors    =&gt; [C1, B1, A1]
+E2.ancestors    =&gt; [E2, D2, B2, C2, A2] 
+E3.ancestors    =&gt; [E3, D3, C3, A3]
+# so far, so good
+E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]
+E5.ancestors    =&gt; [E5, D5, C5, A5, B5]
+# where is your god now?
+</code></pre>
+<p>Two things further complicate the situation:</p>
+<ul>
+<li>The <code>prepend</code> function is a variant of <code>include</code> with a slightly different
+behaviour.</li>
+<li><code>include A, B</code> is the same as <code>include B; include A</code>. Yep.</li>
+</ul>
+<h2 id="the-algorithm">The Algorithm</h2>
+<p>The linearization algorithm is very hard to describe precisely with a few
+sentences, so I&#39;ll just serve you the code:</p>
+<pre><code class="lang-ruby">Include = Struct.new :mod
+Prepend = Struct.new :mod
+
+# Returns the ancestry chain of `mod`, given the environment `env`.
+#
+# No distinctions are made between classes and modules: where a class extends
+# another class, that class is treated as the first included module.
+#
+# params:
+# - mod: Symbol
+#   Represents a module.
+# - env: Map&lt;Symbol, Array&lt;Include|Prepend&gt;&gt;
+#   Maps modules to inclusions, in order of apperance.
+
+def ancestors (mod, env)
+  chain = [mod]
+  includes = env[mod]
+  includes.each { |it| insert(mod, it, env, chain) }
+  chain
+end
+
+
+def insert (mod, inclusion, env, chain)
+  i = inclusion.is_a?(Prepend) ? 0 : 1
+  ancestors(inclusion.mod, env).each do |it|
+    raise ArgumentError(&#39;cyclic include detected&#39;) if it == mod
+    j = chain.find_index it
+    if not j.nil?
+      i = j + 1 if j &gt;= i
+      next
+    end
+    chain.insert(i, it)
+    i += 1
+  end
+end
+</code></pre>
+<h3 id="intuition">Intuition</h3>
+<p>Let&#39;s try to get some intuition in there. Let&#39;s start with some observations:</p>
+<ul>
+<li><p>If B is included after A, B take precedence over A.</p>
+</li>
+<li><p>If B extends or includes A, B takes precedences over A.</p>
+</li>
+<li><p>When including a module X, the algorithm tries to maintain the ordering
+of the ancestor chain of X.</p>
+</li>
+<li><p>If there is a conflict of ordering, the algorithm always favors the
+ordering of modules that were included earlier.</p>
+</li>
+</ul>
+<p>The last point highlight the most unintuitive thing about the algorithm: modules
+included later take precedence, but when considering conflicts of ordering, it&#39;s
+modules included earlier that win!</p>
+<p>The reason is that in Ruby, we may include a module in another at any time. Ruby
+never reorders modules in the ancestor chain, but has no problem inserting
+modules in between existing modules. This does make sense, but leads to puzzling
+linearization behaviour.</p>
+<p>Making module included earlier take precedence would solve the problem. However
+when we include a module in another at runtime, we usually would like it to take
+precedence on previously included modules!</p>
+<h3 id="inheritance-vs-inclusion">Inheritance vs Inclusion</h3>
+<p>As mentionned in the comment, there is no difference between inheritance and
+inclusion with regards to linearization. An inherited class is treated as though
+it was the first included module.</p>
+<h3 id="merging-ancestor-chains">Merging Ancestor Chains</h3>
+<p>If you look at the algorithm, you will see that it is a recursive process: to
+include a module, you need to acquire its ancestor chain, then merge it with the
+current ancestor chain of the includer.</p>
+<p>The way this is done — for regular includes — is to start just after the class
+then insert the modules one by one. We only diverge from this if a module is
+already present in the ancestor chain. Either it is further ahead in the chain:
+then we skip to that position and continue the process; or it is earlier in the
+chain (signifying there is an ordering conflict between included modules) and we
+remain at the current position (in both cases the module is not re-inserted).</p>
+<h3 id="include-vs-prepend">Include vs Prepend</h3>
+<p>The only difference between <code>include</code> and <code>prepend</code> is that prepend will try
+merging the ancestor chain of its parameter <em>before</em> the class in the class
+own&#39;s ancestor chain:</p>
+<pre><code class="lang-ruby">module M; end
+class C; prepend M; end
+C.ancestors =&gt; [M, C, ...]
+</code></pre>
+<h2 id="doing-better-">Doing Better?</h2>
+<p>Despite its idiosyncracies, I would be hard pressed to improve on the algorithm
+without losing some of its nice properties. The key tension is that later calls
+to <code>include</code> should take precedence (to enable effective run-time
+meta-programming), but re-ordering modules is objectively bad.</p>
+<p>If you have any idea, make sure to share them!</p>
+<p>It should also be said that, of course, scenarios such as ordering conflicts
+rarely happen in practice. Most people ignore these rules and are not really
+worse off because of it.</p>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/ruby-module-linearization";
+        this.page.identifier = "ruby-module-linearization";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

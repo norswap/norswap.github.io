@@ -16,7 +16,7 @@ After investing some time to understand these features, I thought I would go the
 extra mile and publish my findings. Here are the topics I will cover:
 
 - [Ruby's Methods, Procs and Blocks](/ruby-methods)
-- Ruby's Module Linearization (soon)
+- [Ruby's Module Linearization](/ruby-module-linearization)
 - Ruby's Lookups and Scopes (soon)
 
 If you think all of this is documented elsewhere, read [Ruby's Specification

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Ruby&#39;s Lookups &amp; Scopes
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Ruby&#39;s Lookups &amp; Scopes</h1>
+      <span class="post-date">06 Mar 2017</span>
+<p>This is the third and last article in the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series.</p>
+<h2 id="lookups-in-ruby">Lookups in Ruby</h2>
+<p>The great difficulty in Ruby is knowing what names refer
+to. <a href="/ruby-module-linearization">Linearization</a> showed us that knowing which method gets
+called is non-trivial. Unfortunately it&#39;s only part of the story.</p>
+<p>In Ruby, names can refer to:</p>
+<ul>
+<li>methods: <code>x.name</code> or <code>name</code></li>
+<li>local variables: <code>name</code></li>
+<li>class variables: <code>@@name</code></li>
+<li>global variables: <code>$name</code></li>
+<li>constants: <code>NAME</code></li>
+<li>modules: <code>Name</code></li>
+</ul>
+<p>We also would like to know on which module methods are defined. By the way,
+since <code>Class &lt; Module</code>, when we say <em>modules</em> we mean <em>modules and classes</em>,
+unless otherwise specified.</p>
+<p>There are five big concepts involved with these lookups (and then some fun
+sprinkled on top):</p>
+<ul>
+<li><strong>self</strong>: what does <code>self</code> refer to?</li>
+<li><strong>definee</strong>: if a method definition appears, on which class is it defined?</li>
+<li><strong>scoping</strong>: knowing which constructs create new scope for local variables and
+which don&#39;t</li>
+<li><strong>nesting</strong>: what are the surrounding modules? (often called <em>cref</em>)</li>
+</ul>
+<p>Let&#39;s look at how each type of name is resolved.</p>
+<h2 id="local-global-variables">Local &amp; Global Variables</h2>
+<p>Global variables are prefixed with <code>$</code> and they are easy: they are accessible
+everywhere.</p>
+<p>Local variables depend on static scopes. New scopes are create when you enter a
+new method or module body, or when you enter a method call&#39;s block. Control flow
+statements do not create scopes!</p>
+<p>Only scopes created by blocks inherit their parent&#39;s scope. Scope created by
+methods and modules are completely isolated from their parent&#39;s scope. It is
+sometimes said that <code>module</code>, <code>class</code> and <code>def</code> are <em>scope gates</em>.</p>
+<pre><code class="lang-ruby">x = 1
+module Foo
+  p x # NameError
+end
+</code></pre>
+<p>There is however a trick you can use:</p>
+<pre><code class="lang-ruby">x = 1
+Foo = Module.new do
+  p x # ok
+end
+</code></pre>
+<p>It is possible to make local variables survive their lexical scope:</p>
+<pre><code class="lang-ruby">def foo
+  x = 0
+  [lambda { x += 1 }, lambda { p x }]
+end
+x, y = foo
+x.call()
+y.call() # 1
+</code></pre>
+<p>Something else that is peculiar: a variable is &quot;in scope&quot; in an assignment to it
+has appeared before in the current scope.</p>
+<pre><code class="lang-ruby">p x # NameError
+x = 1
+# but
+x = 1 if false
+p x # nil
+</code></pre>
+<p>Reflection can help with local variables too: the <code>binding</code> method (both
+<code>Kernel#binding</code> and <code>Proc#binding</code>) returns a <code>Binding</code> object which describes
+the local variables in scope.</p>
+<h2 id="instance-variables">Instance Variables</h2>
+<p>Instance variables are prefixed by <code>@</code>. They are <strong>always</strong> looked up on <code>self</code>.
+If an instance variable doesn&#39;t exists (it has never been assigned), it
+evaluates to <code>nil</code>.</p>
+<p>Note that this means that instance variables are effectively instance-private:
+an instance of <code>X</code> cannot access the instance variables of another instance of
+<code>X</code>. This is more restrictive than <code>private</code> in Java for instance. However, it&#39;s
+easy to use reflection to side-step this with
+<code>Object#instance_variable_get/set</code>.</p>
+<h2 id="class-variables">Class Variables</h2>
+<p>Class variables are prefixed with <code>@@</code>. They are defined on modules, and can be
+accessed both in module bodies and in method bodies. Strangely, they can also be
+accessed in the meta-class of a module (and its meta-meta-class, etc).</p>
+<p>If a module inherits multiple version of a class variable, it&#39;s always the first
+inherited version that wins (so the first <code>&lt;</code>, <code>include</code> or <code>preprend</code>).</p>
+<p>You can list the class variables &quot;owned&quot; by a module with
+<code>Module#class_variables(false)</code> (<code>false</code> says not to include class inherited
+class variables). Interestingly, class variables can &quot;migrate&quot;: if the module is
+a class that has a class variable <code>@@a</code>, and that <code>@@a</code> becomes defined on one
+of its ancestor, the class variable will disappear from the class. This will not
+happen for non-class modules however.</p>
+<pre><code class="lang-ruby">class T; @@a = &#39;t&#39;; end
+class Object; @@a = &#39;o&#39;; end
+class T
+  p @@a # o
+  p class_variables(false) # []
+end
+</code></pre>
+<p>If a class variable is accessed before it has been assigned, a <code>NameError</code>
+occurs.</p>
+<p>Final catch, class variables can only be accessed inside the body of a class
+that inherits/includes the class defining the variables. This means you can&#39;t
+use the <code>@@x</code> notation with the <code>eval</code> method that we will see later. However,
+you can use reflection: <code>Module#class_variable_get/set</code>.</p>
+<h2 id="constants-and-modules-">Constants (and Modules)</h2>
+<p>Constants start with an uppercase letter, and modules are actually a kind of
+constant.</p>
+<p>Constants depend on the notion of <code>nesting</code>: you can access a constant if it is
+declared inside a module body that is around you, or in one of the ancestors of
+the current module (but <strong>not</strong> in an ancestor of a surrounding module!). You
+can also use <code>::</code> to navigate through modules:</p>
+<pre><code class="lang-ruby">X = 0
+module A
+  X = 1
+  p ::X # 0
+  module B; module C; Y = 2; end; end
+  module D
+    p X # 1
+    p B::C::Y
+  end
+end
+</code></pre>
+<p>The following exemple illustrates two gotchas:</p>
+<ul>
+<li>You don&#39;t have access to constants defined in an ancestor of a surrounding
+module.</li>
+<li>Constants in surrounding modules take precedence over constants in ancestors.</li>
+</ul>
+<pre><code class="lang-ruby">module A; X = &#39;a&#39;; end
+module B; Y = &#39;b&#39;; end
+module C
+  include A
+  p X # ok
+  Y = &#39;c&#39;
+  module D
+    include B
+    p Y # &#39;c&#39;!
+    p X # NameError
+  end
+end
+</code></pre>
+<p>The module body really has to be around you:</p>
+<pre><code class="lang-ruby">module A::B::C; p Y; end # ok (Y defined in C)
+module A::D; p X; end # NameError (X defined in A)
+</code></pre>
+<p>We can access the current nesting with <code>Module::nesting</code> and clarify the
+example:</p>
+<pre><code class="lang-ruby">module A
+  module D; p Module.nesting; end # [A, A::D]
+end
+module A::D; p Module.nesting; end # [A::D]
+</code></pre>
+<p>Of course, if you try to access a constant before it has been assigned, a
+<code>NameError</code> ensues. <code>Module::constants</code> will list the constants defined at the
+point of call, while <code>Module#constants</code> will list the constants defined by the
+module (and optionally by its ancestors, depending on the argument).</p>
+<h2 id="methods">Methods</h2>
+<p>Methods are looked up on the receiver (the thing before the dot). If there is no
+receiver, <code>self</code> is assumed. Then it&#39;s just a matter to perform the lookup
+according to <a href="/ruby-module-linearization">linearization</a>. <code>self</code> may also have a meta-class which has
+priority on all other ancestors.</p>
+<p><strong>Refinements</strong></p>
+<p>However, there is another subtlety, called <em>refinements</em>. In Ruby, it is common
+to use <em>monkey patching</em> to open a class and add and redefine methods. However,
+if every library starts doing this, you can end up with nasty conflicts.
+Refinements were introduced as a solution to this problem.</p>
+<p>Refinements can only be defined in non-class modules, and only classes can be refined:</p>
+<pre><code class="lang-ruby">class C
+  def foo; &#39;foo&#39;; end
+end
+
+module M
+  refine C do
+    def foo; &#39;bar&#39;; end
+  end
+end
+</code></pre>
+<p>Defining a refinement does nothing by itself. You have to use the <code>Module#using</code>
+function to enable some refinements in the current module:</p>
+<pre><code class="lang-ruby">module N
+  p C.new.foo # &#39;foo&#39;
+  using M
+  p C.new.foo # &#39;bar&#39;
+end
+p C.new.foo # &#39;foo&#39;
+</code></pre>
+<p><code>using</code> statements are somewhat peculiar, because they are strictly lexical in
+scope. Said otherwise, the introduced refinements have the same visibility as
+constants, <strong>excepted</strong> that the <code>using</code> is not inherited (via sublassing or
+include):</p>
+<pre><code class="lang-ruby">class A; using M; end
+class B &lt; A
+  p C.new.foo # &#39;foo&#39;
+end
+</code></pre>
+<p>However, refinements themselves are inherited:</p>
+<pre><code class="lang-ruby">module O
+  include M
+end
+module P
+  using O
+  p C.new.foo # &#39;bar&#39;
+end
+</code></pre>
+<p>How prioritary are refinements? Refinements always take priority over everything
+else. What if multiple refinements conflicts? The latest innermost <code>using</code> statement
+always wins.</p>
+<p>You can get a list of modules whose refinements are visible with
+<code>Module::used_modules</code>.</p>
+<h2 id="on-which-module-are-methods-defined-">On which module are methods defined?</h2>
+<p>Last, but not least, when you use the <code>def</code> keyword, on which module are the
+methods defined? The not-so-helpful answer is that these methods become instance
+methods of <em>the definee</em>. Entering certain declarations and calling certain
+functions change the definee, as we&#39;ll see in the next section.</p>
+<h2 id="how-self-and-the-definee-change">How <code>self</code> and the definee change</h2>
+<table>
+<thead>
+<tr>
+<th>where</th>
+<th>self</th>
+<th>definee</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top-level (file or REPL)</td>
+<td><code>main</code> (an instance of <code>Object</code>)</td>
+<td>Object</td>
+</tr>
+<tr>
+<td>in a module</td>
+<td>module</td>
+<td>module</td>
+</tr>
+<tr>
+<td>in <code>class &lt;&lt; X</code></td>
+<td>metaclass of <code>X</code></td>
+<td>metaclass of <code>X</code></td>
+</tr>
+<tr>
+<td>in a <code>def method</code></td>
+<td>receiver</td>
+<td>surrounding module</td>
+</tr>
+<tr>
+<td>in a <code>def X.method</code></td>
+<td>receiver (<code>X</code>)</td>
+<td>metaclass of <code>X</code></td>
+</tr>
+<tr>
+<td><code>X.instance_eval</code></td>
+<td>receiver (<code>X</code>)</td>
+<td>metaclass of <code>X</code></td>
+</tr>
+<tr>
+<td><code>X.class_eval</code></td>
+<td>receiver (<code>X</code>, a module)</td>
+<td>receiver (<code>X</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Also note that <code>Module#module_eval</code> is an alias for <code>Module#class_eval</code>. There
+are also variants called <code>class/module/instance_exec</code>, which do the same thing
+as the <code>eval</code> version but allow passing additional arguments to the block
+(useful to make instance variables accessible to the block). This is <strong>the
+only</strong> difference between the <code>exec</code> and <code>eval</code> family, despite the
+documentation seeming to hint at some bizarre lookup behaviour.</p>
+<p>Note that for the two <code>def</code> rows, the definee is both the module on which the
+method itself is being defined, and the definee for nested method definitions.</p>
+<p>At first, it may seem that <code>class/module_eval</code> does the same as a <code>module</code> or
+<code>class</code> block. However, you cannot open a class inside a method, so <code>class_eval</code>
+helps in you need to evaluate something in the context of a class as part of a
+method. Note however that it is possible to open metaclasses in a method through
+<code>class &lt;&lt; X</code>.</p>
+<p>There are also string-based <code>eval</code> based. But things are complex enough as it
+is, if you can avoid to go there, please do.</p>
+<p>Finally, if you experiment, you may find out you cannot define singleton method
+on the classes <code>Integer</code> and <code>Symbol</code> (e.g. <code>def Integer.foo</code>). I assume for
+performance reasons.</p>
+<h2 id="doing-better-">Doing Better?</h2>
+<p>The situation is a bit hairy, to say the least. How could we simplify things?</p>
+<p>Once you wrap your head around them, globals, class and instance variables are
+rather simple. One caveat: I would allow accessing class variables whenever
+<code>self</code> is the class, removing an exception with little benefit.</p>
+<p>Regarding local variables, it&#39;s not quite obvious why scope gates are needed.
+Maybe because they would encourage people to use class-local variables instead
+of class variables? It doesn&#39;t really hurt, but adds yet another thing to
+remember to the language.</p>
+<p>Constants lookup is puzzling. My take is that constants should be looked up
+first in the ancestors then in the surrounding module and its ancestors, etc.
+That would be much less surprising. I don&#39;t see <strong>any</strong> reason to do things in
+the current way (surrounding modules take precedence over the ancestors).</p>
+<p>I think a useful heuristic is to preserve the ability to move code vertically.
+Code that is well-defined in a class should have the same meaning in a subclass
+or in a superclass, unless some symbols are overridden in the class. Surrounding
+modules should not affect such code.</p>
+<p>Refinements blatantly violate the heuristic above. I can appreciate why: the
+idea was to to restrict monkey patching to a well-defined blob of code, and
+inheriting <code>using</code> statements goes against that by forcing monkey patching on
+sub-classes. On the other hand, I think it goes against the principle of least
+surprise by violating my heuristic above.</p>
+<p>Another reason refinements are awkward is that they introduce not one, but two
+new forms of lookup: <code>using</code> statements and refinement definitions (<code>refine</code>).</p>
+<p>I believe it was a mistake to overload modules with another role as &quot;refinement
+container&quot;. It would probably have been better to merge <code>using</code> into <code>refine</code>:
+make all refinements active as soon as defined, and combine them through
+inheritance (using the ancestor chain).</p>
+<p>If it was really desirable to refine a method only within a superclass but not
+within its subclasses, the <code>private</code> function could have been reused. This would
+have made refinement lookups similar to method lookup, and would have surprised
+no-one.</p>
+<p>There is a big problem with this idea: dynamically looking up refinement is
+expensive: you now need to walk two ancestor chains instead of one for every
+lookup. A simple countermeasure: forbid adding new refinements dynamically,
+which is already the case in the current version.</p>
+<p>Finally, I would allow opening classes and modules in methods, and allow any
+expression in place of the class name. This would remove the need for
+<code>class_eval</code> method. If needed one can add the restriction that only existing
+classes and modules can be opened in methods.</p>
+<p>I would also remove <code>instance_eval</code>, however it has no immediate analog. I would
+retool the <code>class &lt;&lt; X</code> notation for this purpose. In order to keep the
+metaclass accessible, I would introduce a <code>metaclass</code> field in class <code>Object</code>.
+This value can be used in conjunction with <code>class</code> so that <code>class X.metaclass</code>
+achieves the previous effect of <code>class &lt;&lt; X</code>.</p>
+<p>So in summary:</p>
+<ul>
+<li>Allow class variables to be used anywhere where <code>self</code> is the class.</li>
+<li>Abolish scope gates?</li>
+<li>Lookup constants first in the ancestors, then in the surround class and their
+ancestors.</li>
+<li>Merge <code>using</code> into <code>refine</code>, and make this new kind of refinement inheritable,
+except when qualified with <code>private</code>. Forbid dynamically adding refinements to
+avoid dynamic refinement lookup.</li>
+<li>Remove the <code>instance_eval</code> and <code>class_eval</code> methods; allow opening classes in
+methods; and make <code>class &lt;&lt; X</code> take the meaning of <code>X.instance_eval</code>.</li>
+<li>Add a <code>metaclass</code> field to class <code>Object</code>.</li>
+</ul>
+<p>Of course, it&#39;s too late for Ruby. But for a language inspired by Ruby, these
+points are worth considering.</p>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/ruby-lookups-scopes";
+        this.page.identifier = "ruby-lookups-scopes";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

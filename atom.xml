@@ -6,6 +6,350 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Ruby&#39;s Lookups &amp; Scopes</title>
+      <description>
+&lt;p&gt;This is the third and last article in the &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt; series.&lt;/p&gt;
+&lt;h2 id=&quot;lookups-in-ruby&quot;&gt;Lookups in Ruby&lt;/h2&gt;
+&lt;p&gt;The great difficulty in Ruby is knowing what names refer
+to. &lt;a href=&quot;/ruby-module-linearization&quot;&gt;Linearization&lt;/a&gt; showed us that knowing which method gets
+called is non-trivial. Unfortunately it&amp;#39;s only part of the story.&lt;/p&gt;
+&lt;p&gt;In Ruby, names can refer to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;methods: &lt;code&gt;x.name&lt;/code&gt; or &lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;local variables: &lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;class variables: &lt;code&gt;@@name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;global variables: &lt;code&gt;$name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;constants: &lt;code&gt;NAME&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;modules: &lt;code&gt;Name&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We also would like to know on which module methods are defined. By the way,
+since &lt;code&gt;Class &amp;lt; Module&lt;/code&gt;, when we say &lt;em&gt;modules&lt;/em&gt; we mean &lt;em&gt;modules and classes&lt;/em&gt;,
+unless otherwise specified.&lt;/p&gt;
+&lt;p&gt;There are five big concepts involved with these lookups (and then some fun
+sprinkled on top):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;self&lt;/strong&gt;: what does &lt;code&gt;self&lt;/code&gt; refer to?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;definee&lt;/strong&gt;: if a method definition appears, on which class is it defined?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;scoping&lt;/strong&gt;: knowing which constructs create new scope for local variables and
+which don&amp;#39;t&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;nesting&lt;/strong&gt;: what are the surrounding modules? (often called &lt;em&gt;cref&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let&amp;#39;s look at how each type of name is resolved.&lt;/p&gt;
+&lt;h2 id=&quot;local-global-variables&quot;&gt;Local &amp;amp; Global Variables&lt;/h2&gt;
+&lt;p&gt;Global variables are prefixed with &lt;code&gt;$&lt;/code&gt; and they are easy: they are accessible
+everywhere.&lt;/p&gt;
+&lt;p&gt;Local variables depend on static scopes. New scopes are create when you enter a
+new method or module body, or when you enter a method call&amp;#39;s block. Control flow
+statements do not create scopes!&lt;/p&gt;
+&lt;p&gt;Only scopes created by blocks inherit their parent&amp;#39;s scope. Scope created by
+methods and modules are completely isolated from their parent&amp;#39;s scope. It is
+sometimes said that &lt;code&gt;module&lt;/code&gt;, &lt;code&gt;class&lt;/code&gt; and &lt;code&gt;def&lt;/code&gt; are &lt;em&gt;scope gates&lt;/em&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;x = 1
+module Foo
+  p x # NameError
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There is however a trick you can use:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;x = 1
+Foo = Module.new do
+  p x # ok
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is possible to make local variables survive their lexical scope:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;def foo
+  x = 0
+  [lambda { x += 1 }, lambda { p x }]
+end
+x, y = foo
+x.call()
+y.call() # 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Something else that is peculiar: a variable is &amp;quot;in scope&amp;quot; in an assignment to it
+has appeared before in the current scope.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;p x # NameError
+x = 1
+# but
+x = 1 if false
+p x # nil
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Reflection can help with local variables too: the &lt;code&gt;binding&lt;/code&gt; method (both
+&lt;code&gt;Kernel#binding&lt;/code&gt; and &lt;code&gt;Proc#binding&lt;/code&gt;) returns a &lt;code&gt;Binding&lt;/code&gt; object which describes
+the local variables in scope.&lt;/p&gt;
+&lt;h2 id=&quot;instance-variables&quot;&gt;Instance Variables&lt;/h2&gt;
+&lt;p&gt;Instance variables are prefixed by &lt;code&gt;@&lt;/code&gt;. They are &lt;strong&gt;always&lt;/strong&gt; looked up on &lt;code&gt;self&lt;/code&gt;.
+If an instance variable doesn&amp;#39;t exists (it has never been assigned), it
+evaluates to &lt;code&gt;nil&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Note that this means that instance variables are effectively instance-private:
+an instance of &lt;code&gt;X&lt;/code&gt; cannot access the instance variables of another instance of
+&lt;code&gt;X&lt;/code&gt;. This is more restrictive than &lt;code&gt;private&lt;/code&gt; in Java for instance. However, it&amp;#39;s
+easy to use reflection to side-step this with
+&lt;code&gt;Object#instance_variable_get/set&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;class-variables&quot;&gt;Class Variables&lt;/h2&gt;
+&lt;p&gt;Class variables are prefixed with &lt;code&gt;@@&lt;/code&gt;. They are defined on modules, and can be
+accessed both in module bodies and in method bodies. Strangely, they can also be
+accessed in the meta-class of a module (and its meta-meta-class, etc).&lt;/p&gt;
+&lt;p&gt;If a module inherits multiple version of a class variable, it&amp;#39;s always the first
+inherited version that wins (so the first &lt;code&gt;&amp;lt;&lt;/code&gt;, &lt;code&gt;include&lt;/code&gt; or &lt;code&gt;preprend&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;You can list the class variables &amp;quot;owned&amp;quot; by a module with
+&lt;code&gt;Module#class_variables(false)&lt;/code&gt; (&lt;code&gt;false&lt;/code&gt; says not to include class inherited
+class variables). Interestingly, class variables can &amp;quot;migrate&amp;quot;: if the module is
+a class that has a class variable &lt;code&gt;@@a&lt;/code&gt;, and that &lt;code&gt;@@a&lt;/code&gt; becomes defined on one
+of its ancestor, the class variable will disappear from the class. This will not
+happen for non-class modules however.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;class T; @@a = &amp;#39;t&amp;#39;; end
+class Object; @@a = &amp;#39;o&amp;#39;; end
+class T
+  p @@a # o
+  p class_variables(false) # []
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If a class variable is accessed before it has been assigned, a &lt;code&gt;NameError&lt;/code&gt;
+occurs.&lt;/p&gt;
+&lt;p&gt;Final catch, class variables can only be accessed inside the body of a class
+that inherits/includes the class defining the variables. This means you can&amp;#39;t
+use the &lt;code&gt;@@x&lt;/code&gt; notation with the &lt;code&gt;eval&lt;/code&gt; method that we will see later. However,
+you can use reflection: &lt;code&gt;Module#class_variable_get/set&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;constants-and-modules-&quot;&gt;Constants (and Modules)&lt;/h2&gt;
+&lt;p&gt;Constants start with an uppercase letter, and modules are actually a kind of
+constant.&lt;/p&gt;
+&lt;p&gt;Constants depend on the notion of &lt;code&gt;nesting&lt;/code&gt;: you can access a constant if it is
+declared inside a module body that is around you, or in one of the ancestors of
+the current module (but &lt;strong&gt;not&lt;/strong&gt; in an ancestor of a surrounding module!). You
+can also use &lt;code&gt;::&lt;/code&gt; to navigate through modules:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;X = 0
+module A
+  X = 1
+  p ::X # 0
+  module B; module C; Y = 2; end; end
+  module D
+    p X # 1
+    p B::C::Y
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The following exemple illustrates two gotchas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You don&amp;#39;t have access to constants defined in an ancestor of a surrounding
+module.&lt;/li&gt;
+&lt;li&gt;Constants in surrounding modules take precedence over constants in ancestors.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;module A; X = &amp;#39;a&amp;#39;; end
+module B; Y = &amp;#39;b&amp;#39;; end
+module C
+  include A
+  p X # ok
+  Y = &amp;#39;c&amp;#39;
+  module D
+    include B
+    p Y # &amp;#39;c&amp;#39;!
+    p X # NameError
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The module body really has to be around you:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;module A::B::C; p Y; end # ok (Y defined in C)
+module A::D; p X; end # NameError (X defined in A)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can access the current nesting with &lt;code&gt;Module::nesting&lt;/code&gt; and clarify the
+example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;module A
+  module D; p Module.nesting; end # [A, A::D]
+end
+module A::D; p Module.nesting; end # [A::D]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Of course, if you try to access a constant before it has been assigned, a
+&lt;code&gt;NameError&lt;/code&gt; ensues. &lt;code&gt;Module::constants&lt;/code&gt; will list the constants defined at the
+point of call, while &lt;code&gt;Module#constants&lt;/code&gt; will list the constants defined by the
+module (and optionally by its ancestors, depending on the argument).&lt;/p&gt;
+&lt;h2 id=&quot;methods&quot;&gt;Methods&lt;/h2&gt;
+&lt;p&gt;Methods are looked up on the receiver (the thing before the dot). If there is no
+receiver, &lt;code&gt;self&lt;/code&gt; is assumed. Then it&amp;#39;s just a matter to perform the lookup
+according to &lt;a href=&quot;/ruby-module-linearization&quot;&gt;linearization&lt;/a&gt;. &lt;code&gt;self&lt;/code&gt; may also have a meta-class which has
+priority on all other ancestors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Refinements&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;However, there is another subtlety, called &lt;em&gt;refinements&lt;/em&gt;. In Ruby, it is common
+to use &lt;em&gt;monkey patching&lt;/em&gt; to open a class and add and redefine methods. However,
+if every library starts doing this, you can end up with nasty conflicts.
+Refinements were introduced as a solution to this problem.&lt;/p&gt;
+&lt;p&gt;Refinements can only be defined in non-class modules, and only classes can be refined:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;class C
+  def foo; &amp;#39;foo&amp;#39;; end
+end
+
+module M
+  refine C do
+    def foo; &amp;#39;bar&amp;#39;; end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Defining a refinement does nothing by itself. You have to use the &lt;code&gt;Module#using&lt;/code&gt;
+function to enable some refinements in the current module:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;module N
+  p C.new.foo # &amp;#39;foo&amp;#39;
+  using M
+  p C.new.foo # &amp;#39;bar&amp;#39;
+end
+p C.new.foo # &amp;#39;foo&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;using&lt;/code&gt; statements are somewhat peculiar, because they are strictly lexical in
+scope. Said otherwise, the introduced refinements have the same visibility as
+constants, &lt;strong&gt;excepted&lt;/strong&gt; that the &lt;code&gt;using&lt;/code&gt; is not inherited (via sublassing or
+include):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;class A; using M; end
+class B &amp;lt; A
+  p C.new.foo # &amp;#39;foo&amp;#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However, refinements themselves are inherited:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;module O
+  include M
+end
+module P
+  using O
+  p C.new.foo # &amp;#39;bar&amp;#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;How prioritary are refinements? Refinements always take priority over everything
+else. What if multiple refinements conflicts? The latest innermost &lt;code&gt;using&lt;/code&gt; statement
+always wins.&lt;/p&gt;
+&lt;p&gt;You can get a list of modules whose refinements are visible with
+&lt;code&gt;Module::used_modules&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;on-which-module-are-methods-defined-&quot;&gt;On which module are methods defined?&lt;/h2&gt;
+&lt;p&gt;Last, but not least, when you use the &lt;code&gt;def&lt;/code&gt; keyword, on which module are the
+methods defined? The not-so-helpful answer is that these methods become instance
+methods of &lt;em&gt;the definee&lt;/em&gt;. Entering certain declarations and calling certain
+functions change the definee, as we&amp;#39;ll see in the next section.&lt;/p&gt;
+&lt;h2 id=&quot;how-self-and-the-definee-change&quot;&gt;How &lt;code&gt;self&lt;/code&gt; and the definee change&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;where&lt;/th&gt;
+&lt;th&gt;self&lt;/th&gt;
+&lt;th&gt;definee&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;top-level (file or REPL)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;main&lt;/code&gt; (an instance of &lt;code&gt;Object&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;Object&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;in a module&lt;/td&gt;
+&lt;td&gt;module&lt;/td&gt;
+&lt;td&gt;module&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;in &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;metaclass of &lt;code&gt;X&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;metaclass of &lt;code&gt;X&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;in a &lt;code&gt;def method&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;receiver&lt;/td&gt;
+&lt;td&gt;surrounding module&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;in a &lt;code&gt;def X.method&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;receiver (&lt;code&gt;X&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;metaclass of &lt;code&gt;X&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;X.instance_eval&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;receiver (&lt;code&gt;X&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;metaclass of &lt;code&gt;X&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;X.class_eval&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;receiver (&lt;code&gt;X&lt;/code&gt;, a module)&lt;/td&gt;
+&lt;td&gt;receiver (&lt;code&gt;X&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Also note that &lt;code&gt;Module#module_eval&lt;/code&gt; is an alias for &lt;code&gt;Module#class_eval&lt;/code&gt;. There
+are also variants called &lt;code&gt;class/module/instance_exec&lt;/code&gt;, which do the same thing
+as the &lt;code&gt;eval&lt;/code&gt; version but allow passing additional arguments to the block
+(useful to make instance variables accessible to the block). This is &lt;strong&gt;the
+only&lt;/strong&gt; difference between the &lt;code&gt;exec&lt;/code&gt; and &lt;code&gt;eval&lt;/code&gt; family, despite the
+documentation seeming to hint at some bizarre lookup behaviour.&lt;/p&gt;
+&lt;p&gt;Note that for the two &lt;code&gt;def&lt;/code&gt; rows, the definee is both the module on which the
+method itself is being defined, and the definee for nested method definitions.&lt;/p&gt;
+&lt;p&gt;At first, it may seem that &lt;code&gt;class/module_eval&lt;/code&gt; does the same as a &lt;code&gt;module&lt;/code&gt; or
+&lt;code&gt;class&lt;/code&gt; block. However, you cannot open a class inside a method, so &lt;code&gt;class_eval&lt;/code&gt;
+helps in you need to evaluate something in the context of a class as part of a
+method. Note however that it is possible to open metaclasses in a method through
+&lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;There are also string-based &lt;code&gt;eval&lt;/code&gt; based. But things are complex enough as it
+is, if you can avoid to go there, please do.&lt;/p&gt;
+&lt;p&gt;Finally, if you experiment, you may find out you cannot define singleton method
+on the classes &lt;code&gt;Integer&lt;/code&gt; and &lt;code&gt;Symbol&lt;/code&gt; (e.g. &lt;code&gt;def Integer.foo&lt;/code&gt;). I assume for
+performance reasons.&lt;/p&gt;
+&lt;h2 id=&quot;doing-better-&quot;&gt;Doing Better?&lt;/h2&gt;
+&lt;p&gt;The situation is a bit hairy, to say the least. How could we simplify things?&lt;/p&gt;
+&lt;p&gt;Once you wrap your head around them, globals, class and instance variables are
+rather simple. One caveat: I would allow accessing class variables whenever
+&lt;code&gt;self&lt;/code&gt; is the class, removing an exception with little benefit.&lt;/p&gt;
+&lt;p&gt;Regarding local variables, it&amp;#39;s not quite obvious why scope gates are needed.
+Maybe because they would encourage people to use class-local variables instead
+of class variables? It doesn&amp;#39;t really hurt, but adds yet another thing to
+remember to the language.&lt;/p&gt;
+&lt;p&gt;Constants lookup is puzzling. My take is that constants should be looked up
+first in the ancestors then in the surrounding module and its ancestors, etc.
+That would be much less surprising. I don&amp;#39;t see &lt;strong&gt;any&lt;/strong&gt; reason to do things in
+the current way (surrounding modules take precedence over the ancestors).&lt;/p&gt;
+&lt;p&gt;I think a useful heuristic is to preserve the ability to move code vertically.
+Code that is well-defined in a class should have the same meaning in a subclass
+or in a superclass, unless some symbols are overridden in the class. Surrounding
+modules should not affect such code.&lt;/p&gt;
+&lt;p&gt;Refinements blatantly violate the heuristic above. I can appreciate why: the
+idea was to to restrict monkey patching to a well-defined blob of code, and
+inheriting &lt;code&gt;using&lt;/code&gt; statements goes against that by forcing monkey patching on
+sub-classes. On the other hand, I think it goes against the principle of least
+surprise by violating my heuristic above.&lt;/p&gt;
+&lt;p&gt;Another reason refinements are awkward is that they introduce not one, but two
+new forms of lookup: &lt;code&gt;using&lt;/code&gt; statements and refinement definitions (&lt;code&gt;refine&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;I believe it was a mistake to overload modules with another role as &amp;quot;refinement
+container&amp;quot;. It would probably have been better to merge &lt;code&gt;using&lt;/code&gt; into &lt;code&gt;refine&lt;/code&gt;:
+make all refinements active as soon as defined, and combine them through
+inheritance (using the ancestor chain).&lt;/p&gt;
+&lt;p&gt;If it was really desirable to refine a method only within a superclass but not
+within its subclasses, the &lt;code&gt;private&lt;/code&gt; function could have been reused. This would
+have made refinement lookups similar to method lookup, and would have surprised
+no-one.&lt;/p&gt;
+&lt;p&gt;There is a big problem with this idea: dynamically looking up refinement is
+expensive: you now need to walk two ancestor chains instead of one for every
+lookup. A simple countermeasure: forbid adding new refinements dynamically,
+which is already the case in the current version.&lt;/p&gt;
+&lt;p&gt;Finally, I would allow opening classes and modules in methods, and allow any
+expression in place of the class name. This would remove the need for
+&lt;code&gt;class_eval&lt;/code&gt; method. If needed one can add the restriction that only existing
+classes and modules can be opened in methods.&lt;/p&gt;
+&lt;p&gt;I would also remove &lt;code&gt;instance_eval&lt;/code&gt;, however it has no immediate analog. I would
+retool the &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt; notation for this purpose. In order to keep the
+metaclass accessible, I would introduce a &lt;code&gt;metaclass&lt;/code&gt; field in class &lt;code&gt;Object&lt;/code&gt;.
+This value can be used in conjunction with &lt;code&gt;class&lt;/code&gt; so that &lt;code&gt;class X.metaclass&lt;/code&gt;
+achieves the previous effect of &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So in summary:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Allow class variables to be used anywhere where &lt;code&gt;self&lt;/code&gt; is the class.&lt;/li&gt;
+&lt;li&gt;Abolish scope gates?&lt;/li&gt;
+&lt;li&gt;Lookup constants first in the ancestors, then in the surround class and their
+ancestors.&lt;/li&gt;
+&lt;li&gt;Merge &lt;code&gt;using&lt;/code&gt; into &lt;code&gt;refine&lt;/code&gt;, and make this new kind of refinement inheritable,
+except when qualified with &lt;code&gt;private&lt;/code&gt;. Forbid dynamically adding refinements to
+avoid dynamic refinement lookup.&lt;/li&gt;
+&lt;li&gt;Remove the &lt;code&gt;instance_eval&lt;/code&gt; and &lt;code&gt;class_eval&lt;/code&gt; methods; allow opening classes in
+methods; and make &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt; take the meaning of &lt;code&gt;X.instance_eval&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Add a &lt;code&gt;metaclass&lt;/code&gt; field to class &lt;code&gt;Object&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Of course, it&amp;#39;s too late for Ruby. But for a language inspired by Ruby, these
+points are worth considering.&lt;/p&gt;
+      </description>
+      <pubDate>2017-03-05T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/ruby-lookups-scopes</link>
+      <guid isPermaLink="true">http://norswap.com/ruby-lookups-scopes</guid>
+    </item>
+    <item>
       <title>Morning Winds</title>
       <description>
 &lt;p&gt;And now, for something &lt;strong&gt;completely&lt;/strong&gt; different.&lt;/p&gt;
@@ -752,7 +1096,7 @@ extra mile and publish my findings. Here are the topics I will cover:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;/ruby-methods&quot;&gt;Ruby&amp;#39;s Methods, Procs and Blocks&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;/ruby-module-linearization&quot;&gt;Ruby&amp;#39;s Module Linearization&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Ruby&amp;#39;s Lookups and Scopes (soon)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;/ruby-lookups-scopes&quot;&gt;Ruby&amp;#39;s Lookups and Scopes&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;If you think all of this is documented elsewhere, read &lt;a href=&quot;/ruby-specification-problem&quot;&gt;Ruby&amp;#39;s Specification
 Problem&lt;/a&gt; and think again.&lt;/p&gt;
@@ -1045,69 +1389,6 @@ defining variables in &lt;code&gt;.profile&lt;/code&gt;.&lt;/p&gt;
       <pubDate>2017-01-23T23:00:00.000Z</pubDate>
       <link>http://norswap.com/path-mgmt</link>
       <guid isPermaLink="true">http://norswap.com/path-mgmt</guid>
-    </item>
-    <item>
-      <title>Sync Your IntelliJ Settings Between Machines</title>
-      <description>
-&lt;p&gt;I recently learned that it was possible to share one&amp;#39;s IntelliJ settings between
-multiple machines.&lt;/p&gt;
-&lt;h2 id=&quot;basic-setup&quot;&gt;Basic Setup&lt;/h2&gt;
-&lt;p&gt;To do so, first install the &lt;a href=&quot;https://plugins.jetbrains.com/idea/plugin/7566-settings-repository&quot;&gt;Settings Repository plugin&lt;/a&gt;. Then, follow
-these &lt;a href=&quot;https://www.jetbrains.com/help/idea/2016.3/sharing-your-ide-settings.html&quot;&gt;instructions&lt;/a&gt;. &lt;strong&gt;However&lt;/strong&gt;, do not complete step 3 (which seems
-inconsistent with the actual UI), but instead, redo step 2 on each machine on
-which you want to sync your settings (except you should use &amp;quot;overwrite local&amp;quot; or
-&amp;quot;merge&amp;quot; instead of &amp;quot;overwrite remote&amp;quot;).&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s done! The settings should sync automatically, but you can force a re-sync
-by using an action of the &lt;code&gt;VCS &amp;gt; Sync Settings&lt;/code&gt; menu.&lt;/p&gt;
-&lt;h2 id=&quot;keybinding-troubles&quot;&gt;Keybinding Troubles&lt;/h2&gt;
-&lt;p&gt;I use IntelliJ on both Windows and MacOS. &lt;/p&gt;
-&lt;p&gt;As you may know, Macs keyboard have this layout on the bottom left of the last row:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fn | control | alt | command
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;On the other hand, classical IBM-style keyboard (which I use on my Windows
- machine) have this layout:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;control | win | alt
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Moreover, in MacOS, most shortcuts where &lt;code&gt;control&lt;/code&gt; is used on Windows use
-&lt;code&gt;command&lt;/code&gt; instead.&lt;/p&gt;
-&lt;p&gt;I like to keep things as similar as possible, which is why I inverted &lt;code&gt;command&lt;/code&gt;
-and &lt;code&gt;control&lt;/code&gt;on MacOS (in &lt;code&gt;System Preferences &amp;gt; Keyboard &amp;gt; Modifier Keys...&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;But now I have an issue in IntelliJ: I want keybinds that use &lt;code&gt;control&lt;/code&gt; on
-Windows to use &lt;code&gt;command&lt;/code&gt; on MacOS, and vice-versa. IntelliJ is not able to make
-this conversion for me.&lt;/p&gt;
-&lt;p&gt;What I ended up doing was building two scripts: &lt;code&gt;kbd_mac_to_win.sh&lt;/code&gt; and
-&lt;code&gt;kbd_win_to_mac.sh&lt;/code&gt; (you can find them along with my IntelliJ
-config &lt;a href=&quot;https://github.com/norswap/intellij-settings&quot;&gt;here&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;These scripts take the MacOS / Windows version of the keymap file, and convert
-it to the equivalent in the other OS by converting between &lt;code&gt;control&lt;/code&gt; and
-&lt;code&gt;command&lt;/code&gt; keys (note that internally, IntelliJ calls the &lt;code&gt;command&lt;/code&gt; key &lt;code&gt;meta&lt;/code&gt;).&lt;/p&gt;
-&lt;h2 id=&quot;a-failed-attempt-to-automate-things&quot;&gt;A Failed Attempt to Automate Things&lt;/h2&gt;
-&lt;p&gt;This is good and well, but running these commands each time I make a change to
-my keybindings gets tiresome quickly.&lt;/p&gt;
-&lt;p&gt;So I tried to automate it using git hooks. I succeeded, but only when using
-&lt;code&gt;git&lt;/code&gt; on the command line. My suspicion is that IntelliJ uses some kind of
-library that do not execute hooks.&lt;/p&gt;
-&lt;p&gt;Nevertheless, I wrote the explanation while developing it on the command line,
-so here it is anyway. It at least taught me how git hooks work, as well as the
-&lt;a href=&quot;https://git-scm.com/book/en/v2/Customizing-Git-Git-Attributes#Keyword-Expansion&quot;&gt;smudge / clean&lt;/a&gt; feature (which I didn&amp;#39;t end up using).&lt;/p&gt;
-&lt;h3 id=&quot;automating-with-git-hooks&quot;&gt;Automating with Git Hooks&lt;/h3&gt;
-&lt;p&gt;I use a pre-commit and a post-commit hook. This was based off an idea I found
-&lt;a href=&quot;http://stackoverflow.com/a/12802592/298664&quot;&gt;on Stack Overflow&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve pushed the hooks to the &lt;a href=&quot;https://github.com/norswap/intellij-settings&quot;&gt;same repository&lt;/a&gt; as my settings (look for
-the files named &lt;code&gt;pre-commit&lt;/code&gt; and &lt;code&gt;post-commit&lt;/code&gt;). To install them, you need to
-copy or symlink them to the &lt;code&gt;.git/hooks&lt;/code&gt; directory of your repository.&lt;/p&gt;
-&lt;p&gt;The solution is not perfect. Namely if both the Windows and the Mac keymap have
-changed, the script will give up and ask you to resolve the conflict manually.
-Still, it works well enough for my purposes.&lt;/p&gt;
-&lt;h3 id=&quot;locating-the-intellij-settings-repository&quot;&gt;Locating the IntelliJ Settings Repository&lt;/h3&gt;
-&lt;p&gt;To install this stuff, you&amp;#39;ll need to locate your settings repository.&lt;/p&gt;
-&lt;p&gt;For IntelliJ 2016.3 (and presumably, it&amp;#39;s similar for most other versions)
-lives in
-&lt;code&gt;C:\Users\&amp;lt;USERNAME&amp;gt;\.IdeaIC2016.3\config\settingsRepository\repository&lt;/code&gt; on
-Windows.&lt;/p&gt;
-&lt;p&gt;On MacOS, it&amp;#39;s &lt;code&gt;/Users/&amp;lt;USERNAME&amp;gt;/Library/IdeaIC2016.3/settingsRepository/repository&lt;/code&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2016-12-25T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/intellij-sync</link>
-      <guid isPermaLink="true">http://norswap.com/intellij-sync</guid>
     </item>
   </channel>
 </rss>

@@ -17,7 +17,7 @@ extra mile and publish my findings. Here are the topics I will cover:
 
 - [Ruby's Methods, Procs and Blocks](/ruby-methods)
 - [Ruby's Module Linearization](/ruby-module-linearization)
-- Ruby's Lookups and Scopes (soon)
+- [Ruby's Lookups and Scopes](/ruby-lookups-scopes)
 
 If you think all of this is documented elsewhere, read [Ruby's Specification
 Problem] and think again.

@@ -373,10 +373,10 @@ expression in place of the class name. This would remove the need for
 classes and modules can be opened in methods.
 
 I would also remove `instance_eval`, however it has no immediate analog. I would
-retool the `class << X` notation for this purpose. In order to keep the
-metaclass accessible, I would introduce a `metaclass` field in class `Object`.
-This value can be used in conjunction with `class` so that `class X.metaclass`
-achieves the previous effect of `class << X`.
+retool the `class << X` notation for this purpose. The metaclas can still be
+accessed through `Object#singleton_class`. This field can be used in conjunction
+with `class` so that `class X.singleton_class` achieves the previous effect of
+`class << X`.
 
 So in summary:
 

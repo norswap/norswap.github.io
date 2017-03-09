@@ -325,10 +325,10 @@ expression in place of the class name. This would remove the need for
 &lt;code&gt;class_eval&lt;/code&gt; method. If needed one can add the restriction that only existing
 classes and modules can be opened in methods.&lt;/p&gt;
 &lt;p&gt;I would also remove &lt;code&gt;instance_eval&lt;/code&gt;, however it has no immediate analog. I would
-retool the &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt; notation for this purpose. In order to keep the
-metaclass accessible, I would introduce a &lt;code&gt;metaclass&lt;/code&gt; field in class &lt;code&gt;Object&lt;/code&gt;.
-This value can be used in conjunction with &lt;code&gt;class&lt;/code&gt; so that &lt;code&gt;class X.metaclass&lt;/code&gt;
-achieves the previous effect of &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt;.&lt;/p&gt;
+retool the &lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt; notation for this purpose. The metaclas can still be
+accessed through &lt;code&gt;Object#singleton_class&lt;/code&gt;. This field can be used in conjunction
+with &lt;code&gt;class&lt;/code&gt; so that &lt;code&gt;class X.singleton_class&lt;/code&gt; achieves the previous effect of
+&lt;code&gt;class &amp;lt;&amp;lt; X&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;So in summary:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Allow class variables to be used anywhere where &lt;code&gt;self&lt;/code&gt; is the class.&lt;/li&gt;
@@ -525,6 +525,8 @@ module C1
   include A1
   include B1
 end
+
+# C1.ancestors    =&amp;gt; [C1, B1, A1]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 2
 
@@ -540,6 +542,8 @@ module E2
   include C2
   include D2
 end
+
+# E2.ancestors    =&amp;gt; [E2, D2, B2, C2, A2]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 3
 
@@ -554,7 +558,10 @@ module E3
   include C3
   include D3
 end
+
+# E3.ancestors    =&amp;gt; [E3, D3, C3, A3]
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So far, so good.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 4
 
 module A4; end
@@ -572,6 +579,8 @@ module E4
   include C4
   include D4
 end
+
+# E4.ancestors    =&amp;gt; [E4, D4, C4, A4, F4, B4]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;# Scenario 5
 
@@ -589,16 +598,10 @@ module E5
   include C5
   include D5
 end
+
+# E5.ancestors    =&amp;gt; [E5, D5, C5, A5, B5]
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And here are the linearized orderings:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;C1.ancestors    =&amp;gt; [C1, B1, A1]
-E2.ancestors    =&amp;gt; [E2, D2, B2, C2, A2] 
-E3.ancestors    =&amp;gt; [E3, D3, C3, A3]
-# so far, so good
-E4.ancestors    =&amp;gt; [E4, D4, C4, A4, F4, B4]
-E5.ancestors    =&amp;gt; [E5, D5, C5, A5, B5]
-# where is your god now?
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pretty surprising, isn&amp;#39;t it?&lt;/p&gt;
 &lt;p&gt;Two things further complicate the situation:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The &lt;code&gt;prepend&lt;/code&gt; function is a variant of &lt;code&gt;include&lt;/code&gt; with a slightly different

@@ -51,6 +51,8 @@ module C1
   include A1
   include B1
 end
+
+# C1.ancestors    => [C1, B1, A1]
 ```
 
 ```ruby
@@ -68,6 +70,8 @@ module E2
   include C2
   include D2
 end
+
+# E2.ancestors    => [E2, D2, B2, C2, A2] 
 ```
 
 ```ruby
@@ -84,7 +88,11 @@ module E3
   include C3
   include D3
 end
+
+# E3.ancestors    => [E3, D3, C3, A3]
 ```
+
+So far, so good.
 
 ```ruby
 # Scenario 4
@@ -104,6 +112,8 @@ module E4
   include C4
   include D4
 end
+
+# E4.ancestors    => [E4, D4, C4, A4, F4, B4]
 ```
 
 ```ruby
@@ -123,19 +133,11 @@ module E5
   include C5
   include D5
 end
+
+# E5.ancestors    => [E5, D5, C5, A5, B5]
 ```
 
-And here are the linearized orderings:
-
-```ruby
-C1.ancestors    => [C1, B1, A1]
-E2.ancestors    => [E2, D2, B2, C2, A2] 
-E3.ancestors    => [E3, D3, C3, A3]
-# so far, so good
-E4.ancestors    => [E4, D4, C4, A4, F4, B4]
-E5.ancestors    => [E5, D5, C5, A5, B5]
-# where is your god now?
-```
+Pretty surprising, isn't it?
 
 Two things further complicate the situation:
 

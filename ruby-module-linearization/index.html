@@ -79,6 +79,8 @@ module C1
   include A1
   include B1
 end
+
+# C1.ancestors    =&gt; [C1, B1, A1]
 </code></pre>
 <pre><code class="lang-ruby"># Scenario 2
 
@@ -94,6 +96,8 @@ module E2
   include C2
   include D2
 end
+
+# E2.ancestors    =&gt; [E2, D2, B2, C2, A2]
 </code></pre>
 <pre><code class="lang-ruby"># Scenario 3
 
@@ -108,7 +112,10 @@ module E3
   include C3
   include D3
 end
+
+# E3.ancestors    =&gt; [E3, D3, C3, A3]
 </code></pre>
+<p>So far, so good.</p>
 <pre><code class="lang-ruby"># Scenario 4
 
 module A4; end
@@ -126,6 +133,8 @@ module E4
   include C4
   include D4
 end
+
+# E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]
 </code></pre>
 <pre><code class="lang-ruby"># Scenario 5
 
@@ -143,16 +152,10 @@ module E5
   include C5
   include D5
 end
+
+# E5.ancestors    =&gt; [E5, D5, C5, A5, B5]
 </code></pre>
-<p>And here are the linearized orderings:</p>
-<pre><code class="lang-ruby">C1.ancestors    =&gt; [C1, B1, A1]
-E2.ancestors    =&gt; [E2, D2, B2, C2, A2] 
-E3.ancestors    =&gt; [E3, D3, C3, A3]
-# so far, so good
-E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]
-E5.ancestors    =&gt; [E5, D5, C5, A5, B5]
-# where is your god now?
-</code></pre>
+<p>Pretty surprising, isn&#39;t it?</p>
 <p>Two things further complicate the situation:</p>
 <ul>
 <li>The <code>prepend</code> function is a variant of <code>include</code> with a slightly different

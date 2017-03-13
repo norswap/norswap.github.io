@@ -6,6 +6,230 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Patterns of Software: Highlights</title>
+      <description>
+&lt;p&gt;Last month, I finished reading the book Patterns of Software by Richard Gabriel
+(available for free &lt;a href=&quot;https://www.dreamsongs.com/Files/PatternsOfSoftware.pdf&quot;&gt;here [pdf]&lt;/a&gt;). It&amp;#39;s a very interesting read, and I
+recommend it to everyone who cares about the craft of writing software.&lt;/p&gt;
+&lt;p&gt;I didn&amp;#39;t really know what to expect going into the book. The first part explains
+architect Scott Alexanders&amp;#39; vision of patterns and pattern languages, and makes
+a parallel with programming. It&amp;#39;s miles away from the &lt;a href=&quot;https://en.wikipedia.org/wiki/Design_Patterns&quot;&gt;gang of four&lt;/a&gt;, which is
+just as well. The second part speaks about Gabriel&amp;#39;s own personal experiences. I
+didn&amp;#39;t expect that, but it was nevertheless captivating. The book ends with an
+expanded version of Gabriel&amp;#39;s &lt;a href=&quot;https://www.dreamsongs.com/RiseOfWorseIsBetter.html&quot;&gt;Worse is Better&lt;/a&gt; thesis.&lt;/p&gt;
+&lt;p&gt;Below, I highlight some of my take-aways from the book. Most of the excerpts
+come from the first part of the book and from the final chapter.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;reuse-vs-compression&quot;&gt;Reuse vs Compression&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Object-orientation promotes reuse through inheritance, but that is most
+properly called compression: the logic is not encapsulated but interspersed.
+It&amp;#39;s still there, but now it&amp;#39;s implicit. True reuse would be using library
+functions. Compression is easier than true reuse because you don&amp;#39;t have to
+think the interface as carefully.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Compression is the characteristic of a piece of text that the meaning of any
+part of it is “larger” than that particular piece has by itself. This
+characteristic is created by a rich context, with each part of the text
+drawing on that context—each word draws part of its meaning from its
+surroundings.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Such webs are examples of compression: The meaning of an expression written in
+the context of the web is determined by the contents of the entire web. If you
+need to change another part of the web, your compressed expression might
+change its meaning, what it does, or even whether it works at all. So when we
+build our tight inheritance hierarchy in object-oriented fashion—weblike or
+pyramid style — we might be falling into this trap.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;habitability-and-piecemeal-growth&quot;&gt;Habitability and Piecemeal Growth&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It&amp;#39;s more important for code to be habitable than clear or beautiful.
+Habitable means it can be extended easily and that new people can get to run
+with the code easily. Perfect clarity is intimidating: it&amp;#39;s hard to improve.
+If everything is interlocked too tightly, with no overhang on which to hang
+extension, the program will be hard to extend, even though it is arguably
+perfect. Abstraction is over-valued because a completed program full of the
+right abstractions is beautiful. But most programs are by definition never
+completed.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Habitability is the characteristic of source code that enables programmers,
+coders, bug-fixers, and people coming to the code later in its life to
+understand its construction and intentions, and to change it comfortably and
+confidently.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Piecemeal growth is the process of design and implementation in which software
+is embellished, modified, reduced, enlarged, and improved through a process of
+repair rather than of replacement.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;pattern-languages&quot;&gt;Pattern Languages&lt;/h3&gt;
+&lt;p&gt;According to Gabriel, pattern languages failed in (brick and mortar)
+architecture because in addition to having the right process, you have to be an
+artist, to manipulate the language artistically.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;symmetries&quot;&gt;Symmetries&lt;/h3&gt;
+&lt;p&gt;The book discusses symmetries in the context of rug-weaving, but it think the
+notion can apply to software as well. Code with local symmetry is easier to
+read. Repeating patterns are pleasant, and many instantiation of the same
+principles can make a codebase more familiar.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;language-design-adoption&quot;&gt;Language Design &amp;amp; Adoption&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Aesthetic principles and design goals don’t excite me, because often they have
+nothing to do with how people really program (habitability and piecemeal
+growth) but more often reflecting mathematical or abstract considerations and
+look-Ma-no-hands single-mechanism trickery. One cannot deny, however, that a
+small set of principles and goals applied to designing a small language
+usually results in a consistent concise language.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Languages are accepted and evolve by a social process, not a technical or technological one.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A language is minimally acceptable if it solves a new problem or make certain
+tasks easier.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Early adopters are trying to hit a home run with new technology to make the
+career moves or corporate improvements they crave.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;productivity-impact&quot;&gt;Productivity &amp;amp; Impact&lt;/h3&gt;
+&lt;p&gt;Gabriel recount the story of the Borland Quattro Pro for Windows, who was
+tremendously productive.&lt;/p&gt;
+&lt;p&gt;One of the most peculiar things this team did was having multi-hours meeting
+each day to gvie overview of changes and define the interfaces.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A manager should be like the sweeper in curling: The sweeper runs ahead of the
+stone and sweeps away debris from the path of the stone so that the progress
+of the stone will be smooth and undisturbed.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;An isolated good success can be better than a string of mediocre successes.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;poetry&quot;&gt;Poetry&lt;/h3&gt;
+&lt;p&gt;Reading poetry is a good way to appreciate good fiction writing, and to become
+better at writing in general.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;First, modern and contemporary poetry is about compression: Say as much in as
+few words as possible. Poets avoid adjectives, adverbs, gerunds, and
+complicated clausal structure. Their goal is to get the point across as fast
+as they can, with the fewest words, and generally with the constraint of
+maintaining an easily spoken verbal rhythm.&lt;/p&gt;
+&lt;p&gt;Second, poets say old things in new ways. When you read good poetry, you will
+be amazed at the insights you get by seeing a compressed expression presenting
+a new way of looking at things.&lt;/p&gt;
+&lt;p&gt;Third, poets love language and write sentences in ways you could never
+imagine. I don’t mean that their sentences are absurd or unusual—rather, the
+sentences demonstrate the poet’s keen interest in minimally stating a complex
+image or point.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;software-development-models&quot;&gt;Software Development Models&lt;/h3&gt;
+&lt;p&gt;Richard Gabriel is well known for his famous essay on &lt;a href=&quot;https://www.dreamsongs.com/RiseOfWorseIsBetter.html&quot;&gt;Worse is Better&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;Worse is Better&lt;/em&gt; model is explained in the book, but Gabriel expands on how
+the model is highly market-efficient.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It takes less development time, so it is out early and can be adopted as the
+de facto standard in a new market area.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If it has some value, it will be ported or adopted and will tend to spread
+like a virus. If it has value and becomes popular, there will be pressure to
+improve it, and over time it will acquire the quality and feature-richness of
+systems designed another way, but with the added advantage that the features
+will be those the customers or users want, not those that the developers think
+they should want.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Worse-is-better takes advantage of the natural advantages of incremental
+development. Incremental improvement satisfies some human needs. When
+something is an incremental change over something else already learned,
+learning the new thing is easier and therefore more likely to be adopted than
+is something with a lot of changes. To some it might seem that there is value
+to users in adding lots of features, but there is, in fact, more value in
+adding a simple, small piece of technology with evolvable value.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;One of the key characteristics of the mainstream customer is conservatism.
+Such a customer does not want to take risks; he (let’s say) doesn’t want to
+debug your product; he doesn’t want to hit a home run so he can move up the
+corporate ladder. Rather, he wants known, predictable improvement over what he
+is doing today with his own practices and products. He wants to talk to other
+folks like himself and hear a good story. He doesn’t want to hear how someone
+bet it all and won; he wants to hear how someone bought the product expecting
+10% improvement and got 11%. This customer is not interested in standing out
+from the crowd, particularly because of a terrible error in his organization
+based on a bad buying decision.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The ideal of the free market supports this kind of growth. If you decide to
+spend a lot of resources developing a radical innovation product, you may be
+throwing away development money. Why bet millions of dollars all at once on
+something that could flop when you can spend a fraction, test the ideas,
+improve the ideas based on customer feedback, and spend the remainder of money
+on the winning evolution of the technology? If you win, you will win more,
+and, if you lose, you will lose less. Moreover, you will be out there ahead of
+competition which is happily making the right-thing mistake.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When you put out small incremental releases, you can do it more frequently
+than you can with large releases, and you can charge money for each of those
+releases. With careful planning you can charge more for a set of improvements
+released incrementally than the market would have borne had you released them
+all at once, taking a risk on their acceptance to boot. Moreover, when you
+release many small improvements, you have less risk of having a recall, and
+managing the release process also is easier and cheaper. With incremental
+improvement, the lifetime of an idea can be stretched out, and so you don’t
+have to keep coming up with new ideas. Besides, who wants to base one’s
+economic success on the ability to come up with new ideas all the time?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Sounds familiar?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The ideal situation is that your proprietary value is small compared with the
+total size of your product, which perhaps can be constructed from standard
+parts by either you or your customers or partners.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Wade’s Maxim: No one ever made money by typing.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!------&gt;
+&lt;blockquote&gt;
+&lt;p&gt;What this means in our context is that you cannot try to build too large and
+complex product by yourself—you need to get parts from other places if your
+product is complex, and you must make your value clear and apparent, and it
+must be a simple decision for a customer to use your technology.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;epilogue&quot;&gt;Epilogue&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In software engineering—if there really be such a thing—we have worked
+thoroughly on Firmness, some during the last 10 years on Commodity, and none
+on Delight.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Clearly that has changed some. But have we gone far enough?&lt;/p&gt;
+      </description>
+      <pubDate>2017-03-12T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/patterns-of-software</link>
+      <guid isPermaLink="true">http://norswap.com/patterns-of-software</guid>
+    </item>
+    <item>
       <title>Ruby&#39;s Lookups &amp; Scopes</title>
       <description>
 &lt;p&gt;This is the third and last article in the &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt; series.&lt;/p&gt;
@@ -1230,168 +1454,6 @@ sub-reddit&lt;/a&gt;.&lt;/p&gt;
       <pubDate>2017-01-24T23:00:00.000Z</pubDate>
       <link>http://norswap.com/music-piracy-miniguide</link>
       <guid isPermaLink="true">http://norswap.com/music-piracy-miniguide</guid>
-    </item>
-    <item>
-      <title>The Ultimate PATH Management Guide</title>
-      <description>
-&lt;h2 id=&quot;basics-of-environment-variables-and-path&quot;&gt;Basics of Environment Variables and PATH&lt;/h2&gt;
-&lt;p&gt;Each process has an &lt;em&gt;environment&lt;/em&gt;, a set of variables that the process can read
-or write. When the process spawns another process, the new process inherits the
-environment of its parent. These values are nevertheless &lt;em&gt;local&lt;/em&gt;: the child
-inherits a copy of the variables of the parent at creation-time. If the parent
-later changes his variables, the change will not be reflected on the child&amp;#39;s
-variables.&lt;/p&gt;
-&lt;p&gt;One particularly interesting environment variable is called &lt;code&gt;PATH&lt;/code&gt;: it defines
-the paths to search to find an executable specified by name. The value of this
-variable is a list of paths separated by a separator (&lt;code&gt;:&lt;/code&gt; on Unix-based OSes
-like Mac OS X and Linux, &lt;code&gt;;&lt;/code&gt; on Windows).&lt;/p&gt;
-&lt;p&gt;This is particularly relevant on the command line: when you type the name of a
-program (for instance &lt;code&gt;ls&lt;/code&gt; in Unix), it will search the paths listed in the
-&lt;code&gt;PATH&lt;/code&gt; variable (from left to right) until it finds one containing a &lt;code&gt;ls&lt;/code&gt;
-executable.&lt;/p&gt;
-&lt;p&gt;We&amp;#39;ll now see how each OS handles environment variables and the &lt;code&gt;PATH&lt;/code&gt;. One
-particular question that will interest us is how the &amp;quot;default&amp;quot; value for the
-environment variables (and the &lt;code&gt;PATH&lt;/code&gt; in particular) are set.&lt;/p&gt;
-&lt;h2 id=&quot;windows&quot;&gt;Windows&lt;/h2&gt;
-&lt;p&gt;In Windows, the initial values for environment variables are stored in the
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Windows_Registry&quot;&gt;registry&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;These are separated between system values and user values. If a variable has
-both a system and user value, the user value takes precedence, &lt;strong&gt;excepted&lt;/strong&gt; for
-the PATH, where both values get concatenated (user PATH, &lt;code&gt;;&lt;/code&gt;, system PATH).&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;User environment variables are stored in &lt;code&gt;HKEY_CURRENT_USER\Environment&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;System environment variables are stored in
-&lt;code&gt;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session
-Manager\Environment&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;code&gt;explorer.exe&lt;/code&gt; will immediately reflect any change to these values, and any
-program launched by it will inherit these values.&lt;/p&gt;
-&lt;p&gt;All other programs, on the other hand, need to be restarted. A few comments
-about programs of interest:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;The &lt;a href=&quot;http://www.launchy.net/&quot;&gt;Launchy&lt;/a&gt; app launcher automatically updates the
-environment before launching a program.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;The &lt;a href=&quot;https://conemu.github.io/&quot;&gt;ConEmu&lt;/a&gt; console emulator is by default
-configured to hijack the opening of new consoles and open them in the existing
-ConEmu window instead (this is a good thing). The problem that is when
-intercepting consoles opened by &lt;code&gt;explorer.exe&lt;/code&gt;, the environment seems to be set to
-that of the ConEmu window (i.e. the environment when a console was first
-launched). See &lt;a href=&quot;https://github.com/Maximus5/ConEmu/issues/468&quot;&gt;this issue&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;How to change the environment&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Locally in a console: use the built-in &lt;a href=&quot;http://ss64.com/nt/set.html&quot;&gt;set&lt;/a&gt; command.
-You can clear a variable by assigning it nothing: &lt;code&gt;set X=&lt;/code&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Globally in a console: use &lt;a href=&quot;http://ss64.com/nt/setx.html&quot;&gt;setx&lt;/a&gt; (built-in Windows
-7+, &lt;a href=&quot;https://www.microsoft.com/en-us/download/details.aspx?id=18546&quot;&gt;download&lt;/a&gt; for previous versions)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;From the explorer, &lt;a href=&quot;https://www.java.com/en/download/help/path.xml&quot;&gt;follow these instructions&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Use the excellent &lt;a href=&quot;https://www.rapidee.com/en/about&quot;&gt;Rapid Environment Editor&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Running scripts on the command line&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;On Windows, it is customary to append an extension to executables binaries
-(&lt;code&gt;.exe&lt;/code&gt;) and scripts (&lt;code&gt;.bat&lt;/code&gt;, &lt;code&gt;.sh&lt;/code&gt;, &lt;code&gt;.py&lt;/code&gt;, ...). However, typing this extension
-to run the program is not very desirable.&lt;/p&gt;
-&lt;p&gt;There is an environment variable called &lt;code&gt;PATHEXT&lt;/code&gt; which holds a list of all
-extensions that can be run on the command line. Basically, if a file has its
-extension in this list, you can type its name ommitting the extension and it
-will run as though you double clicked it. There might be some additional finesse
-here, but it will be like this most of the time. The order of the extensions
-inside &lt;code&gt;PATHEXT&lt;/code&gt; is important if there are two files with the same name but
-different extensions. Extensions earlier in the list have more priority.&lt;/p&gt;
-&lt;h2 id=&quot;unix&quot;&gt;Unix&lt;/h2&gt;
-&lt;p&gt;Both Mac OS X and Linux are Unix-based OSes. As such, the basic principles of
-how environment variables are handled is similar. I&amp;#39;ll explain this here before
-talking about the peculiarities of each OS.&lt;/p&gt;
-&lt;p&gt;In Unix, a process does not automatically inherit all the environment variables
-of its parents. It only inherits those that are explicitly exported.&lt;/p&gt;
-&lt;p&gt;In a shell script, or on the command line, we can mark a variable &lt;code&gt;X&lt;/code&gt; for export
-by writing &lt;code&gt;export X&lt;/code&gt;. This can also be combined with the definition of the
-variable: &lt;code&gt;export X=&amp;quot;some stuff&amp;quot;&lt;/code&gt;. You can un-export something with &lt;code&gt;export -n&lt;/code&gt;.
-Removing purely and simply a variable is done with &lt;code&gt;unset&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;On Unix, environment variables are initialized by shell scripts. Some scripts
-are executed each time a shell is run. Which scripts are run depends on whether
-the shell is a &lt;em&gt;login shell&lt;/em&gt; and wether it is &lt;em&gt;interactive&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;The rules are rather complex,
-but &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;this page does a good job at summarizing them&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Also beware that your scripts may source other files, including those that
-mentionned in that guide.&lt;/p&gt;
-&lt;p&gt;When taking inheritance into account, usually the right thing to do is to define
-your environment variables in &lt;code&gt;~/.profile&lt;/code&gt; or equivalent. One caveat: the file
-won&amp;#39;t get sourced when running a command remotely via SSH (that is, when running
-a command through &lt;code&gt;ssh&lt;/code&gt; without creating an interactive shell).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Reloading the environment&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Reloading the environment in an existing shell after you edited &lt;code&gt;.profile&lt;/code&gt; can
-be tricky. One easy solution would be to re-source &lt;code&gt;.profile&lt;/code&gt;, but there are a
-few caveats:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Sourcing your &lt;code&gt;.profile&lt;/code&gt; should not have unwanted side-effects.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Often variables are not just set, but are &lt;em&gt;modified&lt;/em&gt;. This is typically the&lt;/p&gt;
-&lt;p&gt;case for &lt;code&gt;PATH&lt;/code&gt;, where you append to the existing definition.&lt;/p&gt;
-&lt;p&gt;In this case, if you reload the &lt;code&gt;.profile&lt;/code&gt;, you&amp;#39;ll end up with many duplicate
-entries in your PATH, and you&amp;#39;ll fail to clear entries you want removed.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Hence: no side-effects; set variables, don&amp;#39;t modify them.&lt;/p&gt;
-&lt;h2 id=&quot;mac-os-x&quot;&gt;Mac OS X&lt;/h2&gt;
-&lt;p&gt;OS X has a fantastic little utility called &lt;code&gt;path_helper&lt;/code&gt; that will help you
-manage the PATH. Basically what it does is read the files in &lt;code&gt;/etc/paths.d&lt;/code&gt; and
-appends their content to the PATH (one entry per line). Files are read in
-lexicographic order, so you can control the order of entries in the PATH.&lt;/p&gt;
-&lt;p&gt;Ironically, &lt;code&gt;path_helper&lt;/code&gt; is not itself on the path, so you must call it through
-its fully qualified name &lt;code&gt;/usr/libexec/path_helper&lt;/code&gt;. The output of &lt;code&gt;path_helper&lt;/code&gt;
-is a shell command to set the PATH. This command must itself be evaluated.&lt;/p&gt;
-&lt;p&gt;I suggest to define the following shell alias for ease of use:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;alias refresh_path=&amp;#39;eval `/usr/libexec/path_helper -s`&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;-s&lt;/code&gt; part is just to ensure a bash-compatible command is generated.&lt;/p&gt;
-&lt;p&gt;By default, OS X calls &lt;code&gt;path_helper&lt;/code&gt; in &lt;code&gt;/etc/profile&lt;/code&gt; so you do not need to add
-it yourself.&lt;/p&gt;
-&lt;p&gt;Oh and by the way, &lt;code&gt;path_helper&lt;/code&gt; does the same thing it does to &lt;code&gt;PATH&lt;/code&gt; to
-&lt;code&gt;MANPATH&lt;/code&gt; (which holds the paths used to find manpages) but with the
-&lt;code&gt;/etc/manpaths.d&lt;/code&gt; directory.&lt;/p&gt;
-&lt;p&gt;Final word of caution: &lt;code&gt;/etc/paths.d&lt;/code&gt; requires root permission to write into.
-However, the files must be readable without root permissions to be used by
-&lt;code&gt;path_helper&lt;/code&gt;. Hence you might need to do a &lt;code&gt;chmod 644&lt;/code&gt; on the files you create
-in that directory.&lt;/p&gt;
-&lt;p&gt;See &lt;a href=&quot;http://www.softec.lu/site/DevelopersCorner/MasteringThePathHelper&quot;&gt;this webpage&lt;/a&gt; for more details about &lt;code&gt;path_helper&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Setting the PATH for GUI applications&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Ways of defining the PATH for GUI applications on OS X have a history of
-breaking. You may read on the net about &lt;code&gt;~/.MacOSX/environment.plist&lt;/code&gt; or
-&lt;code&gt;launchd.conf&lt;/code&gt;, but those no longer works.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/a/26586170&quot;&gt;&amp;quot;The&amp;quot; solution&lt;/a&gt;, at the time of writing, is to create a file
-&lt;code&gt;~/Library/LaunchAgents/environment.plist&lt;/code&gt;, enter a bunch of boilerplate and
-include &lt;code&gt;launchtl setenv&lt;/code&gt; commands to set environment variables.
-See &lt;a href=&quot;http://stackoverflow.com/a/26586170&quot;&gt;this explanation&lt;/a&gt; for details.&lt;/p&gt;
-&lt;p&gt;After a change, you can make it take effect with &lt;code&gt;launchctl load
-~/Library/LaunchAgents/environment.plist&lt;/code&gt; (or wait for a reboot).&lt;/p&gt;
-&lt;p&gt;Once applied, new applications started from the Finder (or Spotlight) will
-inherit the environment variables set in &lt;code&gt;environment.plist&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Note that what &lt;code&gt;environment.plist&lt;/code&gt; does is simply run a script. You could use
-that to actually source your &lt;code&gt;.profile&lt;/code&gt; or invoke &lt;code&gt;path_helper&lt;/code&gt;. Two solutions
-that work with this idea (but doing rather more complicated things) are to be
-found &lt;a href=&quot;http://stackoverflow.com/a/32405815&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;http://superuser.com/a/476960&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The difficulty to achieve something so basic is truly baffling.&lt;/p&gt;
-&lt;h2 id=&quot;linux&quot;&gt;Linux&lt;/h2&gt;
-&lt;p&gt;There are too many desktop managers for Linux to cover. Cursory searches seem to
-indicate that this aspect isn&amp;#39;t too well thought-out however.&lt;/p&gt;
-&lt;p&gt;However, Linux should, &lt;em&gt;in theory&lt;/em&gt;, be more scrupulous than OS X about
-inheriting the PATH, even in GUI applications. Which means that, editing
-&lt;code&gt;.profile&lt;/code&gt; then login out and login in &lt;em&gt;should&lt;/em&gt; work as a last resort.&lt;/p&gt;
-&lt;p&gt;Some distributions (notably Debian, Ubuntu, Fedora) have files called
-&lt;code&gt;~/.pam_environment&lt;/code&gt; and &lt;code&gt;/etc/environment&lt;/code&gt; where they recommend you define your
-environment variables. The benefits of this way of doing things are rather
-unclear, since it doesn&amp;#39;t seem to enable anything that couldn&amp;#39;t be done by
-defining variables in &lt;code&gt;.profile&lt;/code&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2017-01-23T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/path-mgmt</link>
-      <guid isPermaLink="true">http://norswap.com/path-mgmt</guid>
     </item>
   </channel>
 </rss>

@@ -6,6 +6,33 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Prolog Served DRY</title>
+      <description>
+&lt;p&gt;I believe there should be more programming books targetted at experienced
+programmers. In particular, it seems like most books about programming
+languages go to great lengths to be accessible to beginners.&lt;/p&gt;
+&lt;p&gt;But this is actually detrimental to the experience of the experienced
+programmer, who either wants to get up and running with the language as fast as
+possible, or to understand what makes the language tick.&lt;/p&gt;
+&lt;p&gt;Most of the time, I&amp;#39;m firmly in the second category: I want the mental models
+and implentation details underlying the language. Those are of paramount
+importance to reach proficiency with the language, yet they are rarely taught
+explicitly.&lt;/p&gt;
+&lt;p&gt;At the start of this year, I actually was in a position to do something about
+this, as I needed to design the lab sessions for our Programming Language
+Paradigms course. While the (master) students are not exactly &lt;em&gt;experienced&lt;/em&gt; in
+the traditional sense, they already have at least 3 languages under their belts
+and are quite capable of handling what we throw at them.&lt;/p&gt;
+&lt;p&gt;The first language we cover is Prolog. There are three lab sessions on the topic
+and I have now made them available &lt;a href=&quot;https://github.com/norswap/prolog-dry&quot;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;re interested in Prolog, give them a spin. You might find them
+interesting, maybe not all that easy, and – I hope – enlightening.&lt;/p&gt;
+      </description>
+      <pubDate>2017-03-13T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/prolog-served-dry</link>
+      <guid isPermaLink="true">http://norswap.com/prolog-served-dry</guid>
+    </item>
+    <item>
       <title>Patterns of Software: Highlights</title>
       <description>
 &lt;p&gt;Last month, I finished reading the book Patterns of Software by Richard Gabriel
@@ -1379,81 +1406,6 @@ impetus for action.&lt;/p&gt;
       <pubDate>2017-01-27T23:00:00.000Z</pubDate>
       <link>http://norswap.com/expectations</link>
       <guid isPermaLink="true">http://norswap.com/expectations</guid>
-    </item>
-    <item>
-      <title>Music Piracy Miniguide</title>
-      <description>
-&lt;p&gt;Nowadays, it is easier than ever to listen to music: just use &lt;a href=&quot;https://play.spotify.com&quot;&gt;Spotify&lt;/a&gt; or
-&lt;a href=&quot;http://www.deezer.com/&quot;&gt;Deezer&lt;/a&gt;, amongst others.&lt;/p&gt;
-&lt;p&gt;Call me old-fashioned, but I don&amp;#39;t like to be dependent on an internet connection.
-I&amp;#39;m also a bit of a pirate at heart &lt;code&gt;P)&lt;/code&gt;. So let&amp;#39;s get started.&lt;/p&gt;
-&lt;h2 id=&quot;single-tracks&quot;&gt;Single Tracks&lt;/h2&gt;
-&lt;h3 id=&quot;youtube&quot;&gt;Youtube&lt;/h3&gt;
-&lt;p&gt;This is the option I use most often, because it is so damn easy. Go on &lt;a href=&quot;http://www.deezer.com/en/&quot;&gt;YouTube&lt;/a&gt;,
-then use the website &lt;a href=&quot;http://www.flvto.biz/&quot;&gt;flvto&lt;/a&gt;. Or even better, download
-their &lt;a href=&quot;http://www.flvto.biz/youtube-downloader/&quot;&gt;desktop app&lt;/a&gt; for Windows/OSX which enables HD downloads,
-and automatic detection of YouTube URLs in the clipboard. They also
-have &lt;a href=&quot;http://www.flvto.biz/addon/&quot;&gt;addons&lt;/a&gt; for most browsers.&lt;/p&gt;
-&lt;p&gt;Another alternative is &lt;a href=&quot;http://www.youtube-mp3.org&quot;&gt;youtube-mp3&lt;/a&gt;, which also has Firefox and Chrome &lt;a href=&quot;http://www.youtube-mp3.org/addons&quot;&gt;addons&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;The downside of downloading from YouTube is that quality tends to be somewhat
-variable. I&amp;#39;m no audiophile and so if it sounds good to me, I download it.&lt;/p&gt;
-&lt;h3 id=&quot;songr&quot;&gt;Songr&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.xamasoft.com/songr/&quot;&gt;Songr&lt;/a&gt; is an app that searches a bunch of websites (include &lt;a href=&quot;http://groovesharks.org/&quot;&gt;Grooveshark&lt;/a&gt; and
-&lt;a href=&quot;http://pleer.net/&quot;&gt;Prostopleer&lt;/a&gt;) for MP3 downloads. I don&amp;#39;t use it very much, YouTube + flvto is
-easier, and the options in the next section are more comprehensive. Nevertheless
-it has been around for a while, and it&amp;#39;s good to know that it is available.&lt;/p&gt;
-&lt;h2 id=&quot;full-albums-single-tracks-&quot;&gt;Full Albums (&amp;amp; Single Tracks)&lt;/h2&gt;
-&lt;h3 id=&quot;spotiload-formerly-spotify-vk-downloader-&quot;&gt;Spotiload (formerly Spotify VK Downloader)&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://chrome.google.com/webstore/detail/spotiload-former-spotify/baggnalhgbpeanbhedjlbndhjgmimmhl&quot;&gt;Spotiload&lt;/a&gt; is a chrome extension that lets you download songs from Spotify.
-Except it doesn&amp;#39;t, really. Instead, you have to be logged on the Russian social
-network &lt;a href=&quot;https://vk.com/&quot;&gt;VK.com&lt;/a&gt;, which for some reason holds a huge collection of MP3s. You&amp;#39;ll
-then be able to search for the music you&amp;#39;re listening to on Spotify and download
-it from VK.&lt;/p&gt;
-&lt;p&gt;A small pain point is that you can only download songs 4 at at time, so you
-cannot leave you album download unattended. It has also happened to me that
-Spotiload couldn&amp;#39;t find some songs on VK (the song wasn&amp;#39;t on YouTube either, but
-I finally got it from Deezer). That should be exceedingly rare however.&lt;/p&gt;
-&lt;p&gt;There doesn&amp;#39;t seem to be any reliable way to download music from Spotify itself
-at the time of writing. VK, howver, doesn&amp;#39;t seem very intent to crack down on
-illegal downloads, so this seems like a good option for now.&lt;/p&gt;
-&lt;h3 id=&quot;deezer-downloader&quot;&gt;Deezer Downloader&lt;/h3&gt;
-&lt;p&gt;While searching for a song I couldn&amp;#39;t find by any other means, I stumbled on
-&lt;a href=&quot;https://www.reddit.com/r/Piracy/comments/5i33o1/yet_another_downloader_for_deezer/&quot;&gt;this reddit conversation&lt;/a&gt; introducing a Deezer desktop
-downloader. It works really well.&lt;/p&gt;
-&lt;p&gt;The caveat is that I&amp;#39;m not too confident about it being able to work for long.
-Like Spotify, Deezer is intent on cracking down on downloads. There seems to be
-a few other Deezer downloaders around, so who knows.&lt;/p&gt;
-&lt;p&gt;PS: I goes without saying that if you&amp;#39;re looking to replace anything on this
-guide, the &lt;a href=&quot;https://www.reddit.com/r/Piracy/&quot;&gt;Piracy sub-reddit&lt;/a&gt; is a good place to start looking.&lt;/p&gt;
-&lt;h3 id=&quot;private-bittorrent-trackers&quot;&gt;Private BitTorrent Trackers&lt;/h3&gt;
-&lt;p&gt;In general, BitTorrent is lousy for album downloads. However, there exist
-specialized trackers where you can find all the music you want. If only it was
-that easy...&lt;/p&gt;
-&lt;p&gt;First, these trackers usually require you to be invited by an existing member.
-Sometimes, you can pass an &lt;a href=&quot;https://interview.passtheheadphones.me/index.shtml&quot;&gt;interview&lt;/a&gt; (I kid you not) to be invited.&lt;/p&gt;
-&lt;p&gt;Once you&amp;#39;re invited, you&amp;#39;re required to maintain a positive seed ratio (upload
-as much as you download). That doesn&amp;#39;t seem like much, but it can actually be
-pretty challenging. First because everyone is trying to maintain/improve their
-ratio, so there is more upload capacity than demand. Second, because when you
-are starting out, you will have nothing to upload! Usually you can download
-without uploading at the beginning, to get a starting stash. Still, that doesn&amp;#39;t
-always suffice. Some trackers have &lt;em&gt;freeleech&lt;/em&gt; albums where downloads don&amp;#39;t count
-towards your ratio, but uploads do, the goal being to generate some easy upload
-for users. Incidentally this is also why many people use &lt;em&gt;seeboxes&lt;/em&gt; (servers
-dedicated to torrenting): those have high upload bandwidth, so you can increase
-your upload faster.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s a bit of a crazy world, and I haven&amp;#39;t found the need to engage in this
-sillyness so far, but you never know.&lt;/p&gt;
-&lt;p&gt;It seems that the best option currently is &lt;a href=&quot;https://passtheheadphones.me/&quot;&gt;Pass The Headphones&lt;/a&gt; and &lt;a href=&quot;https://apollo.rip/&quot;&gt;Apollo&lt;/a&gt;
-(formerly Xanax). Over the years, the best options have been OiNK, What.cd and
-Waffles.cd. Some of these grew quite famous, but ultimately they all closed or
-were closed.&lt;/p&gt;
-&lt;p&gt;The definitive source of info about private trackers is the &lt;a href=&quot;https://www.reddit.com/r/trackers/&quot;&gt;Trackers
-sub-reddit&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2017-01-24T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/music-piracy-miniguide</link>
-      <guid isPermaLink="true">http://norswap.com/music-piracy-miniguide</guid>
     </item>
   </channel>
 </rss>

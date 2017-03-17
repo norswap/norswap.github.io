@@ -40,7 +40,7 @@ single inheritance chain (the *ancestor chain*) and consecutive calls to
 But how does linearization work, exactly?
 
 Here are a couple scenarios, what do you think the behaviour for each of this
-scenario is? Each is taylored to show something about the linearization process.
+scenario is? Each is tailored to show something about the linearization process.
 
 ```ruby
 # Scenario 1

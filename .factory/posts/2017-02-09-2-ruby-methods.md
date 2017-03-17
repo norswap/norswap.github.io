@@ -255,7 +255,8 @@ This parameter must be assigned a (syntactic) block (which becomes a proc) or a
 
 Other than with blocks, procs can be instantiated with `proc`, `Proc.new`,
 `lambda` or `->` (*lambda literal* or *dash rocket* or *stab operator*). The
-tree first forms simply take a block argument, while the last form looks like this:
+three first forms simply take a block argument, while the last form looks like
+this:
 
 ```ruby
 -> (a, b) { ... }

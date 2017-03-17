@@ -362,7 +362,7 @@ expression in place of the class name. This would remove the need for
 <code>class_eval</code> method. If needed one can add the restriction that only existing
 classes and modules can be opened in methods.</p>
 <p>I would also remove <code>instance_eval</code>, however it has no immediate analog. I would
-retool the <code>class &lt;&lt; X</code> notation for this purpose. The metaclas can still be
+retool the <code>class &lt;&lt; X</code> notation for this purpose. The metaclass can still be
 accessed through <code>Object#singleton_class</code>. This field can be used in conjunction
 with <code>class</code> so that <code>class X.singleton_class</code> achieves the previous effect of
 <code>class &lt;&lt; X</code>.</p>

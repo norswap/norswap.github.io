@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Thread-Local Properties in Kotlin
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Thread-Local Properties in Kotlin</h1>
+      <span class="post-date">19 Mar 2017</span>
+<p>The <a href="https://kotlinlang.org/">Kotlin</a> language has a feature called <a href="https://kotlinlang.org/docs/reference/delegated-properties.html">Delegated Properties</a>. It basically
+lets you delegate a getter (and optionally a setter) to an object that
+implements the <code>getValue</code> (and optionally the <code>setValue</code>) method.</p>
+<p>I haven&#39;t had much use of the feature, but I just found something very nifty
+that could be done with it: create thread-local properties.</p>
+<p>Here&#39;s an example of what you can do:</p>
+<pre><code class="lang-kotlin">import norswap.utils.thread_local.*
+
+class Test
+{
+    val _i = 0
+    val i by _i
+
+    val j by thread_local(0)
+}
+</code></pre>
+<p>This creates two counters, <code>i</code> and <code>j</code> that are backed by instances of
+<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html"><code>ThreadLocal&lt;Int&gt;</code></a>. In the first case we specify the instance explicitly,
+while in the second case the <code>ThreadLocal</code> instance is created implicitly, given
+a default value (0 here).</p>
+<p>And now for the implementation:</p>
+<pre><code class="lang-kotlin">package norswap.utils.thread_local
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
+class ThreadLocalDelegate&lt;T&gt; (val local: ThreadLocal&lt;T&gt;)
+: ReadWriteProperty&lt;Any, T&gt;
+{
+    companion object {
+        fun &lt;T&gt; late_init ()
+            = ThreadLocalDelegate&lt;T&gt;(ThreadLocal())
+    }
+
+    constructor (initial: T):
+        this(ThreadLocal.withInitial { initial })
+
+    constructor (initial: () -&gt; T):
+        this(ThreadLocal.withInitial(initial))
+
+    override fun getValue
+            (thisRef: Any, property: KProperty&lt;*&gt;): T
+        = local.get()
+
+    override fun setValue
+            (thisRef: Any, property: KProperty&lt;*&gt;, value: T)
+        = local.set(value)
+}
+
+typealias thread_local&lt;T&gt; = ThreadLocalDelegate&lt;T&gt;
+
+operator fun &lt;T&gt; ThreadLocal&lt;T&gt;.provideDelegate
+        (self: Any, prop: KProperty&lt;*&gt;)
+    = ThreadLocalDelegate(this)
+</code></pre>
+<p>Let&#39;s do a quick rundown. The <code>ThreadLocalDelegate</code> class does what it says on
+the tin: it delegates all attempts to read or write the property to the
+<code>ThreadLocal</code> instance.</p>
+<p>What is more interesting is the different way you can instantiate the delegate:
+you can pass it a <code>ThreadLocal</code> instance (primary constructor), an initial
+value, or a function that compute the initial value. The companion object also
+has a function <code>late_init()</code> that lets you create a delegate with no initial
+value.</p>
+<p>Now we could use <code>ThreadLocalDelegate</code> like this:</p>
+<pre><code class="lang-kotlin">val num by ThreadLocalDelegate(0)
+val str by ThreadLocalDelegate&lt;String&gt;.late_init()
+</code></pre>
+<p>But that&#39;s quite a mouthful, so there is a typealias <code>thread_local</code> to make
+things look nicer.</p>
+<p>Finally, the <code>provideDelegate</code> operator function tells Kotlin how to create a
+delegate from a <code>ThreadLocal</code> instance. That&#39;s how we could do <code>val i by _i</code> at
+the top of the post.</p>
+<p>Aaand that&#39;s pretty much it for today :)</p>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/kotlin-threadlocal-properties";
+        this.page.identifier = "kotlin-threadlocal-properties";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

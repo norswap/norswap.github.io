@@ -6,6 +6,86 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Thread-Local Properties in Kotlin</title>
+      <description>
+&lt;p&gt;The &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; language has a feature called &lt;a href=&quot;https://kotlinlang.org/docs/reference/delegated-properties.html&quot;&gt;Delegated Properties&lt;/a&gt;. It basically
+lets you delegate a getter (and optionally a setter) to an object that
+implements the &lt;code&gt;getValue&lt;/code&gt; (and optionally the &lt;code&gt;setValue&lt;/code&gt;) method.&lt;/p&gt;
+&lt;p&gt;I haven&amp;#39;t had much use of the feature, but I just found something very nifty
+that could be done with it: create thread-local properties.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s an example of what you can do:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;import norswap.utils.thread_local.*
+
+class Test
+{
+    val _i = 0
+    val i by _i
+
+    val j by thread_local(0)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This creates two counters, &lt;code&gt;i&lt;/code&gt; and &lt;code&gt;j&lt;/code&gt; that are backed by instances of
+&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html&quot;&gt;&lt;code&gt;ThreadLocal&amp;lt;Int&amp;gt;&lt;/code&gt;&lt;/a&gt;. In the first case we specify the instance explicitly,
+while in the second case the &lt;code&gt;ThreadLocal&lt;/code&gt; instance is created implicitly, given
+a default value (0 here).&lt;/p&gt;
+&lt;p&gt;And now for the implementation:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;package norswap.utils.thread_local
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
+class ThreadLocalDelegate&amp;lt;T&amp;gt; (val local: ThreadLocal&amp;lt;T&amp;gt;)
+: ReadWriteProperty&amp;lt;Any, T&amp;gt;
+{
+    companion object {
+        fun &amp;lt;T&amp;gt; late_init ()
+            = ThreadLocalDelegate&amp;lt;T&amp;gt;(ThreadLocal())
+    }
+
+    constructor (initial: T):
+        this(ThreadLocal.withInitial { initial })
+
+    constructor (initial: () -&amp;gt; T):
+        this(ThreadLocal.withInitial(initial))
+
+    override fun getValue
+            (thisRef: Any, property: KProperty&amp;lt;*&amp;gt;): T
+        = local.get()
+
+    override fun setValue
+            (thisRef: Any, property: KProperty&amp;lt;*&amp;gt;, value: T)
+        = local.set(value)
+}
+
+typealias thread_local&amp;lt;T&amp;gt; = ThreadLocalDelegate&amp;lt;T&amp;gt;
+
+operator fun &amp;lt;T&amp;gt; ThreadLocal&amp;lt;T&amp;gt;.provideDelegate
+        (self: Any, prop: KProperty&amp;lt;*&amp;gt;)
+    = ThreadLocalDelegate(this)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;#39;s do a quick rundown. The &lt;code&gt;ThreadLocalDelegate&lt;/code&gt; class does what it says on
+the tin: it delegates all attempts to read or write the property to the
+&lt;code&gt;ThreadLocal&lt;/code&gt; instance.&lt;/p&gt;
+&lt;p&gt;What is more interesting is the different way you can instantiate the delegate:
+you can pass it a &lt;code&gt;ThreadLocal&lt;/code&gt; instance (primary constructor), an initial
+value, or a function that compute the initial value. The companion object also
+has a function &lt;code&gt;late_init()&lt;/code&gt; that lets you create a delegate with no initial
+value.&lt;/p&gt;
+&lt;p&gt;Now we could use &lt;code&gt;ThreadLocalDelegate&lt;/code&gt; like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;val num by ThreadLocalDelegate(0)
+val str by ThreadLocalDelegate&amp;lt;String&amp;gt;.late_init()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But that&amp;#39;s quite a mouthful, so there is a typealias &lt;code&gt;thread_local&lt;/code&gt; to make
+things look nicer.&lt;/p&gt;
+&lt;p&gt;Finally, the &lt;code&gt;provideDelegate&lt;/code&gt; operator function tells Kotlin how to create a
+delegate from a &lt;code&gt;ThreadLocal&lt;/code&gt; instance. That&amp;#39;s how we could do &lt;code&gt;val i by _i&lt;/code&gt; at
+the top of the post.&lt;/p&gt;
+&lt;p&gt;Aaand that&amp;#39;s pretty much it for today :)&lt;/p&gt;
+      </description>
+      <pubDate>2017-03-18T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/kotlin-threadlocal-properties</link>
+      <guid isPermaLink="true">http://norswap.com/kotlin-threadlocal-properties</guid>
+    </item>
+    <item>
       <title>Prolog Served DRY</title>
       <description>
 &lt;p&gt;I believe there should be more programming books targetted at experienced
@@ -1359,54 +1439,6 @@ Problem&lt;/a&gt; and think again.&lt;/p&gt;
       <pubDate>2017-02-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/ruby-dark-corners</link>
       <guid isPermaLink="true">http://norswap.com/ruby-dark-corners</guid>
-    </item>
-    <item>
-      <title>Action and Expectations</title>
-      <description>
-&lt;blockquote&gt;
-&lt;p&gt;Mindfulness is the art of “just doing”. The problem with expectation is that
-  it adds a layer of unnecessary complication to doing, a layer that is
-  potentially self-defeating. If you do a thing with an expectation, and it
-  doesn’t live up to your desire (as so often is the case) you experience fear,
-  failure, detachment and laziness.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!----&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The reason people are lazy is simultaneously the reason they are ambitious—
-  they associate action with expectation. If they don’t act, they don’t expect,
-  and thus don’t suffer. If they do act, they expect, and often do suffer.
-  Projecting idealizations onto an uncaring and inhuman world doesn’t make good
-  things more likely to happen. It often just causes you trouble.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://medium.com/@dailyzen/expectation-and-delusion-2cb7edff6239#.tfut0y1au&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It’s important to see that it’s not life that causes suffering but our
-  expectation that life should be the way we want. We can’t live without
-  expectation, but if we can handle the feelings caused by the difference
-  between our expectations and reality, that’s liberation.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://medium.com/@dailyzen/zen-masters-101-kodo-sawaki-fc09dc251e00#.k457qrlnj&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Having a positive outlook on the future (optimism) seems like a pre-requisite
-for happiness. On the other hand, expecting the worst not to be disappointed is
-a common technique to avoid unhappiness. The technique is closely related to
-stoic philosophy. Zen masters, on the other hand, advocat not expecting anything
-at all.&lt;/p&gt;
-&lt;p&gt;There seems like there is a contradiction there. And indeed, there is. These
-examples are representative of a broader trade-off between a radical acceptance
-of the present moment, and the kind of positive visualisation that often is the
-impetus for action.&lt;/p&gt;
-&lt;p&gt;What&amp;#39;s the answer then? I think it&amp;#39;s to transcend the trade-off.&lt;br&gt;Act without expectations.&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Success consists of going from failure to failure without loss of enthusiasm.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Winston Churchill&lt;/p&gt;
-      </description>
-      <pubDate>2017-01-27T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/expectations</link>
-      <guid isPermaLink="true">http://norswap.com/expectations</guid>
     </item>
   </channel>
 </rss>

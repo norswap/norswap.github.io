@@ -5,7 +5,7 @@
   <!-- https://css-tricks.com/probably-use-initial-scale1/-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-       norswap &middot; Thread-Local Properties in Kotlin
+       norswap &middot; The Most Useful Kotlin Function
   </title>
   <link rel="stylesheet" href="/assets/poole.css">
   <link rel="stylesheet" href="/assets/syntax.css">
@@ -47,80 +47,39 @@
   </div>
   <div class="content container">
     <div class="post">
-      <h1 class="post-title">Thread-Local Properties in Kotlin</h1>
-      <span class="post-date">19 Mar 2017</span>
-<p>The <a href="https://kotlinlang.org/">Kotlin</a> language has a feature called <a href="https://kotlinlang.org/docs/reference/delegated-properties.html">Delegated Properties</a>. It basically
-lets you delegate a getter (and optionally a setter) to an object that
-implements the <code>getValue</code> (and optionally the <code>setValue</code>) method.</p>
-<p>I haven&#39;t had much use of the feature, but I just found something very nifty
-that could be done with it: create thread-local properties.</p>
-<p>Here&#39;s an example of what you can do:</p>
-<pre><code class="lang-kotlin">import norswap.utils.thread_local.*
-
-class Test
-{
-    val _i = 0
-    val i by _i
-
-    val j by thread_local(0)
-}
+      <h1 class="post-title">The Most Useful Kotlin Function</h1>
+      <span class="post-date">20 Mar 2017</span>
+<p>Two years ago, I wrote a posted called <a href="/java_caster">The Most Useful Java Function</a>.
+This was rather tongue-in-cheek, as the function in question lets you cast from
+a type to another, inferring the target type and suppressing unchecked cast
+exceptions.</p>
+<p>Nevertheless, it is useful remarkably often.</p>
+<p>With Kotlin however, you can step up your game to a whole new level.
+Introducing <code>proclaim</code>:</p>
+<pre><code class="lang-kotlin">val list: Collection&lt;Int&gt; = ArrayList(list(1, 2, 3))
+proclaim(list as ArrayList&lt;Int&gt;)
+val x = list[0] // works
 </code></pre>
-<p>This creates two counters, <code>i</code> and <code>j</code> that are backed by instances of
-<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html"><code>ThreadLocal&lt;Int&gt;</code></a>. In the first case we specify the instance explicitly,
-while in the second case the <code>ThreadLocal</code> instance is created implicitly, given
-a default value (0 here).</p>
-<p>And now for the implementation:</p>
-<pre><code class="lang-kotlin">package norswap.utils.thread_local
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
-
-class ThreadLocalDelegate&lt;T&gt; (val local: ThreadLocal&lt;T&gt;)
-: ReadWriteProperty&lt;Any, T&gt;
-{
-    companion object {
-        fun &lt;T&gt; late_init ()
-            = ThreadLocalDelegate&lt;T&gt;(ThreadLocal())
-    }
-
-    constructor (initial: T):
-        this(ThreadLocal.withInitial { initial })
-
-    constructor (initial: () -&gt; T):
-        this(ThreadLocal.withInitial(initial))
-
-    override fun getValue
-            (thisRef: Any, property: KProperty&lt;*&gt;): T
-        = local.get()
-
-    override fun setValue
-            (thisRef: Any, property: KProperty&lt;*&gt;, value: T)
-        = local.set(value)
-}
-
-typealias thread_local&lt;T&gt; = ThreadLocalDelegate&lt;T&gt;
-
-operator fun &lt;T&gt; ThreadLocal&lt;T&gt;.provideDelegate
-        (self: Any, prop: KProperty&lt;*&gt;)
-    = ThreadLocalDelegate(this)
+<p>The trick here is actually not <code>proclaim</code>. It&#39;s the fact that Kotlin has &quot;smart
+casts&quot; which are essentially a form of flow typing.</p>
+<p>The type inferencer reasons out that if the cast <code>list as ArrayList&lt;Int&gt;</code>
+succeeds, then it means that <code>list</code> is indeed an <code>ArrayList&lt;Int&gt;</code>. And since
+<code>list</code> is a <code>val</code>, its value can&#39;t change. So in the rest of the body where the
+cast appears, list is &quot;smart-casted&quot; to <code>ArrayList&lt;Int&gt;</code>.</p>
+<p>Here is a possible definition for <code>proclaim</code> (0 run-time overhead besides the
+cast):</p>
+<pre><code class="lang-kotlin">@Suppress(&quot;UNUSED_PARAMETER&quot;, &quot;NOTHING_TO_INLINE&quot;)
+inline fun proclaim (cast: Any)
+    = Unit
 </code></pre>
-<p>Let&#39;s do a quick rundown. The <code>ThreadLocalDelegate</code> class does what it says on
-the tin: it delegates all attempts to read or write the property to the
-<code>ThreadLocal</code> instance.</p>
-<p>What is more interesting is the different way you can instantiate the delegate:
-you can pass it a <code>ThreadLocal</code> instance (primary constructor), an initial
-value, or a function that compute the initial value. The companion object also
-has a function <code>late_init()</code> that lets you create a delegate with no initial
-value.</p>
-<p>Now we could use <code>ThreadLocalDelegate</code> like this:</p>
-<pre><code class="lang-kotlin">val num by ThreadLocalDelegate(0)
-val str by ThreadLocalDelegate&lt;String&gt;.late_init()
-</code></pre>
-<p>But that&#39;s quite a mouthful, so there is a typealias <code>thread_local</code> to make
-things look nicer.</p>
-<p>Finally, the <code>provideDelegate</code> operator function tells Kotlin how to create a
-delegate from a <code>ThreadLocal</code> instance. That&#39;s how we could do <code>val i by _i</code> at
-the top of the post.</p>
-<p>Aaand that&#39;s pretty much it for today :)</p>
+<p>Let&#39;s get the obvious out of the way: of course this can be misused.</p>
+<p>On the other hand, just like the casting function, it is handy surprisingly
+often. Type systems just aren&#39;t powerful enough to be able to figure some things
+we know to be true in our code. Especially that of Java and Kotlin.</p>
+<p>I&#39;m not giving any examples: by their nature they would be short and easily
+rewritten to accomodate the type system. But if you genuinely want to know, you
+can search the net for &quot;(path-)dependent types&quot; use case or examples. Keep in
+mind that&#39;s just a subset of what we can&#39;t express in Java/Kotlin though.</p>
     </div>
 
     <hr>
@@ -146,8 +105,8 @@ the top of the post.</p>
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = "http://norswap.com/kotlin-threadlocal-properties";
-        this.page.identifier = "kotlin-threadlocal-properties";
+        this.page.url = "http://norswap.com/kotlin-proclaim";
+        this.page.identifier = "kotlin-proclaim";
       };
       (function() {
         var d = document, s = d.createElement('script');

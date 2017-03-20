@@ -6,6 +6,45 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>The Most Useful Kotlin Function</title>
+      <description>
+&lt;p&gt;Two years ago, I wrote a posted called &lt;a href=&quot;/java_caster&quot;&gt;The Most Useful Java Function&lt;/a&gt;.
+This was rather tongue-in-cheek, as the function in question lets you cast from
+a type to another, inferring the target type and suppressing unchecked cast
+exceptions.&lt;/p&gt;
+&lt;p&gt;Nevertheless, it is useful remarkably often.&lt;/p&gt;
+&lt;p&gt;With Kotlin however, you can step up your game to a whole new level.
+Introducing &lt;code&gt;proclaim&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;val list: Collection&amp;lt;Int&amp;gt; = ArrayList(list(1, 2, 3))
+proclaim(list as ArrayList&amp;lt;Int&amp;gt;)
+val x = list[0] // works
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The trick here is actually not &lt;code&gt;proclaim&lt;/code&gt;. It&amp;#39;s the fact that Kotlin has &amp;quot;smart
+casts&amp;quot; which are essentially a form of flow typing.&lt;/p&gt;
+&lt;p&gt;The type inferencer reasons out that if the cast &lt;code&gt;list as ArrayList&amp;lt;Int&amp;gt;&lt;/code&gt;
+succeeds, then it means that &lt;code&gt;list&lt;/code&gt; is indeed an &lt;code&gt;ArrayList&amp;lt;Int&amp;gt;&lt;/code&gt;. And since
+&lt;code&gt;list&lt;/code&gt; is a &lt;code&gt;val&lt;/code&gt;, its value can&amp;#39;t change. So in the rest of the body where the
+cast appears, list is &amp;quot;smart-casted&amp;quot; to &lt;code&gt;ArrayList&amp;lt;Int&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here is a possible definition for &lt;code&gt;proclaim&lt;/code&gt; (0 run-time overhead besides the
+cast):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;@Suppress(&amp;quot;UNUSED_PARAMETER&amp;quot;, &amp;quot;NOTHING_TO_INLINE&amp;quot;)
+inline fun proclaim (cast: Any)
+    = Unit
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;#39;s get the obvious out of the way: of course this can be misused.&lt;/p&gt;
+&lt;p&gt;On the other hand, just like the casting function, it is handy surprisingly
+often. Type systems just aren&amp;#39;t powerful enough to be able to figure some things
+we know to be true in our code. Especially that of Java and Kotlin.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m not giving any examples: by their nature they would be short and easily
+rewritten to accomodate the type system. But if you genuinely want to know, you
+can search the net for &amp;quot;(path-)dependent types&amp;quot; use case or examples. Keep in
+mind that&amp;#39;s just a subset of what we can&amp;#39;t express in Java/Kotlin though.&lt;/p&gt;
+      </description>
+      <pubDate>2017-03-19T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/kotlin-proclaim</link>
+      <guid isPermaLink="true">http://norswap.com/kotlin-proclaim</guid>
+    </item>
+    <item>
       <title>Thread-Local Properties in Kotlin</title>
       <description>
 &lt;p&gt;The &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; language has a feature called &lt;a href=&quot;https://kotlinlang.org/docs/reference/delegated-properties.html&quot;&gt;Delegated Properties&lt;/a&gt;. It basically
@@ -1415,30 +1454,6 @@ that.&lt;/p&gt;
       <pubDate>2017-02-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/ruby-specification-problem</link>
       <guid isPermaLink="true">http://norswap.com/ruby-specification-problem</guid>
-    </item>
-    <item>
-      <title>Ruby&#39;s Dark Corners</title>
-      <description>
-&lt;p&gt;Recently, I&amp;#39;ve been immersing myself in the Ruby language for the need of our
-new programming language paradigms course. Ruby is there to showcase run-time
-metaprogramming.&lt;/p&gt;
-&lt;p&gt;I have been surprised by how some language features are governed by byzantine
-rules. Most practitionners know and use these features, supported by an
-heuristic undertanding of them that is serviceable in most situations. However,
-itt turns out almost no-one understand the precise semantics.&lt;/p&gt;
-&lt;p&gt;After investing some time to understand these features, I thought I would go the
-extra mile and publish my findings. Here are the topics I will cover:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;/ruby-methods&quot;&gt;Ruby&amp;#39;s Methods, Procs and Blocks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;/ruby-module-linearization&quot;&gt;Ruby&amp;#39;s Module Linearization&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;/ruby-lookups-scopes&quot;&gt;Ruby&amp;#39;s Lookups and Scopes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;If you think all of this is documented elsewhere, read &lt;a href=&quot;/ruby-specification-problem&quot;&gt;Ruby&amp;#39;s Specification
-Problem&lt;/a&gt; and think again.&lt;/p&gt;
-      </description>
-      <pubDate>2017-02-08T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/ruby-dark-corners</link>
-      <guid isPermaLink="true">http://norswap.com/ruby-dark-corners</guid>
     </item>
   </channel>
 </rss>

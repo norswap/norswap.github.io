@@ -1152,10 +1152,7 @@ argument into parts. Here are some examples, assuming the argument is &lt;code&g
 (a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
 ((a, *b), c)  a = 1,      b = [2], c = 3
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;For seemingly no good reason, you cannot have an array decomposition
-parameter, a splat parameter and a keyword parameter in the same method. Go
-figure.&lt;/p&gt;
-&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;The splat parameter enables variable length argument lists and receives all
 extra arguments.&lt;/p&gt;
 &lt;/li&gt;
@@ -1375,19 +1372,18 @@ ignored instead of causing an error (the behaviour is otherwise the same as
 for methods, as outlined above). Lambda behave like methods for parameter
 assignment.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Procs with multiple parameters can be passed a single array argument, which
-will be automatically &amp;quot;splatted&amp;quot;.&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Regular prrocs with multiple parameters can be passed a single array argument,
+which will be automatically &amp;quot;splatted&amp;quot;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;code&gt;proc&lt;/code&gt; and &lt;code&gt;Proc.new&lt;/code&gt; are used to create regular procs, while &lt;code&gt;lambda&lt;/code&gt; and &lt;code&gt;-&amp;gt;&lt;/code&gt;
 create lambdas.&lt;/p&gt;
-&lt;p&gt;At first, it seems possible to convert between regular procs and lambdas like
-this: &lt;code&gt;lambda &amp;amp;my_proc&lt;/code&gt;. It turns out that the resulting lambda behaves like a
-proc regarding the aspects listed above! So put otherwise, this conversation is
-perfectly pointless, and in fact doesn&amp;#39;t do anything (i.e. &lt;code&gt;lambda &amp;amp;my_proc&lt;/code&gt;
-returns &lt;code&gt;my_proc&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;It seems possible to convert between proc and lambda like this: &lt;code&gt;lambda
+&amp;amp;my_proc&lt;/code&gt; or &lt;code&gt;proc &amp;amp;my_lambda&lt;/code&gt;. However, these conversions don&amp;#39;t do anything:
+&lt;code&gt;lambda &amp;amp;my_proc&lt;/code&gt; returns &lt;code&gt;my_proc&lt;/code&gt;, and the regular proc behaviour is
+preserved. The converse is true for the reverse conversion.&lt;/p&gt;
 &lt;h3 id=&quot;curly-brackets-vs-do-end-&quot;&gt;Curly Brackets (&lt;code&gt;{}&lt;/code&gt;) vs &lt;code&gt;do .. end&lt;/code&gt;&lt;/h3&gt;
-&lt;p&gt;There is not semantic difference between both forms.&lt;/p&gt;
+&lt;p&gt;There is no semantic difference between both forms.&lt;/p&gt;
 &lt;p&gt;There is one syntactic difference because the two forms have different
 precedences:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;foo bar { ... }     # foo(bar { ... })
@@ -1403,21 +1399,25 @@ side-effects matter.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;edits&quot;&gt;Edits&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt; (2017/02/09)&lt;/p&gt;
 &lt;p&gt;Thanks to &lt;a href=&quot;https://twitter.com/eregontp&quot;&gt;Benoit Daloze&lt;/a&gt;, who pointed out many small mistakes in the article,
 as well as the fact that the proper names for what I called &lt;em&gt;regular&lt;/em&gt; and
 &lt;em&gt;default&lt;/em&gt; parameters were &lt;em&gt;required&lt;/em&gt; and &lt;em&gt;optional&lt;/em&gt; parameters. He also
 mentionned &lt;code&gt;Method#parameters&lt;/code&gt;, and inspired me to improve the section on blocks
 and procs.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt; (2017/02/11)&lt;/p&gt;
 &lt;p&gt;Following a conversation with &lt;a href=&quot;https://twitter.com/tom_enebo&quot;&gt;Tom Enebo&lt;/a&gt; on Twitter, I realized that I forgot
 to account for hash arguments with non-symbol keys! This lead to some more
 investigation and the uncovering of a few errors. The assignment procedure has
 been revised and is now much simpler.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3&lt;/strong&gt; (2017/03/27)&lt;/p&gt;
 &lt;p&gt;Reader &lt;em&gt;A Quiet Immanence&lt;/em&gt; pointed out in the comments that a conversion between
 regular proc and lambda doesn&amp;#39;t do anything, and that an array argument to a
 regular proc with multiple parameters is auto-splatted.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4&lt;/strong&gt; (2017/03/27)&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/wspurgin&quot;&gt;Will Spurgin&lt;/a&gt; pointed out in the comments that you
+can have array decomposition, splat and keyword parameters in the same method,
+as long as you respect the parameter ordering.&lt;/p&gt;
       </description>
       <pubDate>2017-02-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/ruby-methods</link>

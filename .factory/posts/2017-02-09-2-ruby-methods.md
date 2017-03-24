@@ -57,10 +57,6 @@ Here are quick explanations:
   ((a, *b), c)  a = 1,      b = [2], c = 3
   ```
   
-  For seemingly no good reason, you cannot have an array decomposition
-  parameter, a splat parameter and a keyword parameter in the same method. Go
-  figure.
-  
 - The splat parameter enables variable length argument lists and receives all
   extra arguments.
   
@@ -292,21 +288,20 @@ Lambdas are special, stricter kind of procs.
   for methods, as outlined above). Lambda behave like methods for parameter
   assignment.
   
-- Procs with multiple parameters can be passed a single array argument, which
-  will be automatically "splatted".
+- Regular prrocs with multiple parameters can be passed a single array argument,
+  which will be automatically "splatted".
   
 `proc` and `Proc.new` are used to create regular procs, while `lambda` and `->`
 create lambdas.
 
-At first, it seems possible to convert between regular procs and lambdas like
-this: `lambda &my_proc`. It turns out that the resulting lambda behaves like a
-proc regarding the aspects listed above! So put otherwise, this conversation is
-perfectly pointless, and in fact doesn't do anything (i.e. `lambda &my_proc`
-returns `my_proc`).
+It seems possible to convert between proc and lambda like this: `lambda
+&my_proc` or `proc &my_lambda`. However, these conversions don't do anything:
+`lambda &my_proc` returns `my_proc`, and the regular proc behaviour is
+preserved. The converse is true for the reverse conversion.
 
 ### Curly Brackets (`{}`) vs `do .. end`
 
-There is not semantic difference between both forms.
+There is no semantic difference between both forms.
 
 There is one syntactic difference because the two forms have different
 precedences:
@@ -326,7 +321,7 @@ choose on form over the other:
 
 ## Edits
 
-**1**
+**1** (2017/02/09)
 
 Thanks to [Benoit Daloze], who pointed out many small mistakes in the article,
 as well as the fact that the proper names for what I called *regular* and
@@ -336,7 +331,7 @@ and procs.
 
 [Benoit Daloze]: https://twitter.com/eregontp
 
-**2**
+**2** (2017/02/11)
 
 Following a conversation with [Tom Enebo] on Twitter, I realized that I forgot
 to account for hash arguments with non-symbol keys! This lead to some more
@@ -345,8 +340,14 @@ been revised and is now much simpler.
 
 [Tom Enebo]: https://twitter.com/tom_enebo
 
-**3**
+**3** (2017/03/27)
 
 Reader *A Quiet Immanence* pointed out in the comments that a conversion between
 regular proc and lambda doesn't do anything, and that an array argument to a
 regular proc with multiple parameters is auto-splatted.
+
+**4** (2017/03/27)
+
+[Will Spurgin](https://github.com/wspurgin) pointed out in the comments that you
+can have array decomposition, splat and keyword parameters in the same method,
+as long as you respect the parameter ordering.

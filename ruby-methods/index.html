@@ -344,9 +344,17 @@ ignored instead of causing an error (the behaviour is otherwise the same as
 for methods, as outlined above). Lambda behave like methods for parameter
 assignment.</p>
 </li>
+<li><p>Procs with multiple parameters can be passed a single array argument, which
+will be automatically &quot;splatted&quot;.</p>
+</li>
 </ul>
 <p><code>proc</code> and <code>Proc.new</code> are used to create regular procs, while <code>lambda</code> and <code>-&gt;</code>
 create lambdas.</p>
+<p>At first, it seems possible to convert between regular procs and lambdas like
+this: <code>lambda &amp;my_proc</code>. It turns out that the resulting lambda behaves like a
+proc regarding the aspects listed above! So put otherwise, this conversation is
+perfectly pointless, and in fact doesn&#39;t do anything (i.e. <code>lambda &amp;my_proc</code>
+returns <code>my_proc</code>).</p>
 <h3 id="curly-brackets-vs-do-end-">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
 <p>There is not semantic difference between both forms.</p>
 <p>There is one syntactic difference because the two forms have different
@@ -375,6 +383,10 @@ and procs.</p>
 to account for hash arguments with non-symbol keys! This lead to some more
 investigation and the uncovering of a few errors. The assignment procedure has
 been revised and is now much simpler.</p>
+<p><strong>3</strong></p>
+<p>Reader <em>A Quiet Immanence</em> pointed out in the comments that a conversion between
+regular proc and lambda doesn&#39;t do anything, and that an array argument to a
+regular proc with multiple parameters is auto-splatted.</p>
     </div>
 
     <hr>

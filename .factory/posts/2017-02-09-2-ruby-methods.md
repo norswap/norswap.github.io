@@ -292,8 +292,17 @@ Lambdas are special, stricter kind of procs.
   for methods, as outlined above). Lambda behave like methods for parameter
   assignment.
   
+- Procs with multiple parameters can be passed a single array argument, which
+  will be automatically "splatted".
+  
 `proc` and `Proc.new` are used to create regular procs, while `lambda` and `->`
 create lambdas.
+
+At first, it seems possible to convert between regular procs and lambdas like
+this: `lambda &my_proc`. It turns out that the resulting lambda behaves like a
+proc regarding the aspects listed above! So put otherwise, this conversation is
+perfectly pointless, and in fact doesn't do anything (i.e. `lambda &my_proc`
+returns `my_proc`).
 
 ### Curly Brackets (`{}`) vs `do .. end`
 
@@ -335,3 +344,9 @@ investigation and the uncovering of a few errors. The assignment procedure has
 been revised and is now much simpler.
 
 [Tom Enebo]: https://twitter.com/tom_enebo
+
+**3**
+
+Reader *A Quiet Immanence* pointed out in the comments that a conversion between
+regular proc and lambda doesn't do anything, and that an array argument to a
+regular proc with multiple parameters is auto-splatted.

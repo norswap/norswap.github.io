@@ -1375,9 +1375,17 @@ ignored instead of causing an error (the behaviour is otherwise the same as
 for methods, as outlined above). Lambda behave like methods for parameter
 assignment.&lt;/p&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Procs with multiple parameters can be passed a single array argument, which
+will be automatically &amp;quot;splatted&amp;quot;.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;code&gt;proc&lt;/code&gt; and &lt;code&gt;Proc.new&lt;/code&gt; are used to create regular procs, while &lt;code&gt;lambda&lt;/code&gt; and &lt;code&gt;-&amp;gt;&lt;/code&gt;
 create lambdas.&lt;/p&gt;
+&lt;p&gt;At first, it seems possible to convert between regular procs and lambdas like
+this: &lt;code&gt;lambda &amp;amp;my_proc&lt;/code&gt;. It turns out that the resulting lambda behaves like a
+proc regarding the aspects listed above! So put otherwise, this conversation is
+perfectly pointless, and in fact doesn&amp;#39;t do anything (i.e. &lt;code&gt;lambda &amp;amp;my_proc&lt;/code&gt;
+returns &lt;code&gt;my_proc&lt;/code&gt;).&lt;/p&gt;
 &lt;h3 id=&quot;curly-brackets-vs-do-end-&quot;&gt;Curly Brackets (&lt;code&gt;{}&lt;/code&gt;) vs &lt;code&gt;do .. end&lt;/code&gt;&lt;/h3&gt;
 &lt;p&gt;There is not semantic difference between both forms.&lt;/p&gt;
 &lt;p&gt;There is one syntactic difference because the two forms have different
@@ -1406,6 +1414,10 @@ and procs.&lt;/p&gt;
 to account for hash arguments with non-symbol keys! This lead to some more
 investigation and the uncovering of a few errors. The assignment procedure has
 been revised and is now much simpler.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Reader &lt;em&gt;A Quiet Immanence&lt;/em&gt; pointed out in the comments that a conversion between
+regular proc and lambda doesn&amp;#39;t do anything, and that an array argument to a
+regular proc with multiple parameters is auto-splatted.&lt;/p&gt;
       </description>
       <pubDate>2017-02-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/ruby-methods</link>

@@ -57,7 +57,7 @@ that could be done with it: create thread-local properties.&lt;/p&gt;
 
 class Test
 {
-    val _i = 0
+    val _i = ThreadLocal.withInitial { 0 }
     val i by _i
 
     val j by thread_local(0)
@@ -104,9 +104,9 @@ operator fun &amp;lt;T&amp;gt; ThreadLocal&amp;lt;T&amp;gt;.provideDelegate
 &lt;p&gt;Let&amp;#39;s do a quick rundown. The &lt;code&gt;ThreadLocalDelegate&lt;/code&gt; class does what it says on
 the tin: it delegates all attempts to read or write the property to the
 &lt;code&gt;ThreadLocal&lt;/code&gt; instance.&lt;/p&gt;
-&lt;p&gt;What is more interesting is the different way you can instantiate the delegate:
+&lt;p&gt;What is more interesting is the different ways you can instantiate the delegate:
 you can pass it a &lt;code&gt;ThreadLocal&lt;/code&gt; instance (primary constructor), an initial
-value, or a function that compute the initial value. The companion object also
+value, or a function that computes the initial value. The companion object also
 has a function &lt;code&gt;late_init()&lt;/code&gt; that lets you create a delegate with no initial
 value.&lt;/p&gt;
 &lt;p&gt;Now we could use &lt;code&gt;ThreadLocalDelegate&lt;/code&gt; like this:&lt;/p&gt;

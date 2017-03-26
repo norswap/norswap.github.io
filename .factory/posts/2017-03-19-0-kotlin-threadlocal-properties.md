@@ -20,7 +20,7 @@ import norswap.utils.thread_local.*
 
 class Test
 {
-    val _i = 0
+    val _i = ThreadLocal.withInitial { 0 }
     val i by _i
     
     val j by thread_local(0)
@@ -75,9 +75,9 @@ Let's do a quick rundown. The `ThreadLocalDelegate` class does what it says on
 the tin: it delegates all attempts to read or write the property to the
 `ThreadLocal` instance.
 
-What is more interesting is the different way you can instantiate the delegate:
+What is more interesting is the different ways you can instantiate the delegate:
 you can pass it a `ThreadLocal` instance (primary constructor), an initial
-value, or a function that compute the initial value. The companion object also
+value, or a function that computes the initial value. The companion object also
 has a function `late_init()` that lets you create a delegate with no initial
 value.
 

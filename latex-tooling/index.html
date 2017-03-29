@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; LaTeX Tooling Guide
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">LaTeX Tooling Guide</h1>
+      <span class="post-date">29 Mar 2017</span>
+<p>I&#39;ll let you in on a small secret: I hate LaTeX with a passion. It&#39;s a bloated
+mess with crazy syntax. It generates reams of warnings you can never totally get
+rid of, and some of the most confusing and/or unhelpeful errors I have ever
+seen. It needs to be run N times in a row. It even has a stupid name.</p>
+<p>Don Knuth wrote TeX, and it may have been art. But, to use a fashionable word,
+TeX was never meant to scale to LaTeX. Pervasive use of non-hygienic macros and
+constant manipulations of global values is a recipe for disaster.</p>
+<p>I wish I could avoid LaTeX completely, unfortuately conferences have templates
+and the only other format available is MS Word, which has its own flaws (as I
+recall, in how it handles numbering and floating figures).</p>
+<p>Anyhow, the current article is about how I setup my Latex to alleviate some of
+these pains. I&#39;ll start with a tour of what I use, then give you <a href="https://github.com/norswap/template-sigplan/blob/master/makefile">a makefile</a>
+and an <a href="https://github.com/norswap/template-sigplan">example git repository</a> to bring all these tools together.</p>
+<hr>
+<h2 id="installing-and-updating">Installing and Updating</h2>
+<p>See <a href="https://www.sharelatex.com/learn/Choosing_a_LaTeX_Compiler">this article</a> about available Latex distributions. I
+recommend sticking to the tried-and-true, so that would be MiKTeX for Windows,
+MacTeX for OSX and TeX Live for Linux.</p>
+<p>If you already have a Latex distribution installed, but it is not up to date,
+this fantastic <a href="https://tex.stackexchange.com/questions/55437/how-do-i-update-my-tex-distribution">TeX Stack Exchange answer</a> will tell you how to
+update it.</p>
+<h2 id="editors">Editors</h2>
+<p>Most people will use some kind of Latex-mode that comes with their editor of
+choice. I edit text in Emacs, and so I use <a href="https://www.gnu.org/software/auctex/">Auctex</a>.</p>
+<p>Nevertheless, it might be nicer to have something closer to an IDE for Latex. My
+option of choice here is <a href="http://www.texstudio.org/">TeXstudio</a>. Even though most of my Latex editing is in
+Auctex, I use it from time to time to typeset math or help with diagnostics.</p>
+<p>Finally, but perhaps most importantly, there are a few online Latex editors. The
+best of them is <a href="https://www.sharelatex.com/">ShareLaTeX</a>. Its great strength is that it saves you from doing
+any kind of setup, and in my own experience is super reliable.</p>
+<p>ShareLatex also filters out unhelpful warning and errors and does its best to
+correlated what is left with your source file. Later in this guide we will show
+command line tools that do the same thing.</p>
+<p>It&#39;s good enough as an editor, but also allows realtime collaboration on a
+document. Best of all, it now has the ability to sync with GitHub, meaning you
+can mix online and offline collaboration.</p>
+<h2 id="building">Building</h2>
+<p>One of the famous annoyances of Latex is that it needs to be run multiple times
+to get references right, interleaved with runs of your bibliography tool
+(usually BibTeX or Biber).</p>
+<p>Fortunately this whole process can be automated. Most Latex distribution come
+with a tool called <code>latexmk</code>, which does automates all these invocations for
+you.</p>
+<p>Beware that <code>latexmk</code> requires Perl to run, which is not bundled with Latex.
+This tends to be a caveat on Windows. If you are running Windows and want to use
+<code>latexmk</code>, install <a href="http://strawberryperl.com/">Strawberry Perl</a> to fix the problem.</p>
+<p>There is a better tool, though, which is called <a href="https://github.com/aclements/latexrun">latexrun</a>. <code>latexrun</code> does what
+<code>latexmk</code> does, but also sanitizes Latex&#39;s output to only show helpful errors,
+similar to what you would see on ShareLatex.</p>
+<p><code>latexrun</code> is a single Python3 script, which is great for portability. You can
+even drop it directly in your paper&#39;s git repository.</p>
+<h2 id="errors">Errors</h2>
+<p>If you&#39;re using ShareLatex or <code>latexrun</code>, you&#39;re already pretty well covered
+here.</p>
+<p>There is one more tool that bears mentioning: <a href="https://github.com/dmwit/pulp">pulp</a>. <code>pulp</code> lets you filter out
+unwanted warnings and errors, and tries to correlated errors with file
+positions.</p>
+<p><code>pulp</code>&#39;s output is less pretty than that of <code>latexrun</code>, but its great strength
+is that it lets define custom filtering rules, to remove those annoying warnings
+that you cannot get rid of, but break nothing. Or, more frequently, comes from
+the class file that you are forced to use to submit you paper (I&#39;m looking at
+you, ACM).</p>
+<p>Here&#39;s an exemple of filtering spec to get rid of all errors that pop up when
+compiling the <a href="http://www.sigplan.org/Resources/Author/">acmart</a> example file:</p>
+<pre><code>!(boring | info | message | under | over
+| p &quot;hyperref&quot; &amp; &quot;Token not allowed in a PDF string&quot;
+| &quot;Class acmart Info&quot;
+| &quot;file:line:error style messages enabled&quot;
+| &quot;Excluding.*comment&quot;
+| &quot;Processing.*comment&quot;
+| &quot;Include comment&quot;
+| &quot;comment.cut&quot;
+| &quot;(msharpe)&quot;
+| &quot;]&quot; &amp;&amp; !&quot;..&quot;
+)
+</code></pre><p>The first line matches <code>pulp</code>&#39;s default specification.</p>
+<p><code>pulp</code> can be integrated with <code>latexmk</code> fairly easily, by means of a
+configuration file.</p>
+<p><code>pulp</code> is not as friendly to install as the other tools. Here is how to install
+on OSX, assuming you already have <a href="https://brew.sh/">homebrew</a> (on other platforms, you just need
+to install the Haskell platform in some other way):</p>
+<pre><code>brew cask install haskell-platform
+git clone https://github.com/dmwit/pulp.git
+cabal update
+cabal install
+PATH=&quot;$HOME/Library/Haskell/bin:$PATH&quot;
+</code></pre><h2 id="preview">Preview</h2>
+<p>Unless you&#39;re working with TeXstudio or ShareLatex, you&#39;ll need to preview the
+generated PDF files using a PDF viewer. You want to use one that picks up
+changes to the PDF on the disk, and reloads it on the fly, while keeping your
+position in the PDF. On OSX, the built-in viewer (confusingly named <em>Preview</em>)
+does this adequately. On Windows, I&#39;m partial to <a href="https://www.sumatrapdfreader.org/free-pdf-reader.html">Sumatra PDF</a>.</p>
+<p><code>latexmk</code> and <code>latexrun</code> will automatically open a generated PDF file (using the
+OS-determined associated tool).</p>
+<h2 id="all-together">All Together</h2>
+<p>I&#39;ve put together <a href="https://github.com/norswap/template-sigplan">a repository</a> that serves as template for papers using
+the <a href="http://www.sigplan.org/Resources/Author/">ascmart sigplan</a> style.</p>
+<p>The tooling centers around <a href="https://github.com/norswap/template-sigplan/blob/master/makefile">a makefile</a>. The default configuration is to use
+<code>latexmk</code> with pulp integration. The following commands are available:</p>
+<ul>
+<li><code>make</code> / <code>make view</code>: generates the PDF file and displays it</li>
+<li><code>make pdf</code>: generates the PDF file but does not display it; latex is run silently</li>
+<li><code>make verbose</code>: like <code>make pdf</code>, but shows error details</li>
+<li><code>make rebuild</code>: forces a rebuild of the pdf, even if no changes are picked up</li>
+<li><code>make clean</code>: removes all temporary files (for all tools!)</li>
+<li><code>make mrproper</code>: like <code>make clean</code>, but also removes the generated PDF</li>
+</ul>
+<p>If you don&#39;t have <code>pulp</code>, just delete or rename the <code>.latexmkrc</code> file from the
+repo.</p>
+<p>If <code>latexmk</code> is not found or doesn&#39;t work (for instance if Perl is not
+installed), the makefile will fall back to using plain make rules, and <code>make
+pdf</code> will be verbose by default.</p>
+<p>It is also possible to use <code>latexrun</code>, which is bundled in the repository, by
+running <code>make run</code> (Python3 required).</p>
+<p><code>pulp</code> can be run standalone with <code>make pulp</code> (pulp is not bundled in the
+repository), assuming a compilation was attempted earlier and the <code>.log</code> file is
+left uncleaned.</p>
+<p><strong>DISCLAIMER</strong>: I won&#39;t be too assiduous in maintaining this makefile, and it
+may even contain a few bugs. It should be taken as an example of how to do
+things, rather than as a toolchain to be relied on.</p>
+<p>With all this, you&#39;ll have no Latex excuses for turning your next paper late :)</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/latex-tooling";
+        this.page.identifier = "latex-tooling";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

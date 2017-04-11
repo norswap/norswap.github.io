@@ -1,7 +1,7 @@
 make:
 	rm -rf ../../web/*
-	cp -r top/* ../../web/
 	node ribosome.js generate.js
+	cp -r top/* ../../web/
 
 preview:
 	cd .. && .factory/node_modules/http-server/bin/http-server

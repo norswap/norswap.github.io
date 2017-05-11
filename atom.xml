@@ -6,6 +6,37 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Programming Sucks</title>
+      <description>
+&lt;p&gt;Source: &lt;a href=&quot;http://www.stilldrinking.org/programming-sucks&quot;&gt;http://www.stilldrinking.org/programming-sucks&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Every programmer occasionally, when nobody’s home, turns off the lights, pours a
+glass of scotch, puts on some light German electronica, and opens up a file on
+their computer. It’s a different file for every programmer. Sometimes they wrote
+it, sometimes they found it and knew they had to save it. They read over the
+lines, and weep at their beauty, then the tears turn bitter as they remember the
+rest of the files and the inevitable collapse of all that is good and true in
+the world.&lt;/p&gt;
+&lt;p&gt;This file is Good Code. It has sensible and consistent names for functions and
+variables. It’s concise. It doesn’t do anything obviously stupid. It has never
+had to live in the wild, or answer to a sales team. It does exactly one,
+mundane, specific thing, and it does it well. It was written by a single person,
+and never touched by another. It reads like poetry written by someone over
+thirty.&lt;/p&gt;
+&lt;p&gt;Every programmer starts out writing some perfect little snowflake like this.
+Then they’re told on Friday they need to have six hundred snowflakes written by
+Tuesday, so they cheat a bit here and there and maybe copy a few snowflakes and
+try to stick them together or they have to ask a coworker to work on one who
+melts it and then all the programmers’ snowflakes get dumped together in some
+inscrutable shape and somebody leans a Picasso on it because nobody wants to see
+the cat urine soaking into all your broken snowflakes melting in the light of
+day. Next week, everybody shovels more snow on it to keep the Picasso from
+falling over.&lt;/p&gt;
+      </description>
+      <pubDate>2017-05-09T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/programming-sucks</link>
+      <guid isPermaLink="true">http://norswap.com/programming-sucks</guid>
+    </item>
+    <item>
       <title>briefly</title>
       <description>
 &lt;p&gt;&lt;img src=&quot;/gurren-lagann-reaction/team-gurren.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
@@ -941,96 +972,6 @@ it. He was not about to let his hard work undone by some fools.&lt;/p&gt;
       <pubDate>2017-02-27T23:00:00.000Z</pubDate>
       <link>http://norswap.com/morning-winds</link>
       <guid isPermaLink="true">http://norswap.com/morning-winds</guid>
-    </item>
-    <item>
-      <title>Unconstraining</title>
-      <description>
-&lt;blockquote&gt;
-&lt;p&gt;You believe that you are your mind. This is the delusion. The instrument has taken you over.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The more you are identified with your mind, the more you suffer.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;There is one thing we can actually control—the mind-set with which we respond
-to the events around us.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It is the purpose of the training to allow people to see that the
-circumstances of their lives and that their attitudes about the circumstances
-of their lives exist in a context or a system of knowing, and that it is
-possible to have exactly the same circumstances and attitudes about these
-circumstances held in a different context, and that, as a matter of fact, it
-is possible for people to choose their own context for the contents of their
-lives.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;They no longer are their point of view. They have one, and know that the one
-they have is the one they chose, until now, and that they can, and probably
-will, choose to create other points of view. They experience, that is, that
-they are the one who defines the point of view, and not the reverse. They
-experience the intended result of the training, which is a shift in what
-orients people&amp;#39;s being from the attempt to gain satisfaction - a deficiency
-orientation - to the expression of satisfaction already being experienced - a
-sufficiency orientation.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Each time we try to prove we are not fools we reinforce the belief that we must
-prove that we are not.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;And yet, the experience of responsibility for one&amp;#39;s own experience is the
-awareness that I am the source of my experience. It is absolutely inseparable
-from the experience of satisfaction.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When you first start learning, early in life, there is a bottleneck in the
-amount of information you have access to. You soak up everything like a sponge,
-because you are open and there is relatively little to absorb.&lt;/p&gt;
-&lt;p&gt;But very quickly, in elementary school, your access to information stops being
-the limiting factor. You take home a few giant textbooks, and suddenly the
-bottleneck moves to ways of structuring and contextualizing the information.&lt;/p&gt;
-&lt;p&gt;In high school, you learn a variety of methods to structure
-information — outlines, diagrams, underlining and highlighting, reports, essays,
-notebooks and binders. The bottleneck moves to your ability to synthesize this
-information, to turn it into new ideas.&lt;/p&gt;
-&lt;p&gt;In college, if you make it that far, the bottleneck moves to insight generation.
-You start questioning the world as given, and find that the juiciest
-intellectual rewards are ideas that shift how you view it. You start hunting for
-the revolutionary, the controversial, steering your learning toward the red
-pills of paradoxes and contradictions.&lt;/p&gt;
-&lt;p&gt;If you are lucky enough to go beyond this, the bottleneck moves once again: to
-your assumptions. They constrain your view, what you are allowed to see, and
-thereby the thoughts and actions available to you. You start getting a kick out
-of unearthing new assumptions, shining a light on blindspots that, by
-definition, you didn’t know you didn’t know about. This process is unbounded,
-because with enough examination, all your beliefs are revealed to be
-assumptions.&lt;/p&gt;
-&lt;p&gt;There are many ways to reveal assumptions. Interesting experiences, traveling,
-genuine conversation, and reading fiction all help you question your own point
-of view.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The interesting thing about constraints is that they are never on you. They
-are constraints on your context, shaping the space of possibilities you allow
-yourself to consider.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Sources: Eckhart Tolle, Robert Greene, Werner Erhard, Tiago Forte&lt;/p&gt;
-&lt;p&gt;Warning: Greene and Erhard require a hefty pinch of salt.&lt;/p&gt;
-&lt;p&gt;For a practical roadmap to unconstraining,
-read &lt;a href=&quot;https://medium.com/praxis-blog/&quot;&gt;Tiago Forte&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2017-02-27T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/unconstraining</link>
-      <guid isPermaLink="true">http://norswap.com/unconstraining</guid>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,6 @@
 ---
-layout: brief
-title: ""
+layout: post
+title: "Hot Take: Gurren Lagann"
 ---
 
 ![](/gurren-lagann-reaction/team-gurren.jpg)

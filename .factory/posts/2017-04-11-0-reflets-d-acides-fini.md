@@ -1,6 +1,6 @@
 ---
-layout: brief
-title: ""
+layout: post
+title: "Reflets d'Acide: It's (Finally) Over"
 ---
 
 ![](/reflets-d-acides-fini/rda.jpg)

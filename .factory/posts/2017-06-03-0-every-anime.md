@@ -85,6 +85,13 @@ definitely don't regret watching it.
 [Shinji get in the robot]: https://soundcloud.com/ferrousfellow/shinji-get-in-the-robot
 [Yo! version]: https://www.youtube.com/watch?v=ygWPB_FevFU
 
+**Edit 10 June**: Youtuber Aleczandxr has put a video that, while
+called [Why I Don't Like Neon Genesis Evangelion][alex-eva], actually does a
+very good job at explaining how alienation is treated very stongly in
+Evangelion.
+
+[alex-eva]: https://www.youtube.com/watch?v=ocmBWomlwsY
+
 Second sidebar: for some reason, anime showmaker seem to have a fascination with
 mystical, and often cabbalistic motifs. Considering only this list, these motifs
 can be found in Eva, Attack on Titan, Fullmetal Alchemist and Code Geass.

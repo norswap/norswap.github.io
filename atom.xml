@@ -6,6 +6,97 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Random Generation Testing</title>
+      <description>
+&lt;p&gt;At its core, testing is the process of building redundancy in order to ward off
+errors. When you write usual unit tests, you&amp;#39;re comparing the output of your
+code with the output of your brain, given the same inputs.&lt;/p&gt;
+&lt;p&gt;I always found testing profoundly unpleasant. It&amp;#39;s hard to select the proper
+inputs to root out all possible issues. One way to look at it is that good
+testing should exercise all possible paths through the program. That is of
+course impossible — but we could narrow it down to a representative sample,
+e.g. where loop repetitions of n &amp;gt; 2 are considered identical. You still get
+combinatorial explosion. This is in fact the major limitation in &lt;a href=&quot;https://en.wikipedia.org/wiki/Symbolic_execution&quot;&gt;symbolic
+execution&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Test coverage is an even further approximation. Instead of considering paths
+through the program, we &lt;em&gt;just&lt;/em&gt; want to ensure that tests run every piece of code
+at least once. That doesn&amp;#39;t give you a whole lot of guarantees. And yet,
+reaching a high percentage of test coverage in tests already seems like a really
+hard challenge for most software teams.&lt;/p&gt;
+&lt;p&gt;Besides a few obvious edge cases, selecting inputs is hard, because the most
+interesting inputs are those we probably wouldn&amp;#39;t pick, reflecting blind spots
+in our implementation. I&amp;#39;m a perfectionnist, and just good enough at programming
+to realize how bad I really am. The realization that I&amp;#39;m leaving a whole lot
+untested always eats at me when I write traditional unit tests.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;But fear not, for I have the cure.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The fundamental weakness of testing is that we even have to select the inputs.
+We have to select inputs because we&amp;#39;re comparing the program against our brains,
+which we of course cannot &amp;quot;run&amp;quot; during a test suite. Instead, results for
+pre-selected inputs have to be hardcoded in the test suite. What if we compared
+our program to another program instead? If you are re-implementing an existing
+system or protocol, then you&amp;#39;re all set! Otherwise, you need to write the second
+implementation yourself.&lt;/p&gt;
+&lt;p&gt;Multiple objections could be raised. The first one: if your test fails, how do
+you know which program is at fault? Good one: you don&amp;#39;t. You have the same
+problem with brain-computed results though. When you run your test for the first
+time, how do you know whether the program or the expected results are wrong?
+Usualy, you double check. But it is true this is more of a problem when
+comparing two program, because these kinds of test tend to go much much further.&lt;/p&gt;
+&lt;p&gt;Another objection: you&amp;#39;re doing the work twice! In theory, yes. In practice, you
+can cast by the wayside a whole lot of non-essential requirements in the second
+implementation: performance, deployment, durability (writing to a DB),
+resiliency (logging, transactions) and probably more, in order to focus on
+&amp;quot;business logic&amp;quot;. In fact the second implementation should be as naive and
+simple as possible, to minimize the chance you made a mistake there (but do see
+the caveat in the next objection). As a side benefit, you might gain some
+understanding by writing the second implementation. Finally, consider the time
+it would take to write regular tests. For some teams, it&amp;#39;s not rare that it
+approaches or exceeds 50% of the total development time.&lt;/p&gt;
+&lt;p&gt;Third objection: aren&amp;#39;t you likely to reproduce the same mistakes in both
+implementations. That is a danger, yes. Multiple steps can be taken to avoid
+this. One is to make the second implementation as simple as possible. Another is
+to have two separate people write both implementations (also great to make
+hidden assumptions come to light). Yet another is to write the two
+implementations in radically different styles: purely functional, logical, using
+another architecture (but while keeping it as simple as possible within that
+style).&lt;/p&gt;
+&lt;p&gt;Once you have logic redundancy, you are free from the tyranny of input
+selection. You can input anything, the the same result should come out of the
+end of both programs. Hence, the next logical step is to randomly generate
+this input.&lt;/p&gt;
+&lt;p&gt;This is perhaps the trickiest part of the process: you have to ensure that the
+random generation process is able to generate most interesting inputs (our
+&lt;em&gt;representative sample&lt;/em&gt; from earlier), and that the combination of probabilities
+does not make some of these inputs as likely as the second coming of the
+dinosaurs. Of course, the more complex your input, the harder this is. However,
+I&amp;#39;m currently applying this method to genreate whole &lt;acronym title=&quot;Abstract
+Syntax Trees&quot;&gt;ASTs&lt;/acronym&gt;, so it&amp;#39;s unlikely to ever be &lt;em&gt;too&lt;/em&gt; hard.&lt;/p&gt;
+&lt;p&gt;If you get this right, you can run the tests — which generates inputs forever,
+runs both programs and compares their outputs — and get confidence in your
+implementation(s) proportional to the running time. Even if you don&amp;#39;t get it
+entirely right, you&amp;#39;re unlikely to do worse than hand-selected scenarios, you&amp;#39;ll
+just eschew some interesting types of inputs.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Invert, always invert.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;#39;s now look at an interesting variation on that theme. This applies when
+there is a one-to-one (or almost one-to-one) mapping between your input and your
+output. So you can go from input to output, and then back from output to input.&lt;/p&gt;
+&lt;p&gt;The idea is that instead of building a second implementation, you build the
+inverse of the implementation (taking outputs to inputs). Then, instead of
+generating inputs, you generate outputs, take them back to inputs with the
+inverse program, and back again with the actual program, and check that the
+final outputs match the generated outputs. It&amp;#39;s also possible to go inputs →
+outputs → inputs instead, depending on what makes the most sense. As an added
+benefit, the inverse is often useful in its own right, or downright necessary.&lt;/p&gt;
+&lt;p&gt;I applied this approach to test &lt;a href=&quot;/reusable-lexer&quot;&gt;the lexer I wrote about recently&lt;/a&gt;, here are
+&lt;a href=&quot;https://github.com/norswap/core0/tree/cea49b103f86b260df46fee67e01940d1b2a1634/test/core/lexer&quot;&gt;the tests&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2017-07-03T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/gen-testing</link>
+      <guid isPermaLink="true">http://norswap.com/gen-testing</guid>
+    </item>
+    <item>
       <title>A Reusable Lexer</title>
       <description>
 &lt;p&gt;I&amp;#39;m writing a small programming language — codename &lt;a href=&quot;https://github.com/norswap/core0&quot;&gt;Core 0&lt;/a&gt; — in order to try
@@ -983,45 +1074,6 @@ things, rather than as a toolchain to be relied on.&lt;/p&gt;
       <pubDate>2017-03-28T22:00:00.000Z</pubDate>
       <link>http://norswap.com/latex-tooling</link>
       <guid isPermaLink="true">http://norswap.com/latex-tooling</guid>
-    </item>
-    <item>
-      <title>The Most Useful Kotlin Function</title>
-      <description>
-&lt;p&gt;Two years ago, I wrote a posted called &lt;a href=&quot;/java_caster&quot;&gt;The Most Useful Java Function&lt;/a&gt;.
-This was rather tongue-in-cheek, as the function in question lets you cast from
-a type to another, inferring the target type and suppressing unchecked cast
-exceptions.&lt;/p&gt;
-&lt;p&gt;Nevertheless, it is useful remarkably often.&lt;/p&gt;
-&lt;p&gt;With Kotlin however, you can step up your game to a whole new level.
-Introducing &lt;code&gt;proclaim&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;val list: Collection&amp;lt;Int&amp;gt; = ArrayList(list(1, 2, 3))
-proclaim(list as ArrayList&amp;lt;Int&amp;gt;)
-val x = list[0] // works
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The trick here is actually not &lt;code&gt;proclaim&lt;/code&gt;. It&amp;#39;s the fact that Kotlin has &amp;quot;smart
-casts&amp;quot; which are essentially a form of flow typing.&lt;/p&gt;
-&lt;p&gt;The type inferencer reasons out that if the cast &lt;code&gt;list as ArrayList&amp;lt;Int&amp;gt;&lt;/code&gt;
-succeeds, then it means that &lt;code&gt;list&lt;/code&gt; is indeed an &lt;code&gt;ArrayList&amp;lt;Int&amp;gt;&lt;/code&gt;. And since
-&lt;code&gt;list&lt;/code&gt; is a &lt;code&gt;val&lt;/code&gt;, its value can&amp;#39;t change. So in the rest of the body where the
-cast appears, list is &amp;quot;smart-casted&amp;quot; to &lt;code&gt;ArrayList&amp;lt;Int&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Here is a possible definition for &lt;code&gt;proclaim&lt;/code&gt; (0 run-time overhead besides the
-cast):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;@Suppress(&amp;quot;UNUSED_PARAMETER&amp;quot;, &amp;quot;NOTHING_TO_INLINE&amp;quot;)
-inline fun proclaim (cast: Any)
-    = Unit
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Let&amp;#39;s get the obvious out of the way: of course this can be misused.&lt;/p&gt;
-&lt;p&gt;On the other hand, just like the casting function, it is handy surprisingly
-often. Type systems just aren&amp;#39;t powerful enough to be able to figure some things
-we know to be true in our code. Especially that of Java and Kotlin.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m not giving any examples: by their nature they would be short and easily
-rewritten to accomodate the type system. But if you genuinely want to know, you
-can search the net for &amp;quot;(path-)dependent types&amp;quot; use case or examples. Keep in
-mind that&amp;#39;s just a subset of what we can&amp;#39;t express in Java/Kotlin though.&lt;/p&gt;
-      </description>
-      <pubDate>2017-03-19T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/kotlin-proclaim</link>
-      <guid isPermaLink="true">http://norswap.com/kotlin-proclaim</guid>
     </item>
   </channel>
 </rss>

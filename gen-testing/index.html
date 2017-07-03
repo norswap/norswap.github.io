@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Random Generation Testing
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Random Generation Testing</h1>
+      <span class="post-date">04 Jul 2017</span>
+<p>At its core, testing is the process of building redundancy in order to ward off
+errors. When you write usual unit tests, you&#39;re comparing the output of your
+code with the output of your brain, given the same inputs.</p>
+<p>I always found testing profoundly unpleasant. It&#39;s hard to select the proper
+inputs to root out all possible issues. One way to look at it is that good
+testing should exercise all possible paths through the program. That is of
+course impossible — but we could narrow it down to a representative sample,
+e.g. where loop repetitions of n &gt; 2 are considered identical. You still get
+combinatorial explosion. This is in fact the major limitation in <a href="https://en.wikipedia.org/wiki/Symbolic_execution">symbolic
+execution</a>.</p>
+<p>Test coverage is an even further approximation. Instead of considering paths
+through the program, we <em>just</em> want to ensure that tests run every piece of code
+at least once. That doesn&#39;t give you a whole lot of guarantees. And yet,
+reaching a high percentage of test coverage in tests already seems like a really
+hard challenge for most software teams.</p>
+<p>Besides a few obvious edge cases, selecting inputs is hard, because the most
+interesting inputs are those we probably wouldn&#39;t pick, reflecting blind spots
+in our implementation. I&#39;m a perfectionnist, and just good enough at programming
+to realize how bad I really am. The realization that I&#39;m leaving a whole lot
+untested always eats at me when I write traditional unit tests.</p>
+<p><strong>But fear not, for I have the cure.</strong></p>
+<p>The fundamental weakness of testing is that we even have to select the inputs.
+We have to select inputs because we&#39;re comparing the program against our brains,
+which we of course cannot &quot;run&quot; during a test suite. Instead, results for
+pre-selected inputs have to be hardcoded in the test suite. What if we compared
+our program to another program instead? If you are re-implementing an existing
+system or protocol, then you&#39;re all set! Otherwise, you need to write the second
+implementation yourself.</p>
+<p>Multiple objections could be raised. The first one: if your test fails, how do
+you know which program is at fault? Good one: you don&#39;t. You have the same
+problem with brain-computed results though. When you run your test for the first
+time, how do you know whether the program or the expected results are wrong?
+Usualy, you double check. But it is true this is more of a problem when
+comparing two program, because these kinds of test tend to go much much further.</p>
+<p>Another objection: you&#39;re doing the work twice! In theory, yes. In practice, you
+can cast by the wayside a whole lot of non-essential requirements in the second
+implementation: performance, deployment, durability (writing to a DB),
+resiliency (logging, transactions) and probably more, in order to focus on
+&quot;business logic&quot;. In fact the second implementation should be as naive and
+simple as possible, to minimize the chance you made a mistake there (but do see
+the caveat in the next objection). As a side benefit, you might gain some
+understanding by writing the second implementation. Finally, consider the time
+it would take to write regular tests. For some teams, it&#39;s not rare that it
+approaches or exceeds 50% of the total development time.</p>
+<p>Third objection: aren&#39;t you likely to reproduce the same mistakes in both
+implementations. That is a danger, yes. Multiple steps can be taken to avoid
+this. One is to make the second implementation as simple as possible. Another is
+to have two separate people write both implementations (also great to make
+hidden assumptions come to light). Yet another is to write the two
+implementations in radically different styles: purely functional, logical, using
+another architecture (but while keeping it as simple as possible within that
+style).</p>
+<p>Once you have logic redundancy, you are free from the tyranny of input
+selection. You can input anything, the the same result should come out of the
+end of both programs. Hence, the next logical step is to randomly generate
+this input.</p>
+<p>This is perhaps the trickiest part of the process: you have to ensure that the
+random generation process is able to generate most interesting inputs (our
+<em>representative sample</em> from earlier), and that the combination of probabilities
+does not make some of these inputs as likely as the second coming of the
+dinosaurs. Of course, the more complex your input, the harder this is. However,
+I&#39;m currently applying this method to genreate whole <acronym title="Abstract
+Syntax Trees">ASTs</acronym>, so it&#39;s unlikely to ever be <em>too</em> hard.</p>
+<p>If you get this right, you can run the tests — which generates inputs forever,
+runs both programs and compares their outputs — and get confidence in your
+implementation(s) proportional to the running time. Even if you don&#39;t get it
+entirely right, you&#39;re unlikely to do worse than hand-selected scenarios, you&#39;ll
+just eschew some interesting types of inputs.</p>
+<blockquote>
+<p>Invert, always invert.</p>
+</blockquote>
+<p>Let&#39;s now look at an interesting variation on that theme. This applies when
+there is a one-to-one (or almost one-to-one) mapping between your input and your
+output. So you can go from input to output, and then back from output to input.</p>
+<p>The idea is that instead of building a second implementation, you build the
+inverse of the implementation (taking outputs to inputs). Then, instead of
+generating inputs, you generate outputs, take them back to inputs with the
+inverse program, and back again with the actual program, and check that the
+final outputs match the generated outputs. It&#39;s also possible to go inputs →
+outputs → inputs instead, depending on what makes the most sense. As an added
+benefit, the inverse is often useful in its own right, or downright necessary.</p>
+<p>I applied this approach to test <a href="/reusable-lexer">the lexer I wrote about recently</a>, here are
+<a href="https://github.com/norswap/core0/tree/cea49b103f86b260df46fee67e01940d1b2a1634/test/core/lexer">the tests</a>.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/gen-testing";
+        this.page.identifier = "gen-testing";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

@@ -6,6 +6,56 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>A Reusable Lexer</title>
+      <description>
+&lt;p&gt;I&amp;#39;m writing a small programming language — codename &lt;a href=&quot;https://github.com/norswap/core0&quot;&gt;Core 0&lt;/a&gt; — in order to try
+out multiple ideas I have in language design and compiler implementation (which
+is fortunate, as that happens to be my research topic).&lt;/p&gt;
+&lt;p&gt;The first step in that journey was to write a lexer. A lexer (aka tokenizer) is
+a system that turns a textual input into a stream of tokens. Typical tokens:
+numbers, identifiers, keywords, operators, ...&lt;/p&gt;
+&lt;p&gt;While parsing can handle characters directly, going through a lexer has multiple
+advantages (which, it should be said, I failed to appreciate in the past).
+First, it helps performance by avoiding to match the same token again and again.
+Second, it helps error reporting, but supplying a less granular unit of content.&lt;/p&gt;
+&lt;p&gt;I wanted to design the lexer to be reusable, by which I mean that it shouldn&amp;#39;t
+be tied to any specific language. In particular, I wanted to avoid hardwiring a
+particular choice of keywords and operators in the lexer. This is not to say the
+lexer can handle all languages, far from it. Reuse by copy and modification is
+fine for me. In fact, I think much harm has been done by insisting on components
+that can be reused in any situation without modifications.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s frequent for lexers to be specified as a set of regular expressions (one
+regex per token type) and to assume that the lexer always takes the longest
+match at the current position. The implementation is typically not done like
+that for performance reasons, but rather it&amp;#39;s structured as a big ole
+character-level switch loop.&lt;/p&gt;
+&lt;p&gt;I could have followed the regex approach but I didn&amp;#39;t really see the point, so I
+wrote an English &lt;a href=&quot;https://github.com/norswap/core0/blob/master/src/core/lexer/_README.md&quot;&gt;specification&lt;/a&gt; for the lexer, making each token type mutually
+exclusive (so that there is never an ambiguity). That was a useful exercise to
+crystallize my thoughts. I also included a series of restrictions on valid token
+streams that follow naturally from the tokens definitions. For instance, an
+identifer cannot directly follow another identifier, otherwise the lexer would
+have generated a single, longer identifier instead.&lt;/p&gt;
+&lt;p&gt;An interesting decision I made is that the lexer always generates a stream of
+tokens, for every input. To do so, there is a &lt;em&gt;garbage&lt;/em&gt; token type that
+encapsulates spans of characters that cannot be attached to a token. Typically,
+these are non-ascii characters that are not part of a comment or litteral.&lt;/p&gt;
+&lt;p&gt;The implementation is in Java but it follows a rather weird — almost C-like —
+style. The reason is that eventually I want to bootstrap the Core 0 compiler
+(write it in itself). Because of that, I want to keep the implementation as
+simple and decoupled from Java&amp;#39;s idiosyncracies as possible. I also don&amp;#39;t expect
+that Core 0 will be object-oriented. For the same reason, I also didn&amp;#39;t use any
+libraries, including the standard libraries. There are a few exceptions, but I
+encapsulated them neatly in their own functions.&lt;/p&gt;
+&lt;p&gt;You can check out &lt;a href=&quot;https://github.com/norswap/core0/commit/cea49b103f86b260df46fee67e01940d1b2a1634&quot;&gt;the code here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Stay tuned for a description of the testing methodology I use to test the lexer,
+and further infos on Core 0&amp;#39;s implementation.&lt;/p&gt;
+      </description>
+      <pubDate>2017-07-02T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/reusable-lexer</link>
+      <guid isPermaLink="true">http://norswap.com/reusable-lexer</guid>
+    </item>
+    <item>
       <title>The Bed of Procrustes: Chosen Tidbits</title>
       <description>
 &lt;p&gt;&amp;quot;The Bed of Procrustes&amp;quot; is a book of &lt;a href=&quot;https://en.wikipedia.org/wiki/Aphorism&quot;&gt;aphorisms&lt;/a&gt; by Nassim Taleb, who
@@ -972,86 +1022,6 @@ mind that&amp;#39;s just a subset of what we can&amp;#39;t express in Java/Kotli
       <pubDate>2017-03-19T23:00:00.000Z</pubDate>
       <link>http://norswap.com/kotlin-proclaim</link>
       <guid isPermaLink="true">http://norswap.com/kotlin-proclaim</guid>
-    </item>
-    <item>
-      <title>Thread-Local Properties in Kotlin</title>
-      <description>
-&lt;p&gt;The &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; language has a feature called &lt;a href=&quot;https://kotlinlang.org/docs/reference/delegated-properties.html&quot;&gt;Delegated Properties&lt;/a&gt;. It basically
-lets you delegate a getter (and optionally a setter) to an object that
-implements the &lt;code&gt;getValue&lt;/code&gt; (and optionally the &lt;code&gt;setValue&lt;/code&gt;) method.&lt;/p&gt;
-&lt;p&gt;I haven&amp;#39;t had much use of the feature, but I just found something very nifty
-that could be done with it: create thread-local properties.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s an example of what you can do:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;import norswap.utils.thread_local.*
-
-class Test
-{
-    val _i = ThreadLocal.withInitial { 0 }
-    val i by _i
-
-    val j by thread_local(0)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This creates two counters, &lt;code&gt;i&lt;/code&gt; and &lt;code&gt;j&lt;/code&gt; that are backed by instances of
-&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html&quot;&gt;&lt;code&gt;ThreadLocal&amp;lt;Int&amp;gt;&lt;/code&gt;&lt;/a&gt;. In the first case we specify the instance explicitly,
-while in the second case the &lt;code&gt;ThreadLocal&lt;/code&gt; instance is created implicitly, given
-a default value (0 here).&lt;/p&gt;
-&lt;p&gt;And now for the implementation:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;package norswap.utils.thread_local
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
-
-class ThreadLocalDelegate&amp;lt;T&amp;gt; (val local: ThreadLocal&amp;lt;T&amp;gt;)
-: ReadWriteProperty&amp;lt;Any, T&amp;gt;
-{
-    companion object {
-        fun &amp;lt;T&amp;gt; late_init ()
-            = ThreadLocalDelegate&amp;lt;T&amp;gt;(ThreadLocal())
-    }
-
-    constructor (initial: T):
-        this(ThreadLocal.withInitial { initial })
-
-    constructor (initial: () -&amp;gt; T):
-        this(ThreadLocal.withInitial(initial))
-
-    override fun getValue
-            (thisRef: Any, property: KProperty&amp;lt;*&amp;gt;): T
-        = local.get()
-
-    override fun setValue
-            (thisRef: Any, property: KProperty&amp;lt;*&amp;gt;, value: T)
-        = local.set(value)
-}
-
-typealias thread_local&amp;lt;T&amp;gt; = ThreadLocalDelegate&amp;lt;T&amp;gt;
-
-operator fun &amp;lt;T&amp;gt; ThreadLocal&amp;lt;T&amp;gt;.provideDelegate
-        (self: Any, prop: KProperty&amp;lt;*&amp;gt;)
-    = ThreadLocalDelegate(this)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Let&amp;#39;s do a quick rundown. The &lt;code&gt;ThreadLocalDelegate&lt;/code&gt; class does what it says on
-the tin: it delegates all attempts to read or write the property to the
-&lt;code&gt;ThreadLocal&lt;/code&gt; instance.&lt;/p&gt;
-&lt;p&gt;What is more interesting is the different ways you can instantiate the delegate:
-you can pass it a &lt;code&gt;ThreadLocal&lt;/code&gt; instance (primary constructor), an initial
-value, or a function that computes the initial value. The companion object also
-has a function &lt;code&gt;late_init()&lt;/code&gt; that lets you create a delegate with no initial
-value.&lt;/p&gt;
-&lt;p&gt;Now we could use &lt;code&gt;ThreadLocalDelegate&lt;/code&gt; like this:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-kotlin&quot;&gt;val num by ThreadLocalDelegate(0)
-val str by ThreadLocalDelegate&amp;lt;String&amp;gt;.late_init()
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;But that&amp;#39;s quite a mouthful, so there is a typealias &lt;code&gt;thread_local&lt;/code&gt; to make
-things look nicer.&lt;/p&gt;
-&lt;p&gt;Finally, the &lt;code&gt;provideDelegate&lt;/code&gt; operator function tells Kotlin how to create a
-delegate from a &lt;code&gt;ThreadLocal&lt;/code&gt; instance. That&amp;#39;s how we could do &lt;code&gt;val i by _i&lt;/code&gt; at
-the top of the post.&lt;/p&gt;
-&lt;p&gt;Aaand that&amp;#39;s pretty much it for today :)&lt;/p&gt;
-      </description>
-      <pubDate>2017-03-18T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/kotlin-threadlocal-properties</link>
-      <guid isPermaLink="true">http://norswap.com/kotlin-threadlocal-properties</guid>
     </item>
   </channel>
 </rss>

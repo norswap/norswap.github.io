@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; A Reusable Lexer
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">A Reusable Lexer</h1>
+      <span class="post-date">03 Jul 2017</span>
+<p>I&#39;m writing a small programming language — codename <a href="https://github.com/norswap/core0">Core 0</a> — in order to try
+out multiple ideas I have in language design and compiler implementation (which
+is fortunate, as that happens to be my research topic).</p>
+<p>The first step in that journey was to write a lexer. A lexer (aka tokenizer) is
+a system that turns a textual input into a stream of tokens. Typical tokens:
+numbers, identifiers, keywords, operators, ...</p>
+<p>While parsing can handle characters directly, going through a lexer has multiple
+advantages (which, it should be said, I failed to appreciate in the past).
+First, it helps performance by avoiding to match the same token again and again.
+Second, it helps error reporting, but supplying a less granular unit of content.</p>
+<p>I wanted to design the lexer to be reusable, by which I mean that it shouldn&#39;t
+be tied to any specific language. In particular, I wanted to avoid hardwiring a
+particular choice of keywords and operators in the lexer. This is not to say the
+lexer can handle all languages, far from it. Reuse by copy and modification is
+fine for me. In fact, I think much harm has been done by insisting on components
+that can be reused in any situation without modifications.</p>
+<p>It&#39;s frequent for lexers to be specified as a set of regular expressions (one
+regex per token type) and to assume that the lexer always takes the longest
+match at the current position. The implementation is typically not done like
+that for performance reasons, but rather it&#39;s structured as a big ole
+character-level switch loop.</p>
+<p>I could have followed the regex approach but I didn&#39;t really see the point, so I
+wrote an English <a href="https://github.com/norswap/core0/blob/master/src/core/lexer/_README.md">specification</a> for the lexer, making each token type mutually
+exclusive (so that there is never an ambiguity). That was a useful exercise to
+crystallize my thoughts. I also included a series of restrictions on valid token
+streams that follow naturally from the tokens definitions. For instance, an
+identifer cannot directly follow another identifier, otherwise the lexer would
+have generated a single, longer identifier instead.</p>
+<p>An interesting decision I made is that the lexer always generates a stream of
+tokens, for every input. To do so, there is a <em>garbage</em> token type that
+encapsulates spans of characters that cannot be attached to a token. Typically,
+these are non-ascii characters that are not part of a comment or litteral.</p>
+<p>The implementation is in Java but it follows a rather weird — almost C-like —
+style. The reason is that eventually I want to bootstrap the Core 0 compiler
+(write it in itself). Because of that, I want to keep the implementation as
+simple and decoupled from Java&#39;s idiosyncracies as possible. I also don&#39;t expect
+that Core 0 will be object-oriented. For the same reason, I also didn&#39;t use any
+libraries, including the standard libraries. There are a few exceptions, but I
+encapsulated them neatly in their own functions.</p>
+<p>You can check out <a href="https://github.com/norswap/core0/commit/cea49b103f86b260df46fee67e01940d1b2a1634">the code here</a>.</p>
+<p>Stay tuned for a description of the testing methodology I use to test the lexer,
+and further infos on Core 0&#39;s implementation.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/reusable-lexer";
+        this.page.identifier = "reusable-lexer";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

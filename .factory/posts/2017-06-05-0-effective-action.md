@@ -18,7 +18,7 @@ vote for this candidate, given the rest of his politics. Third, the candidate
 must try to keep his word, and must manage to pass the policies you desire.
 
 That's a lot of ifs, but we havent even got to the biggest objection: you
-actually have no control over wether the candidate gets elected.
+actually have no control over whether the candidate gets elected.
 
 Here is a small scenario to illustrate: you live in a town with 1000 people, who
 all vote; and there are two candidates. Let's suppose everyone votes at random,
@@ -44,7 +44,7 @@ distribute pamphlets, etc...
 
 But this won't work, or won't work well enough. If you need to do this, you
 cause is not well established, and people won't care enough to attend your
-events. Your proselytism will midly annoy them at best.
+events. Your proselytism will mildly annoy them at best.
 
 The problem with voting for candidates is that you are not voting on issues. You
 are (ideally...) voting for a program that takes a stance on many issues. Your
@@ -88,8 +88,8 @@ Many important changes depend on the "the right man" being there "at the right
 place", and also at the right time.
 
 To be the right man (or woman) at the right place, you first have to be at the
-right place. Many carreer will afford you some influence at some level
-(unfortunately, some carreer won't afford you any). Second, you have to be
+right place. Many carreers will afford you some influence at some level
+(unfortunately, some carreers won't afford you any). Second, you have to be
 *right*.
 
 *Right* means be the right influence. It means looking at all the facts and

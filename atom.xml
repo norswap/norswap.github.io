@@ -6,6 +6,64 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Another Ruby Dark Corner</title>
+      <description>
+&lt;p&gt;The other day, my colleague Benoit was faced with a strange problem in his Ruby
+code. Here is a greatly simplified version of the code that caused the problem:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-Ruby&quot;&gt;class A
+    def foo
+        p :A
+    end
+end
+
+class B &amp;lt; A
+end
+
+module F
+    def foo
+        super
+        p :F
+    end
+end
+
+method = F.instance_method(:foo)
+B.send(:define_method, :foo, lambda { |*args|
+    method.bind(self).call(*args)
+})
+
+B.new.foo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What do you think the last line does?&lt;/p&gt;
+&lt;p&gt;It seems like it should print &lt;code&gt;:F&lt;/code&gt;, then &lt;code&gt;:A&lt;/code&gt;. &lt;code&gt;B#foo&lt;/code&gt; becomes bounds to a
+lambda, inside which we call &lt;code&gt;F#foo&lt;/code&gt; with &lt;code&gt;self&lt;/code&gt; bound to &lt;code&gt;self&lt;/code&gt; from the
+lambda.&lt;/p&gt;
+&lt;p&gt;Since the lambda is then bound to &lt;code&gt;B#foo&lt;/code&gt;, it would stand to reason to think
+that the &lt;code&gt;super&lt;/code&gt; from &lt;code&gt;F#foo&lt;/code&gt; would invoke &lt;code&gt;A#foo&lt;/code&gt;. But here&amp;#39;s the rub: it
+invokes &lt;code&gt;B#foo&lt;/code&gt; recursively.&lt;/p&gt;
+&lt;p&gt;And so it turns out that the last line fails with &lt;code&gt;SystemStackError: stack level
+too deep&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Of course, the code is actually needlessly complicated. You could do this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;method = F.instance_method(:foo)
+B.send(:define_method, :foo, method)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And — plot twist — this actually works fine.&lt;/p&gt;
+&lt;p&gt;Why? I have no idea. And nothing in
+the &lt;a href=&quot;/ruby-dark-corners&quot;&gt;Ruby&amp;#39;s Dark Corners&lt;/a&gt; series can explain it. And of
+course, &lt;a href=&quot;/ruby-specification-problem&quot;&gt;Ruby doesn&amp;#39;t have a specification&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Interestingly, this also works:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-ruby&quot;&gt;B.send(:define_method, :foo, lambda { |*args| super(*args); p :F })
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This seems to suggest that the fact that the container of &lt;code&gt;super&lt;/code&gt; should be
+bound directly to the method, and that indirections have an effect. At the same,
+the &lt;code&gt;super&lt;/code&gt; call is still able to figure out the correct method name to call in
+the presence of indirections, so the behaviour makes very little sense to me.&lt;/p&gt;
+&lt;p&gt;(This was tested with Ruby 2.3 on Windows and Ruby 2.4 on Mac OS)&lt;/p&gt;
+      </description>
+      <pubDate>2017-09-03T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/another-ruby-dark-corner</link>
+      <guid isPermaLink="true">http://norswap.com/another-ruby-dark-corner</guid>
+    </item>
+    <item>
       <title>Random Generation Testing</title>
       <description>
 &lt;p&gt;At its core, testing is the process of building redundancy in order to ward off
@@ -945,135 +1003,6 @@ any other? Let me know &lt;a href=&quot;/reflets-d-acides-fini/#disqus_thread&qu
       <pubDate>2017-04-10T22:00:00.000Z</pubDate>
       <link>http://norswap.com/reflets-d-acides-fini</link>
       <guid isPermaLink="true">http://norswap.com/reflets-d-acides-fini</guid>
-    </item>
-    <item>
-      <title>LaTeX Tooling Guide</title>
-      <description>
-&lt;p&gt;I&amp;#39;ll let you in on a small secret: I hate LaTeX with a passion. It&amp;#39;s a bloated
-mess with crazy syntax. It generates reams of warnings you can never totally get
-rid of, and some of the most confusing and/or unhelpeful errors I have ever
-seen. It needs to be run N times in a row. It even has a stupid name.&lt;/p&gt;
-&lt;p&gt;Don Knuth wrote TeX, and it may have been art. But, to use a fashionable word,
-TeX was never meant to scale to LaTeX. Pervasive use of non-hygienic macros and
-constant manipulations of global values is a recipe for disaster.&lt;/p&gt;
-&lt;p&gt;I wish I could avoid LaTeX completely, unfortuately conferences have templates
-and the only other format available is MS Word, which has its own flaws (as I
-recall, in how it handles numbering and floating figures).&lt;/p&gt;
-&lt;p&gt;Anyhow, the current article is about how I setup my Latex to alleviate some of
-these pains. I&amp;#39;ll start with a tour of what I use, then give you &lt;a href=&quot;https://github.com/norswap/template-sigplan/blob/master/makefile&quot;&gt;a makefile&lt;/a&gt;
-and an &lt;a href=&quot;https://github.com/norswap/template-sigplan&quot;&gt;example git repository&lt;/a&gt; to bring all these tools together.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;installing-and-updating&quot;&gt;Installing and Updating&lt;/h2&gt;
-&lt;p&gt;See &lt;a href=&quot;https://www.sharelatex.com/learn/Choosing_a_LaTeX_Compiler&quot;&gt;this article&lt;/a&gt; about available Latex distributions. I
-recommend sticking to the tried-and-true, so that would be MiKTeX for Windows,
-MacTeX for OSX and TeX Live for Linux.&lt;/p&gt;
-&lt;p&gt;If you already have a Latex distribution installed, but it is not up to date,
-this fantastic &lt;a href=&quot;https://tex.stackexchange.com/questions/55437/how-do-i-update-my-tex-distribution&quot;&gt;TeX Stack Exchange answer&lt;/a&gt; will tell you how to
-update it.&lt;/p&gt;
-&lt;h2 id=&quot;editors&quot;&gt;Editors&lt;/h2&gt;
-&lt;p&gt;Most people will use some kind of Latex-mode that comes with their editor of
-choice. I edit text in Emacs, and so I use &lt;a href=&quot;https://www.gnu.org/software/auctex/&quot;&gt;Auctex&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Nevertheless, it might be nicer to have something closer to an IDE for Latex. My
-option of choice here is &lt;a href=&quot;http://www.texstudio.org/&quot;&gt;TeXstudio&lt;/a&gt;. Even though most of my Latex editing is in
-Auctex, I use it from time to time to typeset math or help with diagnostics.&lt;/p&gt;
-&lt;p&gt;Finally, but perhaps most importantly, there are a few online Latex editors. The
-best of them is &lt;a href=&quot;https://www.sharelatex.com/&quot;&gt;ShareLaTeX&lt;/a&gt;. Its great strength is that it saves you from doing
-any kind of setup, and in my own experience is super reliable.&lt;/p&gt;
-&lt;p&gt;ShareLatex also filters out unhelpful warning and errors and does its best to
-correlated what is left with your source file. Later in this guide we will show
-command line tools that do the same thing.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s good enough as an editor, but also allows realtime collaboration on a
-document. Best of all, it now has the ability to sync with GitHub, meaning you
-can mix online and offline collaboration.&lt;/p&gt;
-&lt;h2 id=&quot;building&quot;&gt;Building&lt;/h2&gt;
-&lt;p&gt;One of the famous annoyances of Latex is that it needs to be run multiple times
-to get references right, interleaved with runs of your bibliography tool
-(usually BibTeX or Biber).&lt;/p&gt;
-&lt;p&gt;Fortunately this whole process can be automated. Most Latex distribution come
-with a tool called &lt;code&gt;latexmk&lt;/code&gt;, which does automates all these invocations for
-you.&lt;/p&gt;
-&lt;p&gt;Beware that &lt;code&gt;latexmk&lt;/code&gt; requires Perl to run, which is not bundled with Latex.
-This tends to be a caveat on Windows. If you are running Windows and want to use
-&lt;code&gt;latexmk&lt;/code&gt;, install &lt;a href=&quot;http://strawberryperl.com/&quot;&gt;Strawberry Perl&lt;/a&gt; to fix the problem.&lt;/p&gt;
-&lt;p&gt;There is a better tool, though, which is called &lt;a href=&quot;https://github.com/aclements/latexrun&quot;&gt;latexrun&lt;/a&gt;. &lt;code&gt;latexrun&lt;/code&gt; does what
-&lt;code&gt;latexmk&lt;/code&gt; does, but also sanitizes Latex&amp;#39;s output to only show helpful errors,
-similar to what you would see on ShareLatex.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;latexrun&lt;/code&gt; is a single Python3 script, which is great for portability. You can
-even drop it directly in your paper&amp;#39;s git repository.&lt;/p&gt;
-&lt;h2 id=&quot;errors&quot;&gt;Errors&lt;/h2&gt;
-&lt;p&gt;If you&amp;#39;re using ShareLatex or &lt;code&gt;latexrun&lt;/code&gt;, you&amp;#39;re already pretty well covered
-here.&lt;/p&gt;
-&lt;p&gt;There is one more tool that bears mentioning: &lt;a href=&quot;https://github.com/dmwit/pulp&quot;&gt;pulp&lt;/a&gt;. &lt;code&gt;pulp&lt;/code&gt; lets you filter out
-unwanted warnings and errors, and tries to correlated errors with file
-positions.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;pulp&lt;/code&gt;&amp;#39;s output is less pretty than that of &lt;code&gt;latexrun&lt;/code&gt;, but its great strength
-is that it lets define custom filtering rules, to remove those annoying warnings
-that you cannot get rid of, but break nothing. Or, more frequently, comes from
-the class file that you are forced to use to submit you paper (I&amp;#39;m looking at
-you, ACM).&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s an exemple of filtering spec to get rid of all errors that pop up when
-compiling the &lt;a href=&quot;http://www.sigplan.org/Resources/Author/&quot;&gt;acmart&lt;/a&gt; example file:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;!(boring | info | message | under | over
-| p &amp;quot;hyperref&amp;quot; &amp;amp; &amp;quot;Token not allowed in a PDF string&amp;quot;
-| &amp;quot;Class acmart Info&amp;quot;
-| &amp;quot;file:line:error style messages enabled&amp;quot;
-| &amp;quot;Excluding.*comment&amp;quot;
-| &amp;quot;Processing.*comment&amp;quot;
-| &amp;quot;Include comment&amp;quot;
-| &amp;quot;comment.cut&amp;quot;
-| &amp;quot;(msharpe)&amp;quot;
-| &amp;quot;]&amp;quot; &amp;amp;&amp;amp; !&amp;quot;..&amp;quot;
-)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The first line matches &lt;code&gt;pulp&lt;/code&gt;&amp;#39;s default specification.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;pulp&lt;/code&gt; can be integrated with &lt;code&gt;latexmk&lt;/code&gt; fairly easily, by means of a
-configuration file.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;pulp&lt;/code&gt; is not as friendly to install as the other tools. Here is how to install
-on OSX, assuming you already have &lt;a href=&quot;https://brew.sh/&quot;&gt;homebrew&lt;/a&gt; (on other platforms, you just need
-to install the Haskell platform in some other way):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;brew cask install haskell-platform
-git clone https://github.com/dmwit/pulp.git
-cabal update
-cabal install
-PATH=&amp;quot;$HOME/Library/Haskell/bin:$PATH&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;preview&quot;&gt;Preview&lt;/h2&gt;
-&lt;p&gt;Unless you&amp;#39;re working with TeXstudio or ShareLatex, you&amp;#39;ll need to preview the
-generated PDF files using a PDF viewer. You want to use one that picks up
-changes to the PDF on the disk, and reloads it on the fly, while keeping your
-position in the PDF. On OSX, the built-in viewer (confusingly named &lt;em&gt;Preview&lt;/em&gt;)
-does this adequately. On Windows, I&amp;#39;m partial to &lt;a href=&quot;https://www.sumatrapdfreader.org/free-pdf-reader.html&quot;&gt;Sumatra PDF&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;latexmk&lt;/code&gt; and &lt;code&gt;latexrun&lt;/code&gt; will automatically open a generated PDF file (using the
-OS-determined associated tool).&lt;/p&gt;
-&lt;h2 id=&quot;all-together&quot;&gt;All Together&lt;/h2&gt;
-&lt;p&gt;I&amp;#39;ve put together &lt;a href=&quot;https://github.com/norswap/template-sigplan&quot;&gt;a repository&lt;/a&gt; that serves as template for papers using
-the &lt;a href=&quot;http://www.sigplan.org/Resources/Author/&quot;&gt;ascmart sigplan&lt;/a&gt; style.&lt;/p&gt;
-&lt;p&gt;The tooling centers around &lt;a href=&quot;https://github.com/norswap/template-sigplan/blob/master/makefile&quot;&gt;a makefile&lt;/a&gt;. The default configuration is to use
-&lt;code&gt;latexmk&lt;/code&gt; with pulp integration. The following commands are available:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;make&lt;/code&gt; / &lt;code&gt;make view&lt;/code&gt;: generates the PDF file and displays it&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;make pdf&lt;/code&gt;: generates the PDF file but does not display it; latex is run silently&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;make verbose&lt;/code&gt;: like &lt;code&gt;make pdf&lt;/code&gt;, but shows error details&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;make rebuild&lt;/code&gt;: forces a rebuild of the pdf, even if no changes are picked up&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;make clean&lt;/code&gt;: removes all temporary files (for all tools!)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;make mrproper&lt;/code&gt;: like &lt;code&gt;make clean&lt;/code&gt;, but also removes the generated PDF&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;If you don&amp;#39;t have &lt;code&gt;pulp&lt;/code&gt;, just delete or rename the &lt;code&gt;.latexmkrc&lt;/code&gt; file from the
-repo.&lt;/p&gt;
-&lt;p&gt;If &lt;code&gt;latexmk&lt;/code&gt; is not found or doesn&amp;#39;t work (for instance if Perl is not
-installed), the makefile will fall back to using plain make rules, and &lt;code&gt;make
-pdf&lt;/code&gt; will be verbose by default.&lt;/p&gt;
-&lt;p&gt;It is also possible to use &lt;code&gt;latexrun&lt;/code&gt;, which is bundled in the repository, by
-running &lt;code&gt;make run&lt;/code&gt; (Python3 required).&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;pulp&lt;/code&gt; can be run standalone with &lt;code&gt;make pulp&lt;/code&gt; (pulp is not bundled in the
-repository), assuming a compilation was attempted earlier and the &lt;code&gt;.log&lt;/code&gt; file is
-left uncleaned.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;DISCLAIMER&lt;/strong&gt;: I won&amp;#39;t be too assiduous in maintaining this makefile, and it
-may even contain a few bugs. It should be taken as an example of how to do
-things, rather than as a toolchain to be relied on.&lt;/p&gt;
-&lt;p&gt;With all this, you&amp;#39;ll have no Latex excuses for turning your next paper late :)&lt;/p&gt;
-      </description>
-      <pubDate>2017-03-28T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/latex-tooling</link>
-      <guid isPermaLink="true">http://norswap.com/latex-tooling</guid>
     </item>
   </channel>
 </rss>

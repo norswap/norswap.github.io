@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Another Ruby Dark Corner
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Another Ruby Dark Corner</h1>
+      <span class="post-date">04 Sep 2017</span>
+<p>The other day, my colleague Benoit was faced with a strange problem in his Ruby
+code. Here is a greatly simplified version of the code that caused the problem:</p>
+<pre><code class="lang-Ruby">class A
+    def foo
+        p :A
+    end
+end
+
+class B &lt; A
+end
+
+module F
+    def foo
+        super
+        p :F
+    end
+end
+
+method = F.instance_method(:foo)
+B.send(:define_method, :foo, lambda { |*args|
+    method.bind(self).call(*args)
+})
+
+B.new.foo
+</code></pre>
+<p>What do you think the last line does?</p>
+<p>It seems like it should print <code>:F</code>, then <code>:A</code>. <code>B#foo</code> becomes bounds to a
+lambda, inside which we call <code>F#foo</code> with <code>self</code> bound to <code>self</code> from the
+lambda.</p>
+<p>Since the lambda is then bound to <code>B#foo</code>, it would stand to reason to think
+that the <code>super</code> from <code>F#foo</code> would invoke <code>A#foo</code>. But here&#39;s the rub: it
+invokes <code>B#foo</code> recursively.</p>
+<p>And so it turns out that the last line fails with <code>SystemStackError: stack level
+too deep</code>.</p>
+<p>Of course, the code is actually needlessly complicated. You could do this:</p>
+<pre><code class="lang-ruby">method = F.instance_method(:foo)
+B.send(:define_method, :foo, method)
+</code></pre>
+<p>And — plot twist — this actually works fine.</p>
+<p>Why? I have no idea. And nothing in
+the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series can explain it. And of
+course, <a href="/ruby-specification-problem">Ruby doesn&#39;t have a specification</a>.</p>
+<p>Interestingly, this also works:</p>
+<pre><code class="lang-ruby">B.send(:define_method, :foo, lambda { |*args| super(*args); p :F })
+</code></pre>
+<p>This seems to suggest that the fact that the container of <code>super</code> should be
+bound directly to the method, and that indirections have an effect. At the same,
+the <code>super</code> call is still able to figure out the correct method name to call in
+the presence of indirections, so the behaviour makes very little sense to me.</p>
+<p>(This was tested with Ruby 2.3 on Windows and Ruby 2.4 on Mac OS)</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/another-ruby-dark-corner";
+        this.page.identifier = "another-ruby-dark-corner";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

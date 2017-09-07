@@ -49,7 +49,7 @@
     <div class="post">
       <h1 class="post-title">Another Ruby Dark Corner</h1>
       <span class="post-date">04 Sep 2017</span>
-<p>The other day, my colleague Benoit was faced with a strange problem in his Ruby
+<p>The other day, my colleague Benoît was faced with a strange problem in his Ruby
 code. Here is a greatly simplified version of the code that caused the problem:</p>
 <pre><code class="lang-Ruby">class A
     def foo
@@ -88,16 +88,18 @@ too deep</code>.</p>
 B.send(:define_method, :foo, method)
 </code></pre>
 <p>And — plot twist — this actually works fine.</p>
-<p>Why? I have no idea. And nothing in
-the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series can explain it. And of
-course, <a href="/ruby-specification-problem">Ruby doesn&#39;t have a specification</a>.</p>
-<p>Interestingly, this also works:</p>
+<p>This also works:</p>
 <pre><code class="lang-ruby">B.send(:define_method, :foo, lambda { |*args| super(*args); p :F })
 </code></pre>
-<p>This seems to suggest that the fact that the container of <code>super</code> should be
-bound directly to the method, and that indirections have an effect. At the same,
-the <code>super</code> call is still able to figure out the correct method name to call in
-the presence of indirections, so the behaviour makes very little sense to me.</p>
+<p>That&#39;s interesting and wasn&#39;t covered in
+the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series can explain it. And of
+course, <a href="/ruby-specification-problem">Ruby doesn&#39;t have a specification</a>.</p>
+<p>I have an hypothesis: when a &quot;callable&quot; (unbound method, lambda, ...) is
+directly bound to a method, then any <code>super</code> reference in the callable are
+correctly bound to that method. However, if <code>super</code> is called through at least
+one level of indirection (in our example above, we have a lambda that calls a
+method), then <code>super</code> simply calls the regular method (that is the &quot;lowest&quot; one
+in the class hierarchy), no matter what method it was reached from.</p>
 <p>(This was tested with Ruby 2.3 on Windows and Ruby 2.4 on Mac OS)</p>
     </div>
 

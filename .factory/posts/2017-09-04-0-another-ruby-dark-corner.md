@@ -3,7 +3,7 @@ title: "Another Ruby Dark Corner"
 layout: post
 ---
 
-The other day, my colleague Benoit was faced with a strange problem in his Ruby
+The other day, my colleague Benoît was faced with a strange problem in his Ruby
 code. Here is a greatly simplified version of the code that caused the problem:
 
 ```Ruby
@@ -53,19 +53,21 @@ B.send(:define_method, :foo, method)
 
 And — plot twist — this actually works fine.
 
-Why? I have no idea. And nothing in
-the [Ruby's Dark Corners](/ruby-dark-corners) series can explain it. And of
-course, [Ruby doesn't have a specification](/ruby-specification-problem).
-
-Interestingly, this also works:
+This also works:
 
 ```ruby
 B.send(:define_method, :foo, lambda { |*args| super(*args); p :F })
 ```
-    
-This seems to suggest that the fact that the container of `super` should be
-bound directly to the method, and that indirections have an effect. At the same,
-the `super` call is still able to figure out the correct method name to call in
-the presence of indirections, so the behaviour makes very little sense to me.
+
+That's interesting and wasn't covered in
+the [Ruby's Dark Corners](/ruby-dark-corners) series can explain it. And of
+course, [Ruby doesn't have a specification](/ruby-specification-problem).
+
+I have an hypothesis: when a "callable" (unbound method, lambda, ...) is
+directly bound to a method, then any `super` reference in the callable are
+correctly bound to that method. However, if `super` is called through at least
+one level of indirection (in our example above, we have a lambda that calls a
+method), then `super` simply calls the regular method (that is the "lowest" one
+in the class hierarchy), no matter what method it was reached from.
 
 (This was tested with Ruby 2.3 on Windows and Ruby 2.4 on Mac OS)

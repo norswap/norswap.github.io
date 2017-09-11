@@ -16,7 +16,7 @@
       <guid isPermaLink="true">http://norswap.com/pub-red-shift</guid>
     </item>
     <item>
-      <title>Another Ruby Dark Corner</title>
+      <title>Ruby&#39;s `super` Keyword Weirdness</title>
       <description>
 &lt;p&gt;The other day, my colleague Benoît was faced with a strange problem in his Ruby
 code. Here is a greatly simplified version of the code that caused the problem:&lt;/p&gt;
@@ -72,8 +72,8 @@ in the class hierarchy), no matter what method it was reached from.&lt;/p&gt;
 &lt;p&gt;(This was tested with Ruby 2.3 on Windows and Ruby 2.4 on Mac OS)&lt;/p&gt;
       </description>
       <pubDate>2017-09-03T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/another-ruby-dark-corner</link>
-      <guid isPermaLink="true">http://norswap.com/another-ruby-dark-corner</guid>
+      <link>http://norswap.com/ruby-super-keyword</link>
+      <guid isPermaLink="true">http://norswap.com/ruby-super-keyword</guid>
     </item>
     <item>
       <title>Random Generation Testing</title>

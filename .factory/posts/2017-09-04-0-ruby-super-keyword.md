@@ -1,5 +1,5 @@
 ---
-title: "Another Ruby Dark Corner"
+title: "Ruby's `super` Keyword Weirdness"
 layout: post
 ---
 

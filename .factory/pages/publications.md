@@ -3,6 +3,13 @@ layout: page
 title: Publications
 ---
 
+**Red Shift: Procedural Shift-Reduce Parsing**  
+Nicolas Laurent  
+*The 10th ACM SIGPLAN International Conference on Software Language Engineering  
+(SLE 2017)*  
+*Vancouver, Canada, October 23 2017*  
+[\[PDF\]](/pubs/sle2017.pdf)
+
 **Taming Context-Sensitive Languages with Principled Stateful Parsing**  
 Nicolas Laurent and Kim Mens  
 *The 9th ACM SIGPLAN International Conference on Software Language Engineering  

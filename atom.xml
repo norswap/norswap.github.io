@@ -6,6 +6,16 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>New Publication</title>
+      <description>
+&lt;p&gt;New publication: &lt;strong&gt;Red Shift: Procedural Shift-Reduce Parsing&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;To appear at &lt;a href=&quot;http://conf.researchr.org/track/sle-2017/sle-2017-papers&quot;&gt;SLE 2017&lt;/a&gt;.&lt;br&gt;&lt;a href=&quot;/pubs/sle2017.pdf&quot;&gt;Pre-print here&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2017-09-10T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/pub-red-shift</link>
+      <guid isPermaLink="true">http://norswap.com/pub-red-shift</guid>
+    </item>
+    <item>
       <title>Another Ruby Dark Corner</title>
       <description>
 &lt;p&gt;The other day, my colleague Benoît was faced with a strange problem in his Ruby
@@ -980,31 +990,6 @@ think it&amp;#39;s just more good stuff to feed on now.&lt;/p&gt;
       <pubDate>2017-04-10T22:00:00.000Z</pubDate>
       <link>http://norswap.com/gurren-lagann-reaction</link>
       <guid isPermaLink="true">http://norswap.com/gurren-lagann-reaction</guid>
-    </item>
-    <item>
-      <title>Reflets d&#39;Acide: It&#39;s (Finally) Over</title>
-      <description>
-&lt;p&gt;&lt;img src=&quot;/reflets-d-acides-fini/rda.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;If you speak French and do not know about it yet, check out &lt;a href=&quot;http://www.refletsdacide.com/presentation/&quot;&gt;Reflets d&amp;#39;Acide&lt;/a&gt;.
-It&amp;#39;s an humourous fantasy &amp;quot;mp3 saga&amp;quot; (apparently the proper english term is
-&amp;quot;audio drama&amp;quot;). It&amp;#39;s now finally complete (well, the first season) after more
-than 10 years in the running.&lt;/p&gt;
-&lt;p&gt;It distinguishes itself from other offerings in the same vein by its subtle
-humor, layered construction and masterful use of the French language. It even
-uses a non-trivial amount of &lt;a href=&quot;https://en.wiktionary.org/wiki/alexandrine#English&quot;&gt;alexandrines&lt;/a&gt; being used. It&amp;#39;s a bombastic love
-letter to French, laid out in the least boring way possible: as a delightful
-heroic fantasy tale. I still find things in there after listening to it at least
-ten times.&lt;/p&gt;
-&lt;p&gt;I don&amp;#39;t know about any English-language equivalent. At the very least, they
-haven&amp;#39;t had the same kind of impact on geek culture as Reflets d&amp;#39;Acide and other
-sagas (&lt;a href=&quot;http://www.penofchaos.com/warham/donjon-resume.htm&quot;&gt;Le Donjon de Naheulbeuk&lt;/a&gt;, &lt;a href=&quot;http://www.knarfworld.net/episodes&quot;&gt;Les Aventuriers du Survivaure&lt;/a&gt;,
-&lt;a href=&quot;http://www.adoprixtoxis.com/lite/download/adop_downloads.php&quot;&gt;Adoprixtoxis&lt;/a&gt;) have had in the French-speaking parts.&lt;/p&gt;
-&lt;p&gt;The closest thing I can think of is the much more recent &lt;a href=&quot;http://www.pretendwizards.com/&quot;&gt;Pretend Wizards&lt;/a&gt;. Know
-any other? Let me know &lt;a href=&quot;/reflets-d-acides-fini/#disqus_thread&quot;&gt;in the comments&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2017-04-10T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/reflets-d-acides-fini</link>
-      <guid isPermaLink="true">http://norswap.com/reflets-d-acides-fini</guid>
     </item>
   </channel>
 </rss>

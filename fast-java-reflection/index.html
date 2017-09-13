@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Java Reflection, 1000x Faster
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Java Reflection, 1000x Faster</h1>
+      <span class="post-date">13 Sep 2017</span>
+<p>A few weeks ago I got to make some of my code 1000 times faster, without
+changing the underlying complexity! As the title implies, this involved making
+Java reflection calls faster.</p>
+<p>Let me explain my use case as well, because it&#39;s relatively general, and a good
+example of why one would use reflection in the first place.</p>
+<p>I had an interface (representing a tree node) and a slew of classes (100+)
+implementing this interface. The trick is that the tree is heterogeneous, each
+node kind can have different numbers of children, or store them differently.</p>
+<p>I needed some code te be able to walk over such a composite tree. The simple
+approach is to simply add a <code>children()</code> method to the interface and implement
+it in every kind of node. Very tedious, and boilerplaty as hell.</p>
+<p>Instead, I noted that all children were either direct fields, or aggregated in
+fields holding a collection of nodes. I could write a small piece of code that,
+with reflection, would work for every node kind!</p>
+<p>I&#39;ve put up <a href="https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6">a much simplified version of the code on Github</a>. I will link
+the relevant parts as we go.</p>
+<h3 id="initial-code">Initial Code</h3>
+<p>Here is the version I came up with: <a href="https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6#file-walkerdemoslowest-java"><code>WalkerDemoSlowest.java</code></a></p>
+<p>It&#39;s fairly straightforward: get the methods of the node&#39;s class, filter out
+those that are not getters, then consider only that return either a node or a
+collection of node. For those, invoke the method, and recursively invoke <code>walk</code>
+on the children.</p>
+<p>Will anyone be surprised if I tell them it&#39;s very slow?</p>
+<h3 id="caching">Caching</h3>
+<p>There is a simple tweak we can apply that makes it much faster however: we can
+cache the methods lookup.</p>
+<p>Here is the caching version: <a href="https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6#file-walkerdemoslow-java"><code>WalkerDemoSlow.java</code></a></p>
+<p>It&#39;s really the same except that for each class implementing <code>Node</code>, we create a
+<code>ClassData</code> object that caches all the relevant getters, so we only have to look
+them up once. This produces a satisfying ~10x speedup.</p>
+<h3 id="lambdametafactory-magic">LambdaMetafactory Magic</h3>
+<p>Unfortunately, this was still way too slow. So I took to Google, which turned
+out this <a href="https://stackoverflow.com/questions/19557829/faster-alternatives-to-javas-reflection">helpful StackOverflow question</a>.</p>
+<p>The accepted answers proposes the use of <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html"><code>LambdaMetafactory</code></a>, a standard
+library class that supports lambda invocations in the language.</p>
+<p>The details are somewhat hazy to me, but it seems that by using these facilities
+we can &quot;summon the compiler&quot; on our code and optimize the reflective access into
+a native invocation. That&#39;s the working hypothesis anyhow.</p>
+<p>Here is the code: <a href="https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6#file-walkerdemofast-java"><code>WalkerDemoFast.java</code></a></p>
+<p>Now, in my code, this worked wonders, unlocking another 100x speedup. While
+writing this article however, I wanted to demonstrate the effect with some code
+snippet, but didn&#39;t manage to. I tried to give the interface three sub-classes,
+and to give them bogus methods to be filtered out, to no avail. The second and
+third version of the code would run at about the same speed.</p>
+<p>I re-checked the original code -- all seemed good. In my original code, the
+trees are Abstract Syntax Trees (AST) derived by parsing some source files.
+After fooling around some more, I noticed different results if I limited the
+input to the first 14 source files.</p>
+<p>These files are relatively short (few 10s of lines) and syntactically simple.
+With only those, the second and third version would run at about the same speed.
+But add in the 15th file (a few 100s of lines) and the second version would take
+a whopping 36 seconds while the third version would still complete in 0.2
+seconds, a ~700x difference.</p>
+<p>My (somewhat shaky) hypothesis is that if the scenario is simple enough, the
+optimizer notices what you are doing and optmizes away. In more complex cases,
+it exhausts its optimization budget and falls back on the unoptimized version
+and its abysmal performance. But the optimizer is devious enough that crafting a
+toy example that would defeat it seems to be quite the feat.</p>
+<h3 id="lambdametafactory-possibilities">LambdaMetafactory Possibilities</h3>
+<p>I&#39;m somewhat intrigued about what is possible with <code>LambdaMetafactory</code>. In my
+use case, it works wonders because reflection calls are much more expensive than
+a simple cache lookup. But could it be used to optmize regular code in
+pathological cases as well? It seems unlikely to help with <a href="http://insightfullogic.com/2014/May/12/fast-and-megamorphic-what-influences-method-invoca/">megamorphic call
+sites</a>, because the compiled method handle has to be retrieved somehow, and the
+cost of that lookup would dwarf the gains.</p>
+<p>But what about piecing together code at run time, and optimizing it? In
+particular, one could supply a data structure and an interpreter for that data
+structure, and &quot;compile&quot; them together using <code>LambdaMetafactory</code>. Would it be
+smart enough to partially evaluate the code given the data structure, and so
+turn your interpreter into the equivalent &quot;plain&quot; code?</p>
+<p>Incidentally, that is exactly the approach taken by the <a href="https://github.com/graalvm/graal">Truffle framework</a>,
+which runs on top of the Graal VM, so there is definitely something to the idea.
+Maybe something precludes it with the current JVM, hence requiring the GraalVM
+modification?</p>
+<p>In any case, there is something to be said in favor of making these capabilities
+available as a library, which could be used in &quot;regular programs&quot; (i.e. not
+compilers). Writing a simple interpreter is often the easiest approach to some
+problems.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/fast-java-reflection";
+        this.page.identifier = "fast-java-reflection";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

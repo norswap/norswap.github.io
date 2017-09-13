@@ -6,6 +6,92 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Java Reflection, 1000x Faster</title>
+      <description>
+&lt;p&gt;A few weeks ago I got to make some of my code 1000 times faster, without
+changing the underlying complexity! As the title implies, this involved making
+Java reflection calls faster.&lt;/p&gt;
+&lt;p&gt;Let me explain my use case as well, because it&amp;#39;s relatively general, and a good
+example of why one would use reflection in the first place.&lt;/p&gt;
+&lt;p&gt;I had an interface (representing a tree node) and a slew of classes (100+)
+implementing this interface. The trick is that the tree is heterogeneous, each
+node kind can have different numbers of children, or store them differently.&lt;/p&gt;
+&lt;p&gt;I needed some code te be able to walk over such a composite tree. The simple
+approach is to simply add a &lt;code&gt;children()&lt;/code&gt; method to the interface and implement
+it in every kind of node. Very tedious, and boilerplaty as hell.&lt;/p&gt;
+&lt;p&gt;Instead, I noted that all children were either direct fields, or aggregated in
+fields holding a collection of nodes. I could write a small piece of code that,
+with reflection, would work for every node kind!&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve put up &lt;a href=&quot;https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6&quot;&gt;a much simplified version of the code on Github&lt;/a&gt;. I will link
+the relevant parts as we go.&lt;/p&gt;
+&lt;h3 id=&quot;initial-code&quot;&gt;Initial Code&lt;/h3&gt;
+&lt;p&gt;Here is the version I came up with: &lt;a href=&quot;https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6#file-walkerdemoslowest-java&quot;&gt;&lt;code&gt;WalkerDemoSlowest.java&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s fairly straightforward: get the methods of the node&amp;#39;s class, filter out
+those that are not getters, then consider only that return either a node or a
+collection of node. For those, invoke the method, and recursively invoke &lt;code&gt;walk&lt;/code&gt;
+on the children.&lt;/p&gt;
+&lt;p&gt;Will anyone be surprised if I tell them it&amp;#39;s very slow?&lt;/p&gt;
+&lt;h3 id=&quot;caching&quot;&gt;Caching&lt;/h3&gt;
+&lt;p&gt;There is a simple tweak we can apply that makes it much faster however: we can
+cache the methods lookup.&lt;/p&gt;
+&lt;p&gt;Here is the caching version: &lt;a href=&quot;https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6#file-walkerdemoslow-java&quot;&gt;&lt;code&gt;WalkerDemoSlow.java&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s really the same except that for each class implementing &lt;code&gt;Node&lt;/code&gt;, we create a
+&lt;code&gt;ClassData&lt;/code&gt; object that caches all the relevant getters, so we only have to look
+them up once. This produces a satisfying ~10x speedup.&lt;/p&gt;
+&lt;h3 id=&quot;lambdametafactory-magic&quot;&gt;LambdaMetafactory Magic&lt;/h3&gt;
+&lt;p&gt;Unfortunately, this was still way too slow. So I took to Google, which turned
+out this &lt;a href=&quot;https://stackoverflow.com/questions/19557829/faster-alternatives-to-javas-reflection&quot;&gt;helpful StackOverflow question&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The accepted answers proposes the use of &lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/invoke/LambdaMetafactory.html&quot;&gt;&lt;code&gt;LambdaMetafactory&lt;/code&gt;&lt;/a&gt;, a standard
+library class that supports lambda invocations in the language.&lt;/p&gt;
+&lt;p&gt;The details are somewhat hazy to me, but it seems that by using these facilities
+we can &amp;quot;summon the compiler&amp;quot; on our code and optimize the reflective access into
+a native invocation. That&amp;#39;s the working hypothesis anyhow.&lt;/p&gt;
+&lt;p&gt;Here is the code: &lt;a href=&quot;https://gist.github.com/norswap/09846a75092f49a7f1cbf1f00f85e9b6#file-walkerdemofast-java&quot;&gt;&lt;code&gt;WalkerDemoFast.java&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Now, in my code, this worked wonders, unlocking another 100x speedup. While
+writing this article however, I wanted to demonstrate the effect with some code
+snippet, but didn&amp;#39;t manage to. I tried to give the interface three sub-classes,
+and to give them bogus methods to be filtered out, to no avail. The second and
+third version of the code would run at about the same speed.&lt;/p&gt;
+&lt;p&gt;I re-checked the original code -- all seemed good. In my original code, the
+trees are Abstract Syntax Trees (AST) derived by parsing some source files.
+After fooling around some more, I noticed different results if I limited the
+input to the first 14 source files.&lt;/p&gt;
+&lt;p&gt;These files are relatively short (few 10s of lines) and syntactically simple.
+With only those, the second and third version would run at about the same speed.
+But add in the 15th file (a few 100s of lines) and the second version would take
+a whopping 36 seconds while the third version would still complete in 0.2
+seconds, a ~700x difference.&lt;/p&gt;
+&lt;p&gt;My (somewhat shaky) hypothesis is that if the scenario is simple enough, the
+optimizer notices what you are doing and optmizes away. In more complex cases,
+it exhausts its optimization budget and falls back on the unoptimized version
+and its abysmal performance. But the optimizer is devious enough that crafting a
+toy example that would defeat it seems to be quite the feat.&lt;/p&gt;
+&lt;h3 id=&quot;lambdametafactory-possibilities&quot;&gt;LambdaMetafactory Possibilities&lt;/h3&gt;
+&lt;p&gt;I&amp;#39;m somewhat intrigued about what is possible with &lt;code&gt;LambdaMetafactory&lt;/code&gt;. In my
+use case, it works wonders because reflection calls are much more expensive than
+a simple cache lookup. But could it be used to optmize regular code in
+pathological cases as well? It seems unlikely to help with &lt;a href=&quot;http://insightfullogic.com/2014/May/12/fast-and-megamorphic-what-influences-method-invoca/&quot;&gt;megamorphic call
+sites&lt;/a&gt;, because the compiled method handle has to be retrieved somehow, and the
+cost of that lookup would dwarf the gains.&lt;/p&gt;
+&lt;p&gt;But what about piecing together code at run time, and optimizing it? In
+particular, one could supply a data structure and an interpreter for that data
+structure, and &amp;quot;compile&amp;quot; them together using &lt;code&gt;LambdaMetafactory&lt;/code&gt;. Would it be
+smart enough to partially evaluate the code given the data structure, and so
+turn your interpreter into the equivalent &amp;quot;plain&amp;quot; code?&lt;/p&gt;
+&lt;p&gt;Incidentally, that is exactly the approach taken by the &lt;a href=&quot;https://github.com/graalvm/graal&quot;&gt;Truffle framework&lt;/a&gt;,
+which runs on top of the Graal VM, so there is definitely something to the idea.
+Maybe something precludes it with the current JVM, hence requiring the GraalVM
+modification?&lt;/p&gt;
+&lt;p&gt;In any case, there is something to be said in favor of making these capabilities
+available as a library, which could be used in &amp;quot;regular programs&amp;quot; (i.e. not
+compilers). Writing a simple interpreter is often the easiest approach to some
+problems.&lt;/p&gt;
+      </description>
+      <pubDate>2017-09-12T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/fast-java-reflection</link>
+      <guid isPermaLink="true">http://norswap.com/fast-java-reflection</guid>
+    </item>
+    <item>
       <title>New Publication</title>
       <description>
 &lt;p&gt;New publication: &lt;strong&gt;Red Shift: Procedural Shift-Reduce Parsing&lt;/strong&gt;&lt;/p&gt;
@@ -970,26 +1056,6 @@ falling over.&lt;/p&gt;
       <pubDate>2017-05-09T22:00:00.000Z</pubDate>
       <link>http://norswap.com/programming-sucks</link>
       <guid isPermaLink="true">http://norswap.com/programming-sucks</guid>
-    </item>
-    <item>
-      <title>Hot Take: Gurren Lagann</title>
-      <description>
-&lt;p&gt;&lt;img src=&quot;/gurren-lagann-reaction/team-gurren.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;I just watched the anime &lt;a href=&quot;https://myanimelist.net/anime/2001/Tengen_Toppa_Gurren_Lagann&quot;&gt;Tengen Toppa Gurren Lagann&lt;/a&gt;. And: oh. my.&lt;/p&gt;
-&lt;p&gt;Admittedly I&amp;#39;m almost exactly 10 years late to the party. But if you are too and
-have no prejudice against anime&lt;strong&gt;*&lt;/strong&gt;, do yourself a favour and watch it;
-especially if you sometimes struggle with motivation.&lt;/p&gt;
-&lt;p&gt;The anime is completely over-the-top, but somehow it all works out beautiful.
-It&amp;#39;s an ode to fighting spirit, and the force of will. It&amp;#39;s pure motivation
-cranked out to 10. I know it will stay with me a long time.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;*&lt;/strong&gt; Anime is probably one of the most inventive medium currently out there. I
-really should write about it sometimes. It was prejudiced against it enough in
-my youth that I didn&amp;#39;t explore it. I could say I regret it, but I prefer to
-think it&amp;#39;s just more good stuff to feed on now.&lt;/p&gt;
-      </description>
-      <pubDate>2017-04-10T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/gurren-lagann-reaction</link>
-      <guid isPermaLink="true">http://norswap.com/gurren-lagann-reaction</guid>
     </item>
   </channel>
 </rss>

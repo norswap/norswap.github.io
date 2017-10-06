@@ -46,15 +46,7 @@ tokens, for every input. To do so, there is a *garbage* token type that
 encapsulates spans of characters that cannot be attached to a token. Typically,
 these are non-ascii characters that are not part of a comment or litteral.
 
-The implementation is in Java but it follows a rather weird — almost C-like —
-style. The reason is that eventually I want to bootstrap the Core 0 compiler
-(write it in itself). Because of that, I want to keep the implementation as
-simple and decoupled from Java's idiosyncracies as possible. I also don't expect
-that Core 0 will be object-oriented. For the same reason, I also didn't use any
-libraries, including the standard libraries. There are a few exceptions, but I
-encapsulated them neatly in their own functions.
-
-You can check out [the code here](https://github.com/norswap/core0/commit/cea49b103f86b260df46fee67e01940d1b2a1634).
+You can check out [the code here](https://github.com/norswap/core-lexer).
 
 Stay tuned for a description of the testing methodology I use to test the lexer,
 and further infos on Core 0's implementation.

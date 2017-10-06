@@ -103,5 +103,5 @@ I applied this approach to test [the lexer I wrote about recently], here are
 [the tests].
 
 [the lexer I wrote about recently]: /reusable-lexer
-[the tests]: https://github.com/norswap/core0/tree/cea49b103f86b260df46fee67e01940d1b2a1634/test/core/lexer
+[the tests]: https://github.com/norswap/core-lexer/tree/master/test/norswap/core/lexer
 

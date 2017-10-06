@@ -21,7 +21,7 @@ than to complete albums.&lt;/p&gt;
 some kind of thematical consistency, some sense of continuity, and a pleasant
 pacing. Oh, and it had to fit on a 80 minutes CD! I&amp;#39;m pleased with the result,
 and I hope you can enjoy it too.&lt;/p&gt;
-&lt;p&gt;Without further ado, the album:&lt;/p&gt;
+&lt;p&gt;Without further ado, &lt;a href=&quot;https://www.youtube.com/playlist?list=PLiZkNl164CsD_jMZcBIMLrAh1V0Oakq6L&quot;&gt;the album&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/muse-black-holes-butterflies/cover2.jpg&quot; alt=&quot;Muse - Black Holes &amp;amp; Butterflies Album Cover&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;hr&gt;&lt;/p&gt;
 &lt;h3 id=&quot;-listen-on-youtube-listen-&quot;&gt;&lt;a href=&quot;https://www.youtube.com/playlist?list=PLiZkNl164CsD_jMZcBIMLrAh1V0Oakq6L&quot;&gt;Listen on YouTube&lt;/a&gt;&lt;/h3&gt;
@@ -357,7 +357,7 @@ final outputs match the generated outputs. It&amp;#39;s also possible to go inpu
 outputs → inputs instead, depending on what makes the most sense. As an added
 benefit, the inverse is often useful in its own right, or downright necessary.&lt;/p&gt;
 &lt;p&gt;I applied this approach to test &lt;a href=&quot;/reusable-lexer&quot;&gt;the lexer I wrote about recently&lt;/a&gt;, here are
-&lt;a href=&quot;https://github.com/norswap/core0/tree/cea49b103f86b260df46fee67e01940d1b2a1634/test/core/lexer&quot;&gt;the tests&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&quot;https://github.com/norswap/core-lexer/tree/master/test/norswap/core/lexer&quot;&gt;the tests&lt;/a&gt;.&lt;/p&gt;
       </description>
       <pubDate>2017-07-03T22:00:00.000Z</pubDate>
       <link>http://norswap.com/gen-testing</link>
@@ -398,14 +398,7 @@ have generated a single, longer identifier instead.&lt;/p&gt;
 tokens, for every input. To do so, there is a &lt;em&gt;garbage&lt;/em&gt; token type that
 encapsulates spans of characters that cannot be attached to a token. Typically,
 these are non-ascii characters that are not part of a comment or litteral.&lt;/p&gt;
-&lt;p&gt;The implementation is in Java but it follows a rather weird — almost C-like —
-style. The reason is that eventually I want to bootstrap the Core 0 compiler
-(write it in itself). Because of that, I want to keep the implementation as
-simple and decoupled from Java&amp;#39;s idiosyncracies as possible. I also don&amp;#39;t expect
-that Core 0 will be object-oriented. For the same reason, I also didn&amp;#39;t use any
-libraries, including the standard libraries. There are a few exceptions, but I
-encapsulated them neatly in their own functions.&lt;/p&gt;
-&lt;p&gt;You can check out &lt;a href=&quot;https://github.com/norswap/core0/commit/cea49b103f86b260df46fee67e01940d1b2a1634&quot;&gt;the code here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can check out &lt;a href=&quot;https://github.com/norswap/core-lexer&quot;&gt;the code here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Stay tuned for a description of the testing methodology I use to test the lexer,
 and further infos on Core 0&amp;#39;s implementation.&lt;/p&gt;
       </description>

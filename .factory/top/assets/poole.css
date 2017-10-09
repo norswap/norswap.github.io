@@ -59,7 +59,7 @@ html {
 }
 
 body {
-  color: #515151;
+  color: #333;
   background-color: #fff;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
@@ -214,7 +214,7 @@ pre code {
 blockquote {
   padding: .5rem 1rem;
   margin: .8rem 0;
-  color: #7a7a7a;
+  color: #555;
   border-left: .25rem solid #e5e5e5;
 }
 blockquote p:last-child {

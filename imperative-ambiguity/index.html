@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Imperative Ambiguity
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Imperative Ambiguity</h1>
+      <span class="post-date">12 Nov 2017</span>
+<p>A while ago I realized that something people value about <a href="https://en.wikipedia.org/wiki/Purely_functional_programming">purely functional
+programming</a> is the certainties it gives about a function&#39;s signature. That
+might seem obvious, after all there is no data mutation and no side effects.</p>
+<p>I, however, am not a fan of purely functional programming. This is not a debate
+I want to wade in; it suffice to say that I enjoy using purely functional
+programming techniques, but despise being forced to write my whole program using
+that paradigm.</p>
+<p>I am much more interested in what it means not to have these guarantees, and the
+resulting ambiguity in function signatures. And of course, how we could make
+things better.</p>
+<h2 id="an-ambiguous-function">An Ambiguous Function</h2>
+<p>Consider the following function signature:</p>
+<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);
+</code></pre><p>In a purely functional language, you know that <code>list</code> cannot be modified, and
+the returned list will depend only on <code>list</code> and whatever data was captured via
+<a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)">closure</a> at the function definition point (data which, of course, does not
+change).</p>
+<p>In an imperative language, however, the following is unclear:</p>
+<ol>
+<li>Can <code>process</code> modify <code>list</code>?</li>
+<li>Does <code>process</code> modify any state beside <code>list</code>?</li>
+<li>Does <code>process</code> store a reference to <code>list</code> in some other data structure?</li>
+<li>Does <code>process</code> store a reference to the list it returns in some other data
+structure?</li>
+<li>Can the returned list be <code>list</code> itself?</li>
+</ol>
+<p>The first two questions are about mutation, but the last three questions are
+relevant <em>because of</em> mutation. It&#39;s important to know who can access the list,
+because of the possibility it might be mutated.</p>
+<h2 id="caller-and-callee">Caller and Callee</h2>
+<p>It&#39;s important for us to distinguish between the caller and the callee.
+The caller is the entity that makes the function call, while the callee is the
+entity to which the called function belongs.</p>
+<p>What are those entities? Different views can apply: they could be packages,
+modules, classes, objects, clients or libraries.</p>
+<p>I think the most interesting case is when the caller and the callee are evolved
+separately. In this scenario the author/maintainer of the callee does not need
+to be aware of the caller, and the author/maintainer of the caller only needs to
+be aware of the interface of the callee.</p>
+<p>When we talk about ambiguity, we talk about the ambiguity of this interface.</p>
+<h2 id="interpretations">Interpretations</h2>
+<p>Let&#39;s consider a few possible interpretations of the function:</p>
+<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);
+</code></pre><ul>
+<li><p><strong>Immutable</strong>: no one can modify the argument list: not the caller, not the
+callee, nor anyone else.</p>
+</li>
+<li><p><strong>Read Loan</strong>: the callee is allowed to read the list, but not write to it nor
+create a reference that outlives the function&#39;s execution.</p>
+</li>
+<li><p><strong>Write Loan</strong>: the callee is allowed to read and write the list, but not
+create a reference that outlives the function&#39;s execution.</p>
+</li>
+<li><p><strong>Transfer</strong>: the callee may do whatever it wants with the list, the caller may
+not retain a reference to the list that outlives its execution; or, even more
+stringently, may not access the list at all after the call to <code>process</code>.</p>
+</li>
+<li><p><strong>Pipe In</strong>: the callee may read the list and retain a read-only reference that
+outlives the function&#39;s execution. The caller may still read and write the
+list. Data is being <em>piped in</em> the callee.</p>
+</li>
+<li><p><strong>Pipe Out</strong>: the callee may read or write the list and retain a reference that
+outlives the functions&#39;s execution. The caller may still read the list. Data
+is being <em>piped out</em> of the callee.</p>
+</li>
+<li><p><strong>Sync</strong>: the callee may read or write the list and retain a reference that
+outlives the function&#39;s execution. The caller may still read and write the
+list.</p>
+</li>
+</ul>
+<p>Since things are complex enough as it is, we omit discussing whether the
+returned list is an alias or the argument list, as well as considerations
+relating to concurrent execution.</p>
+<h2 id="in-practice">In Practice</h2>
+<p>Is it possible to disambiguate all these scenarios in a way that can be enforced
+by a compiler?</p>
+<p>Maybe. We could imagine keywords on parameters to enforce those. Simple
+(function-local) flow analysis should be sufficient to implement most of them.</p>
+<p>I&#39;m eager to see new languages that engage with this problem.</p>
+<p>The closest thing we have currently is probably <a href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>, but it restricts the
+possible scenarios a lot for the sake of precisely tracking the ownership of a
+piece of data, which is necessary for its <abbr title="Garbage
+Collection">GC</abbr>-less memory management system.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/imperative-ambiguity";
+        this.page.identifier = "imperative-ambiguity";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

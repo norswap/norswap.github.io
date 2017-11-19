@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Simple Math: Trade Rates
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Simple Math: Trade Rates</h1>
+      <span class="post-date">18 Nov 2017</span>
+<p>While I was driving on the highway the other day, I was thinking: &quot;how much time
+would I shave off if I drove at 150 km/h instead of at 120 km/h?&quot;</p>
+<p>It seems like that should have a very simple answer, but I wasn&#39;t able to come
+up with it immediately. Here are insights I gained after thinking a bit more
+about that question.</p>
+<h2 id="trade-rates">Trade Rates</h2>
+<p>First off, let us state that speed is a trade rate. From a human perspective,
+speed allows you to trade time for distance.</p>
+<p>In general a trade rate is a ratio <code>X/Y</code> that states how much of a thing A we
+can trade for a thing B:</p>
+<pre><code> X   A
+--- --- = 1
+ Y   B
+
+X A = Y B
+</code></pre><p>So naturally, 120 km/h allows us to trade an hour for 120 kilometers.</p>
+<h2 id="trade-rates-multiplications">Trade Rates Multiplications</h2>
+<p>Going from 120 km/h to 150 km/h, we add 30 km/h. That is precisely the quartier
+of the base speed.</p>
+<p>Hence: 150 = 120 * (1 + 1/4) = 120 * 5/4</p>
+<p>Let&#39;s see how this affects our trade rate equations:</p>
+<pre><code> 5   120   km
+--- ----- ---- = 1
+ 4    1    h
+
+5 * 120 km = 4 h
+
+150 km = 1 h
+</code></pre><p>As expected, we can now trade one hour for 150 kilometers. But what if we want
+to keep 120 km on the left side of that equation? Say we actually have to drive
+for 120 km, how much time do we save?</p>
+<pre><code>5 * 120 km = 4 h
+
+120 km = 4/5 h = 38 m
+</code></pre><p>We gained 1/5 of an hour, so 12 minutes.</p>
+<p>That&#39;s interesting: we increased our speed by a quarter, but only reduced the
+time by a fifth. This is actually more intuitive when the numbers become larger:
+double your speed, halve the required time, which corresponds to +100% speed for
+-50% time.</p>
+<p>The thing to keep in mind is that we&#39;re messing with the <em>trade rate</em>. Given a
+fixed speed, time and distance mirror one another: double the distance, double
+the time, and vice-versa.</p>
+<p>Another interesting thing: by multiplying the speed by 5/4, keeping the distance
+fixed, we ended up multiplying the time by 4/5. The symmetry between those
+numbers is not random. In fact we can generalize.</p>
+<p>If we multiply a trade rate <code>X/Y</code> with units <code>A/B</code> by a fraction <code>u/z</code>, then either:</p>
+<ul>
+<li><p>We can trade <code>u/z</code> times the A for the same amount of B.</p>
+</li>
+<li><p>We can trade <code>z/u</code> times the B for the same amount of A.</p>
+</li>
+</ul>
+<p>The math is fairly simple:</p>
+<pre><code> u   X   A
+--- --- --- = 1
+ z   Y   B
+
+ u
+--- X A = Y B
+ z
+       z
+X A = --- Y B
+       u
+</code></pre><h2 id="trade-rates-increases">Trade Rates Increases</h2>
+<p>We can think about this in another way. Multiplying the speed by 5/4 was
+actually multiplying it by (1 + 1/4), so we can see this as an 1/4 increase in
+speed.</p>
+<p>Clearly, when your speed increase by one quarter, you can drive one quarter more
+kilometers in an hour.</p>
+<p>It&#39;s less intuitive from the other side: when your speed increases by 1/4, how
+much does the time spent decrease? We already know the answer is 1/5, but how to
+find this without going through the whole development?</p>
+<p>First we need a side property.</p>
+<p><strong>Side Property: Numerator Swap</strong></p>
+<p>(I have no idea how this property is called in reality, or whether it even has a name)</p>
+<pre><code>   X             Y
+------- = 1 - -------
+ X + Y         X + Y
+</code></pre><p>Proof:</p>
+<pre><code>   X       X + Y     X + Y       X
+------- = ------- - ------- + -------  (1)
+ X + Y     X + Y     X + Y     X + Y
+
+                 Y
+        = 1 - -------                  (2)
+               X + Y
+</code></pre><p>In (1) we simply add and remove <code>(X+Y)/(X+Y)</code>.</p>
+<p>In (2), the first term becomes 1, while the <code>X</code> in the second and third terms
+have different signs and cancel each other out.</p>
+<p><strong>End Side Property</strong></p>
+<p>Okay so we wanted to know how to get that 1/5 diminution in time from the 1/4
+(<code>u/z</code> if we abstract) increase in speed.</p>
+<p>Here is the development:</p>
+<pre><code>      u    X   A
+(1 + ---) --- --- = 1
+      z    Y   B
+
+ z + u
+------- X A = Y B           (1)
+   z
+
+         z
+X A = ------- Y B           (2)
+       z + u
+
+              u
+X A = (1 - -------) Y B     (3)
+            z + u
+</code></pre><p>In (1), we pass <code>Y B</code> to the other side, and we replace <code>1</code> by the equivalent
+<code>z/z</code>, leading to the simplified <code>(z + u) / z</code>.</p>
+<p>In (2), we just pass that term to the other side.</p>
+<p>In (3), we use our side property and get our final form.</p>
+<p>In our speed example, <code>u/z = 1/4</code>, so <code>u = 1</code> and <code>z = 4</code>. We can see that <code>u /
+(z + u)</code> is indeed 1/5, and as the equation shows, that is the portion that the
+quantity of B gets reduced by.</p>
+<p>The gist of this is: add the numerator to the denominator.</p>
+<ul>
+<li>1/4 <code>&gt;&gt;</code> 1/5</li>
+<li>2/3 <code>&gt;&gt;</code> 2/5</li>
+<li>3/4 <code>&gt;&gt;</code> 3/7</li>
+</ul>
+<p>Easy peasy!</p>
+<h2 id="diminishing-returns">Diminishing Returns</h2>
+<p>One final interesting observation: there is a diminishing return on trade rate
+increase (assuming you&#39;re on the right side of the equation).</p>
+<p>This is obvious with speed. Double the speed, halve the time spent to go the
+same distance. Double the speed again, halve the time again.</p>
+<p>Imagine our base speed is 60 km/h and we have precisely 60 km to go until our
+destination. If we change our speed to 120 km/h, we gain 30 minutes in travel
+time.</p>
+<p>But if we were driving at 120 km/h, and we change our speed to 240 km/h, we only
+gain 15 minutes (half of our 30 minutes travel time at 120 km/h).</p>
+<p>So if you&#39;re driving at 60 km/h, and you add 60 km/h, you gain 30 minutes. But
+if you immediately add 120 km/h more, you only gain 15 minutes!</p>
+<p>Again, this is because we&#39;re changing the rate. Given a fixed speed, adding more
+time will yield a linear increase in distance travelled.</p>
+<hr>
+<p>That&#39;s it for today. Drive safe!</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/trade-rates";
+        this.page.identifier = "trade-rates";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

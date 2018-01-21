@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Simple Math: Permutations and Combinations
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Simple Math: Permutations and Combinations</h1>
+      <span class="post-date">21 Jan 2018</span>
+<p>In today&#39;s post, I want to (re-)introduce some simple math that most people
+learn in high school, but forget quicly: permutations and combinations.</p>
+<p>Permutations and combinations allow you to answer questions like: In how many
+ways can I order a set of distinct items? If I take K of those items, how many
+combinations of them are there? Then we will go a bit further and see how to
+deal with repetition (putting back an item after selecting it), multisets (sets
+in which there are multiple copies of the same item, like a pit that would hold
+4 red balls, 3 blue balls and 2 green balls) and picking from different sets.</p>
+<hr>
+<h2 id="sets-of-distinct-items">Sets of Distinct Items</h2>
+<p>Imagine you have a set of distinct items. This could be a deck of cards, or a
+pit containing uniquely numbered balls. We will look at the number of ways to
+pick items out of this set, with and without taking ordering into account.</p>
+<p>One basic rule: Once an item has been picked from the set, it can&#39;t be picked
+again.</p>
+<p>We will look at three questions:</p>
+<ul>
+<li><p><strong>Permutations</strong></p>
+<p>How many ways are there to order all items in the set?</p>
+<p>For instance, for a set of three balls {1, 2, 3}, there are six way to order
+them: 123, 132, 213, 231, 312, 321.</p>
+</li>
+<li><p><strong>k-Permutations</strong></p>
+<p>How many ways are there to order <em>k</em> items picked from a set?</p>
+<p>For instance, for a set of three balls {1, 2, 3}, there are 6 ways to order
+two of them: 12, 13, 21, 23, 31, 32.</p>
+</li>
+<li><p><strong>(k-)Combinations</strong></p>
+<p>How many ways are there to pick <em>k</em> items picked from a set?</p>
+<p>For instance, for a set of three balls {1, 2, 3}, there are 3 ways to pick two
+of them: {1, 2}, {1, 3} and {2, 3}.</p>
+</li>
+</ul>
+<p>Let&#39;s now give the formula and intuition for how to answer these questions.</p>
+<h3 id="permutations">Permutations</h3>
+<p>There are <code>n!</code> ways to order the elements of a set of size <em>n</em>.</p>
+<p><code>n!</code> means the <a href="https://en.wikipedia.org/wiki/Factorial">factorial</a> of n. The factorial of 3 is <code>3 * 2 * 1 = 6</code>. The
+factorial of 5 is <code>5 * 4 * 3 * 2 * 1 = 120</code>, etc. The factorial of 0 is 1.</p>
+<p><strong>Intuition:</strong> Imagine we have to order 3 balls {1, 2, 3}. First we pick one ball
+and we have three to choose from, so that&#39;s three possibilities. Next we pick
+another ball, and there are only two left to choose from. This means that for
+each choice we made when picking the first ball, there are two further
+possibilities for the second ball, so that&#39;s <code>3 * 2 = 6</code> possibilities. Finally
+there is only one ball left to pick: we have no choice. This means there are <code>3!
+= 3 * 2 * 1 = 6</code> ways to order the three balls.</p>
+<h3 id="k-permutations">k-Permutations</h3>
+<p>The are <code>P(n, k) = n! / (n-k)!</code> ways to order <em>k</em> items picked from a set of
+size <em>n</em>. For other mathematical notations, see <a href="https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n">here</a>.</p>
+<p><strong>Intuition:</strong> We start by considering all <code>n!</code> permutations of the set. But we
+are only interested in the <em>k</em> first items of these permutations. Amongst all
+permutations, there are multiple that start with the same <em>k</em> items. How many of
+these are there?</p>
+<p>Well, the permutations that have the same first <em>k</em> items must have a different
+permutations of their <em>n-k</em> last items. With the formula for permutations, we
+know there are <code>(n-k)!</code> ways to form permutations of a set of <em>n-k</em> items.</p>
+<p>So by dividing the total number of permutations (<code>n!</code>) by the number of
+permutations of the last <em>n-k</em> items (<code>(n-k)!</code>), we only keep one permutation
+per possible k-permutation, and that is our answer.</p>
+<h3 id="-k-combinations">(k-)Combinations</h3>
+<p>The are <code>C(n, k) = n! / (k! * (n-k)!)</code> ways to pick <em>k</em> items from a set of size
+<em>n</em>. For other mathematical notations, see <a href="https://en.wikipedia.org/wiki/Combination#Number_of_k-combinations">here</a>.</p>
+<p><strong>Intuition:</strong> We start from the <code>n! / (n-k)!</code> k-permutations of the set. These
+have the right size, but they take ordering into account. This means the
+combinations are counted multiple times, with different ordering. How many
+ordering of each combination are there?</p>
+<p>A combination is just a subset of size <em>k</em> of the whole set. With the formula
+for permutations, we know there are <code>k!</code> ways to order the items of this set.</p>
+<p>So by dividing the number of k-permutations (<code>n! / (n-k)!</code>) by the number of
+permutations (<code>k!</code>) for each combination, we end up getting the number of
+combinations!</p>
+<hr>
+<h2 id="sets-of-distinct-items-with-repetition">Sets of Distinct Items, with Repetition</h2>
+<p>By repetition, we mean that we change the basic rule of the last section: once a
+item has been picked from the set, we put it back and are free to pick it again,
+as many times as we like.</p>
+<p>This time, looking at the number of permutations of a whole set doesn&#39;t make
+sense anymore, as we put back each item after picking it.</p>
+<p>Let&#39;s look at the other two questions in the presence of repetitions:</p>
+<h3 id="k-permutations-with-repetitions-or-n-tuples-">k-Permutations with repetitions (or n-tuples)</h3>
+<p>There are <code>n^k</code> ways to order <em>k</em> items from a set of size <em>n</em>, with repetition.</p>
+<p><strong>Intuition</strong>: each time we pick an item, we have <em>n</em> possibilities, and these
+possibilities just multiply for each item we pick.</p>
+<p>For instance, for a set of two balls {1, 2}, there are <code>2^3 = 8</code> ways to pick 3
+balls: 111, 112, 121, 122, 211, 212, 221, 222.</p>
+<h3 id="-k-combinations-with-repetitions-or-k-multicombination-or-multisubset-">(k-)Combinations with repetitions (or k-multicombination or multisubset)</h3>
+<p>There are <code>CC(n, k) = C(n+k-1, k) = (n+k-1)! / (k! * (n-1)!)</code> ways to pick <em>k</em>
+items from a set of size <em>n</em>, with repetition. For the proper mathematical
+notation, see <a href="https://en.wikipedia.org/wiki/Combination#Number_of_combinations_with_repetition">here</a>.</p>
+<p><strong>Intuition:</strong> This formula is rather harder than the rest, and so the intuition
+is a bit more indirect.</p>
+<p>The idea is that each k-multicombination can be seen as a sequence of <em>k</em> stars
+and <em>n-1</em> separating bars. Basically, the bars define <em>n</em> separated intervals
+(for instance <code>1|2|3</code>). Each interval corresponds to an item in the set, and the
+number of stars (zero or more) in that interval corresponds to the number of
+times that item was picked from the set.</p>
+<p>So for instance, <code>***|*||*</code> represents a way to pick 5 (<em>k</em>) items from a set of
+4 (<em>n</em>) items. In this particular solution, the first item is picked thrice, the
+third not at all, and the other two only once.</p>
+<p>So if we want to know the number of k-multicombinations, the problem reduces to
+that of counting the number of such sequences. The sequences will have length
+<em>n+k-1</em>, and there are as many sequences as ways to pick the position of the <em>k</em>
+stars within the sequence. That is a combination! In particular, it is <code>C(n+k-1,
+k)</code>, and the rest is just applying the combination formula.</p>
+<hr>
+<h2 id="picking-from-multiple-sets">Picking From Multiple Sets</h2>
+<p>Before we get to the somewhat harder problem of picking in sets that contains
+multiple copies of the same items, let&#39;s see what happens when we pick from
+multiple distinct sets.</p>
+<p>We want to answer questions like: how many ways are there to pick 3 balls from
+my first pit containing 10 balls, and 4 balls from my second pit containing 8
+balls.</p>
+<p>It&#39;s very simple: since picking from each set is independent, we just compute
+the two combinations, then multiply them: we can pair any combination from the
+first set with a any combination from the second set.</p>
+<p>The same works for permutations, and we can even mix the two kinds. Just
+remember: when two number of possibilities are independant (all combinations of
+the two set of possibilities are valid), you can just multiply them.</p>
+<hr>
+<h2 id="multisets">Multisets</h2>
+<p>In what follows, we consider multisets: sets that have repeated items.</p>
+<p>We always consider a multiset of size <em>n</em> containing <em>m</em> kind of items, such
+that there are <em>k1</em>, <em>k2</em>, ..., <em>km</em> copies of the first, second, ..., last
+item. Note that <code>k1 + k2 + ... + km = n</code>.</p>
+<h3 id="permutations-of-multisets">Permutations of Multisets</h3>
+<p>There are <code>n! / (k1! * k2! * ... * km!)</code> ways to order the elements of a
+multiset.</p>
+<p>This formula is also called the &quot;multinomial coefficient&quot;.</p>
+<p><strong>Intuition</strong>: There would be <code>n!</code> ways to order the items of the multiset, if
+we considered each item to be unique.</p>
+<p>Let&#39;s consider the first kind of items (let&#39;s say &quot;red balls&quot;). All
+configurations that have red balls in the same positions are identical. For each
+of our <code>n!</code> permutations, how many have the red balls in the same position,
+except with different red balls? This is equivalent to asking to asking how many
+ways there are to distribute the red balls in the &quot;red slots&quot;. This is the same
+as asking how many ways there are to order all the red balls, which is a simple
+permutation: <code>k1!</code> ways.</p>
+<p>Now we know there are <code>n!/k1!</code> permutations in which we do not distinguish
+between the red balls, but still distinguish between all the other balls
+individually. To obtain, the final result, the same process must be performed
+for each kind of ball, successively divising until we obtain the final formula:
+<code>n! / (k1! * k2! * ... * km!)</code>.</p>
+<h3 id="k-permutations-of-multisets">k-Permutations of Multisets</h3>
+<p>This is <strong>much</strong> more complicated than what we&#39;d seen so far. A formula can be
+derived, but it is unwieldy.</p>
+<p>I will still try to give some intuition, but if you&#39;re after easy to use
+formulas, feel free to skip this.</p>
+<p>Observe that if we pick <em>k</em> items from our multiset such that <code>k &lt; k1, k &lt; k2,
+..., k &lt; km</code>, then the problem is essentially that of k-permutations with
+repetition, and there are thus <code>m^k</code> such permutations. The reason is that we
+can never run out of any kind of item.</p>
+<p>When this condition doesn&#39;t hold anymore, we would like to still start from
+<code>m^k</code> hypothetical permutations, but remove from this total the permutations
+where we picked more of a kind of item than there were in the multiset. This
+seems easy, but there is a problem: some of the permutations that have too many
+of the first kind of items may also have too many of the second kind of item. We
+should not remove them twice!</p>
+<p>Let&#39;s call <em>TM1</em>, <em>TM2</em>, ..., <em>TMm</em> the number of permutations where there are
+Too Many of the 1st, 2nd, ..., mth item. Computing these values is not trivial:
+for each <em>TMi</em>, we have to sum all k-combinations of <em>x</em> items amongst <em>k</em>, for
+all <em>x</em> such that <code>ki &lt; x &lt;= k</code>.</p>
+<p>When we have two kind of items, the simplified formula is: <code>m^k - TM1 - TM2 +
+TM(1,2)</code>.</p>
+<p>The meaning of <em>TM(1,2)</em> here is &quot;number of of permutations where there are too
+many of the first kind of item AND too many of the second times of item&quot;. Those
+permutations are actually substracted twice (once via <em>TM1</em>, once via <em>TM2</em>) and
+so need to be added back.</p>
+<p>What about three kind of items? It&#39;s <code>m^k - TM1 - TM2 - TM3 + TM(1, 2) + TM(1,
+3) + TM (2, 3) - TM(1, 2, 3)</code></p>
+<p>We now have three combinations of item kinds to consider. But after adding back
+these permutations, we still aren&#39;t done! Consider the permutations where we
+have too many of all three kind of items. We have removed them thrice (<em>TM1</em>,
+<em>TM2</em>, <em>TM3</em>) and added them back thrice (<em>TM(1, 2)</em>, <em>TM(1, 3)</em>, <em>TM(2, 3)</em>),
+so we need to remove them one final time (<em>TM(1, 2, 3)</em>).</p>
+<p>The more kinds of items you have, the crazier it gets. Not to mention that all
+these <em>TM</em> values are hairy to compute by themselves. Still easy stuff for a
+computer to do, but don&#39;t try this by hand.</p>
+<p>This principle of removing and adding back duplicates is known as <a href="https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle">The
+Inclusion-Exclusion Principle</a></p>
+<h3 id="k-permutations-of-multisets-with-repetition">k-Permutations of Multisets with Repetition</h3>
+<p>This is actually easy! Because repetition is allowed, it doesn&#39;t matter how many
+of each kind of item there is. The answer is thus the same as the number of
+k-permutations with reptition for a set that would have only one of each kind of
+item: <code>k^m</code> (where <em>m</em> is the number of kinds of items).</p>
+<p>However, there is a pitfall: while all <code>k^m</code> k-permutations are possible, they
+aren&#39;t all equiprobable — they don&#39;t all have the same probability to be
+selected randomly. The probabilities for each k-permutation will depend on the
+number of items of each kind.</p>
+<h3 id="k-combinations-of-multisets">k-Combinations of Multisets</h3>
+<p>This has just the same problem as counting the number of k-permutations of a
+multiset, the only difference being we do not consider ordering.</p>
+<p>The reasoning is much the same, so I shall say no more of it.</p>
+<h3 id="k-combinations-of-multisets-with-repetition">k-Combinations of Multisets with Repetition</h3>
+<p>This, in turn, can be obtained in much the same way as the number of
+k-permutations of multisets with repetition.</p>
+<p>Namely, there are <code>`CC(m, k) = C(m+k-1, k) = (m+k-1)! / (k! * (m-1)!)</code> such
+k-combinations. And again, not all of them are equiprobable.</p>
+<hr>
+<h2 id="probabilities">Probabilities</h2>
+<p>Combinations and permutations are often used for deriving the probability that a
+class of event will occur.</p>
+<p>The general recipe goes something like this:</p>
+<ol>
+<li><p>Derive the number of configurations that match the class of events (e.g.
+drawing three heart cards from a full deck of cards)</p>
+</li>
+<li><p>Derive the total number of configurations (e.g. the number of ways to draw
+three cards from a full deck of cards)</p>
+</li>
+<li><p>The ratio between (1) and (2) is your probability.</p>
+</li>
+</ol>
+<p>So to take our example, there are <code>C(52, 3)</code> ways to draw three
+cards out of a full 52-cards deck. There are <code>C(13, 3)</code> ways to pick three
+hearts cards from all heart cards in the deck, so that&#39;s also the number of
+scenarios in which we pick three cards from our full deck.</p>
+<p>So there is a <code>C(13, 3) / C(52, 3) = 0.013 = 1.3%</code> probabability to pick 3 heart
+cards from a full deck.</p>
+<p>Remember you can multiply scenarios if they are independent in order to get the
+total number of scenarios. This corresponds to an AND within a scenario. For
+instance, the probability to draw three red cards and three black cards from a
+full deck. (Answer: <code>C(26, 3)^2 / C(52, 6)</code>)</p>
+<p>You can also add scenarios when they are independent. This corresponds to an OR
+within the scenario. Example: There are 12 balls in a bag, 3 of them are red, 4
+of them are green and 5 of them are blue. We randomly take out 3 balls from the
+bag at the same time. What is the probability that all three balls are of the
+same colour? (Answer: <code>(C(5, 3) + C(4, 3) + C(3, 3)) / C(12, 3)</code>.</p>
+<p>Beware of scenarios that are not independant. For instance, if you search the
+probability to draw four cards, three of which are red, and one of which is a
+figure, you can&#39;t just multiply the probability to pick three red cards and the
+probability to pick a figure: the figure might be one of your red cards!</p>
+<p>There are ways around these issues, and we already mentionned the <a href="https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle">The
+Inclusion-Exclusion Principle</a>. I&#39;m afraid that in intricate cases, there
+is no substitute for some thinking.</p>
+<hr>
+<p>More information:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Combination">Combinations</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Permutation">Permutations</a></li>
+</ul>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/combinatorics";
+        this.page.identifier = "combinatorics";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

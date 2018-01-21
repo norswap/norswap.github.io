@@ -6,6 +6,253 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Simple Math: Permutations and Combinations</title>
+      <description>
+&lt;p&gt;In today&amp;#39;s post, I want to (re-)introduce some simple math that most people
+learn in high school, but forget quicly: permutations and combinations.&lt;/p&gt;
+&lt;p&gt;Permutations and combinations allow you to answer questions like: In how many
+ways can I order a set of distinct items? If I take K of those items, how many
+combinations of them are there? Then we will go a bit further and see how to
+deal with repetition (putting back an item after selecting it), multisets (sets
+in which there are multiple copies of the same item, like a pit that would hold
+4 red balls, 3 blue balls and 2 green balls) and picking from different sets.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;sets-of-distinct-items&quot;&gt;Sets of Distinct Items&lt;/h2&gt;
+&lt;p&gt;Imagine you have a set of distinct items. This could be a deck of cards, or a
+pit containing uniquely numbered balls. We will look at the number of ways to
+pick items out of this set, with and without taking ordering into account.&lt;/p&gt;
+&lt;p&gt;One basic rule: Once an item has been picked from the set, it can&amp;#39;t be picked
+again.&lt;/p&gt;
+&lt;p&gt;We will look at three questions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Permutations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;How many ways are there to order all items in the set?&lt;/p&gt;
+&lt;p&gt;For instance, for a set of three balls {1, 2, 3}, there are six way to order
+them: 123, 132, 213, 231, 312, 321.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;k-Permutations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;How many ways are there to order &lt;em&gt;k&lt;/em&gt; items picked from a set?&lt;/p&gt;
+&lt;p&gt;For instance, for a set of three balls {1, 2, 3}, there are 6 ways to order
+two of them: 12, 13, 21, 23, 31, 32.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;(k-)Combinations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;How many ways are there to pick &lt;em&gt;k&lt;/em&gt; items picked from a set?&lt;/p&gt;
+&lt;p&gt;For instance, for a set of three balls {1, 2, 3}, there are 3 ways to pick two
+of them: {1, 2}, {1, 3} and {2, 3}.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let&amp;#39;s now give the formula and intuition for how to answer these questions.&lt;/p&gt;
+&lt;h3 id=&quot;permutations&quot;&gt;Permutations&lt;/h3&gt;
+&lt;p&gt;There are &lt;code&gt;n!&lt;/code&gt; ways to order the elements of a set of size &lt;em&gt;n&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;n!&lt;/code&gt; means the &lt;a href=&quot;https://en.wikipedia.org/wiki/Factorial&quot;&gt;factorial&lt;/a&gt; of n. The factorial of 3 is &lt;code&gt;3 * 2 * 1 = 6&lt;/code&gt;. The
+factorial of 5 is &lt;code&gt;5 * 4 * 3 * 2 * 1 = 120&lt;/code&gt;, etc. The factorial of 0 is 1.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intuition:&lt;/strong&gt; Imagine we have to order 3 balls {1, 2, 3}. First we pick one ball
+and we have three to choose from, so that&amp;#39;s three possibilities. Next we pick
+another ball, and there are only two left to choose from. This means that for
+each choice we made when picking the first ball, there are two further
+possibilities for the second ball, so that&amp;#39;s &lt;code&gt;3 * 2 = 6&lt;/code&gt; possibilities. Finally
+there is only one ball left to pick: we have no choice. This means there are &lt;code&gt;3!
+= 3 * 2 * 1 = 6&lt;/code&gt; ways to order the three balls.&lt;/p&gt;
+&lt;h3 id=&quot;k-permutations&quot;&gt;k-Permutations&lt;/h3&gt;
+&lt;p&gt;The are &lt;code&gt;P(n, k) = n! / (n-k)!&lt;/code&gt; ways to order &lt;em&gt;k&lt;/em&gt; items picked from a set of
+size &lt;em&gt;n&lt;/em&gt;. For other mathematical notations, see &lt;a href=&quot;https://en.wikipedia.org/wiki/Permutation#k-permutations_of_n&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intuition:&lt;/strong&gt; We start by considering all &lt;code&gt;n!&lt;/code&gt; permutations of the set. But we
+are only interested in the &lt;em&gt;k&lt;/em&gt; first items of these permutations. Amongst all
+permutations, there are multiple that start with the same &lt;em&gt;k&lt;/em&gt; items. How many of
+these are there?&lt;/p&gt;
+&lt;p&gt;Well, the permutations that have the same first &lt;em&gt;k&lt;/em&gt; items must have a different
+permutations of their &lt;em&gt;n-k&lt;/em&gt; last items. With the formula for permutations, we
+know there are &lt;code&gt;(n-k)!&lt;/code&gt; ways to form permutations of a set of &lt;em&gt;n-k&lt;/em&gt; items.&lt;/p&gt;
+&lt;p&gt;So by dividing the total number of permutations (&lt;code&gt;n!&lt;/code&gt;) by the number of
+permutations of the last &lt;em&gt;n-k&lt;/em&gt; items (&lt;code&gt;(n-k)!&lt;/code&gt;), we only keep one permutation
+per possible k-permutation, and that is our answer.&lt;/p&gt;
+&lt;h3 id=&quot;-k-combinations&quot;&gt;(k-)Combinations&lt;/h3&gt;
+&lt;p&gt;The are &lt;code&gt;C(n, k) = n! / (k! * (n-k)!)&lt;/code&gt; ways to pick &lt;em&gt;k&lt;/em&gt; items from a set of size
+&lt;em&gt;n&lt;/em&gt;. For other mathematical notations, see &lt;a href=&quot;https://en.wikipedia.org/wiki/Combination#Number_of_k-combinations&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intuition:&lt;/strong&gt; We start from the &lt;code&gt;n! / (n-k)!&lt;/code&gt; k-permutations of the set. These
+have the right size, but they take ordering into account. This means the
+combinations are counted multiple times, with different ordering. How many
+ordering of each combination are there?&lt;/p&gt;
+&lt;p&gt;A combination is just a subset of size &lt;em&gt;k&lt;/em&gt; of the whole set. With the formula
+for permutations, we know there are &lt;code&gt;k!&lt;/code&gt; ways to order the items of this set.&lt;/p&gt;
+&lt;p&gt;So by dividing the number of k-permutations (&lt;code&gt;n! / (n-k)!&lt;/code&gt;) by the number of
+permutations (&lt;code&gt;k!&lt;/code&gt;) for each combination, we end up getting the number of
+combinations!&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;sets-of-distinct-items-with-repetition&quot;&gt;Sets of Distinct Items, with Repetition&lt;/h2&gt;
+&lt;p&gt;By repetition, we mean that we change the basic rule of the last section: once a
+item has been picked from the set, we put it back and are free to pick it again,
+as many times as we like.&lt;/p&gt;
+&lt;p&gt;This time, looking at the number of permutations of a whole set doesn&amp;#39;t make
+sense anymore, as we put back each item after picking it.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s look at the other two questions in the presence of repetitions:&lt;/p&gt;
+&lt;h3 id=&quot;k-permutations-with-repetitions-or-n-tuples-&quot;&gt;k-Permutations with repetitions (or n-tuples)&lt;/h3&gt;
+&lt;p&gt;There are &lt;code&gt;n^k&lt;/code&gt; ways to order &lt;em&gt;k&lt;/em&gt; items from a set of size &lt;em&gt;n&lt;/em&gt;, with repetition.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intuition&lt;/strong&gt;: each time we pick an item, we have &lt;em&gt;n&lt;/em&gt; possibilities, and these
+possibilities just multiply for each item we pick.&lt;/p&gt;
+&lt;p&gt;For instance, for a set of two balls {1, 2}, there are &lt;code&gt;2^3 = 8&lt;/code&gt; ways to pick 3
+balls: 111, 112, 121, 122, 211, 212, 221, 222.&lt;/p&gt;
+&lt;h3 id=&quot;-k-combinations-with-repetitions-or-k-multicombination-or-multisubset-&quot;&gt;(k-)Combinations with repetitions (or k-multicombination or multisubset)&lt;/h3&gt;
+&lt;p&gt;There are &lt;code&gt;CC(n, k) = C(n+k-1, k) = (n+k-1)! / (k! * (n-1)!)&lt;/code&gt; ways to pick &lt;em&gt;k&lt;/em&gt;
+items from a set of size &lt;em&gt;n&lt;/em&gt;, with repetition. For the proper mathematical
+notation, see &lt;a href=&quot;https://en.wikipedia.org/wiki/Combination#Number_of_combinations_with_repetition&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intuition:&lt;/strong&gt; This formula is rather harder than the rest, and so the intuition
+is a bit more indirect.&lt;/p&gt;
+&lt;p&gt;The idea is that each k-multicombination can be seen as a sequence of &lt;em&gt;k&lt;/em&gt; stars
+and &lt;em&gt;n-1&lt;/em&gt; separating bars. Basically, the bars define &lt;em&gt;n&lt;/em&gt; separated intervals
+(for instance &lt;code&gt;1|2|3&lt;/code&gt;). Each interval corresponds to an item in the set, and the
+number of stars (zero or more) in that interval corresponds to the number of
+times that item was picked from the set.&lt;/p&gt;
+&lt;p&gt;So for instance, &lt;code&gt;***|*||*&lt;/code&gt; represents a way to pick 5 (&lt;em&gt;k&lt;/em&gt;) items from a set of
+4 (&lt;em&gt;n&lt;/em&gt;) items. In this particular solution, the first item is picked thrice, the
+third not at all, and the other two only once.&lt;/p&gt;
+&lt;p&gt;So if we want to know the number of k-multicombinations, the problem reduces to
+that of counting the number of such sequences. The sequences will have length
+&lt;em&gt;n+k-1&lt;/em&gt;, and there are as many sequences as ways to pick the position of the &lt;em&gt;k&lt;/em&gt;
+stars within the sequence. That is a combination! In particular, it is &lt;code&gt;C(n+k-1,
+k)&lt;/code&gt;, and the rest is just applying the combination formula.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;picking-from-multiple-sets&quot;&gt;Picking From Multiple Sets&lt;/h2&gt;
+&lt;p&gt;Before we get to the somewhat harder problem of picking in sets that contains
+multiple copies of the same items, let&amp;#39;s see what happens when we pick from
+multiple distinct sets.&lt;/p&gt;
+&lt;p&gt;We want to answer questions like: how many ways are there to pick 3 balls from
+my first pit containing 10 balls, and 4 balls from my second pit containing 8
+balls.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s very simple: since picking from each set is independent, we just compute
+the two combinations, then multiply them: we can pair any combination from the
+first set with a any combination from the second set.&lt;/p&gt;
+&lt;p&gt;The same works for permutations, and we can even mix the two kinds. Just
+remember: when two number of possibilities are independant (all combinations of
+the two set of possibilities are valid), you can just multiply them.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;multisets&quot;&gt;Multisets&lt;/h2&gt;
+&lt;p&gt;In what follows, we consider multisets: sets that have repeated items.&lt;/p&gt;
+&lt;p&gt;We always consider a multiset of size &lt;em&gt;n&lt;/em&gt; containing &lt;em&gt;m&lt;/em&gt; kind of items, such
+that there are &lt;em&gt;k1&lt;/em&gt;, &lt;em&gt;k2&lt;/em&gt;, ..., &lt;em&gt;km&lt;/em&gt; copies of the first, second, ..., last
+item. Note that &lt;code&gt;k1 + k2 + ... + km = n&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;permutations-of-multisets&quot;&gt;Permutations of Multisets&lt;/h3&gt;
+&lt;p&gt;There are &lt;code&gt;n! / (k1! * k2! * ... * km!)&lt;/code&gt; ways to order the elements of a
+multiset.&lt;/p&gt;
+&lt;p&gt;This formula is also called the &amp;quot;multinomial coefficient&amp;quot;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intuition&lt;/strong&gt;: There would be &lt;code&gt;n!&lt;/code&gt; ways to order the items of the multiset, if
+we considered each item to be unique.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s consider the first kind of items (let&amp;#39;s say &amp;quot;red balls&amp;quot;). All
+configurations that have red balls in the same positions are identical. For each
+of our &lt;code&gt;n!&lt;/code&gt; permutations, how many have the red balls in the same position,
+except with different red balls? This is equivalent to asking to asking how many
+ways there are to distribute the red balls in the &amp;quot;red slots&amp;quot;. This is the same
+as asking how many ways there are to order all the red balls, which is a simple
+permutation: &lt;code&gt;k1!&lt;/code&gt; ways.&lt;/p&gt;
+&lt;p&gt;Now we know there are &lt;code&gt;n!/k1!&lt;/code&gt; permutations in which we do not distinguish
+between the red balls, but still distinguish between all the other balls
+individually. To obtain, the final result, the same process must be performed
+for each kind of ball, successively divising until we obtain the final formula:
+&lt;code&gt;n! / (k1! * k2! * ... * km!)&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;k-permutations-of-multisets&quot;&gt;k-Permutations of Multisets&lt;/h3&gt;
+&lt;p&gt;This is &lt;strong&gt;much&lt;/strong&gt; more complicated than what we&amp;#39;d seen so far. A formula can be
+derived, but it is unwieldy.&lt;/p&gt;
+&lt;p&gt;I will still try to give some intuition, but if you&amp;#39;re after easy to use
+formulas, feel free to skip this.&lt;/p&gt;
+&lt;p&gt;Observe that if we pick &lt;em&gt;k&lt;/em&gt; items from our multiset such that &lt;code&gt;k &amp;lt; k1, k &amp;lt; k2,
+..., k &amp;lt; km&lt;/code&gt;, then the problem is essentially that of k-permutations with
+repetition, and there are thus &lt;code&gt;m^k&lt;/code&gt; such permutations. The reason is that we
+can never run out of any kind of item.&lt;/p&gt;
+&lt;p&gt;When this condition doesn&amp;#39;t hold anymore, we would like to still start from
+&lt;code&gt;m^k&lt;/code&gt; hypothetical permutations, but remove from this total the permutations
+where we picked more of a kind of item than there were in the multiset. This
+seems easy, but there is a problem: some of the permutations that have too many
+of the first kind of items may also have too many of the second kind of item. We
+should not remove them twice!&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s call &lt;em&gt;TM1&lt;/em&gt;, &lt;em&gt;TM2&lt;/em&gt;, ..., &lt;em&gt;TMm&lt;/em&gt; the number of permutations where there are
+Too Many of the 1st, 2nd, ..., mth item. Computing these values is not trivial:
+for each &lt;em&gt;TMi&lt;/em&gt;, we have to sum all k-combinations of &lt;em&gt;x&lt;/em&gt; items amongst &lt;em&gt;k&lt;/em&gt;, for
+all &lt;em&gt;x&lt;/em&gt; such that &lt;code&gt;ki &amp;lt; x &amp;lt;= k&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;When we have two kind of items, the simplified formula is: &lt;code&gt;m^k - TM1 - TM2 +
+TM(1,2)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The meaning of &lt;em&gt;TM(1,2)&lt;/em&gt; here is &amp;quot;number of of permutations where there are too
+many of the first kind of item AND too many of the second times of item&amp;quot;. Those
+permutations are actually substracted twice (once via &lt;em&gt;TM1&lt;/em&gt;, once via &lt;em&gt;TM2&lt;/em&gt;) and
+so need to be added back.&lt;/p&gt;
+&lt;p&gt;What about three kind of items? It&amp;#39;s &lt;code&gt;m^k - TM1 - TM2 - TM3 + TM(1, 2) + TM(1,
+3) + TM (2, 3) - TM(1, 2, 3)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We now have three combinations of item kinds to consider. But after adding back
+these permutations, we still aren&amp;#39;t done! Consider the permutations where we
+have too many of all three kind of items. We have removed them thrice (&lt;em&gt;TM1&lt;/em&gt;,
+&lt;em&gt;TM2&lt;/em&gt;, &lt;em&gt;TM3&lt;/em&gt;) and added them back thrice (&lt;em&gt;TM(1, 2)&lt;/em&gt;, &lt;em&gt;TM(1, 3)&lt;/em&gt;, &lt;em&gt;TM(2, 3)&lt;/em&gt;),
+so we need to remove them one final time (&lt;em&gt;TM(1, 2, 3)&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;The more kinds of items you have, the crazier it gets. Not to mention that all
+these &lt;em&gt;TM&lt;/em&gt; values are hairy to compute by themselves. Still easy stuff for a
+computer to do, but don&amp;#39;t try this by hand.&lt;/p&gt;
+&lt;p&gt;This principle of removing and adding back duplicates is known as &lt;a href=&quot;https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle&quot;&gt;The
+Inclusion-Exclusion Principle&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;k-permutations-of-multisets-with-repetition&quot;&gt;k-Permutations of Multisets with Repetition&lt;/h3&gt;
+&lt;p&gt;This is actually easy! Because repetition is allowed, it doesn&amp;#39;t matter how many
+of each kind of item there is. The answer is thus the same as the number of
+k-permutations with reptition for a set that would have only one of each kind of
+item: &lt;code&gt;k^m&lt;/code&gt; (where &lt;em&gt;m&lt;/em&gt; is the number of kinds of items).&lt;/p&gt;
+&lt;p&gt;However, there is a pitfall: while all &lt;code&gt;k^m&lt;/code&gt; k-permutations are possible, they
+aren&amp;#39;t all equiprobable — they don&amp;#39;t all have the same probability to be
+selected randomly. The probabilities for each k-permutation will depend on the
+number of items of each kind.&lt;/p&gt;
+&lt;h3 id=&quot;k-combinations-of-multisets&quot;&gt;k-Combinations of Multisets&lt;/h3&gt;
+&lt;p&gt;This has just the same problem as counting the number of k-permutations of a
+multiset, the only difference being we do not consider ordering.&lt;/p&gt;
+&lt;p&gt;The reasoning is much the same, so I shall say no more of it.&lt;/p&gt;
+&lt;h3 id=&quot;k-combinations-of-multisets-with-repetition&quot;&gt;k-Combinations of Multisets with Repetition&lt;/h3&gt;
+&lt;p&gt;This, in turn, can be obtained in much the same way as the number of
+k-permutations of multisets with repetition.&lt;/p&gt;
+&lt;p&gt;Namely, there are &lt;code&gt;`CC(m, k) = C(m+k-1, k) = (m+k-1)! / (k! * (m-1)!)&lt;/code&gt; such
+k-combinations. And again, not all of them are equiprobable.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;probabilities&quot;&gt;Probabilities&lt;/h2&gt;
+&lt;p&gt;Combinations and permutations are often used for deriving the probability that a
+class of event will occur.&lt;/p&gt;
+&lt;p&gt;The general recipe goes something like this:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Derive the number of configurations that match the class of events (e.g.
+drawing three heart cards from a full deck of cards)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Derive the total number of configurations (e.g. the number of ways to draw
+three cards from a full deck of cards)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The ratio between (1) and (2) is your probability.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So to take our example, there are &lt;code&gt;C(52, 3)&lt;/code&gt; ways to draw three
+cards out of a full 52-cards deck. There are &lt;code&gt;C(13, 3)&lt;/code&gt; ways to pick three
+hearts cards from all heart cards in the deck, so that&amp;#39;s also the number of
+scenarios in which we pick three cards from our full deck.&lt;/p&gt;
+&lt;p&gt;So there is a &lt;code&gt;C(13, 3) / C(52, 3) = 0.013 = 1.3%&lt;/code&gt; probabability to pick 3 heart
+cards from a full deck.&lt;/p&gt;
+&lt;p&gt;Remember you can multiply scenarios if they are independent in order to get the
+total number of scenarios. This corresponds to an AND within a scenario. For
+instance, the probability to draw three red cards and three black cards from a
+full deck. (Answer: &lt;code&gt;C(26, 3)^2 / C(52, 6)&lt;/code&gt;)&lt;/p&gt;
+&lt;p&gt;You can also add scenarios when they are independent. This corresponds to an OR
+within the scenario. Example: There are 12 balls in a bag, 3 of them are red, 4
+of them are green and 5 of them are blue. We randomly take out 3 balls from the
+bag at the same time. What is the probability that all three balls are of the
+same colour? (Answer: &lt;code&gt;(C(5, 3) + C(4, 3) + C(3, 3)) / C(12, 3)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Beware of scenarios that are not independant. For instance, if you search the
+probability to draw four cards, three of which are red, and one of which is a
+figure, you can&amp;#39;t just multiply the probability to pick three red cards and the
+probability to pick a figure: the figure might be one of your red cards!&lt;/p&gt;
+&lt;p&gt;There are ways around these issues, and we already mentionned the &lt;a href=&quot;https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle&quot;&gt;The
+Inclusion-Exclusion Principle&lt;/a&gt;. I&amp;#39;m afraid that in intricate cases, there
+is no substitute for some thinking.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;More information:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Combination&quot;&gt;Combinations&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Permutation&quot;&gt;Permutations&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+      </description>
+      <pubDate>2018-01-20T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/combinatorics</link>
+      <guid isPermaLink="true">http://norswap.com/combinatorics</guid>
+    </item>
+    <item>
       <title>What is &quot;The Pervert&#39;s Guide to Ideology&quot; About?</title>
       <description>
 &lt;p&gt;Like many people who like ideas, I found the
@@ -2607,171 +2854,6 @@ tendencies acting in favor of a particular outcome.&lt;/p&gt;
       <pubDate>2017-11-04T23:00:00.000Z</pubDate>
       <link>http://norswap.com/munger-psychology</link>
       <guid isPermaLink="true">http://norswap.com/munger-psychology</guid>
-    </item>
-    <item>
-      <title>Charlie Munger on Learning</title>
-      <description>
-&lt;p&gt;This is post 3/4 in &lt;a href=&quot;/munger&quot;&gt;a series about Charlie Munger&amp;#39;s wisdom&lt;/a&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;My habit of committing far more time to learning and thinking than to doing is
-no accident.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;More important than the will to win is the will to prepare.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Acquire Wordly Wisdom&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Spend each day trying to be a little wiser than you were when you woke up.
-Discharge your duties faithfully and well. Step by step you get ahead, but not
-necessarily in fast spurts. But you build discipline by preparing for fast
-spurts. Slug it out one inch at a time, day by day. At the end of the day – if
-you live long enough – most people get what they deserve.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Acquire worldly wisdom and adjust your behavior accordingly. If your new
-behavior gives you a little temporary unpopularity with your peer group... then
-to hell with them.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Read a Lot&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;In my whole life, I have known no wise people (over a broad subject matter
-area) who didn&amp;#39;t read all the time - none, zero. You&amp;#39;d be amazed at how much
-Warren reads - and at how much I read.&lt;/p&gt;
-&lt;p&gt;If it is wisdom you’re after, you’re going to spend a lot of time on your ass
-reading.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;We read a lot. I don’t know anyone who’s wise who doesn’t read a lot. But
-that’s not enough: You have a to have a temperament to grab ideas and do
-sensible things. Most people don’t grab the right ideas or don’t know what to
-do with them.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I insist on a lot of time being spent, almost every day, to just sit and
-think. That is very uncommon in American business. I read and think. So I do
-more reading and thinking, and make less impulse decisions than most people in
-business. I do it because I like this kind of life.&lt;br&gt;— Warren Buffett&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Learn The Easily Learned Principles&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I believe in the discipline of mastering the best that other people have ever
-figured out. I don’t believe in just sitting down and trying to dream it all up
-yourself. Nobody’s that smart.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It never ceases to amaze me to see how much territory can be grasped if one
-merely masters and consistently uses all the obvious and easily learned
-principles.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Take a simple idea and take it seriously.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I am a biography nut myself. And I think when you&amp;#39;re trying to teach the great
-concepts that work, it helps to tie them into the lives and personalities of
-the people who developed them. I think you learn economics better if you make
-Adam Smith your friend. That sounds funny, making friends among the eminent
-dead, but if you go through life making friends with the eminent dead who had
-the right ideas, I think it will work better for you in life and work better
-in education. It&amp;#39;s way better than just giving the basic concepts.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Idea Destruction&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;We all are learning, modifying, or destroying ideas all the time. Rapid
-destruction of your ideas when the time is right is one of the most valuable
-qualities you can acquire. You must force yourself to consider arguments on
-the other side.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The ability to destroy your ideas rapidly instead of slowly when the occasion
-is right is one of the most valuable things. You have to work hard on it. Ask
-yourself what are the arguments on the other side. It’s bad to have an opinion
-you’re proud of if you can’t state the arguments for the other side better
-than your opponents. This is a great mental discipline.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Any year that passes in which you don’t destroy one of your best loved ideas
-is a wasted year.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When a better tool (idea or approach) comes along, what could be better than
-to swap it for your old, less useful tool?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Every Experience is a Chance To Learn&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Life will have terrible blows in it, horrible blows, unfair blows. It doesn&amp;#39;t
-matter. And some people recover and others don&amp;#39;t. And there I think the
-attitude of Epictetus is the best. He thought that every missed chance in life
-was an opportunity to behave well. Every missed chance in life was an
-opportunity to learn something and that your duty was not to be submerged in
-self-pity. But instead to utilize the terrible blow in constructive fashion.
-That is a very good idea.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It is really useful to be reminded of your errors. I think Warren Buffett and
-I are pretty good at that. We do kind of mentally rub our own noses in our own
-mistakes. And that is a very good mental habit.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Focus Over a Long Timespan&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Concentrating hard on something that’s important, I can’t succeed at all
-without doing it. I did not succeed in life by intelligence. I succeeded
-because I have a long attention span.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Simplicity is the end result of long, hard work, not the starting point.&lt;br&gt;— Frederick Maitland&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;You need to have a passionate interest in why things are happening. That cast
-of mind, kept over long periods, gradually improves your ability to focus on
-reality. If you dont have the cast of mind, you&amp;#39;re destined for failure even
-if you have a high I.Q.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Learn to Fluency&lt;/strong&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The deep structure of the human mind requires that the way to full-scope
-competency of virtually any kind is learn it all to fluency, like it or not.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If a skill is raised to fluency, instead of merely being crammed in briefly to
-enable one to pass some test, then the skill (1) will be lost more slowly and
-(2) will come back faster when refreshed with new learning. These are not
-minor advantages, and a wise man engaged in learning some important skill will
-not stop until he is really fluent in it.&lt;/p&gt;
-&lt;/blockquote&gt;
-      </description>
-      <pubDate>2017-10-30T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/munger-learning</link>
-      <guid isPermaLink="true">http://norswap.com/munger-learning</guid>
     </item>
   </channel>
 </rss>

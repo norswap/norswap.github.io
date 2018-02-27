@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Effective Command Line Searching
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Effective Command Line Searching</h1>
+      <span class="post-date">27 Feb 2018</span>
+<p>I do keep a fair amount of information inside text files - this is how I
+organize myself, keep track of what I&#39;ve read, etc.</p>
+<p>Occasionally, I need to search these files by content to retrieve some
+information, or remind myself of something I read earlier. Hence the need for
+software that does just that.</p>
+<p>So far, I had settled on <a href="https://www.mythicsoft.com/agentransack/">Agent Ransack</a> on Windows and <a href="https://www.houdah.com/tembo/?lang=en">Tembo</a> on OS X.
+However, I was looking for something a bit more snappy, hence the idea of using
+a command line tool.</p>
+<p>I expect the reader will be familiar with the venerable <a href="https://www.gnu.org/software/grep/">grep</a>, but it turns out
+there are a whole lot more tools that can be used.</p>
+<p>The most useful resource I found online was <a href="https://beyondgrep.com/feature-comparison/">this comparison</a> of tools, which
+compares (at the time of writing), <a href="https://beyondgrep.com/"><code>ack</code></a>, <a href="https://geoff.greer.fm/ag/"><code>ag</code></a>, <a href="https://git-scm.com/docs/git-grep"><code>git-grep</code></a>, <a href="https://www.gnu.org/software/grep/"><code>GNU
+grep</code></a> and <a href="https://github.com/BurntSushi/ripgrep"><code>rg</code></a>.</p>
+<p>After a glance, I was really tempted to use <a href="https://github.com/BurntSushi/ripgrep">ripgrep (<code>rg</code>)</a>, which seems
+to be the fastest of the bunch, has well-rounded features and nice
+documentations.</p>
+<p>However, it lacked a vital feature for me: multi-line matching. I store a lot of
+text formatted to hard-line-wrap at 80 characters, and I want to be able to
+search for word groups accros line boundaries. So ultimately I settled on <a href="https://geoff.greer.fm/ag/">the
+silver searcher (<code>ag</code>)</a>, which is great as well.</p>
+<h2 id="effective-selecting">Effective Selecting</h2>
+<p>Additionally, I also wanted to try <a href="https://github.com/garybernhardt/selecta">selecta</a>, a command line tool by <a href="https://www.destroyallsoftware.com/screencasts">Gary
+Bernhardt</a>.</p>
+<p>What it does is read lines from the input stream and allow you to scroll these
+lines on the command line, ultimately selecting one. If this description is
+unclear, check the animated gif on the <a href="https://github.com/garybernhardt/selecta">github page</a>.</p>
+<p>Unfortunately selecta is Unix-only, however there are a few clones and I ended
+up settling on the multi-platform <a href="https://github.com/rschmitt/heatseeker">heatseeker</a>.</p>
+<p>Here&#39;s an example of what I can do with <code>ag</code> and heatseeker (<code>hs</code>):</p>
+<pre><code>em $(ag -l parser | hs)
+</code></pre><p>Or the Windows equivalent (assuming you have <code>xargs</code> installed, it comes with
+<a href="https://www.cygwin.com/">Cygwin</a>, <a href="http://www.mingw.org/">MinGW</a> and even Git):</p>
+<pre><code>ag -l parser | hs | xargs em
+</code></pre><p>What I&#39;m doing is that I&#39;m searching for the string &quot;parser&quot; in the current
+directory. The <code>-l</code> flag says to only print the file name (not the line number)
+of matches. Then heatseeker is used for the selection, and once the selection is
+done, the file opens in Emacs (<code>em</code> is my <a href="https://github.com/norswap/.emacs.d">custom Emacs launching
+script</a>).</p>
+<p>Of course, this could be encapsulated in a batch script or bash function in
+order to be even more convenient.</p>
+<h2 id="filename-search">Filename Search</h2>
+<p>Just to be clear, the article is about searching inside text files. However, I
+also often want to search files by name.</p>
+<p>To do this, I use GUI programs. On Windows, the best is <a href="https://www.voidtools.com/">Everything</a>. I have
+this handy program hotkeyed to <code>Win+S</code> and I use it all the time to quickly
+navigate to a file.</p>
+<p>OS X has unfortunately nothing as good as that. The main problem is that most
+search programs seems to rely on the Spotlight engine, which is flaky in a
+couple of places. Most aggravating for me, Spotlight will not search inside
+dot-directories (e.g. <code>.config</code>). It&#39;s also not possible to formulate queries as
+easily as in Everything. I think partial path matching is not possible for
+instance. The search program that don&#39;t use the Spotlight engine are somehow
+even worse.</p>
+<p>In the absence of a real solution, <a href="https://www.houdah.com/tembo/?lang=en">Tembo</a> is also able to search on file names
+on OS X. It&#39;s not a patch on Everything, but it&#39;s better than nothing
+(accidental pun!).</p>
+<p>In the rare cases where I want to search on the command line, I can either use
+the venerable <a href="http://man7.org/linux/man-pages/man1/find.1.html"><code>find</code></a> or the use <code>-g</code> flag of <code>ag</code>.</p>
+<h2 id="android">Android</h2>
+<p>I also have a bunch of text files synced on my phone, and on the rare occassion
+I need to make a search on the go, I use the <a href="https://play.google.com/store/apps/details?id=jp.sblo.pandora.aGrep&amp;hl=en&amp;rdid=jp.sblo.pandora.aGrep">aGrep</a> application. I have also
+tried <a href="https://play.google.com/store/apps/details?id=com.docsearch&amp;hl=en">DocSearch</a>, but the user experience was less pleasant.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/cmd-search";
+        this.page.identifier = "cmd-search";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-82435249-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

@@ -31,6 +31,12 @@ Nicolas Laurent, Stefano Vissichio and Marco Canini
 *Chicago, USA, August 22 2014*  
 [\[PDF\]](/pubs/hotsdn2014.pdf)
 
+**A PEG-Based Macro System for Java**  
+Nicolas Laurent  
+*Master Thesis*  
+*September 2013*  
+[\[PDF\]](/pubs/master.pdf)
+
 ----
 
 See also:

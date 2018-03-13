@@ -9,3 +9,7 @@ PhD in computer science at the Université Catholique de Louvain.
 Contact me at `norswap@gmail.com`. Don't be shy!
 
 [facebook]: https://facebook.com/norswap
+
+I'm currently [looking for work](/looking-for-work).
+
+Here is [my resume](/resume) ([PDF](/resume.pdf)).

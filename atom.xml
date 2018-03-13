@@ -6,6 +6,28 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Looking for Work</title>
+      <description>
+&lt;p&gt;I&amp;#39;m slated to finish my PhD thesis by September (give or take) and I&amp;#39;ve started
+to look for work opportunities after that.&lt;/p&gt;
+&lt;p&gt;I have made contact with some interesting companies/institutions, but since
+I have a few months left before I need to make up my mind, I thought I would
+sollicit further offers.&lt;/p&gt;
+&lt;p&gt;So if you have something that might interest me, send information my way!&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m interested in:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;research or R&amp;amp;D-type work, especially on programming languages&lt;/li&gt;
+&lt;li&gt;senior technical positions, preferably including some management
+responsibilities&lt;/li&gt;
+&lt;li&gt;computer science teaching positions in higher eduction&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I have uploaded my resume &lt;a href=&quot;/resume&quot;&gt;here&lt;/a&gt; (&lt;a href=&quot;/resume.pdf&quot;&gt;PDF&lt;/a&gt;).&lt;br&gt;Be also sure to check my &lt;a href=&quot;https://github.com/norswap/&quot;&gt;Github account&lt;/a&gt; and my &lt;a href=&quot;/publications&quot;&gt;publications&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2018-03-12T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/looking-for-work</link>
+      <guid isPermaLink="true">http://norswap.com/looking-for-work</guid>
+    </item>
+    <item>
       <title>Effective Command Line Searching</title>
       <description>
 &lt;p&gt;I do keep a fair amount of information inside text files - this is how I
@@ -2575,97 +2597,6 @@ time will yield a linear increase in distance travelled.&lt;/p&gt;
       <pubDate>2017-11-17T23:00:00.000Z</pubDate>
       <link>http://norswap.com/trade-rates</link>
       <guid isPermaLink="true">http://norswap.com/trade-rates</guid>
-    </item>
-    <item>
-      <title>Imperative Ambiguity</title>
-      <description>
-&lt;p&gt;A while ago I realized that something people value about &lt;a href=&quot;https://en.wikipedia.org/wiki/Purely_functional_programming&quot;&gt;purely functional
-programming&lt;/a&gt; is the certainties it gives about a function&amp;#39;s signature. That
-might seem obvious, after all there is no data mutation and no side effects.&lt;/p&gt;
-&lt;p&gt;I, however, am not a fan of purely functional programming. This is not a debate
-I want to wade in; it suffice to say that I enjoy using purely functional
-programming techniques, but despise being forced to write my whole program using
-that paradigm.&lt;/p&gt;
-&lt;p&gt;I am much more interested in what it means not to have these guarantees, and the
-resulting ambiguity in function signatures. And of course, how we could make
-things better.&lt;/p&gt;
-&lt;h2 id=&quot;an-ambiguous-function&quot;&gt;An Ambiguous Function&lt;/h2&gt;
-&lt;p&gt;Consider the following function signature:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;List&amp;lt;T&amp;gt; process(List&amp;lt;T&amp;gt; list);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In a purely functional language, you know that &lt;code&gt;list&lt;/code&gt; cannot be modified, and
-the returned list will depend only on &lt;code&gt;list&lt;/code&gt; and whatever data was captured via
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Closure_(computer_programming)&quot;&gt;closure&lt;/a&gt; at the function definition point (data which, of course, does not
-change).&lt;/p&gt;
-&lt;p&gt;In an imperative language, however, the following is unclear:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Can &lt;code&gt;process&lt;/code&gt; modify &lt;code&gt;list&lt;/code&gt;?&lt;/li&gt;
-&lt;li&gt;Does &lt;code&gt;process&lt;/code&gt; modify any state beside &lt;code&gt;list&lt;/code&gt;?&lt;/li&gt;
-&lt;li&gt;Does &lt;code&gt;process&lt;/code&gt; store a reference to &lt;code&gt;list&lt;/code&gt; in some other data structure?&lt;/li&gt;
-&lt;li&gt;Does &lt;code&gt;process&lt;/code&gt; store a reference to the list it returns in some other data
-structure?&lt;/li&gt;
-&lt;li&gt;Can the returned list be &lt;code&gt;list&lt;/code&gt; itself?&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The first two questions are about mutation, but the last three questions are
-relevant &lt;em&gt;because of&lt;/em&gt; mutation. It&amp;#39;s important to know who can access the list,
-because of the possibility it might be mutated.&lt;/p&gt;
-&lt;h2 id=&quot;caller-and-callee&quot;&gt;Caller and Callee&lt;/h2&gt;
-&lt;p&gt;It&amp;#39;s important for us to distinguish between the caller and the callee.
-The caller is the entity that makes the function call, while the callee is the
-entity to which the called function belongs.&lt;/p&gt;
-&lt;p&gt;What are those entities? Different views can apply: they could be packages,
-modules, classes, objects, clients or libraries.&lt;/p&gt;
-&lt;p&gt;I think the most interesting case is when the caller and the callee are evolved
-separately. In this scenario the author/maintainer of the callee does not need
-to be aware of the caller, and the author/maintainer of the caller only needs to
-be aware of the interface of the callee.&lt;/p&gt;
-&lt;p&gt;When we talk about ambiguity, we talk about the ambiguity of this interface.&lt;/p&gt;
-&lt;h2 id=&quot;interpretations&quot;&gt;Interpretations&lt;/h2&gt;
-&lt;p&gt;Let&amp;#39;s consider a few possible interpretations of the function:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;List&amp;lt;T&amp;gt; process(List&amp;lt;T&amp;gt; list);
-&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Immutable&lt;/strong&gt;: no one can modify the argument list: not the caller, not the
-callee, nor anyone else.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Read Loan&lt;/strong&gt;: the callee is allowed to read the list, but not write to it nor
-create a reference that outlives the function&amp;#39;s execution.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Write Loan&lt;/strong&gt;: the callee is allowed to read and write the list, but not
-create a reference that outlives the function&amp;#39;s execution.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Transfer&lt;/strong&gt;: the callee may do whatever it wants with the list, the caller may
-not retain a reference to the list that outlives its execution; or, even more
-stringently, may not access the list at all after the call to &lt;code&gt;process&lt;/code&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Pipe In&lt;/strong&gt;: the callee may read the list and retain a read-only reference that
-outlives the function&amp;#39;s execution. The caller may still read and write the
-list. Data is being &lt;em&gt;piped in&lt;/em&gt; the callee.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Pipe Out&lt;/strong&gt;: the callee may read or write the list and retain a reference that
-outlives the functions&amp;#39;s execution. The caller may still read the list. Data
-is being &lt;em&gt;piped out&lt;/em&gt; of the callee.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Sync&lt;/strong&gt;: the callee may read or write the list and retain a reference that
-outlives the function&amp;#39;s execution. The caller may still read and write the
-list.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Since things are complex enough as it is, we omit discussing whether the
-returned list is an alias or the argument list, as well as considerations
-relating to concurrent execution.&lt;/p&gt;
-&lt;h2 id=&quot;in-practice&quot;&gt;In Practice&lt;/h2&gt;
-&lt;p&gt;Is it possible to disambiguate all these scenarios in a way that can be enforced
-by a compiler?&lt;/p&gt;
-&lt;p&gt;Maybe. We could imagine keywords on parameters to enforce those. Simple
-(function-local) flow analysis should be sufficient to implement most of them.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m eager to see new languages that engage with this problem.&lt;/p&gt;
-&lt;p&gt;The closest thing we have currently is probably &lt;a href=&quot;https://en.wikipedia.org/wiki/Rust_(programming_language)&quot;&gt;Rust&lt;/a&gt;, but it restricts the
-possible scenarios a lot for the sake of precisely tracking the ownership of a
-piece of data, which is necessary for its &lt;abbr title=&quot;Garbage
-Collection&quot;&gt;GC&lt;/abbr&gt;-less memory management system.&lt;/p&gt;
-      </description>
-      <pubDate>2017-11-11T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/imperative-ambiguity</link>
-      <guid isPermaLink="true">http://norswap.com/imperative-ambiguity</guid>
     </item>
   </channel>
 </rss>

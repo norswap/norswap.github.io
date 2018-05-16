@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Inductive Programming: A New Approach
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Inductive Programming: A New Approach</h1>
+      <span class="post-date">16 May 2018</span>
+<p>In the context of a job interview, I was asked to write a small paper outlining
+a research direction to tackle a problem in the field of <em>Inductive Programming</em>
+— essentially how to generate programs from examples. Here it is reproduced for
+your reading pleasure.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>Devise an approach to automatically generate programs which solve programming
+challenges, the like of which are used in hiring interviews, or listed on
+programming challenge websites (e.g. Project Euler).</p>
+<p>In particular, to generate a program we can use (1) a natural-language textual
+description of the problem to solve (including descriptions of the input and
+output), (2) a set of input/output (I/O) examples and (3) a piece of skeleton
+code for the solution.</p>
+<h2 id="state-of-the-art">State of the Art</h2>
+<p>The area of program generation from examples is known as <em>Inductive Programming</em>
+or <em>Inductive Program Synthesis</em>. We also consider other forms of <em>Program
+Synthesis</em>, where a higher-level (formal) specification of the problem may be
+given.</p>
+<p>The introductory paper by Gulwani et al. [1] is rather useful to get a sense of
+what the field is about. It further points to three surveys of the field [2, 3,
+4]. The survey by Kitzelmann [4] is particularly useful, as it divides the field
+into three tried-and-true approaches: <em>analytical-functional</em>, <em>inductive logic
+programming</em> and <em>generate-and-test</em>. Another survey by Gulwani et al. [5], has
+its own classification, which largely overlaps with that of Kitzelmann. In
+particular, it introduces the <em>constraint-solving approach</em>, which includes
+inductive logic programming.</p>
+<p>Let&#39;s note that classification is sometimes tricky, as many approaches accross
+categories use elements of search, constraint-solving and statistics.</p>
+<p>Below, I offer a brief summary of the advantages, drawbacks and results of
+different approaches as I understood them. Beware that this is written after a
+cursory literature review, by someone who is unexperienced in the field. It may
+be wrong in some signifiant regard.</p>
+<p><strong>The analytical-functional approach</strong> works well with &quot;symbolic&quot; problems where
+the structure of the input and output is significant: e.g. simple list
+processing problem such as the <em>reverse</em> function. The state of the art in this
+approach is Igor2 [6], a system that mixes the analytical-functional approach
+with search principles (cf. <em>generate-and-test</em>). Igor2 is able to induce the
+insertion sort and quicksort algorithms, albeit slowly for the later (~63s on
+the test setup versus ~0.2s for insertion sort).</p>
+<p><strong>The constraint-solving approach</strong> usually (but not always) makes use of a SAT
+or SMT solver. A representative example is Rosette [7]. It is able to generate
+relatively specialised programs, such as specifications for an HTML scraper.
+This approach does however struggle with complex loops and recursion.</p>
+<p><em>Inductive Logic Programming</em> (ILP) is a form of constraint-solving. ILP
+techniques are based on first-order predicate logic and typically generate
+Prolog programs. They use some form of solving in order to produce Prolog rules
+that enables the derivation of a set of facts (~ the output). From what I could
+gather, they&#39;re generally not more powerful than Igor2.</p>
+<p><strong>The generate-and-test approach</strong> is based on the idea of generating many
+candidate programs and testing them against a specification or a set of I/O
+pairs. Typically, a fitness function is used to guide the search, and the
+algorithms are genetic in nature: promising candidate solutions are mutated and
+crossed to generated new candidates. The approach is in principle very general,
+but slow in practice.</p>
+<p>Gulwani et al. [5] call this the <em>stochastic search approach</em> and offer the
+following definition:</p>
+<blockquote>
+<p>The stochastic synthesis approaches learn a distribution over the space of
+programs in the hypothesis space that is conditioned on the specification, and
+then sample programs from the distribution to learn a consistent program. The
+goal of these techniques is to use the learnt distribution to guide the search
+of programs that are more likely to lead to programs that conform with the
+specification.</p>
+</blockquote>
+<p>A major representative of this approach is ADATE [8], which is able to induce
+programs that sort lists, insert nodes in a binary search tree, or generate all
+permutations of a list. However, the generation process takes at least hours and
+up to 9 days.</p>
+<p>Another idea is to use a set of higher-order functions (<em>map</em>, <em>fold</em>, etc...)
+as primitives. The assumption is that most programs can be more tersely
+expressed using these, leading to a reduction in search space that makes it
+practical to enumerate all possible programs. This approach is notably
+implemented in MagicHaskeller [9]. In practice, the results are very limited
+(the examples given in the paper are <em>nth</em>, <em>map</em> and <em>length</em>).</p>
+<p>A third notable example is SyGuS (for Syntax-Guided Synthesis) [10]. SyGuS uses
+SMT solving to check the conformance of a candidate solution to a specification.
+In case of failure, it outputs a counter-example. Correctness on previously
+encountered counter-examples is then used to derive the fitness function that
+guides the search. Another key idea is the ability to supply a syntactic
+restriction on the program search space. For instance, if we were searching for
+a matrix-multplication routine for 2x2 matrices, we could submit the syntactic
+restriction that candidate solutions must use only 7 multiplication operations.</p>
+<p>SyGuS is evaluated using bit-twiddling problems (transformations of bit
+vectors). This is a quite limited set of problems, that has the advantage to fit
+the nature of SMT solving (which is a generalization of SAT solving — based on
+the boolean satisfiability problem). The generated programs are relatively
+simple, and the results are rather inconclusive beyond this class of problems.</p>
+<p>Finally, the generate-and-test approach also includes techniques based on neural
+networks. Gulwani et al. [5]:</p>
+<blockquote>
+<p>The proposed approaches can be divided into two categories: i) program
+induction, and ii) program synthesis. The neural architectures that perform
+program induction learn a network that is capable of replicating the behavior of
+the desired program, whereas the neural systems that perform program synthesis
+return an interpretable program that matches the desired specification
+behavior.</p>
+</blockquote>
+<p>As an example of program synthesis, DeepCoder [11] uses a deep learning
+algorithm to learn features from I/O pairs. The result is a way to map any set
+of I/O pairs to a probability distribution. The distribution indicates how
+likely it is that a programming language component will be present in a program
+that turns input into output.</p>
+<p>The results are quite limited in applicability. In particular, DeepCoder works
+with an ad hoc programming language that is very high-level and very limited.
+The language processes vectors and only has a very small number of built-in
+functions. The approach is also very limited in the program size: The evaluation
+is done on programming problems whose solution is a 5-statements program.</p>
+<p>However, the technique can still be useful in practical cases, with some
+relaxations. Microsoft Excel uses FlashFill [12], a technique that is roughly
+similar to that of DeepCoder, but relies on a manually crafted set of heuristics
+(<em>clues</em>) in order to derive the feature set. Flashfill is used to infer Excel
+formulas matching the user intent. Because these formulas do not feature loops
+or recursion, and because they draw on a set of primitive functions, the
+expressivity is roughly on par with constraint-solving approaches like Rosette
+[7], although the success rate is much better, thanks to clues. FlashFill does
+not feature neural networks, but a version that does replace manual clues with
+neural networks has been devised [13]. It is able to pass 38% of the original
+FlashFill benchmarks. One major limitation regards the size of the generated
+programs, currently limited to 13 (presumably, 13 functions).</p>
+<h2 id="first-thoughts">First Thoughts</h2>
+<p>My first thoughts upon hearing the problem was that it was impossible. That&#39;s
+too strong a claim, as there are no obvious theoretical impossibilities. Since
+then, I&#39;ve somewhat revised my opinion. I still think the problem is incredibly
+ambitious and hard, but there might be ways to do much better than the state of
+the art, if one stumbles upon a breakthrough technique.</p>
+<p>As seen in the small literature review above, there is quite a bit of work on
+program synthesis, and the results fall quite short of the mark as I understand
+it — which is to tackle even relatively challenging programming tasks.</p>
+<p>If we consider a more modest objective, then arguably current systems might
+already be good enough. Igor2 [6] being able to infer a quicksort in 60 seconds
+<strong>is</strong> impressive. The question is then: What goal do we want to reach? What is
+the benchmark for success?</p>
+<p>It is doubtful that incremental improvements over existing techniques can lead
+very far. Popular techniques have been combined to some success (again, Igor2 is
+a case in point). This means that if we want to solve the problem, we need to
+try something new. But that is, of course, a much bigger research risk.</p>
+<h2 id="divide-and-conquer">Divide And Conquer</h2>
+<p>Clearly, the area of inductive programming is active and already
+well-researched. I don&#39;t think I can come up with a worthy research direction
+without spending a few weeks in the literature and talking with people well
+acquainted with the topic.</p>
+<p>But what about dividing the problem into parts and trying to solve each part
+individually? That might be easier. Let&#39;s cheat!</p>
+<p>My suggestion is that, instead of working from a natural language description,
+we work from a formal, unambiguous, specification. We would still use examples
+as well. My idea for this part of the solution looks roughly like a compiler,
+which is maybe not a surprise given my background in language engineering.</p>
+<p>Then, as a second step, we could try to derive a formal specification from the
+natural-language specification. It is probably impossible to do this very well —
+given the ambiguity of natural language — but maybe we can still extract a
+partial specification, or extract many candidate specifications, over which we
+can conduct a search.</p>
+<h2 id="ambiguity">Ambiguity</h2>
+<p>A few words on one of the big problems facing us: ambiguity. It occurs at
+multiple levels in the problem.</p>
+<p>First, inductive programming based on examples is inherently ambiguous, given
+that there are infinitely many semantically distinct programs that can match
+the I/O pairs.</p>
+<p>In fact, a simple program mapping example inputs to outputs is a solution. Of
+course, that&#39;s typical overfitting. We&#39;d like a solution that, for instance, can
+generate a program matching all I/O pairs when only given any set containing
+half of the pairs as input. Some similar notion is probably defined in the
+literature, but I am not familiar with it.</p>
+<p>Still, this leads to an interesting question: What are the properties of the
+program that we want to generate, given that there are many that fit the bill?
+Probably we want something approaching the simplest solution. And probably, we
+can approximate this by the program size.</p>
+<p>Second, natural language is naturally ambiguous. From what I know (and looked
+up) on Natural Language Processing (NLP) [14], it&#39;s already not trivial to
+acquire an unambiguous parse tree from an English text. Moreover, within that
+parse tree, references (e.g., pronouns) are quintessentially ambiguous. Humans
+usually use the available context to disambiguate, although even that is not
+always enough. Should we even assume that such a parse tree is available, we are
+faced with the daunting task of assigning <em>meaning</em> to the words that make up
+the tree. This probably requires some kind of semantic network that relates the
+words to one another and to programming language concepts. Creating such a
+network by hand is possible but unpleasant and very time-consuming. Generating
+it from existing text is probably as difficult as the problem we&#39;re trying to
+solve in the first place.</p>
+<p>So a precise interpretation of the natural-language description is off. We
+could, instead, try to mine it for hints about the specification. It&#39;s not
+difficult to imagine we could employ machine learning techniques to extract some
+meaning from the description. For instance, a correlation between the presence
+of the word &quot;sorted&quot; and the presence of a sort component in the solution.</p>
+<p>This is similar to what DeepCoder [11] does, but with the I/O examples. It uses
+deep learning to learn to correlate some features in the examples with
+programming language constructs. This correlation (which takes the form of a
+probability distribution for various programming language constructs) is then
+used to guide a local search on the space of programs.</p>
+<p>And indeed, we could also add the natural-language description as a second
+source of heuristics to guide the local search. My feeling is that this is not
+anywhere near enough to make significant progress on the problem.</p>
+<p>There is another approach, which is to translate between the natural and the
+formal language, possibly reusing existing machine learning techniques*. This is
+what I suggested as a second step in the previous section. The result is still
+ambiguous, but much more readily exploitable assuming we manage to make good on
+the first problem — generating code based on the I/O examples and a formal
+specification.</p>
+<div style="float:left; height: 50px; width: 20px;">*</div>
+<p>
+There is a vast literature on the topic, including many papers related to
+Google Translate [15] — arguably the state of the art solution in machine
+translation.
+</p>
+
+<div style="page-break-after: always;"></div>
+
+<h2 id="from-specification-to-program">From Specification to Program</h2>
+<p>My proposed first step in the research would be to devise a way to turn a formal
+specification into a program.</p>
+<p>It&#39;s actually very easy to come up with a terrible solution to this problem:
+generate a program that enumerates all possible outputs, then filter using the
+specification. This solution is incredibly inefficient, but maybe it can serves
+as the basis for something better.</p>
+<p>First off, we can probably use part of the specification to constrain the
+generated outputs. The outputs must probably conform to a precise shape, which
+may also be related to the input (e.g. one line of output per line of input).</p>
+<p>Some parts of the specification might be naturally ammenable to be translated
+into a constructive algorithm — as opposed to simply filtering out bad
+solutions. For instance, the assertion that <code>y == f(x)</code> where <code>y</code> is a part of
+the output and <code>x</code> a part of the input could be translated immediately as <code>y =
+f(x)</code>, assuming it is the only thing that constrains <code>y</code>.</p>
+<p>I also expect that, starting from our initial program, we can
+backward-propagated some of the constraints to the enumeration logic itself.
+Some of the constraints could be translated into assertions used to prune the
+search tree, or invariants to be maintained. Static analysis and optimization
+techniques from compiler engineering should be relevant here.</p>
+<p>The big question is how far we can push these efforts. Can we generate enough
+stub code and optimize away enough of the search that we end up with an program
+that does <em>little enough</em> guessing?</p>
+<p>If we can&#39;t, all is not lost. We can still use this as a correct-by-construction
+candidate solution, and use it as a starting point for a local search in the
+space of programs. Within that search, we could exploit knowledge about the
+specification to make smart guesses as to what to change. We can use our I/O
+pairs to validate that the mutated program is still considered correct, as well
+as fresh inputs, whose corresponding output must satisfy the specification. The
+goal of the search is to derive a program that is simpler and more efficient.</p>
+<p>As a side note, it is not possible to check candidate programs against the
+specification directly, as per Rice&#39;s Theorem: &quot;all non-trivial semantic
+properties of programs are undecidable&quot;. It would probably be worthwhile to
+check a computability theory handbook to see if there are no other impossibility
+results that could orient our efforts.</p>
+<p>For the search in program-space, we can use the whole bag of tricks from the
+<em>generate-and-test</em> approach, notably fitness functions and genetic algorithms.
+But other, more specific methods could also be tried: using higher-order
+functions as building blocks, syntactic restrictions, ...</p>
+<p>Other classical AI techniques can be handy. I&#39;m thinking notably of simulated
+annealing, where we first <em>increase entropy</em> by allowing a certain amount of
+<em>noise</em>. In our case, we allow the initially-correct program to get worse,
+because we want to move away from that solution towards a shorter/more
+efficient/cleaner one; and then we progressively cool things down, trying to
+zero in on new correct solution.</p>
+<h2 id="defining-the-specification-language">Defining The Specification Language</h2>
+<p>A key concern in the proposition made above is the shape of the specification
+language. According to me, two concerns are in tension.</p>
+<p>First, the language should as broad and expressive as possible. The goal is to
+make it easy to write the specifications — otherwise, they won&#39;t get written at
+all. This is also beneficial because it makes extracting formal specifications
+from a natural-language document easier, as we may have constructs that better
+reflect the natural-language explanation.</p>
+<p>Second, the language should be a good basis for the kind of code generation and
+constraint propagation proposed in the previous section.</p>
+<p>There is some inherent contradiction between these two goals: if the
+specification language is bigger, it will neccessarily includes multiple many
+ways to specify the same constraint, some of which will be less amenable to code
+generation or constraint propagation. It would be interesting to study this in
+order to make an informed decision on what to include in the specification
+language.</p>
+<p>An interesting source of inspiration is the Z Notation [16], which mixes set
+theory, lambda calculus and first-order predicate logic.</p>
+<div style="page-break-after: always;"></div>
+
+<h2 id="fuzzy-specifications-natural-language">Fuzzy Specifications &amp; Natural Language</h2>
+<p>The second part of my solution calls for a way to acquire a formal specification
+from the natural-language specification and/or the examples.</p>
+<p>From examples, a partial specification can be obtained by looking for
+relationships between input and output that are consistent accross all I/O
+pairs. If the example set is too small, overfitting could be a danger.</p>
+<p>It&#39;s not quite clear to me how to mine the relationships from I/O pairs. An idea
+is to train a neural network as an oracle that indicates whether a new I/O pair
+is <em>valid</em>, that is to say, consistent with the training set of legitimate I/O
+pairs, a proxy for satisfying the specification. We could then train a second
+neural network to derive formal relationships based on the oracle itself. Such a
+two-part architecture is featured in Neural FlashFill [13]. The idea is very out
+there, however.</p>
+<p>The other (potentially complementary) option is to use the natural-language
+specification to guess at the formal specification. As discussed before,
+&quot;traditional&quot; (i.e., non-statistical) NLP is probably too arduous. However, given
+a big enough corpus of specifications available both in natural-language and
+formal versions, we can statistically learn a way to translate between both.
+This would work similarly to translation between two natural-languages (e.g.,
+what Google Translate does). It might be possible to retool these efforts
+towards our goal. A potential problem here is to find or produce this &quot;big
+enough&quot; corpus of natural and formal specifications.</p>
+<p>In any case, we must be ready to deal with mistakes in the generated
+specification, and our proposition so far assumed that the specification was
+correct. Fortunately, there is something very easy and effective we can do:
+simply run the generated specification against our I/O examples, and
+see if the specification is satisfied. If not, it cannot possibly be correct,
+and the invalid parts can be discarded.</p>
+<p>Furthermore, we can generate many candidate solutions — the translation process
+being inherently statistical — and perform a search on those.</p>
+<p>Even incorrect specifications have value, as we can perform a local search that
+mutates the specifications to try to find adjacent correct specifications. Here
+too, fitness functions and genetic algorithms could be helpful.</p>
+<div style="page-break-after: always;"></div>
+
+<h2 id="summary">Summary</h2>
+<p>Given that (1) current inductive programming techniques results are
+underwhelming with respect to our goal and (2) non-statistical NLP techniques
+can hardly help us, I propose a two-pronged approach to tackle our challenge.</p>
+<p>First, devise a way to generate programs based on a correct formal specification
+of the problem. For this, I suggest using techniques from statical analysis and
+compiler optimizations. We would tackle the generation process both forward, by
+constructively generating code from amenable specification fragments; and
+backwards, by propagation constraint into our code — initially a simple
+enumeration routine.</p>
+<p>Second, manage to extract a formal specification from the natural-language
+specificaton of the problem and from the initial set of I/O examples. For this,
+I propose to exploit statistical NLP techniques to &quot;translate&quot; between English
+and our formal specification language.</p>
+<p>The whole proposal is of course a rather wild shot in the dark. But it is
+different enough from previously-proposed approaches to have a chance — with
+some luck — to yield some low-hanging fruits, or maybe even — with luck <strong>and</strong>
+diligence — to go further than existing approaches.</p>
+<h2 id="references">References</h2>
+<ol>
+<li><p>Gulwani, Sumit, et al. &quot;Inductive programming meets the real world.&quot;
+Communications of the ACM 58.11 (2015): 90-99.</p>
+</li>
+<li><p>Hernández-Orallo, José. Deep knowledge: Inductive programming as an answer.
+Dagstuhl TR 13502, 2013.</p>
+</li>
+<li><p>Flener, Pierre, and Ute Schmid. &quot;An introduction to inductive programming.&quot;
+Artificial Intelligence Review 29.1 (2008): 45-62.</p>
+</li>
+<li><p>Kitzelmann, Emanuel. &quot;Inductive programming: A survey of program synthesis
+techniques.&quot; International workshop on approaches and applications of
+inductive programming. Springer, Berlin, Heidelberg, 2009.</p>
+</li>
+<li><p>Gulwani, Sumit, Oleksandr Polozov, and Rishabh Singh. &quot;Program synthesis.&quot;
+Foundations and Trends® in Programming Languages 4.1-2 (2017): 1-119.</p>
+</li>
+<li><p>Kitzelmann, Emanuel. &quot;Analytical inductive functional programming.&quot;
+International Symposium on Logic-Based Program Synthesis and Transformation.
+Springer, Berlin, Heidelberg, 2008.</p>
+</li>
+<li><p>Torlak, Emina, and Rastislav Bodik. &quot;A lightweight symbolic virtual machine
+for solver-aided host languages.&quot; ACM SIGPLAN Notices. Vol. 49. No. 6. ACM,
+2014.</p>
+</li>
+<li><p>Olsson, Roland. &quot;Inductive functional programming using incremental program
+transformation.&quot; Artificial intelligence 74.1 (1995): 55-81.</p>
+</li>
+<li><p>Katayama, Susumu. &quot;Systematic search for lambda expressions.&quot; Trends in
+functional programming 6 (2005): 111-126.</p>
+</li>
+<li><p>Alur, Rajeev, et al. &quot;Syntax-guided synthesis.&quot; Formal Methods in
+Computer-Aided Design (FMCAD), 2013. IEEE, 2013.</p>
+</li>
+<li><p>Balog, Matej, et al. &quot;Deepcoder: Learning to write programs.&quot; arXiv
+preprint arXiv:1611.01989 (2016). (To be published at ICLR 2017)</p>
+</li>
+<li><p>Gulwani, Sumit. &quot;Automating string processing in spreadsheets using
+input-output examples.&quot; ACM SIGPLAN Notices. Vol. 46. No. 1. ACM, 2011.</p>
+</li>
+<li><p>Parisotto, Emilio, et al. &quot;Neuro-symbolic program synthesis.&quot; arXiv preprint
+arXiv:1611.01855 (2016).</p>
+</li>
+<li><p>Mote, Kevin. &quot;Natural Language Processing-A Survey.&quot; arXiv preprint
+arXiv:1209.6238 (2012).</p>
+</li>
+<li><p><a href="https://research.google.com/pubs/MachineTranslation.html">https://research.google.com/pubs/MachineTranslation.html</a>
+Consulted on the 20th April 2018.</p>
+</li>
+<li><p>Abrial, J. et al. &quot;The Z Notation: A Reference Manual.&quot; (1998).</p>
+</li>
+</ol>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/inductive-programming";
+        this.page.identifier = "inductive-programming";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

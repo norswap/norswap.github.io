@@ -6,6 +6,391 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Inductive Programming: A New Approach</title>
+      <description>
+&lt;p&gt;In the context of a job interview, I was asked to write a small paper outlining
+a research direction to tackle a problem in the field of &lt;em&gt;Inductive Programming&lt;/em&gt;
+— essentially how to generate programs from examples. Here it is reproduced for
+your reading pleasure.&lt;/p&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;/h2&gt;
+&lt;p&gt;Devise an approach to automatically generate programs which solve programming
+challenges, the like of which are used in hiring interviews, or listed on
+programming challenge websites (e.g. Project Euler).&lt;/p&gt;
+&lt;p&gt;In particular, to generate a program we can use (1) a natural-language textual
+description of the problem to solve (including descriptions of the input and
+output), (2) a set of input/output (I/O) examples and (3) a piece of skeleton
+code for the solution.&lt;/p&gt;
+&lt;h2 id=&quot;state-of-the-art&quot;&gt;State of the Art&lt;/h2&gt;
+&lt;p&gt;The area of program generation from examples is known as &lt;em&gt;Inductive Programming&lt;/em&gt;
+or &lt;em&gt;Inductive Program Synthesis&lt;/em&gt;. We also consider other forms of &lt;em&gt;Program
+Synthesis&lt;/em&gt;, where a higher-level (formal) specification of the problem may be
+given.&lt;/p&gt;
+&lt;p&gt;The introductory paper by Gulwani et al. [1] is rather useful to get a sense of
+what the field is about. It further points to three surveys of the field [2, 3,
+4]. The survey by Kitzelmann [4] is particularly useful, as it divides the field
+into three tried-and-true approaches: &lt;em&gt;analytical-functional&lt;/em&gt;, &lt;em&gt;inductive logic
+programming&lt;/em&gt; and &lt;em&gt;generate-and-test&lt;/em&gt;. Another survey by Gulwani et al. [5], has
+its own classification, which largely overlaps with that of Kitzelmann. In
+particular, it introduces the &lt;em&gt;constraint-solving approach&lt;/em&gt;, which includes
+inductive logic programming.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s note that classification is sometimes tricky, as many approaches accross
+categories use elements of search, constraint-solving and statistics.&lt;/p&gt;
+&lt;p&gt;Below, I offer a brief summary of the advantages, drawbacks and results of
+different approaches as I understood them. Beware that this is written after a
+cursory literature review, by someone who is unexperienced in the field. It may
+be wrong in some signifiant regard.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The analytical-functional approach&lt;/strong&gt; works well with &amp;quot;symbolic&amp;quot; problems where
+the structure of the input and output is significant: e.g. simple list
+processing problem such as the &lt;em&gt;reverse&lt;/em&gt; function. The state of the art in this
+approach is Igor2 [6], a system that mixes the analytical-functional approach
+with search principles (cf. &lt;em&gt;generate-and-test&lt;/em&gt;). Igor2 is able to induce the
+insertion sort and quicksort algorithms, albeit slowly for the later (~63s on
+the test setup versus ~0.2s for insertion sort).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The constraint-solving approach&lt;/strong&gt; usually (but not always) makes use of a SAT
+or SMT solver. A representative example is Rosette [7]. It is able to generate
+relatively specialised programs, such as specifications for an HTML scraper.
+This approach does however struggle with complex loops and recursion.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Inductive Logic Programming&lt;/em&gt; (ILP) is a form of constraint-solving. ILP
+techniques are based on first-order predicate logic and typically generate
+Prolog programs. They use some form of solving in order to produce Prolog rules
+that enables the derivation of a set of facts (~ the output). From what I could
+gather, they&amp;#39;re generally not more powerful than Igor2.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The generate-and-test approach&lt;/strong&gt; is based on the idea of generating many
+candidate programs and testing them against a specification or a set of I/O
+pairs. Typically, a fitness function is used to guide the search, and the
+algorithms are genetic in nature: promising candidate solutions are mutated and
+crossed to generated new candidates. The approach is in principle very general,
+but slow in practice.&lt;/p&gt;
+&lt;p&gt;Gulwani et al. [5] call this the &lt;em&gt;stochastic search approach&lt;/em&gt; and offer the
+following definition:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The stochastic synthesis approaches learn a distribution over the space of
+programs in the hypothesis space that is conditioned on the specification, and
+then sample programs from the distribution to learn a consistent program. The
+goal of these techniques is to use the learnt distribution to guide the search
+of programs that are more likely to lead to programs that conform with the
+specification.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A major representative of this approach is ADATE [8], which is able to induce
+programs that sort lists, insert nodes in a binary search tree, or generate all
+permutations of a list. However, the generation process takes at least hours and
+up to 9 days.&lt;/p&gt;
+&lt;p&gt;Another idea is to use a set of higher-order functions (&lt;em&gt;map&lt;/em&gt;, &lt;em&gt;fold&lt;/em&gt;, etc...)
+as primitives. The assumption is that most programs can be more tersely
+expressed using these, leading to a reduction in search space that makes it
+practical to enumerate all possible programs. This approach is notably
+implemented in MagicHaskeller [9]. In practice, the results are very limited
+(the examples given in the paper are &lt;em&gt;nth&lt;/em&gt;, &lt;em&gt;map&lt;/em&gt; and &lt;em&gt;length&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;A third notable example is SyGuS (for Syntax-Guided Synthesis) [10]. SyGuS uses
+SMT solving to check the conformance of a candidate solution to a specification.
+In case of failure, it outputs a counter-example. Correctness on previously
+encountered counter-examples is then used to derive the fitness function that
+guides the search. Another key idea is the ability to supply a syntactic
+restriction on the program search space. For instance, if we were searching for
+a matrix-multplication routine for 2x2 matrices, we could submit the syntactic
+restriction that candidate solutions must use only 7 multiplication operations.&lt;/p&gt;
+&lt;p&gt;SyGuS is evaluated using bit-twiddling problems (transformations of bit
+vectors). This is a quite limited set of problems, that has the advantage to fit
+the nature of SMT solving (which is a generalization of SAT solving — based on
+the boolean satisfiability problem). The generated programs are relatively
+simple, and the results are rather inconclusive beyond this class of problems.&lt;/p&gt;
+&lt;p&gt;Finally, the generate-and-test approach also includes techniques based on neural
+networks. Gulwani et al. [5]:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The proposed approaches can be divided into two categories: i) program
+induction, and ii) program synthesis. The neural architectures that perform
+program induction learn a network that is capable of replicating the behavior of
+the desired program, whereas the neural systems that perform program synthesis
+return an interpretable program that matches the desired specification
+behavior.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;As an example of program synthesis, DeepCoder [11] uses a deep learning
+algorithm to learn features from I/O pairs. The result is a way to map any set
+of I/O pairs to a probability distribution. The distribution indicates how
+likely it is that a programming language component will be present in a program
+that turns input into output.&lt;/p&gt;
+&lt;p&gt;The results are quite limited in applicability. In particular, DeepCoder works
+with an ad hoc programming language that is very high-level and very limited.
+The language processes vectors and only has a very small number of built-in
+functions. The approach is also very limited in the program size: The evaluation
+is done on programming problems whose solution is a 5-statements program.&lt;/p&gt;
+&lt;p&gt;However, the technique can still be useful in practical cases, with some
+relaxations. Microsoft Excel uses FlashFill [12], a technique that is roughly
+similar to that of DeepCoder, but relies on a manually crafted set of heuristics
+(&lt;em&gt;clues&lt;/em&gt;) in order to derive the feature set. Flashfill is used to infer Excel
+formulas matching the user intent. Because these formulas do not feature loops
+or recursion, and because they draw on a set of primitive functions, the
+expressivity is roughly on par with constraint-solving approaches like Rosette
+[7], although the success rate is much better, thanks to clues. FlashFill does
+not feature neural networks, but a version that does replace manual clues with
+neural networks has been devised [13]. It is able to pass 38% of the original
+FlashFill benchmarks. One major limitation regards the size of the generated
+programs, currently limited to 13 (presumably, 13 functions).&lt;/p&gt;
+&lt;h2 id=&quot;first-thoughts&quot;&gt;First Thoughts&lt;/h2&gt;
+&lt;p&gt;My first thoughts upon hearing the problem was that it was impossible. That&amp;#39;s
+too strong a claim, as there are no obvious theoretical impossibilities. Since
+then, I&amp;#39;ve somewhat revised my opinion. I still think the problem is incredibly
+ambitious and hard, but there might be ways to do much better than the state of
+the art, if one stumbles upon a breakthrough technique.&lt;/p&gt;
+&lt;p&gt;As seen in the small literature review above, there is quite a bit of work on
+program synthesis, and the results fall quite short of the mark as I understand
+it — which is to tackle even relatively challenging programming tasks.&lt;/p&gt;
+&lt;p&gt;If we consider a more modest objective, then arguably current systems might
+already be good enough. Igor2 [6] being able to infer a quicksort in 60 seconds
+&lt;strong&gt;is&lt;/strong&gt; impressive. The question is then: What goal do we want to reach? What is
+the benchmark for success?&lt;/p&gt;
+&lt;p&gt;It is doubtful that incremental improvements over existing techniques can lead
+very far. Popular techniques have been combined to some success (again, Igor2 is
+a case in point). This means that if we want to solve the problem, we need to
+try something new. But that is, of course, a much bigger research risk.&lt;/p&gt;
+&lt;h2 id=&quot;divide-and-conquer&quot;&gt;Divide And Conquer&lt;/h2&gt;
+&lt;p&gt;Clearly, the area of inductive programming is active and already
+well-researched. I don&amp;#39;t think I can come up with a worthy research direction
+without spending a few weeks in the literature and talking with people well
+acquainted with the topic.&lt;/p&gt;
+&lt;p&gt;But what about dividing the problem into parts and trying to solve each part
+individually? That might be easier. Let&amp;#39;s cheat!&lt;/p&gt;
+&lt;p&gt;My suggestion is that, instead of working from a natural language description,
+we work from a formal, unambiguous, specification. We would still use examples
+as well. My idea for this part of the solution looks roughly like a compiler,
+which is maybe not a surprise given my background in language engineering.&lt;/p&gt;
+&lt;p&gt;Then, as a second step, we could try to derive a formal specification from the
+natural-language specification. It is probably impossible to do this very well —
+given the ambiguity of natural language — but maybe we can still extract a
+partial specification, or extract many candidate specifications, over which we
+can conduct a search.&lt;/p&gt;
+&lt;h2 id=&quot;ambiguity&quot;&gt;Ambiguity&lt;/h2&gt;
+&lt;p&gt;A few words on one of the big problems facing us: ambiguity. It occurs at
+multiple levels in the problem.&lt;/p&gt;
+&lt;p&gt;First, inductive programming based on examples is inherently ambiguous, given
+that there are infinitely many semantically distinct programs that can match
+the I/O pairs.&lt;/p&gt;
+&lt;p&gt;In fact, a simple program mapping example inputs to outputs is a solution. Of
+course, that&amp;#39;s typical overfitting. We&amp;#39;d like a solution that, for instance, can
+generate a program matching all I/O pairs when only given any set containing
+half of the pairs as input. Some similar notion is probably defined in the
+literature, but I am not familiar with it.&lt;/p&gt;
+&lt;p&gt;Still, this leads to an interesting question: What are the properties of the
+program that we want to generate, given that there are many that fit the bill?
+Probably we want something approaching the simplest solution. And probably, we
+can approximate this by the program size.&lt;/p&gt;
+&lt;p&gt;Second, natural language is naturally ambiguous. From what I know (and looked
+up) on Natural Language Processing (NLP) [14], it&amp;#39;s already not trivial to
+acquire an unambiguous parse tree from an English text. Moreover, within that
+parse tree, references (e.g., pronouns) are quintessentially ambiguous. Humans
+usually use the available context to disambiguate, although even that is not
+always enough. Should we even assume that such a parse tree is available, we are
+faced with the daunting task of assigning &lt;em&gt;meaning&lt;/em&gt; to the words that make up
+the tree. This probably requires some kind of semantic network that relates the
+words to one another and to programming language concepts. Creating such a
+network by hand is possible but unpleasant and very time-consuming. Generating
+it from existing text is probably as difficult as the problem we&amp;#39;re trying to
+solve in the first place.&lt;/p&gt;
+&lt;p&gt;So a precise interpretation of the natural-language description is off. We
+could, instead, try to mine it for hints about the specification. It&amp;#39;s not
+difficult to imagine we could employ machine learning techniques to extract some
+meaning from the description. For instance, a correlation between the presence
+of the word &amp;quot;sorted&amp;quot; and the presence of a sort component in the solution.&lt;/p&gt;
+&lt;p&gt;This is similar to what DeepCoder [11] does, but with the I/O examples. It uses
+deep learning to learn to correlate some features in the examples with
+programming language constructs. This correlation (which takes the form of a
+probability distribution for various programming language constructs) is then
+used to guide a local search on the space of programs.&lt;/p&gt;
+&lt;p&gt;And indeed, we could also add the natural-language description as a second
+source of heuristics to guide the local search. My feeling is that this is not
+anywhere near enough to make significant progress on the problem.&lt;/p&gt;
+&lt;p&gt;There is another approach, which is to translate between the natural and the
+formal language, possibly reusing existing machine learning techniques*. This is
+what I suggested as a second step in the previous section. The result is still
+ambiguous, but much more readily exploitable assuming we manage to make good on
+the first problem — generating code based on the I/O examples and a formal
+specification.&lt;/p&gt;
+&lt;div style=&quot;float:left; height: 50px; width: 20px;&quot;&gt;*&lt;/div&gt;
+&lt;p&gt;
+There is a vast literature on the topic, including many papers related to
+Google Translate [15] — arguably the state of the art solution in machine
+translation.
+&lt;/p&gt;
+
+&lt;div style=&quot;page-break-after: always;&quot;&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;from-specification-to-program&quot;&gt;From Specification to Program&lt;/h2&gt;
+&lt;p&gt;My proposed first step in the research would be to devise a way to turn a formal
+specification into a program.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s actually very easy to come up with a terrible solution to this problem:
+generate a program that enumerates all possible outputs, then filter using the
+specification. This solution is incredibly inefficient, but maybe it can serves
+as the basis for something better.&lt;/p&gt;
+&lt;p&gt;First off, we can probably use part of the specification to constrain the
+generated outputs. The outputs must probably conform to a precise shape, which
+may also be related to the input (e.g. one line of output per line of input).&lt;/p&gt;
+&lt;p&gt;Some parts of the specification might be naturally ammenable to be translated
+into a constructive algorithm — as opposed to simply filtering out bad
+solutions. For instance, the assertion that &lt;code&gt;y == f(x)&lt;/code&gt; where &lt;code&gt;y&lt;/code&gt; is a part of
+the output and &lt;code&gt;x&lt;/code&gt; a part of the input could be translated immediately as &lt;code&gt;y =
+f(x)&lt;/code&gt;, assuming it is the only thing that constrains &lt;code&gt;y&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I also expect that, starting from our initial program, we can
+backward-propagated some of the constraints to the enumeration logic itself.
+Some of the constraints could be translated into assertions used to prune the
+search tree, or invariants to be maintained. Static analysis and optimization
+techniques from compiler engineering should be relevant here.&lt;/p&gt;
+&lt;p&gt;The big question is how far we can push these efforts. Can we generate enough
+stub code and optimize away enough of the search that we end up with an program
+that does &lt;em&gt;little enough&lt;/em&gt; guessing?&lt;/p&gt;
+&lt;p&gt;If we can&amp;#39;t, all is not lost. We can still use this as a correct-by-construction
+candidate solution, and use it as a starting point for a local search in the
+space of programs. Within that search, we could exploit knowledge about the
+specification to make smart guesses as to what to change. We can use our I/O
+pairs to validate that the mutated program is still considered correct, as well
+as fresh inputs, whose corresponding output must satisfy the specification. The
+goal of the search is to derive a program that is simpler and more efficient.&lt;/p&gt;
+&lt;p&gt;As a side note, it is not possible to check candidate programs against the
+specification directly, as per Rice&amp;#39;s Theorem: &amp;quot;all non-trivial semantic
+properties of programs are undecidable&amp;quot;. It would probably be worthwhile to
+check a computability theory handbook to see if there are no other impossibility
+results that could orient our efforts.&lt;/p&gt;
+&lt;p&gt;For the search in program-space, we can use the whole bag of tricks from the
+&lt;em&gt;generate-and-test&lt;/em&gt; approach, notably fitness functions and genetic algorithms.
+But other, more specific methods could also be tried: using higher-order
+functions as building blocks, syntactic restrictions, ...&lt;/p&gt;
+&lt;p&gt;Other classical AI techniques can be handy. I&amp;#39;m thinking notably of simulated
+annealing, where we first &lt;em&gt;increase entropy&lt;/em&gt; by allowing a certain amount of
+&lt;em&gt;noise&lt;/em&gt;. In our case, we allow the initially-correct program to get worse,
+because we want to move away from that solution towards a shorter/more
+efficient/cleaner one; and then we progressively cool things down, trying to
+zero in on new correct solution.&lt;/p&gt;
+&lt;h2 id=&quot;defining-the-specification-language&quot;&gt;Defining The Specification Language&lt;/h2&gt;
+&lt;p&gt;A key concern in the proposition made above is the shape of the specification
+language. According to me, two concerns are in tension.&lt;/p&gt;
+&lt;p&gt;First, the language should as broad and expressive as possible. The goal is to
+make it easy to write the specifications — otherwise, they won&amp;#39;t get written at
+all. This is also beneficial because it makes extracting formal specifications
+from a natural-language document easier, as we may have constructs that better
+reflect the natural-language explanation.&lt;/p&gt;
+&lt;p&gt;Second, the language should be a good basis for the kind of code generation and
+constraint propagation proposed in the previous section.&lt;/p&gt;
+&lt;p&gt;There is some inherent contradiction between these two goals: if the
+specification language is bigger, it will neccessarily includes multiple many
+ways to specify the same constraint, some of which will be less amenable to code
+generation or constraint propagation. It would be interesting to study this in
+order to make an informed decision on what to include in the specification
+language.&lt;/p&gt;
+&lt;p&gt;An interesting source of inspiration is the Z Notation [16], which mixes set
+theory, lambda calculus and first-order predicate logic.&lt;/p&gt;
+&lt;div style=&quot;page-break-after: always;&quot;&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;fuzzy-specifications-natural-language&quot;&gt;Fuzzy Specifications &amp;amp; Natural Language&lt;/h2&gt;
+&lt;p&gt;The second part of my solution calls for a way to acquire a formal specification
+from the natural-language specification and/or the examples.&lt;/p&gt;
+&lt;p&gt;From examples, a partial specification can be obtained by looking for
+relationships between input and output that are consistent accross all I/O
+pairs. If the example set is too small, overfitting could be a danger.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not quite clear to me how to mine the relationships from I/O pairs. An idea
+is to train a neural network as an oracle that indicates whether a new I/O pair
+is &lt;em&gt;valid&lt;/em&gt;, that is to say, consistent with the training set of legitimate I/O
+pairs, a proxy for satisfying the specification. We could then train a second
+neural network to derive formal relationships based on the oracle itself. Such a
+two-part architecture is featured in Neural FlashFill [13]. The idea is very out
+there, however.&lt;/p&gt;
+&lt;p&gt;The other (potentially complementary) option is to use the natural-language
+specification to guess at the formal specification. As discussed before,
+&amp;quot;traditional&amp;quot; (i.e., non-statistical) NLP is probably too arduous. However, given
+a big enough corpus of specifications available both in natural-language and
+formal versions, we can statistically learn a way to translate between both.
+This would work similarly to translation between two natural-languages (e.g.,
+what Google Translate does). It might be possible to retool these efforts
+towards our goal. A potential problem here is to find or produce this &amp;quot;big
+enough&amp;quot; corpus of natural and formal specifications.&lt;/p&gt;
+&lt;p&gt;In any case, we must be ready to deal with mistakes in the generated
+specification, and our proposition so far assumed that the specification was
+correct. Fortunately, there is something very easy and effective we can do:
+simply run the generated specification against our I/O examples, and
+see if the specification is satisfied. If not, it cannot possibly be correct,
+and the invalid parts can be discarded.&lt;/p&gt;
+&lt;p&gt;Furthermore, we can generate many candidate solutions — the translation process
+being inherently statistical — and perform a search on those.&lt;/p&gt;
+&lt;p&gt;Even incorrect specifications have value, as we can perform a local search that
+mutates the specifications to try to find adjacent correct specifications. Here
+too, fitness functions and genetic algorithms could be helpful.&lt;/p&gt;
+&lt;div style=&quot;page-break-after: always;&quot;&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Given that (1) current inductive programming techniques results are
+underwhelming with respect to our goal and (2) non-statistical NLP techniques
+can hardly help us, I propose a two-pronged approach to tackle our challenge.&lt;/p&gt;
+&lt;p&gt;First, devise a way to generate programs based on a correct formal specification
+of the problem. For this, I suggest using techniques from statical analysis and
+compiler optimizations. We would tackle the generation process both forward, by
+constructively generating code from amenable specification fragments; and
+backwards, by propagation constraint into our code — initially a simple
+enumeration routine.&lt;/p&gt;
+&lt;p&gt;Second, manage to extract a formal specification from the natural-language
+specificaton of the problem and from the initial set of I/O examples. For this,
+I propose to exploit statistical NLP techniques to &amp;quot;translate&amp;quot; between English
+and our formal specification language.&lt;/p&gt;
+&lt;p&gt;The whole proposal is of course a rather wild shot in the dark. But it is
+different enough from previously-proposed approaches to have a chance — with
+some luck — to yield some low-hanging fruits, or maybe even — with luck &lt;strong&gt;and&lt;/strong&gt;
+diligence — to go further than existing approaches.&lt;/p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Gulwani, Sumit, et al. &amp;quot;Inductive programming meets the real world.&amp;quot;
+Communications of the ACM 58.11 (2015): 90-99.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Hernández-Orallo, José. Deep knowledge: Inductive programming as an answer.
+Dagstuhl TR 13502, 2013.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Flener, Pierre, and Ute Schmid. &amp;quot;An introduction to inductive programming.&amp;quot;
+Artificial Intelligence Review 29.1 (2008): 45-62.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Kitzelmann, Emanuel. &amp;quot;Inductive programming: A survey of program synthesis
+techniques.&amp;quot; International workshop on approaches and applications of
+inductive programming. Springer, Berlin, Heidelberg, 2009.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Gulwani, Sumit, Oleksandr Polozov, and Rishabh Singh. &amp;quot;Program synthesis.&amp;quot;
+Foundations and Trends® in Programming Languages 4.1-2 (2017): 1-119.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Kitzelmann, Emanuel. &amp;quot;Analytical inductive functional programming.&amp;quot;
+International Symposium on Logic-Based Program Synthesis and Transformation.
+Springer, Berlin, Heidelberg, 2008.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Torlak, Emina, and Rastislav Bodik. &amp;quot;A lightweight symbolic virtual machine
+for solver-aided host languages.&amp;quot; ACM SIGPLAN Notices. Vol. 49. No. 6. ACM,
+2014.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Olsson, Roland. &amp;quot;Inductive functional programming using incremental program
+transformation.&amp;quot; Artificial intelligence 74.1 (1995): 55-81.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Katayama, Susumu. &amp;quot;Systematic search for lambda expressions.&amp;quot; Trends in
+functional programming 6 (2005): 111-126.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Alur, Rajeev, et al. &amp;quot;Syntax-guided synthesis.&amp;quot; Formal Methods in
+Computer-Aided Design (FMCAD), 2013. IEEE, 2013.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Balog, Matej, et al. &amp;quot;Deepcoder: Learning to write programs.&amp;quot; arXiv
+preprint arXiv:1611.01989 (2016). (To be published at ICLR 2017)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Gulwani, Sumit. &amp;quot;Automating string processing in spreadsheets using
+input-output examples.&amp;quot; ACM SIGPLAN Notices. Vol. 46. No. 1. ACM, 2011.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Parisotto, Emilio, et al. &amp;quot;Neuro-symbolic program synthesis.&amp;quot; arXiv preprint
+arXiv:1611.01855 (2016).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Mote, Kevin. &amp;quot;Natural Language Processing-A Survey.&amp;quot; arXiv preprint
+arXiv:1209.6238 (2012).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://research.google.com/pubs/MachineTranslation.html&quot;&gt;https://research.google.com/pubs/MachineTranslation.html&lt;/a&gt;
+Consulted on the 20th April 2018.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Abrial, J. et al. &amp;quot;The Z Notation: A Reference Manual.&amp;quot; (1998).&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+      </description>
+      <pubDate>2018-05-15T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/inductive-programming</link>
+      <guid isPermaLink="true">http://norswap.com/inductive-programming</guid>
+    </item>
+    <item>
       <title>Looking for Work</title>
       <description>
 &lt;p&gt;I&amp;#39;m slated to finish my PhD thesis by September (give or take) and I&amp;#39;ve started
@@ -2451,152 +2836,6 @@ important thing is or are not making routine progress on it.&lt;/p&gt;
       <pubDate>2017-11-25T23:00:00.000Z</pubDate>
       <link>http://norswap.com/celerity</link>
       <guid isPermaLink="true">http://norswap.com/celerity</guid>
-    </item>
-    <item>
-      <title>Simple Math: Trade Rates</title>
-      <description>
-&lt;p&gt;While I was driving on the highway the other day, I was thinking: &amp;quot;how much time
-would I shave off if I drove at 150 km/h instead of at 120 km/h?&amp;quot;&lt;/p&gt;
-&lt;p&gt;It seems like that should have a very simple answer, but I wasn&amp;#39;t able to come
-up with it immediately. Here are insights I gained after thinking a bit more
-about that question.&lt;/p&gt;
-&lt;h2 id=&quot;trade-rates&quot;&gt;Trade Rates&lt;/h2&gt;
-&lt;p&gt;First off, let us state that speed is a trade rate. From a human perspective,
-speed allows you to trade time for distance.&lt;/p&gt;
-&lt;p&gt;In general a trade rate is a ratio &lt;code&gt;X/Y&lt;/code&gt; that states how much of a thing A we
-can trade for a thing B:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; X   A
---- --- = 1
- Y   B
-
-X A = Y B
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So naturally, 120 km/h allows us to trade an hour for 120 kilometers.&lt;/p&gt;
-&lt;h2 id=&quot;trade-rates-multiplications&quot;&gt;Trade Rates Multiplications&lt;/h2&gt;
-&lt;p&gt;Going from 120 km/h to 150 km/h, we add 30 km/h. That is precisely the quartier
-of the base speed.&lt;/p&gt;
-&lt;p&gt;Hence: 150 = 120 * (1 + 1/4) = 120 * 5/4&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s see how this affects our trade rate equations:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; 5   120   km
---- ----- ---- = 1
- 4    1    h
-
-5 * 120 km = 4 h
-
-150 km = 1 h
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;As expected, we can now trade one hour for 150 kilometers. But what if we want
-to keep 120 km on the left side of that equation? Say we actually have to drive
-for 120 km, how much time do we save?&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;5 * 120 km = 4 h
-
-120 km = 4/5 h = 38 m
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We gained 1/5 of an hour, so 12 minutes.&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s interesting: we increased our speed by a quarter, but only reduced the
-time by a fifth. This is actually more intuitive when the numbers become larger:
-double your speed, halve the required time, which corresponds to +100% speed for
--50% time.&lt;/p&gt;
-&lt;p&gt;The thing to keep in mind is that we&amp;#39;re messing with the &lt;em&gt;trade rate&lt;/em&gt;. Given a
-fixed speed, time and distance mirror one another: double the distance, double
-the time, and vice-versa.&lt;/p&gt;
-&lt;p&gt;Another interesting thing: by multiplying the speed by 5/4, keeping the distance
-fixed, we ended up multiplying the time by 4/5. The symmetry between those
-numbers is not random. In fact we can generalize.&lt;/p&gt;
-&lt;p&gt;If we multiply a trade rate &lt;code&gt;X/Y&lt;/code&gt; with units &lt;code&gt;A/B&lt;/code&gt; by a fraction &lt;code&gt;u/z&lt;/code&gt;, then either:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;We can trade &lt;code&gt;u/z&lt;/code&gt; times the A for the same amount of B.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;We can trade &lt;code&gt;z/u&lt;/code&gt; times the B for the same amount of A.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The math is fairly simple:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt; u   X   A
---- --- --- = 1
- z   Y   B
-
- u
---- X A = Y B
- z
-       z
-X A = --- Y B
-       u
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;trade-rates-increases&quot;&gt;Trade Rates Increases&lt;/h2&gt;
-&lt;p&gt;We can think about this in another way. Multiplying the speed by 5/4 was
-actually multiplying it by (1 + 1/4), so we can see this as an 1/4 increase in
-speed.&lt;/p&gt;
-&lt;p&gt;Clearly, when your speed increase by one quarter, you can drive one quarter more
-kilometers in an hour.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s less intuitive from the other side: when your speed increases by 1/4, how
-much does the time spent decrease? We already know the answer is 1/5, but how to
-find this without going through the whole development?&lt;/p&gt;
-&lt;p&gt;First we need a side property.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Side Property: Numerator Swap&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;(I have no idea how this property is called in reality, or whether it even has a name)&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;   X             Y
-------- = 1 - -------
- X + Y         X + Y
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Proof:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;   X       X + Y     X + Y       X
-------- = ------- - ------- + -------  (1)
- X + Y     X + Y     X + Y     X + Y
-
-                 Y
-        = 1 - -------                  (2)
-               X + Y
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In (1) we simply add and remove &lt;code&gt;(X+Y)/(X+Y)&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;In (2), the first term becomes 1, while the &lt;code&gt;X&lt;/code&gt; in the second and third terms
-have different signs and cancel each other out.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;End Side Property&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Okay so we wanted to know how to get that 1/5 diminution in time from the 1/4
-(&lt;code&gt;u/z&lt;/code&gt; if we abstract) increase in speed.&lt;/p&gt;
-&lt;p&gt;Here is the development:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;      u    X   A
-(1 + ---) --- --- = 1
-      z    Y   B
-
- z + u
-------- X A = Y B           (1)
-   z
-
-         z
-X A = ------- Y B           (2)
-       z + u
-
-              u
-X A = (1 - -------) Y B     (3)
-            z + u
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In (1), we pass &lt;code&gt;Y B&lt;/code&gt; to the other side, and we replace &lt;code&gt;1&lt;/code&gt; by the equivalent
-&lt;code&gt;z/z&lt;/code&gt;, leading to the simplified &lt;code&gt;(z + u) / z&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;In (2), we just pass that term to the other side.&lt;/p&gt;
-&lt;p&gt;In (3), we use our side property and get our final form.&lt;/p&gt;
-&lt;p&gt;In our speed example, &lt;code&gt;u/z = 1/4&lt;/code&gt;, so &lt;code&gt;u = 1&lt;/code&gt; and &lt;code&gt;z = 4&lt;/code&gt;. We can see that &lt;code&gt;u /
-(z + u)&lt;/code&gt; is indeed 1/5, and as the equation shows, that is the portion that the
-quantity of B gets reduced by.&lt;/p&gt;
-&lt;p&gt;The gist of this is: add the numerator to the denominator.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;1/4 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 1/5&lt;/li&gt;
-&lt;li&gt;2/3 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 2/5&lt;/li&gt;
-&lt;li&gt;3/4 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 3/7&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Easy peasy!&lt;/p&gt;
-&lt;h2 id=&quot;diminishing-returns&quot;&gt;Diminishing Returns&lt;/h2&gt;
-&lt;p&gt;One final interesting observation: there is a diminishing return on trade rate
-increase (assuming you&amp;#39;re on the right side of the equation).&lt;/p&gt;
-&lt;p&gt;This is obvious with speed. Double the speed, halve the time spent to go the
-same distance. Double the speed again, halve the time again.&lt;/p&gt;
-&lt;p&gt;Imagine our base speed is 60 km/h and we have precisely 60 km to go until our
-destination. If we change our speed to 120 km/h, we gain 30 minutes in travel
-time.&lt;/p&gt;
-&lt;p&gt;But if we were driving at 120 km/h, and we change our speed to 240 km/h, we only
-gain 15 minutes (half of our 30 minutes travel time at 120 km/h).&lt;/p&gt;
-&lt;p&gt;So if you&amp;#39;re driving at 60 km/h, and you add 60 km/h, you gain 30 minutes. But
-if you immediately add 120 km/h more, you only gain 15 minutes!&lt;/p&gt;
-&lt;p&gt;Again, this is because we&amp;#39;re changing the rate. Given a fixed speed, adding more
-time will yield a linear increase in distance travelled.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;That&amp;#39;s it for today. Drive safe!&lt;/p&gt;
-      </description>
-      <pubDate>2017-11-17T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/trade-rates</link>
-      <guid isPermaLink="true">http://norswap.com/trade-rates</guid>
     </item>
   </channel>
 </rss>

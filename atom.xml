@@ -6,6 +6,58 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Striving vs Cruising</title>
+      <description>
+&lt;p&gt;There is a question that everyone tends to ask themselves at one point or
+another and that question is &lt;em&gt;What should I do with my life?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t think there is a higher value that overrides all other. Unless it is so
+general as to be tautological. Some call this tautological value &lt;em&gt;happiness&lt;/em&gt;, or
+more scientifically &lt;em&gt;subjective well-being&lt;/em&gt; or &lt;em&gt;life satisfaction&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;We often try to answer the question in terms of goals and objectives. That&amp;#39;s not
+necessarily the right approach. After all, all we can ever decide is what to do
+right here, right now. Still, it raises the following question: Is it necessary
+to achieve to be happy? Should you just cruise through life and take in the
+sights? Or strive towards a goal worthy of you?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I sincerely believe that happiness requires meaning, and meaning requires a
+struggle. You should strive, but focus on the quality of the striving rather
+than on the end goal. Cruise if you must, but cruise towards something. Strive,
+but don&amp;#39;t be consumed by the goal.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There were many inspirations that led me to that conclusion, but the following
+three I find the most illuminating:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.fs.blog/2014/05/hunter-s-thompson-to-hume-logan/&quot;&gt;Finding Your Purpose and Living a Meaningful Life&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;A thorough examination of the idea of striving versus cruising.&lt;/p&gt;
+&lt;p&gt;If you don&amp;#39;t know what to do with your life, have you at least started
+looking?&lt;/p&gt;
+&lt;p&gt;Strive to be yourself.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://markmanson.net/question&quot;&gt;The Most Important Question of Your Life&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;What pain do you want in life? Looking for the pain you enjoy or even
+tolerate better than other goes a long way towards finding somewhat you will
+find meaningful.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.raptitude.com/2015/11/worry-less/&quot;&gt;How to Worry Less&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The vast majority of life consists of getting somewhere else. There are very
+few moments of arrival, and they are over as soon as they begin. If you feel
+like you need to be there before you can fully relax into where you are, then
+you will seldom be relaxed in life.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Post Scriptum&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This used to be a huge series of posts tackling the grand question of the
+meaning of life. I spent tens of hours writing and editing these posts... and
+came to hate them with a passion. It came from a good place: I wanted to share
+all my inspirations, all the connections that I&amp;#39;d developped. But at the same
+time it felt like I was trying to look clever all the time.&lt;/p&gt;
+&lt;p&gt;I was &lt;a href=&quot;https://sivers.org/7&quot;&gt;inspired&lt;/a&gt; by Derek Sivers to just extract the essential point and trash
+the rest. I&amp;#39;m glad I did.&lt;/p&gt;
+      </description>
+      <pubDate>2018-05-23T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/striving-cruising</link>
+      <guid isPermaLink="true">http://norswap.com/striving-cruising</guid>
+    </item>
+    <item>
       <title>Starting Weight Training</title>
       <description>
 &lt;p&gt;I&amp;#39;ve been weight training for a bit less than two months and I wanted to report
@@ -2386,17 +2438,6 @@ design, so there is not much I can say right now, but stay tuned :)&lt;/p&gt;
       <pubDate>2017-12-03T23:00:00.000Z</pubDate>
       <link>http://norswap.com/research-personal</link>
       <guid isPermaLink="true">http://norswap.com/research-personal</guid>
-    </item>
-    <item>
-      <title>Skelex</title>
-      <description>
-&lt;p&gt;I recently released &lt;strong&gt;&lt;a href=&quot;https://github.com/norswap/skelex&quot;&gt;skelex&lt;/a&gt;&lt;/strong&gt;, a regular expression (regex) matching library that
-works over streams of objects. Unlike most regex libraries, it also produces a
-parse tree. &lt;a href=&quot;https://github.com/norswap/skelex&quot;&gt;Check it out!&lt;/a&gt;&lt;/p&gt;
-      </description>
-      <pubDate>2017-11-29T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/skelex-release</link>
-      <guid isPermaLink="true">http://norswap.com/skelex-release</guid>
     </item>
   </channel>
 </rss>

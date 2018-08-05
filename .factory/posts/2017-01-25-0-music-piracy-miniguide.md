@@ -70,20 +70,25 @@ illegal downloads, so this seems like a good option for now.
 
 ### Deezer Downloader
 
-While searching for a song I couldn't find by any other means, I stumbled on
-[this reddit conversation][reddit-deezer] introducing a Deezer desktop
-downloader. It works really well.
+Here is a downloader for Deezer called [Deezloader]. It actually doesn't work
+as-is (you can't log into your Deezer account), you'll need to apply [this fix] first.
 
-[reddit-deezer]: https://www.reddit.com/r/Piracy/comments/5i33o1/yet_another_downloader_for_deezer/
+[Deezloader]: https://github.com/Deezloader/Deezloader
+[this fix]: https://old.reddit.com/r/Piracy/comments/921xiw/deezer_api/e33hpsq/
 
-The caveat is that I'm not too confident about it being able to work for long.
-Like Spotify, Deezer is intent on cracking down on downloads. There seems to be
-a few other Deezer downloaders around, so who knows.
+The above was updated in May 2018. When I first wrote this post, I said
+something to the effect that I wasn't confident that the downloader I
+recommended then would keep working for very long. And indeed, I've had to
+update (I should have updated more than once, but got lazy).
 
-PS: I goes without saying that if you're looking to replace anything on this
-guide, the [Piracy sub-reddit] is a good place to start looking.
+I still think no tool in this niche is perenne, and so, if you find yourself
+needing a Deezer downloader or any other such tool, a good place to search is
+the [Piracy sub-reddit].
 
 [Piracy sub-reddit]: https://www.reddit.com/r/Piracy/
+
+However, in the current state of things, Deezloader is my tool of choice for
+high-quality track and albums downloads.
 
 ### Private BitTorrent Trackers
 

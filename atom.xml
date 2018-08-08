@@ -1413,28 +1413,6 @@ Consulted on the 20th April 2018.&lt;/p&gt;
       <guid isPermaLink="true">http://norswap.com/inductive-programming</guid>
     </item>
     <item>
-      <title>Looking for Work</title>
-      <description>
-&lt;p&gt;I&amp;#39;m slated to finish my PhD thesis by September (give or take) and I&amp;#39;ve started
-to look for work opportunities after that.&lt;/p&gt;
-&lt;p&gt;I have made contact with some interesting companies/institutions, but since
-I have a few months left before I need to make up my mind, I thought I would
-sollicit further offers.&lt;/p&gt;
-&lt;p&gt;So if you have something that might interest me, send information my way!&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m interested in:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;research or R&amp;amp;D-type work, especially on programming languages&lt;/li&gt;
-&lt;li&gt;senior technical positions, preferably including some management
-responsibilities&lt;/li&gt;
-&lt;li&gt;computer science teaching positions in higher eduction&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;I have uploaded my resume &lt;a href=&quot;/resume&quot;&gt;here&lt;/a&gt; (&lt;a href=&quot;/resume.pdf&quot;&gt;PDF&lt;/a&gt;).&lt;br&gt;Be also sure to check my &lt;a href=&quot;https://github.com/norswap/&quot;&gt;Github account&lt;/a&gt; and my &lt;a href=&quot;/publications&quot;&gt;publications&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2018-03-12T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/looking-for-work</link>
-      <guid isPermaLink="true">http://norswap.com/looking-for-work</guid>
-    </item>
-    <item>
       <title>Effective Command Line Searching</title>
       <description>
 &lt;p&gt;I do keep a fair amount of information inside text files - this is how I
@@ -2695,6 +2673,17 @@ hegemonic ideology. (20)&lt;/p&gt;
       <pubDate>2017-12-19T23:00:00.000Z</pubDate>
       <link>http://norswap.com/zizek-ideology</link>
       <guid isPermaLink="true">http://norswap.com/zizek-ideology</guid>
+    </item>
+    <item>
+      <title>A simple Java Lexer</title>
+      <description>
+&lt;p&gt;I just released &lt;strong&gt;&lt;a href=&quot;https://github.com/norswap/java-lexer&quot;&gt;java-lexer&lt;/a&gt;&lt;/strong&gt;, a &lt;a href=&quot;https://docs.oracle.com/javase/specs/jls/se9/html/jls-3.html&quot;&gt;JLS&lt;/a&gt;-compliant yet simplistic lexer for the
+Java language. It&amp;#39;s completely stand-alone and not dependent on any parser or
+other libraries. &lt;a href=&quot;https://github.com/norswap/java-lexer&quot;&gt;Check it out!&lt;/a&gt;&lt;/p&gt;
+      </description>
+      <pubDate>2017-12-13T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/java-lexer-release</link>
+      <guid isPermaLink="true">http://norswap.com/java-lexer-release</guid>
     </item>
   </channel>
 </rss>

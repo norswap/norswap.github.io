@@ -58,16 +58,13 @@
     {
         return (T) obj;
     }
-}
-</code></pre><p>Now you can write:</p>
+}</code></pre><p>Now you can write:</p>
 <pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
-functionExpectingStringList(Caster.cast(x));
-</code></pre><p>instead of:</p>
+functionExpectingStringList(Caster.cast(x));</code></pre><p>instead of:</p>
 <pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
 @SuppressWarnings(&quot;unchecked&quot;)
 List&lt;String&gt; y = (List&lt;String&gt;) x;
-functionExpectingStringList(y);
-</code></pre><p>So, it does two things: (1) automatically infer the destination type and (2)
+functionExpectingStringList(y);</code></pre><p>So, it does two things: (1) automatically infer the destination type and (2)
 avoid an intermediate variable declaration, which you need if you want to ignore
 the resulting &quot;unchecked cast&quot; warning. This warning appears when the cast can&#39;t
 be checked at run-time, as is the case when casting between types that differ in
@@ -77,8 +74,7 @@ their generic type parameters.</p>
 <p>In the cases where the type cannot be inferred, you need to specify it
 explicitly:</p>
 <pre><code>Object x = &quot;cthulhu&quot;;
-functionExpectingString(Caster.&lt;String&gt;cast(x));
-</code></pre><p>It also holds up remarkably well when using multiple casts with generics:</p>
+functionExpectingString(Caster.&lt;String&gt;cast(x));</code></pre><p>It also holds up remarkably well when using multiple casts with generics:</p>
 <pre><code>static &lt;T&gt; void takeArrayListPair(ArrayList&lt;T&gt; a, ArrayList&lt;T&gt; b) {}
 
 static void test()
@@ -88,8 +84,7 @@ static void test()
 
     takeArrayListPair(Caster.cast(x), Caster.cast(y));
     // x and y are casted to ArrayList&lt;Object&gt;
-}
-</code></pre>
+}</code></pre>
     </div>
 
     <hr>

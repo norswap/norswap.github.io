@@ -75,7 +75,7 @@ single inheritance chain (the <em>ancestor chain</em>) and consecutive calls to
 <p>But how does linearization work, exactly?</p>
 <p>Here are a couple scenarios, what do you think the behaviour for each of this
 scenario is? Each is tailored to show something about the linearization process.</p>
-<pre><code class="lang-ruby"># Scenario 1
+<pre><code class="language-ruby"># Scenario 1
 
 module A1; end
 module B1; end
@@ -84,9 +84,8 @@ module C1
   include B1
 end
 
-# C1.ancestors    =&gt; [C1, B1, A1]
-</code></pre>
-<pre><code class="lang-ruby"># Scenario 2
+# C1.ancestors    =&gt; [C1, B1, A1]</code></pre>
+<pre><code class="language-ruby"># Scenario 2
 
 module A2; end
 module B2; end
@@ -101,9 +100,8 @@ module E2
   include D2
 end
 
-# E2.ancestors    =&gt; [E2, D2, B2, C2, A2]
-</code></pre>
-<pre><code class="lang-ruby"># Scenario 3
+# E2.ancestors    =&gt; [E2, D2, B2, C2, A2] </code></pre>
+<pre><code class="language-ruby"># Scenario 3
 
 module A3; end
 module C3
@@ -117,10 +115,9 @@ module E3
   include D3
 end
 
-# E3.ancestors    =&gt; [E3, D3, C3, A3]
-</code></pre>
+# E3.ancestors    =&gt; [E3, D3, C3, A3]</code></pre>
 <p>So far, so good.</p>
-<pre><code class="lang-ruby"># Scenario 4
+<pre><code class="language-ruby"># Scenario 4
 
 module A4; end
 module B4; end
@@ -138,9 +135,8 @@ module E4
   include D4
 end
 
-# E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]
-</code></pre>
-<pre><code class="lang-ruby"># Scenario 5
+# E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]</code></pre>
+<pre><code class="language-ruby"># Scenario 5
 
 module A5; end
 module B5; end
@@ -157,8 +153,7 @@ module E5
   include D5
 end
 
-# E5.ancestors    =&gt; [E5, D5, C5, A5, B5]
-</code></pre>
+# E5.ancestors    =&gt; [E5, D5, C5, A5, B5]</code></pre>
 <p>Pretty surprising, isn&#39;t it?</p>
 <p>Two things further complicate the situation:</p>
 <ul>
@@ -169,7 +164,7 @@ behaviour.</li>
 <h2 id="the-algorithm">The Algorithm</h2>
 <p>The linearization algorithm is very hard to describe precisely with a few
 sentences, so I&#39;ll just serve you the code:</p>
-<pre><code class="lang-ruby">Include = Struct.new :mod
+<pre><code class="language-ruby">Include = Struct.new :mod
 Prepend = Struct.new :mod
 
 # Returns the ancestry chain of `mod`, given the environment `env`.
@@ -203,8 +198,7 @@ def insert (mod, inclusion, env, chain)
     chain.insert(i, it)
     i += 1
   end
-end
-</code></pre>
+end</code></pre>
 <h3 id="intuition">Intuition</h3>
 <p>Let&#39;s try to get some intuition in there. Let&#39;s start with some observations:</p>
 <ul>
@@ -247,10 +241,9 @@ remain at the current position (in both cases the module is not re-inserted).</p
 <p>The only difference between <code>include</code> and <code>prepend</code> is that prepend will try
 merging the ancestor chain of its parameter <em>before</em> the class in the class
 own&#39;s ancestor chain:</p>
-<pre><code class="lang-ruby">module M; end
+<pre><code class="language-ruby">module M; end
 class C; prepend M; end
-C.ancestors =&gt; [M, C, ...]
-</code></pre>
+C.ancestors =&gt; [M, C, ...]</code></pre>
 <h2 id="doing-better-">Doing Better?</h2>
 <p>Despite its idiosyncracies, I would be hard pressed to improve on the algorithm
 without losing some of its nice properties. The key tension is that later calls

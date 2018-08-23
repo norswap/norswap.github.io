@@ -54,13 +54,13 @@ organize myself, keep track of what I&#39;ve read, etc.</p>
 <p>Occasionally, I need to search these files by content to retrieve some
 information, or remind myself of something I read earlier. Hence the need for
 software that does just that.</p>
-<p>So far, I had settled on <a href="https://www.mythicsoft.com/agentransack/">Agent Ransack</a> on Windows and <a href="https://www.houdah.com/tembo/?lang=en">Tembo</a> on OS X.
+<p>So far, I had settled on <a href="https://www.mythicsoft.com/agentransack/">Agent Ransack</a> on Windows and <a href="https://www.houdah.com/tembo/">Tembo</a> on OS X.
 However, I was looking for something a bit more snappy, hence the idea of using
 a command line tool.</p>
 <p>I expect the reader will be familiar with the venerable <a href="https://www.gnu.org/software/grep/">grep</a>, but it turns out
 there are a whole lot more tools that can be used.</p>
 <p>The most useful resource I found online was <a href="https://beyondgrep.com/feature-comparison/">this comparison</a> of tools, which
-compares (at the time of writing), <a href="https://beyondgrep.com/"><code>ack</code></a>, <a href="https://geoff.greer.fm/ag/"><code>ag</code></a>, <a href="https://git-scm.com/docs/git-grep"><code>git-grep</code></a>, <a href="https://www.gnu.org/software/grep/"><code>GNU
+compares (at the time of writing), <a href="https://www.gnu.org/software/grep/"><code>ack</code>], <a href="https://geoff.greer.fm/ag/"><code>ag</code></a>, <a href="https://git-scm.com/docs/git-grep"><code>git-grep</code></a>, [<code>GNU
 grep</code></a> and <a href="https://github.com/BurntSushi/ripgrep"><code>rg</code></a>.</p>
 <p>After a glance, I was really tempted to use <a href="https://github.com/BurntSushi/ripgrep">ripgrep (<code>rg</code>)</a>, which seems
 to be the fastest of the bunch, has well-rounded features and nice
@@ -78,11 +78,9 @@ unclear, check the animated gif on the <a href="https://github.com/garybernhardt
 <p>Unfortunately selecta is Unix-only, however there are a few clones and I ended
 up settling on the multi-platform <a href="https://github.com/rschmitt/heatseeker">heatseeker</a>.</p>
 <p>Here&#39;s an example of what I can do with <code>ag</code> and heatseeker (<code>hs</code>):</p>
-<pre><code>em $(ag -l parser | hs)
-</code></pre><p>Or the Windows equivalent (assuming you have <code>xargs</code> installed, it comes with
+<pre><code>em $(ag -l parser | hs)</code></pre><p>Or the Windows equivalent (assuming you have <code>xargs</code> installed, it comes with
 <a href="https://www.cygwin.com/">Cygwin</a>, <a href="http://www.mingw.org/">MinGW</a> and even Git):</p>
-<pre><code>ag -l parser | hs | xargs em
-</code></pre><p>What I&#39;m doing is that I&#39;m searching for the string &quot;parser&quot; in the current
+<pre><code>ag -l parser | hs | xargs em</code></pre><p>What I&#39;m doing is that I&#39;m searching for the string &quot;parser&quot; in the current
 directory. The <code>-l</code> flag says to only print the file name (not the line number)
 of matches. Then heatseeker is used for the selection, and once the selection is
 done, the file opens in Emacs (<code>em</code> is my <a href="https://github.com/norswap/.emacs.d">custom Emacs launching
@@ -102,7 +100,7 @@ dot-directories (e.g. <code>.config</code>). It&#39;s also not possible to formu
 easily as in Everything. I think partial path matching is not possible for
 instance. The search program that don&#39;t use the Spotlight engine are somehow
 even worse.</p>
-<p>In the absence of a real solution, <a href="https://www.houdah.com/tembo/?lang=en">Tembo</a> is also able to search on file names
+<p>In the absence of a real solution, <a href="https://www.houdah.com/tembo/">Tembo</a> is also able to search on file names
 on OS X. It&#39;s not a patch on Everything, but it&#39;s better than nothing
 (accidental pun!).</p>
 <p>In the rare cases where I want to search on the command line, I can either use

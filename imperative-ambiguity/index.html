@@ -61,8 +61,7 @@ resulting ambiguity in function signatures. And of course, how we could make
 things better.</p>
 <h2 id="an-ambiguous-function">An Ambiguous Function</h2>
 <p>Consider the following function signature:</p>
-<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);
-</code></pre><p>In a purely functional language, you know that <code>list</code> cannot be modified, and
+<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);</code></pre><p>In a purely functional language, you know that <code>list</code> cannot be modified, and
 the returned list will depend only on <code>list</code> and whatever data was captured via
 <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)">closure</a> at the function definition point (data which, of course, does not
 change).</p>
@@ -91,8 +90,7 @@ be aware of the interface of the callee.</p>
 <p>When we talk about ambiguity, we talk about the ambiguity of this interface.</p>
 <h2 id="interpretations">Interpretations</h2>
 <p>Let&#39;s consider a few possible interpretations of the function:</p>
-<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);
-</code></pre><ul>
+<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);</code></pre><ul>
 <li><p><strong>Immutable</strong>: no one can modify the argument list: not the caller, not the
 callee, nor anyone else.</p>
 </li>

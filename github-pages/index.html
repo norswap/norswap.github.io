@@ -60,8 +60,7 @@ git init .
 git remote add origin git@github.com:USERNAME/REPO.git
 git checkout --orphan gh-pages
 git commit --allow-empty -m &quot;initial empty commit (pages)&quot;
-git push -u origin gh-pages
-</code></pre><p>Finally, add <code>/pages/</code> to the <code>.gitignore</code> file for your project.</p>
+git push -u origin gh-pages</code></pre><p>Finally, add <code>/pages/</code> to the <code>.gitignore</code> file for your project.</p>
 <p>What it does: basically it clones your repo inside the <code>pages</code> directory and
 immediately switches to an empty, commit-less branch called <code>gh-pages</code> (as
 required by Github).</p>

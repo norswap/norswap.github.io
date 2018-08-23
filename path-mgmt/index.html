@@ -163,8 +163,7 @@ lexicographic order, so you can control the order of entries in the PATH.</p>
 its fully qualified name <code>/usr/libexec/path_helper</code>. The output of <code>path_helper</code>
 is a shell command to set the PATH. This command must itself be evaluated.</p>
 <p>I suggest to define the following shell alias for ease of use:</p>
-<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;
-</code></pre><p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
+<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;</code></pre><p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
 <p>By default, OS X calls <code>path_helper</code> in <code>/etc/profile</code> so you do not need to add
 it yourself.</p>
 <p>Oh and by the way, <code>path_helper</code> does the same thing it does to <code>PATH</code> to

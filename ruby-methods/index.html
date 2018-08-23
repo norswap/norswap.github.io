@@ -70,8 +70,7 @@
 <th>example</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>required</td>
 <td><code>a</code></td>
 </tr>
@@ -103,11 +102,9 @@
 <td>block</td>
 <td><code>&amp;blk</code></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>A kitchen sink example:</p>
-<pre><code class="lang-ruby">def foo a, b = 2, *c, d, e:, f: 7, **g, &amp;blk; end
-</code></pre>
+<pre><code class="language-ruby">def foo a, b = 2, *c, d, e:, f: 7, **g, &amp;blk; end</code></pre>
 <p>Here are quick explanations:</p>
 <ul>
 <li><p>Optional parameters can have a default value.</p>
@@ -120,8 +117,7 @@ argument into parts. Here are some examples, assuming the argument is <code>[[1,
 (a, *b)       a = [1, 2], b = [3]
 (a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
-((a, *b), c)  a = 1,      b = [2], c = 3
-</code></pre></li>
+((a, *b), c)  a = 1,      b = [2], c = 3</code></pre></li>
 <li><p>The splat parameter enables variable length argument lists and receives all
 extra arguments.</p>
 </li>
@@ -141,9 +137,8 @@ you to pass it to other methods, and call it by name instead of through
 </ul>
 <p>You can get a list of a method&#39;s parameters with <code>Method#parameters</code>, which will
 show the type of each parameter. Here it is, running over our <code>foo</code> method.</p>
-<pre><code class="lang-ruby">method(:foo).parameters
-# [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]
-</code></pre>
+<pre><code class="language-ruby">method(:foo).parameters
+# [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]</code></pre>
 <p>Note that this glitches for array decomposition parameters, indicating just
 <code>[:req]</code>.</p>
 <h3 id="ordering">Ordering</h3>
@@ -173,8 +168,7 @@ parameters.</p>
 <th>example</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>regular</td>
 <td><code>v</code></td>
 </tr>
@@ -202,13 +196,11 @@ parameters.</p>
 <td>block</td>
 <td><code>{ .. }</code> or <code>do .. end</code></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>You can substitute <code>v</code> (and <code>v1</code>, <code>v2</code>) with almost any expression, as long as
 you respect operator precedence.</p>
 <p>A kitchen sink example:</p>
-<pre><code class="lang-ruby">foo 1, *array, 2, c: 3, &quot;d&quot; =&gt; 4, **hash
-</code></pre>
+<pre><code class="language-ruby">foo 1, *array, 2, c: 3, &quot;d&quot; =&gt; 4, **hash</code></pre>
 <p>Here are quick explanations:</p>
 <ul>
 <li><p>Keyword arguments are equivalent to hash arguments whose key is a symbol. If
@@ -314,11 +306,10 @@ This parameter must be assigned a (syntactic) block (which becomes a proc) or a
 <code>lambda</code> or <code>-&gt;</code> (<em>lambda literal</em> or <em>dash rocket</em> or <em>stab operator</em>). The
 three first forms simply take a block argument, while the last form looks like
 this:</p>
-<pre><code class="lang-ruby">-&gt; (a, b) { ... }
+<pre><code class="language-ruby">-&gt; (a, b) { ... }
 -&gt; (a, b) do .. end
 -&gt; { ... }
--&gt; do .. end
-</code></pre>
+-&gt; do .. end</code></pre>
 <p>When a method accepts an implicit block, you can call it with <code>yield</code> (you can
 also call the explicit block parameter with <code>yield</code>). Somewhat peculiarly, the
 <code>yield</code> notation cannot be passed a block of its own. A proc or block parameter
@@ -351,13 +342,12 @@ create lambdas.</p>
 &amp;my_proc</code> or <code>proc &amp;my_lambda</code>. However, these conversions don&#39;t do anything:
 <code>lambda &amp;my_proc</code> returns <code>my_proc</code>, and the regular proc behaviour is
 preserved. The converse is true for the reverse conversion.</p>
-<h3 id="curly-brackets-vs-do-end-">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
+<h3 id="curly-brackets-vs-do-end">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
 <p>There is no semantic difference between both forms.</p>
 <p>There is one syntactic difference because the two forms have different
 precedences:</p>
-<pre><code class="lang-ruby">foo bar { ... }     # foo(bar { ... })
-foo bar do ... end  # foo(bar) { ... }
-</code></pre>
+<pre><code class="language-ruby">foo bar { ... }     # foo(bar { ... })
+foo bar do ... end  # foo(bar) { ... }</code></pre>
 <p>If you don&#39;t need to use this particularity, there are two popular ways to
 choose on form over the other:</p>
 <ul>

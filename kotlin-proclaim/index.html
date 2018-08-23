@@ -56,10 +56,9 @@ exceptions.</p>
 <p>Nevertheless, it is useful remarkably often.</p>
 <p>With Kotlin however, you can step up your game to a whole new level.
 Introducing <code>proclaim</code>:</p>
-<pre><code class="lang-kotlin">val list: Collection&lt;Int&gt; = ArrayList(list(1, 2, 3))
+<pre><code class="language-kotlin">val list: Collection&lt;Int&gt; = ArrayList(list(1, 2, 3))
 proclaim(list as ArrayList&lt;Int&gt;)
-val x = list[0] // works
-</code></pre>
+val x = list[0] // works</code></pre>
 <p>The trick here is actually not <code>proclaim</code>. It&#39;s the fact that Kotlin has &quot;smart
 casts&quot; which are essentially a form of flow typing.</p>
 <p>The type inferencer reasons out that if the cast <code>list as ArrayList&lt;Int&gt;</code>
@@ -68,10 +67,9 @@ succeeds, then it means that <code>list</code> is indeed an <code>ArrayList&lt;I
 cast appears, list is &quot;smart-casted&quot; to <code>ArrayList&lt;Int&gt;</code>.</p>
 <p>Here is a possible definition for <code>proclaim</code> (0 run-time overhead besides the
 cast):</p>
-<pre><code class="lang-kotlin">@Suppress(&quot;UNUSED_PARAMETER&quot;, &quot;NOTHING_TO_INLINE&quot;)
+<pre><code class="language-kotlin">@Suppress(&quot;UNUSED_PARAMETER&quot;, &quot;NOTHING_TO_INLINE&quot;)
 inline fun proclaim (cast: Any)
-    = Unit
-</code></pre>
+    = Unit</code></pre>
 <p>Let&#39;s get the obvious out of the way: of course this can be misused.</p>
 <p>On the other hand, just like the casting function, it is handy surprisingly
 often. Type systems just aren&#39;t powerful enough to be able to figure some things

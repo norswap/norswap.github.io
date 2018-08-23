@@ -55,7 +55,7 @@ implements the <code>getValue</code> (and optionally the <code>setValue</code>) 
 <p>I haven&#39;t had much use of the feature, but I just found something very nifty
 that could be done with it: create thread-local properties.</p>
 <p>Here&#39;s an example of what you can do:</p>
-<pre><code class="lang-kotlin">import norswap.utils.thread_local.*
+<pre><code class="language-kotlin">import norswap.utils.thread_local.*
 
 class Test
 {
@@ -63,14 +63,13 @@ class Test
     val i by _i
 
     val j by thread_local(0)
-}
-</code></pre>
+}</code></pre>
 <p>This creates two counters, <code>i</code> and <code>j</code> that are backed by instances of
 <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html"><code>ThreadLocal&lt;Int&gt;</code></a>. In the first case we specify the instance explicitly,
 while in the second case the <code>ThreadLocal</code> instance is created implicitly, given
 a default value (0 here).</p>
 <p>And now for the implementation:</p>
-<pre><code class="lang-kotlin">package norswap.utils.thread_local
+<pre><code class="language-kotlin">package norswap.utils.thread_local
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -101,8 +100,7 @@ typealias thread_local&lt;T&gt; = ThreadLocalDelegate&lt;T&gt;
 
 operator fun &lt;T&gt; ThreadLocal&lt;T&gt;.provideDelegate
         (self: Any, prop: KProperty&lt;*&gt;)
-    = ThreadLocalDelegate(this)
-</code></pre>
+    = ThreadLocalDelegate(this)</code></pre>
 <p>Let&#39;s do a quick rundown. The <code>ThreadLocalDelegate</code> class does what it says on
 the tin: it delegates all attempts to read or write the property to the
 <code>ThreadLocal</code> instance.</p>
@@ -112,9 +110,8 @@ value, or a function that computes the initial value. The companion object also
 has a function <code>late_init()</code> that lets you create a delegate with no initial
 value.</p>
 <p>Now we could use <code>ThreadLocalDelegate</code> like this:</p>
-<pre><code class="lang-kotlin">val num by ThreadLocalDelegate(0)
-val str by ThreadLocalDelegate&lt;String&gt;.late_init()
-</code></pre>
+<pre><code class="language-kotlin">val num by ThreadLocalDelegate(0)
+val str by ThreadLocalDelegate&lt;String&gt;.late_init()</code></pre>
 <p>But that&#39;s quite a mouthful, so there is a typealias <code>thread_local</code> to make
 things look nicer.</p>
 <p>Finally, the <code>provideDelegate</code> operator function tells Kotlin how to create a

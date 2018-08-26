@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* commit: https://github.com/sustrik/ribosome/tree/ef346e6e5a49ed4538acb7fa66ecb34dc0c0ddb7 */
-
 /*
 
   Copyright (c) 2014-2015 Contributors as noted in AUTHORS file.
@@ -442,7 +440,7 @@ if (process.argv.length < 3 || process.argv[2] == "-h" ||
     usage();
 }
 if (process.argv[2] == "-v" || process.argv[2] == "--version") {
-    process.stderr.write("ribosome code generator, version 1.16\n");
+    process.stderr.write("ribosome code generator, version 1.17\n");
     process.exit(1);
 }
 

@@ -8,7 +8,7 @@
     "http-server": "^0.11.1",
     "marked": "^0.5.0",
     "moment": "^2.22.2",
-    "tmp": "^0.0.33"
+    "tmp-promise": "^1.0.5"
   },
   "license": "CC-BY-NC-4.0",
   "repository": {

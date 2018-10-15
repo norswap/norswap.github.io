@@ -8,17 +8,6 @@ const mkdirp      = require('mkdirp-promise')
 const watcher     = require('@atom/nsfw')
 const path        = require('path')
 
-// TODO: posts manifest
-//  when creating / modifying posts, must load page manifest
-//  if it doesn't exist -> create it
-//  to create it, read every post
-//  save: title, link, date, layout, content for briefs, content for $atom_posts most recent posts
-//  generate pages & atom from this manifest
-//  updating manifest + regenerate pages/atom:
-//      if the entry for a link would be changed
-
-// TODO: directories nested within 'top'
-
 // --------------------------------------------------------------------------------
 
 function Post (date, filename, permalink, meta, content) {
@@ -32,16 +21,110 @@ function Post (date, filename, permalink, meta, content) {
 // --------------------------------------------------------------------------------
 
 const url               = 'http://norswap.com'
-const posts             = []
 const posts_per_page    = 15
 const atom_posts        = 10
 
 // --------------------------------------------------------------------------------
 
-// Forces the last written file to be flushed.
+// Forces the last file written by ribosome to be flushed.
 process.on('exit', () => {
 .   /!stdout()
 });
+
+// --------------------------------------------------------------------------------
+// Post Tracking
+
+// Tracks the lowest post that changed, so that we only regenerate the feed and
+// the index pages if we need to.
+let lowest_post_change = Infinity
+
+// Posts are sorted in newest-first order: so reverse filename order, because
+// filenames start with their date followed by a daily counter.
+let posts
+
+// When building incrementally, fill with boolean to indicate whether there is
+// still a source file for the post at the same index (= true).
+let post_exists
+
+// Returns the index of the post with the given filename within `posts` or the location at which it
+// should be inserted.
+function find_post (filename)
+{
+    let low  = 0
+    let high = posts.length
+
+    while (low != high)
+    {
+        const mid  = Math.floor((high + low) / 2)
+        if (posts[mid].filename > filename)
+            low = mid + 1
+        else
+            high = mid
+    }
+
+    return low
+}
+
+// Insert `post` into `posts`, keeping it sorted and avoiding duplicates by
+// filename.
+function insert_post (post)
+{
+    const i = find_post(post.filename)
+    lowest_post_change = Math.min(i, lowest_post_change)
+
+    // Skip content for posts for which it is not required elsewhere.
+    if (i >= atom_posts) {
+        if (post.meta.layout != 'brief')
+            post.content = ''
+    // The content of the last atom post might no longer be required.
+    } else if (posts.length > atom_posts) {
+        const last = posts[atom_posts]
+        if (last.meta.layout != 'brief') last.content = ''
+    }
+
+    if (i < posts.length && posts[i].filename == post.filename) {
+        posts[i] = post
+        post_exists[i] = true
+    } else {
+        posts.splice(i, 0, post)
+        post_exists.splice(i, 0, true)
+    }
+}
+
+// Removes the post with the given filename from `posts`, if it exists.
+function remove_post (filename)
+{
+    const i = find_post(filename)
+    lowest_post_change = Math.min(i, lowest_post_change)
+
+    if (i < posts.length && posts[i].filename == filename)
+    {
+        posts.splice(i, 1)
+
+        // Regenerate the content for one post that might now be needed to round
+        // out the atom feed.
+        if (i < atom_posts && posts.length >= atom_posts) {
+            const last = posts[atom_posts - 1]
+            if (last.meta.layout != 'brief')
+                generate_page('post', last.filename, false)
+        }
+    }
+}
+
+async function parse_post_cache()
+{
+    posts = JSON.parse(await fsp.readFile('posts.json'),
+                       (k,v) => k == 'date' ? moment(v) : v)
+
+    post_exists = new Array(posts.length).fill(false)
+
+}
+
+async function write_post_cache()
+{
+    if (lowest_post_change < Infinity)
+        await fsp.writeFile('posts.json', JSON.stringify(posts, null, '\t'))
+}
 
 // --------------------------------------------------------------------------------
 // Page Generation
@@ -50,7 +133,7 @@ function permalink (type, filename)
 {
     switch (type) {
         case 'post':
-            return filename.slice(13, -3) // strip date, number and extension
+            return filename.slice(13, -3) // strip date, counter and extension
         case 'page':
             return filename.slice(0, -3); // strip extension
         case 'draft':
@@ -59,85 +142,118 @@ function permalink (type, filename)
     throw "unknown page type"
 }
 
-async function generate_page (type, filename) // relative filename
+async function generate_page (type, filename, incremental) // relative filename
 {
-    var date = moment(filename.slice(0, 10), 'YYYY-MM-DD')
-    var layout = type == 'draft' ? 'post' : type
-    var plink = permalink(type, filename)
-    var src_loc = type + 's/' + filename;
-    var str = await fsp.readFile(src_loc, {encoding: 'utf-8'});
-    var obj = matter(str);
-    var meta = obj.data;
-    if (meta.title) meta.title = escape_html(meta.title);
-    var content = marked(obj.content);
-    if (type == 'post')
-        posts.push(new Post(date, filename, plink, meta, content));
-    await mkdirp('../' + plink);
-    let loc = `../${plink}/index.html`
-.   /!output(loc)
+    const src_loc = type + 's/' + filename
+    const plink = permalink(type, filename)
+    const dst_loc = `../${plink}/index.html`
+    const src_time = (await fsp.stat(src_loc)).mtimeMs
+
+    if (incremental) {
+        const dst_time = await fsp.stat(dst_loc).then(x => x.mtimeMs, _ => 0)
+        if (src_time < dst_time) {
+            if (type == 'post')
+                post_exists[find_post(filename)] = true
+            return
+        }
+    }
+
+    const date = moment(filename.slice(0, 10), 'YYYY-MM-DD')
+    const layout = type == 'draft' ? 'post' : type
+    const obj = matter(await fsp.readFile(src_loc, {encoding: 'utf-8'}))
+    const meta = obj.data
+    if (meta.title) meta.title = escape_html(meta.title)
+    const content = marked(obj.content)
+    await mkdirp('../' + plink)
+.   /!output(dst_loc)
 .   /!include('page.dna')
-    console.log(`Created ${loc}`)
+    console.log(`Created ${dst_loc}`)
+    if (type == 'post')
+        insert_post(new Post(date, filename, plink, meta, content))
 }
 
-async function generate_pages (type)
+async function generate_pages (type, incremental)
 {
-    const promises = [];
-    for (filename of await fsp.readdir(type + 's'))
-        if (filename[0] == '.') continue;
-        else promises.push(generate_page(type, filename));
-    return Promise.all(promises);
+    const promises = []
+    for (filename of await fsp.readdir(type + 's')) {
+        if (filename[0] == '.') continue
+        promises.push(generate_page(type, filename, incremental))
+    }
+    return Promise.all(promises)
+}
+
+// Note: incremental builds will only call this for posts.
+async function delete_page (type, filename)
+{
+    const dir = '../' + permalink(type, filename)
+    // catch in case already deleted
+    await fsp.unlink(dir + '/index.html').catch(e => {})
+    await fsp.rmdir(dir).catch(e => {})
+    console.log(`Deleted ${dir}`)
+    if (type == 'post')
+        remove_post(filename)
 }
 
 // --------------------------------------------------------------------------------
 // Generate Index Pages & Atom Feed
 
-function range(n) {
-    return Array(n).fill().map((_, i) => i + 1);
-}
-
-async function generate_index_page (page, num_pages)
+async function generate_index_page (posts, page, num_pages)
 {
-    var layout = 'home';
-    var tmp_file = await tmp.tmpName();
+    const layout = 'home';
+    const tmp_file = await tmp.tmpName();
 .   /!output(tmp_file)
 .   /!include('home.dna')
 .   /!stdout() // forces the temp file to be flushed
-    var content = await fsp.readFile(tmp_file, {encoding: 'utf-8'});
+    const content = await fsp.readFile(tmp_file, {encoding: 'utf-8'});
+    let output = ''
 
     if (page == 1) {
-.       /!output('../index.html')
+        output = '../index.html'
     } else {
         await mkdirp('../' + page);
-.       /!output('../' + page + '/index.html')
+        output = `../${page}/index.html`
     }
 
-    var meta = { title: '' + page } // NOT USED
+    const meta = {} // unused, but avoid compile-time error
+.   /!output(output)
 .   /!include('page.dna')
+    console.log(`Created ${output}`)
 }
 
-async function generate_index_pages_and_atom (posts_promise)
+async function generate_index_pages_and_atom ()
 {
-    await posts_promise;
-    // sort in descending filename order (newest (biggest date) first)
-    posts.sort((a, b) => a.filename > b.filename ? -1 : 1);
+    const num_pages = Math.floor((posts.length - 1) / posts_per_page) + 1
+    const lowest_page = Math.floor(lowest_post_change / posts_per_page) + 1
 
-    var num_pages = Math.floor((posts.length - 1) / posts_per_page) + 1;
+    for (let i = lowest_page; i <= num_pages; ++i)
+        generate_index_page(posts, i, num_pages)
 
-    for (page of range(num_pages))
-        generate_index_page(page, num_pages);
-
-.   /!output('../atom.xml')
-.   /!include('atom.dna')
+    if (lowest_post_change < atom_posts) {
+.       /!output('../atom.xml')
+.       /!include('atom.dna')
+        console.log('Created ../atom.xml')
+    }
 }
 
 // --------------------------------------------------------------------------------
 
-function build_all()
+async function build (incremental)
 {
-    const posts_promise = generate_pages('post');
-    generate_index_pages_and_atom(posts_promise);
-    generate_pages('page');
-    generate_pages('draft');
+    generate_pages('page', incremental)
+    generate_pages('draft', incremental)
+    await parse_post_cache()
+
+    await generate_pages('post', incremental)
+
+    if (incremental)
+        // Delete posts whose source have been deleted.
+        await Promise.all(
+            Array.from(post_exists.entries())
+                .filter(([i, val]) => !val)
+                .map(([i, val]) => delete_page('post', posts[i].filename)))
+
+    generate_index_pages_and_atom()
+    await write_post_cache()
 }
 
 // --------------------------------------------------------------------------------
@@ -184,20 +300,18 @@ async function rename (dir, old, cur)
     }
 }
 
-async function unlink (dir, file)
+async function unlink (dir, filename)
 {
     switch (dir) {
         case 'posts':
         case 'pages':
         case 'drafts':
             const type = dir.slice(0, -1)
-            const loc = '../' + permalink(type, file)
-            await fsp.unlink(loc)
-            console.log(`Deleted ${loc}`)
+            await delete_page(type, filename)
             break
         case 'top':
-            await fsp.unlink(`../${file}`)
-                .then  (_ => console.log(`Deleted ../${file}`))
+            await fsp.unlink(`../${filename}`)
+                .then  (_ => console.log(`Deleted ../${filename}`))
                 .catch (e => console.log(e.message))
             break
     }
@@ -229,6 +343,15 @@ function debounce (events)
             delete map[JSON.stringify(create_old)]
             delete map[JSON.stringify(modify_new)]
         }
+        // On Windows (at least), creations also cause a corresponding modification.
+        else if (event.action == watcher.actions.CREATED) {
+            const modify = {
+                action: watcher.actions.MODIFIED,
+                directory: event.directory,
+                file: event.file
+            }
+            delete map[JSON.stringify(modify)]
+        }
     }
 
     return Object.values(map)
@@ -236,8 +359,15 @@ function debounce (events)
 
 async function watch()
 {
+    await parse_post_cache()
+    let lock = Promise.resolve()
     const cwd = path.resolve('.')
-    const watching = await watcher(path.resolve(cwd), events => {
+    const watching = await watcher(path.resolve(cwd), async (events) => {
+        let resolve
+        const old_lock = lock
+        lock = new Promise((r, _) => resolve = r)
+        await old_lock
+        let promises = []
         for (event of debounce(events)) {
             const path = event.directory.replace(/\\/g, '/') // normalize
             const dir  = path.split('/').last()
@@ -245,17 +375,29 @@ async function watch()
             switch (event.action) {
                 case watcher.actions.CREATED:
                 case watcher.actions.MODIFIED:
-                    create(dir, event.file)
+                    promises.push(create(dir, event.file))
                     break
                 case watcher.actions.DELETED:
-                    unlink(dir, event.file)
+                    promises.push(unlink(dir, event.file))
                     break
                 case watcher.actions.RENAMED:
-                    rename(dir, event.oldFile, event.newFile)
+                    promises.push(rename(dir, event.oldFile, event.newFile))
                     break
             }
         }
-    })
+
+        if (promises.length > 0) {
+            await Promise.all(promises)
+            await Promise.all([
+                generate_index_pages_and_atom(),
+                write_post_cache()])
+            lowest_post_change = Infinity
+            console.log('') // skip a line before next set of events
+        }
+        resolve()
+    },
+    {debounceMS: 1000}) // bogus events tend to be fired, even so
+
     watching.start()
 }
 
@@ -264,7 +406,10 @@ async function watch()
 switch (process.argv[2]) // assumes node <script> <arg>
 {
     case 'build':
-        build_all()
+        build(true)
+        break
+    case 'rebuild':
+        build(false)
         break
     case 'watch':
         watch()
@@ -272,3 +417,12 @@ switch (process.argv[2]) // assumes node <script> <arg>
 }
 
 // --------------------------------------------------------------------------------
+// NOTES
+//
+// # Potential Improvements:
+//
+// - Make incremental build also track the deletion of pages and assets (not
+//  only posts).
+//
+// - Watching does not recursively track the changes in the top/ directories
+//   (only direct changes).

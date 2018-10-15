@@ -1,4 +1,6 @@
 .DS_Store
-/.factory/node_modules/
+/.factory/node_modules*
 /.factory/drafts/
+/.factory/posts.json
+/.factory/generate.js.rna
 /draft-*/

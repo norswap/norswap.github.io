@@ -10,4 +10,4 @@ Contact me at `norswap@gmail.com`. Don't be shy!
 
 [facebook]: https://facebook.com/norswap
 
-Here is [my resume](/resume) ([PDF](/resume.pdf)).
+Here is [my resume](/resume) ([PDF](/resume.pdf))..

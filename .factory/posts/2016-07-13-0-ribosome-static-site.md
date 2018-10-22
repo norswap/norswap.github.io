@@ -36,8 +36,8 @@ Ribosome in particular is great, I encourage you to try it.
 pick up additional whitespace. HTML sucks.
 
 [jekyll]: https://jekyllrb.com/
-[ribosome]: http://ribosome.ch/
-[script]: https://github.com/norswap/norswap.github.io/blob/master/.factory/generate.js
+[ribosome]: http://sustrik.github.io/ribosome/
+[script]: https://github.com/norswap/norswap.github.io/blob/867c562b50fd43d8924c02cae044bbc399b1f6c0/.factory/generate.js
 [yaml]: https://www.npmjs.com/package/gray-matter
 [markdown]: https://www.npmjs.com/package/marked
 [dates]: http://momentjs.com/

@@ -1,10 +1,10 @@
 .<style scoped>
-..posts { border-bottom: solid 1px #CCC; list-style-type: none; padding-left: 0; }
+..posts { list-style-type: none; padding-left: 0; margin-bottom: 0; }
 ..posts > li { border-top: solid 1px #CCC; padding: 20px 0; clear: both; }
 ..posts > li .post-content { font-size: 90%; }
 ..posts > li > .date-link  { color: inherit; display: block; font-size: 80%; float: right; padding: 3px 0 20px; }
 ..posts > li > .title-link { color: inherit; font-weight: bold; }
-..pagination { color: #AAA; margin-top: 10px; }
+..pagination { border-top: solid 1px #CCC; clear:both; color: #AAA; margin-top: 0; padding-top: 20px; }
 .</style>
 .<ul class="posts">
 var i

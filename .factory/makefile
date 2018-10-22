@@ -15,7 +15,7 @@ rebuild: generate.js.rna
 watch: generate.js.rna
 	node $< watch
 
-%.rna: %
+%.rna: % *.dna
 	node ribosome.js --rna $< > $@
 
 ifeq ($(OS),Windows_NT)

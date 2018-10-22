@@ -6,6 +6,42 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>What I&#39;ve Been Up To</title>
+      <description>
+&lt;p&gt;Been a while! What I&amp;#39;ve been to since July, in no particular order:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;I visited &lt;a href=&quot;https://photos.app.goo.gl/NrzEvTjUMPfdXKwb9&quot;&gt;Tokyo&lt;/a&gt; &amp;amp; &lt;a href=&quot;https://photos.app.goo.gl/RpXdMQpQa7beJkL96&quot;&gt;Ireland&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I improved the program that generates this website, it now does incremental
+generation, and I have a post in the works about it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I started writing my thesis, and got a good headstart.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I finished my re-read of the first 13 books of &lt;a href=&quot;https://en.wikipedia.org/wiki/The_Wheel_of_Time&quot;&gt;The Wheel of Time&lt;/a&gt;, and my first
+read of the 14th and final book. (I must have read 3 of them since July.) I
+thought of writing about it, but the series means so much to me (&lt;a href=&quot;https://twitter.com/norswap/status/1032258555846569986&quot;&gt;I&amp;#39;m not the
+only one&lt;/a&gt;), I&amp;#39;m afraid not to do it justice. I must also recoup my
+thoughts about it.&lt;/p&gt;
+&lt;p&gt;Did you know Amazon is adapting it into a TV show? Might use that as an excuse
+to re-read and write about it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I&amp;#39;ve kept &lt;a href=&quot;/weight-training/&quot;&gt;lifting weights&lt;/a&gt;, I&amp;#39;ll write some thoughts about it soon.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I&amp;#39;m now reading &lt;a href=&quot;https://eightyearsinazeroth.blogspot.com/&quot;&gt;8 Years in Azeroth&lt;/a&gt;, the account of player Hanzo as he leads
+his guild &lt;Descendants of Draenor&gt; through the first eight years of World of
+Warcraft.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I&amp;#39;ve started tracking my sleep using the &lt;a href=&quot;https://sleep.urbandroid.org/introducing-sonar-as-sensor/&quot;&gt;sonar tech&lt;/a&gt; of the application
+&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.urbandroid.sleep&quot;&gt;Sleep as Android&lt;/a&gt;. I&amp;#39;ve used that as an incentive to get my average time in
+bed to 8 hours / night over the past month.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+      </description>
+      <pubDate>2018-10-22T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/been-up-to</link>
+      <guid isPermaLink="true">http://norswap.com/been-up-to</guid>
+    </item>
+    <item>
       <title>More Anime I Watched</title>
       <description>
 &lt;p&gt;About this time last year, I wrote &lt;a href=&quot;/every-anime/&quot;&gt;a post&lt;/a&gt; giving my opinions
@@ -2715,17 +2751,6 @@ hegemonic ideology. (20)&lt;/p&gt;
       <pubDate>2017-12-19T23:00:00.000Z</pubDate>
       <link>http://norswap.com/zizek-ideology</link>
       <guid isPermaLink="true">http://norswap.com/zizek-ideology</guid>
-    </item>
-    <item>
-      <title>A simple Java Lexer</title>
-      <description>
-&lt;p&gt;I just released &lt;strong&gt;&lt;a href=&quot;https://github.com/norswap/java-lexer&quot;&gt;java-lexer&lt;/a&gt;&lt;/strong&gt;, a &lt;a href=&quot;https://docs.oracle.com/javase/specs/jls/se9/html/jls-3.html&quot;&gt;JLS&lt;/a&gt;-compliant yet simplistic lexer for the
-Java language. It&amp;#39;s completely stand-alone and not dependent on any parser or
-other libraries. &lt;a href=&quot;https://github.com/norswap/java-lexer&quot;&gt;Check it out!&lt;/a&gt;&lt;/p&gt;
-      </description>
-      <pubDate>2017-12-13T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/java-lexer-release</link>
-      <guid isPermaLink="true">http://norswap.com/java-lexer-release</guid>
     </item>
   </channel>
 </rss>

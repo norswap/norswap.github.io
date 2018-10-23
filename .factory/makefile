@@ -40,6 +40,7 @@ update:
     npm update --python=python2.7
 
 setup:
+	rm -rf node_modules
 	ln -sF node_modules_mac node_modules
 
 endif

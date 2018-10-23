@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Static Website Generation, Incrementally
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Static Website Generation, Incrementally</h1>
+      <span class="post-date">23 Oct 2018</span>
+<p>The piece of Javascript that generates this very website has to be one of the
+most zen piece of code I ever wrote. I wrote about it in <a href="http://norswap.com/ribosome-static-site/">an article back in
+2016</a>. It has served me well since, and hasn&#39;t broken on me the way
+that I would have expected something written in Ruby to do.</p>
+<p>Yet not all was perfect. The whole website took mabye 15-20 seconds to generate,
+and complete generation was the only option.</p>
+<p>With that in mind, it was my project to implement incremental generation: only
+re-generate the parts of the content that have actually changed. I also wanted a
+<em>watch</em> feature: the ability to auto-regenerate content whenever I saved a
+source file.</p>
+<p>I&#39;ve achieved these objectives, and this blog post is about that. Before I dive
+in, however, a remark with the benefit of hindsight. Should I have done this at
+all? The <em>watch</em> feature had to be done, but otherwise, if my objective was to
+speed up generation, maybe I should have gone and figured exactly why the
+generation process was so slow... because 15-20 seconds for ~50 blog posts is
+VERY slow, even for Javascript. I haven&#39;t done that, but I think I should have.</p>
+<p>Now for the good part. <a href="https://github.com/norswap/norswap.github.io/blob/f643a18ef7681ecfc176265ae66629decc19ec1e/.factory/generate.js">Here&#39;s the resulting code.</a></p>
+<p>The process started with a lot of refactoring: pounding what was essentially a
+linear script into functions that could be reused.</p>
+<h2 id="async-await-fun">Async/Await Fun</h2>
+<p>As part of that refactoring, I also made sure that all the calls that touched
+the file systems were now using <a href="https://javascript.info/async">promises with async and await</a>. This was
+mostly for fun and my own education, because <a href="http://sustrik.github.io/ribosome/">Ribosome</a> — the templating library
+I use — is fully synchronous. I also think it might be responsible for the slow
+execution times (or maybe just my use of it which involve writing then reading
+to a temp file once per post), but that&#39;s an investigation for another day.</p>
+<p>I think async is great however, although there were a few pitfalls I fell right
+in. As you may know, using async functions guarantees linear execution without
+crazy callback pyramid of doom... if you use the <code>await</code> keyword! It&#39;s easy to
+forget it and it causes no warning (by design, this is not a complain).</p>
+<p>Async also required me to get ... creative in one instance. The package I use
+for watching the file system takes a callback to which it supplies an array of
+events that occured since last time the callback was called. The problem is that
+this callback is never <code>await</code>ed, even if it returns a promise. As such, if you
+do async stuff within that callback (and I did), it&#39;s very possible that the
+package will fire another callback before the last one finished processing. This
+was not acceptable to me: each set of filesystem changes had to be fully
+processed before the processing of the nex tone began.</p>
+<p>Here is how I solved it:</p>
+<pre><code class="language-Javascript">async function watch()
+{
+    let lock = Promise.resolve()
+    ...
+    const watching = await watcher(..., async (events) =&gt; {
+        let resolve
+        const old_lock = lock
+        lock = new Promise((r, _) =&gt; resolve = r)
+        await old_lock
+        ...
+        // process events
+        ...
+        resolve()
+    })
+    watching.start()
+}</code></pre>
+<p>Basically, each invocation of the callback creates a &quot;lock&quot; object, which is an
+unfullfilled promise. It then waits on the previous lock to be fullfilled. Only
+when it has finished processing does if fullfill (<code>resolve</code>) its own lock.
+Notice that since code is never executed in parallel, it&#39;s perfectly safe to use
+a &quot;global&quot; variable to save the last lock. Each successive callback invocation
+creates a copy of the last lock then replaces it with its own. This ensures that
+only a single callback may be waiting on a lock, and thus there is no data race:
+the callbacks are serialized neatly, each waiting on the previous callback&#39;s
+lock to be fullfilled.</p>
+<h2 id="incremental-index-pages">Incremental Index Pages</h2>
+<p>Architecturally, the big challenge was how to regen index pages without having
+to reprocess every blog post ever.</p>
+<p>The problem occurs for instance when you add a new post: all the index pages
+have to have their post shifted backwards one unit. Reparsing the HTML would
+have been a possibility, although I didn&#39;t once contemplate it. It&#39;s still a bit
+ugly in my mind as the HTML page is a product, not a source. But it might
+actually have worked.</p>
+<p>What I ended up doing instead is create a file called <code>posts.json</code> that
+serialized all the needed post data. This includes title, date, layout type, as
+well as content for (a) posts that need to appear in the <a href="/atom.xml">atom feed</a> and (b)
+posts whose layout is <code>brief</code>, i.e. posts whose content appears directly on the
+index pages.</p>
+<p>I also pushed the vice further, and only regenerated the index pages that
+actually needed to. For instance, if I removed the very first post, only the
+last index page would have to be regenerated. I didn&#39;t push this as hard as I
+could have: for instance renaming a post will also cause all subsequent index
+pages to be regenerated, when there is really no need to.</p>
+<h2 id="filesystem-watching-frustrations">Filesystem Watching Frustrations</h2>
+<p>The only frustrating thing I had to deal with was the filesystem watching
+libraries.</p>
+<p>This was further compounded by a dumb mistake of my own which made my whole
+prior evaluation of libraries irrelevant. I don&#39;t even remember what it was I
+did, but it caused me to think the libraries were malfunctioning while it was me
+that was actually being a dumbass.</p>
+<p>Anyway, here are the libraries that I considered, and should reconsider at some
+point in the future:</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/chokidar">Chokidar</a></li>
+<li><a href="https://www.npmjs.com/package/nsfw">nsfw</a></li>
+<li><a href="https://www.npmjs.com/package/@atom/watcher">@atom/watcher</a></li>
+<li><a href="https://www.npmjs.com/package/fb-watchman">fb-watchman</a></li>
+</ul>
+<p>There is also the built-in <code>fs.watch</code>, but the <a href="https://www.npmjs.com/package/chokidar">Chokidar</a> page reports that it
+has a slew of issues, which I am inclined to believe.</p>
+<p>I ended up going with <code>nsfw</code> as it was the one I had setup when I finally
+understood my mistake. However I cannot recommend it, it works quite shittily,
+at the very least on Windows. Amongst the issue I had to contend with and hack
+around:</p>
+<ul>
+<li>Duplicate events.</li>
+<li>File renaming causes a creation event on the old file and a modify event on
+the new file (in addition to the renaming event).</li>
+<li>File creation also causes a modify event on the created file (in addition to
+the creation event).</li>
+</ul>
+<p>These may just be <code>fs.watch</code> issues that <code>nsfw</code> didn&#39;t guard against though...</p>
+<p><code>nsfw</code> also has different dependencies for Windows and MacOS, which causes some
+trouble for me, as I have my code on Dropbox so that I may seamlessly switch
+from my laptop to my desktop without requiring a dirty commit (it&#39;s on Git as
+well, don&#39;t worry).</p>
+<p>Also note that the <code>@atom/watcher</code> is different from the original <code>watcher</code> lib,
+which doesn&#39;t build anymore. I think the build script is the only thing that has
+been altered however.</p>
+<p><code>fb-watchman</code> required an OS-specific software install outside of NPM.</p>
+<p>One of the tools required some Windows build tools to be installed globally (you
+could install it locally, but it&#39;s huge). Another one (or the same, I don&#39;t
+remember) required a flag to ask for Python 2.7.</p>
+<p>All in all, this was a bit of a headache.</p>
+<p>If you were to try one of those, my hunch and the above tells me to go with
+Chokidar.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/static-generation-incrementally";
+        this.page.identifier = "static-generation-incrementally";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

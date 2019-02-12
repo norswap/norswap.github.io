@@ -6,6 +6,37 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Elegant Optional Arguments in Java</title>
+      <description>
+&lt;p&gt;Today, an adventure in programming in the in-between, not quite programming in
+the small, not quite in the large either.&lt;/p&gt;
+&lt;p&gt;The problem is that we would like to have a Java method (or constructor) with
+optional parameters: parameters who take default value as arguments if not
+supplied.&lt;/p&gt;
+&lt;p&gt;The standard way to do this would be to generate overloads with only a subset of
+arguments. This is of course exponential in the number of optional parameters:
+with four of them, we&amp;#39;re already generating 16 overloads! It&amp;#39;s also dependent on
+optional parameters not sharing the same type, and requires one to remember the
+ordering of parameters.&lt;/p&gt;
+&lt;p&gt;A better solution: create a configuration object to hold all optional arguments.
+This is good, but shifts the issue of optional parameters to the instantiation
+of the configuration object. One solution is have a no-argument constructor and
+use setters to specify the non-default values. This can be relatively terse and
+elegant by means of the &lt;a href=&quot;https://dzone.com/articles/design-patterns-the-builder-pattern&quot;&gt;builder pattern&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s also possible to forego the configuration object and store the
+configuration directly on the concerned object. But there is the risk to clutter
+the object, muddling the public interface of the class. It&amp;#39;s better to separate
+concerns so that configuration data is separate from other fields (&amp;quot;work data&amp;quot;,
+stored items, ...).&lt;/p&gt;
+&lt;p&gt;And there you have it, if you require more than one or two optional parameters,
+or you feel the set of optional parameters may grow, consider whipping up
+configuration object with the builder pattern!&lt;/p&gt;
+      </description>
+      <pubDate>2019-02-12T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/java-optional-parameters</link>
+      <guid isPermaLink="true">http://norswap.com/java-optional-parameters</guid>
+    </item>
+    <item>
       <title>More Weightlifting Observations</title>
       <description>
 &lt;p&gt;Previously: &lt;a href=&quot;/weight-training&quot;&gt;Starting Weight Training&lt;/a&gt;&lt;/p&gt;
@@ -1771,74 +1802,6 @@ Consulted on the 20th April 2018.&lt;/p&gt;
       <pubDate>2018-05-15T22:00:00.000Z</pubDate>
       <link>http://norswap.com/inductive-programming</link>
       <guid isPermaLink="true">http://norswap.com/inductive-programming</guid>
-    </item>
-    <item>
-      <title>Effective Command Line Searching</title>
-      <description>
-&lt;p&gt;I do keep a fair amount of information inside text files - this is how I
-organize myself, keep track of what I&amp;#39;ve read, etc.&lt;/p&gt;
-&lt;p&gt;Occasionally, I need to search these files by content to retrieve some
-information, or remind myself of something I read earlier. Hence the need for
-software that does just that.&lt;/p&gt;
-&lt;p&gt;So far, I had settled on &lt;a href=&quot;https://www.mythicsoft.com/agentransack/&quot;&gt;Agent Ransack&lt;/a&gt; on Windows and &lt;a href=&quot;https://www.houdah.com/tembo/&quot;&gt;Tembo&lt;/a&gt; on OS X.
-However, I was looking for something a bit more snappy, hence the idea of using
-a command line tool.&lt;/p&gt;
-&lt;p&gt;I expect the reader will be familiar with the venerable &lt;a href=&quot;https://www.gnu.org/software/grep/&quot;&gt;grep&lt;/a&gt;, but it turns out
-there are a whole lot more tools that can be used.&lt;/p&gt;
-&lt;p&gt;The most useful resource I found online was &lt;a href=&quot;https://beyondgrep.com/feature-comparison/&quot;&gt;this comparison&lt;/a&gt; of tools, which
-compares (at the time of writing), &lt;a href=&quot;https://www.gnu.org/software/grep/&quot;&gt;&lt;code&gt;ack&lt;/code&gt;], &lt;a href=&quot;https://geoff.greer.fm/ag/&quot;&gt;&lt;code&gt;ag&lt;/code&gt;&lt;/a&gt;, &lt;a href=&quot;https://git-scm.com/docs/git-grep&quot;&gt;&lt;code&gt;git-grep&lt;/code&gt;&lt;/a&gt;, [&lt;code&gt;GNU
-grep&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;https://github.com/BurntSushi/ripgrep&quot;&gt;&lt;code&gt;rg&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;After a glance, I was really tempted to use &lt;a href=&quot;https://github.com/BurntSushi/ripgrep&quot;&gt;ripgrep (&lt;code&gt;rg&lt;/code&gt;)&lt;/a&gt;, which seems
-to be the fastest of the bunch, has well-rounded features and nice
-documentations.&lt;/p&gt;
-&lt;p&gt;However, it lacked a vital feature for me: multi-line matching. I store a lot of
-text formatted to hard-line-wrap at 80 characters, and I want to be able to
-search for word groups accros line boundaries. So ultimately I settled on &lt;a href=&quot;https://geoff.greer.fm/ag/&quot;&gt;the
-silver searcher (&lt;code&gt;ag&lt;/code&gt;)&lt;/a&gt;, which is great as well.&lt;/p&gt;
-&lt;h2 id=&quot;effective-selecting&quot;&gt;Effective Selecting&lt;/h2&gt;
-&lt;p&gt;Additionally, I also wanted to try &lt;a href=&quot;https://github.com/garybernhardt/selecta&quot;&gt;selecta&lt;/a&gt;, a command line tool by &lt;a href=&quot;https://www.destroyallsoftware.com/screencasts&quot;&gt;Gary
-Bernhardt&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;What it does is read lines from the input stream and allow you to scroll these
-lines on the command line, ultimately selecting one. If this description is
-unclear, check the animated gif on the &lt;a href=&quot;https://github.com/garybernhardt/selecta&quot;&gt;github page&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Unfortunately selecta is Unix-only, however there are a few clones and I ended
-up settling on the multi-platform &lt;a href=&quot;https://github.com/rschmitt/heatseeker&quot;&gt;heatseeker&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s an example of what I can do with &lt;code&gt;ag&lt;/code&gt; and heatseeker (&lt;code&gt;hs&lt;/code&gt;):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;em $(ag -l parser | hs)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Or the Windows equivalent (assuming you have &lt;code&gt;xargs&lt;/code&gt; installed, it comes with
-&lt;a href=&quot;https://www.cygwin.com/&quot;&gt;Cygwin&lt;/a&gt;, &lt;a href=&quot;http://www.mingw.org/&quot;&gt;MinGW&lt;/a&gt; and even Git):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ag -l parser | hs | xargs em&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;What I&amp;#39;m doing is that I&amp;#39;m searching for the string &amp;quot;parser&amp;quot; in the current
-directory. The &lt;code&gt;-l&lt;/code&gt; flag says to only print the file name (not the line number)
-of matches. Then heatseeker is used for the selection, and once the selection is
-done, the file opens in Emacs (&lt;code&gt;em&lt;/code&gt; is my &lt;a href=&quot;https://github.com/norswap/.emacs.d&quot;&gt;custom Emacs launching
-script&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Of course, this could be encapsulated in a batch script or bash function in
-order to be even more convenient.&lt;/p&gt;
-&lt;h2 id=&quot;filename-search&quot;&gt;Filename Search&lt;/h2&gt;
-&lt;p&gt;Just to be clear, the article is about searching inside text files. However, I
-also often want to search files by name.&lt;/p&gt;
-&lt;p&gt;To do this, I use GUI programs. On Windows, the best is &lt;a href=&quot;https://www.voidtools.com/&quot;&gt;Everything&lt;/a&gt;. I have
-this handy program hotkeyed to &lt;code&gt;Win+S&lt;/code&gt; and I use it all the time to quickly
-navigate to a file.&lt;/p&gt;
-&lt;p&gt;OS X has unfortunately nothing as good as that. The main problem is that most
-search programs seems to rely on the Spotlight engine, which is flaky in a
-couple of places. Most aggravating for me, Spotlight will not search inside
-dot-directories (e.g. &lt;code&gt;.config&lt;/code&gt;). It&amp;#39;s also not possible to formulate queries as
-easily as in Everything. I think partial path matching is not possible for
-instance. The search program that don&amp;#39;t use the Spotlight engine are somehow
-even worse.&lt;/p&gt;
-&lt;p&gt;In the absence of a real solution, &lt;a href=&quot;https://www.houdah.com/tembo/&quot;&gt;Tembo&lt;/a&gt; is also able to search on file names
-on OS X. It&amp;#39;s not a patch on Everything, but it&amp;#39;s better than nothing
-(accidental pun!).&lt;/p&gt;
-&lt;p&gt;In the rare cases where I want to search on the command line, I can either use
-the venerable &lt;a href=&quot;http://man7.org/linux/man-pages/man1/find.1.html&quot;&gt;&lt;code&gt;find&lt;/code&gt;&lt;/a&gt; or the use &lt;code&gt;-g&lt;/code&gt; flag of &lt;code&gt;ag&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;android&quot;&gt;Android&lt;/h2&gt;
-&lt;p&gt;I also have a bunch of text files synced on my phone, and on the rare occassion
-I need to make a search on the go, I use the &lt;a href=&quot;https://play.google.com/store/apps/details?id=jp.sblo.pandora.aGrep&amp;amp;hl=en&amp;amp;rdid=jp.sblo.pandora.aGrep&quot;&gt;aGrep&lt;/a&gt; application. I have also
-tried &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.docsearch&amp;amp;hl=en&quot;&gt;DocSearch&lt;/a&gt;, but the user experience was less pleasant.&lt;/p&gt;
-      </description>
-      <pubDate>2018-02-26T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/cmd-search</link>
-      <guid isPermaLink="true">http://norswap.com/cmd-search</guid>
     </item>
   </channel>
 </rss>

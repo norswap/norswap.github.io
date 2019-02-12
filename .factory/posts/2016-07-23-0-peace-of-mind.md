@@ -76,7 +76,7 @@ doing good work is synonymous with tending to your peace of mind.
 >
 > Zen Buddhists talk about "just sitting," a meditative practice in which the idea
 > of a duality of self and object does not dominate one's consciousness. What I'm
-> talking about here in motorcyele maintenance is ``just fixing,'' in which the
+> talking about here in motorcycle maintenance is "just fixing," in which the
 > idea of a duality of self and object doesn't dominate one's consciousness. When
 > one isn't dominated by feelings of separateness from what he's working on, then
 > one can be said to "care" about what he's doing. That is what caring really is,

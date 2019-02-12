@@ -286,7 +286,7 @@ The reasoning is much the same, so I shall say no more of it.
 This, in turn, can be obtained in much the same way as the number of
 k-permutations of multisets with repetition.
 
-Namely, there are ``CC(m, k) = C(m+k-1, k) = (m+k-1)! / (k! * (m-1)!)` such
+Namely, there are `CC(m, k) = C(m+k-1, k) = (m+k-1)! / (k! * (m-1)!)` such
 k-combinations. And again, not all of them are equiprobable.
 
 ---

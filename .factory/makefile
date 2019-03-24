@@ -15,6 +15,9 @@ rebuild: generate.js.rna
 watch: generate.js.rna
 	node $< watch
 
+generate.js.rna: generate.js
+	node ribosome.js --rna $< > $@
+
 %.rna: %.dna
 	node ribosome.js --rna $< > $@
 

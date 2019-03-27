@@ -10,11 +10,11 @@ recommend it to everyone who cares about the craft of writing software.
 [pospdf]: https://www.dreamsongs.com/Files/PatternsOfSoftware.pdf
 
 I didn't really know what to expect going into the book. The first part explains
-architect Scott Alexanders' vision of patterns and pattern languages, and makes
-a parallel with programming. It's miles away from the [gang of four], which is
-just as well. The second part speaks about Gabriel's own personal experiences. I
-didn't expect that, but it was nevertheless captivating. The book ends with an
-expanded version of Gabriel's [Worse is Better] thesis.
+architect Christopher Alexanders' vision of patterns and pattern languages, and
+makes a parallel with programming. It's miles away from the [gang of four],
+which is just as well. The second part speaks about Gabriel's own personal
+experiences. I didn't expect that, but it was nevertheless captivating. The book
+ends with an expanded version of Gabriel's [Worse is Better] thesis.
 
 [gang of four]: https://en.wikipedia.org/wiki/Design_Patterns
 

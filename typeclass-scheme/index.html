@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Language Design Notes 1: A Precise Typeclass Scheme
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Language Design Notes 1: A Precise Typeclass Scheme</h1>
+      <span class="post-date">01 Apr 2019</span>
+<p>This is the second post in my <strong><a href="/language-design-notes/">Language Design Notes</a></strong> series.</p>
+<p>This instalment is a bit particular, as it outlines pretty precisely (though not
+formally) a way to implement <a href="https://en.wikipedia.org/wiki/Type_class">typeclasses</a> in an imaginary (and for the most
+part, unspecified) language. Nothing much is assumed about the language — it
+isn&#39;t assumed to be purely functional for instance. The syntax is taken to look
+a bit like Python (using significant indentation).</p>
+<p>Some context about why I wrote this, lifted from the the <a href="/language-design-notes/">series
+index</a>:</p>
+<blockquote>
+<p>As I started thinking about typeclasses more, I found the need to write down
+some form of specification of the system I was imagining, so that I could
+refer to other parts of the design, and see if it was consistent.</p>
+<p>I found the need to be fairly precise. Or maybe I just got carried away... but
+I think the precision really helps throw in relief the small detail that
+threatens the consistency and elegance of the whole. Anyhow, this ended up
+looking more like a specification than a nice explanative article, although I
+tried to include enough examples.</p>
+<p>It&#39;s not perfect, but as <a href="/more-content/">discussed earlier</a>, I want thing to move forward, so
+here it is!</p>
+</blockquote>
+<p>And that being said, let&#39;s dive right in!</p>
+<h2 id="declaring-typeclasses-and-instances">Declaring Typeclasses and Instances</h2>
+<p>This is how you declare a single-parameter typeclass:</p>
+<pre><code>class Serializable $T
+    fun serialize (it: $T): String
+    fun deserialize (str: String): $T</code></pre><p><code>$T</code> is a generic type. Generic types all start with a dollar sign. This makes
+them easy to pick out and avoids namespace clashes with regular types. It also
+dispenses us from declaring which types are generic separately. This is not a
+problem for typeclass declarations, but it is for function declaration, where
+generic types may be mingled with normal types.</p>
+<p>For instance, java lists the generic types before the function signature:</p>
+<pre><code>&lt;T&gt; String serialize (T it);</code></pre><p>Haskell uses the scheme we propose, but with lowercase letters for generic
+types. We&#39;d like to keep lowercase letters for things in the domain of values,
+while things in the domain of types are capitalized. (That being said, types
+will also be first-class values in our language.)</p>
+<p>This is how you create an instance of a single-parameter typeclass for a type
+called <code>Point</code>:</p>
+<pre><code>instance Serializable Point
+    fun serialize (it: Point): String
+        return it.x + &quot;,&quot; + it.y
+    fun deserialize (str: String): Point
+        val strs = str.split(&quot;,&quot;)
+        return Point(parse_int(strs[0]), parse_int(strs[1]))</code></pre><p>Here is how you declare a multiple-parameter typeclass:</p>
+<pre><code>enum Order { BIGGER, EQUAL, SMALLER }
+
+class Orderable $X $Y
+    fun order (x: $X, y: $Y): Order</code></pre><p>Here is how you create an instance of a multiple-parameter typeclass for types
+<code>String</code> and <code>Char</code>:</p>
+<pre><code>instance Orderable String Char
+    fun order (x: String, y: Char): Order
+        if x.size == 0
+            return SMALLER
+        if x[0] == y
+            return x.size == 1 ? EQUAL : BIGGER
+        else
+            return x[0] &gt; y ? BIGGER : SMALLER</code></pre><p>Note that both type parameters of <code>Orderable</code> can be the same type:</p>
+<pre><code>instance Orderable Int Int
+    fun order (x: Int, y: Int): Order
+        if (x &gt; y) return BIGGER
+        if (x &lt; y) return SMALLER
+        return EQUAL</code></pre><h2 id="instances-names">Instances Names</h2>
+<p>Every instance must have a name. A subsequent section (<a href="#picking-instances">Picking
+Instances</a>) will explain why names are needed, but for the
+moment bear with me.</p>
+<p>If a name is not given explicitly, it will be generated automatically. For
+instance, our <code>Serializable</code> instance for <code>Point</code> will be called
+<code>Serializable_Point</code>.</p>
+<p>We can also give a name explicitly. Imagine we want to serialize points using
+slashes (/) because of an obscure data format we use:</p>
+<pre><code>instance PointSlash: Serializable Point
+    fun serialize (it: Point): String
+        return it.x + &quot;/&quot; + it.y
+    fun deserialize (str: String): Point
+        val strs = str.split(&quot;/&quot;)
+        return Point(parse_int(strs[0]), parse_int(strs[1]))</code></pre><p>(The definition is the same as <code>Serializable_Point</code>, except the comma has been replaced by a
+slash.)</p>
+<p>This instance will be called <code>PointSlash</code>. It will not receive an automatically
+generated name.</p>
+<p>The scheme to build automatic names for multiple-parameter typeclasses is what
+you&#39;d expect , e.g. <code>Orderable_Int_Int</code>.</p>
+<h2 id="deriving-typeclasses-automatically">Deriving Typeclasses Automatically</h2>
+<p>We can derive a typeclass instance from the existence of another typeclass as
+follows:</p>
+<pre><code>derive instance Orderable $X $Y
+        from Reverse: Orderable $Y $X
+
+    fun order (x: $X, y: $Y): Order
+        val rev = Reverse.order(y, x)
+        if (rev == BIGGER)  return SMALLER
+        if (rev == SMALLER) return BIGGER
+        return EQUAL</code></pre><p>We call this declaration an <em>instance derivation</em>. The instance that will
+fullfill the from-clause is called the <em>source instance</em>. The instance derived
+from a specific source instance is simply known as a <em>derived instance</em>.</p>
+<p>Instance selection will always prefer an explicit instance rather than a derived
+instance when both are in the same scope. So our derived <code>Orderable</code> instance
+does not cause issues when <code>$X</code> and <code>$Y</code> are the same type. We&#39;ll talk about
+this more in the <a href="#type-derivations-and-instance-selection">Type Derivations and Instance
+Selection</a> section.</p>
+<p>Just like instances, instance derivations have names. Similarly, they can have
+explicit names:</p>
+<pre><code>derive instance Reversed: Orderable $X $Y
+        from Reverse: Orderable $Y $X
+    // ...</code></pre><p>But otherwise an automatic name is attributed. For our example, the name would
+be <code>Orderable_$X_$Y_from_Orderable_$Y_$X</code>.</p>
+<p>A single derivation can yield many different instances. There will of course be
+instances with different type arguments, but also instances using a different
+source instance.</p>
+<p>Source instances can be given a name (<code>Reverse</code> in our example) or have a name
+assigned automatically — it would be <code>Orderable_$X_$Y</code> in our example). This,
+however, is not the true name of the source instance — which is simply the name
+of whatever instance is selected to fullfill the role of the source instance.
+Rather it&#39;s an alias that can be used within the definition of the type
+derivation. It may happens that this name clashes with previously declared
+names. In this case, this name shadows the previous declaration, for the
+duration of the type derivation definition. It will be possible to access
+file-levels and imported names by prefixing them with a module name — see next
+section.</p>
+<p>While we don&#39;t declare derived instances explicitly, they also have names! These
+are derived by treating the name of the derivation as a function of the source
+instance, e.g. <code>Reversed(Orderable_Int_Int)</code></p>
+<h2 id="importing-typeclasses-and-instances">Importing Typeclasses and Instances</h2>
+<p>In this imaginary language, I&#39;ve decided not to specify explicitly how things
+can become imported.</p>
+<p>Having nevertheless given it some thought, it appears clear that importing all
+instances explicitly would be cumbersome. One could therefore suppose that
+typeclass instances will get imported <em>implicitly</em>.</p>
+<p>For instance, we could <strong>imagine</strong> that if we import a set of types from a file,
+then all typeclass instances in the file for that set of types would get
+imported implicitly.</p>
+<p>An instance is said to be <em>in scope</em> of some code if they&#39;re declared in the
+same file, or if they&#39;ve been imported (explicitly or implicitly).</p>
+<p>I imagine that this system will rely on a notion of <em>module</em>.</p>
+<p>As such, it will be possible to prefix of an instance or type derivation by the
+name of its defining module — with the special keyword <code>self</code> designating the
+current module. e.g. <code>self.Serializable_Point</code> or
+<code>my_module.Serializable_Point</code>.</p>
+<h2 id="default-functions">Default Functions</h2>
+<p>Typeclass definitions are free to provide default implementations for the
+functions they declare. Such a default definition can always be overidden in the
+typeclass instances — otherwise it should just be a normal function and not a
+typeclass function!</p>
+<p>For instance, the following class includes a default implementation for
+<code>receive_all</code> in terms of its other function <code>receive</code>.</p>
+<pre><code>class Receiver $T $X
+    fun receive (it: $T, item: $X)
+    fun receive_all (it: $T, items: List[$T])
+        for item in items:
+            receive(it, item)</code></pre><p>It&#39;s even possible to have two functions in terms of one another — the user
+implementing the instance will have to override at least one of them.</p>
+<p>(It would be possible to add language-level support to defining such sets of
+functions, at least one of which needs to be overriden, but I&#39;m not sure the
+benefits are worth the conceptual overhead.)</p>
+<p>There are essentially two ways to implement default methods. The first is for
+them to be some kind of template, specialized for and copied into each instance
+that does not override them. The second is to use a late binding mechanism,
+which can be especially interesting if the implementation targets supports it
+(e.g. the JVM).</p>
+<h2 id="typeclass-constraints">Typeclass Constraints</h2>
+<p>There are two places where it&#39;s possible to constrain types based on whether
+they possess a typeclass instance: method definition and typeclass declarations.</p>
+<p>Here is a method with a typeclass constraint:</p>
+<pre><code>fun foo (it: $T) where Serializable $T
+    output(serialize(it))</code></pre><p>And here is a typeclass with a constraint:</p>
+<pre><code>class Reducible $T $X
+        where Sequential: Sequence $T $X
+
+    fun reduce (it: $T): $X</code></pre><p>The function&#39;s constraint prevents us from calling <code>foo</code> with a type <code>$T</code> that
+does not have a corresponding <code>Serializable $T</code> instance.</p>
+<p>Similarly, the typeclass&#39; constraint prevents us from instanciating <code>Reducible</code>
+for pair of types that do not have a corresponding <code>Sequence $T $X</code> instance.</p>
+<p>We call instances that satisfy a function&#39;s constraints <em>the call instances</em>,
+and the instances that satisfy a typeclass&#39;s constraint the <em>required
+instances</em>.</p>
+<p>Sometimes, a typeclass with a type constraint can be very close to a type
+derivation, especially when the typeclass defines default implementations for
+all its functions. The big difference is that a class must still be implemented
+explicitly — an implementation has to be requested even if no functions have to
+be implemented. A derivation, on the other hand, is always &quot;active&quot;.</p>
+<p>Just like for source instances in type derivations (cf. the <a href="#deriving-typeclasses-automatically">Deriving
+Typeclasses Automatically</a> section), the
+required instances may be named and have otherwise an automatically generated
+name. This is not the &quot;true&quot; instance name, but a local alias that may shadow
+previous declarations.</p>
+<p>The other big difference between typeclass declarations with type constraints
+and type derivations is <strong>when</strong> instance selection occurs. We&#39;ll come back to
+it in the <a href="#type-constraints-vs-type-derivations">Type Constraints vs Type
+Derivations</a> section.</p>
+<h2 id="picking-instances">Picking Instances</h2>
+<p>During the execution of our program, there are a couple times when instances
+will need to be picked. </p>
+<ul>
+<li><p><em>Direct instance selection</em> — when we call a function that belong to a
+typeclass, we need to decide which instance will provide the implementation.</p>
+</li>
+<li><p><em>Call instance selection</em> — selecting the instance that satisfies a typeclass
+constraint in a function (cf. last section).</p>
+</li>
+<li><p><em>Required instance selection</em> — selecting the instance that satisfies a
+typeclass constraint in a typeclass (cf. last section).</p>
+</li>
+<li><p><em>Source instance selection</em> — select the instances used as source for instance
+derivations.</p>
+</li>
+</ul>
+<p>Fortunately, all types of instance selections are similar, and follow the same
+rules. In each case, we know the typeclass we want to provide an instance for,
+and we have to select that instance from those that are in scope and fit the
+bill (or emit an error if no instance will do).</p>
+<p>If there is only one instance that works, the language will know to pick it. But
+if there are ambiguities, it needs to decide on a particular instance, based on
+hints supplied by the programmer.</p>
+<p>We&#39;ll explain the instance selection rules using <em>direct instance selection</em>,
+and add precisions for other types of selections later, as required.</p>
+<h2 id="direct-instance-selection">Direct Instance Selection</h2>
+<p>Imagine that we import <code>Serializable_Point</code> and <code>PointSlash</code> from before, two
+instances of <code>Serializable Point</code>.</p>
+<p><u>Small aside</u>: it would be more proper to say &quot;two instances of <code>Serializable</code>
+for the type <code>Point</code>&quot; — but that&#39;s tedious. And what category does <code>Serializable
+Point</code> even belong to? It&#39;s not a typeclass (<code>Serializable</code> is) nor an instance
+(<code>Serializable_Point</code> is). If we really need a name, we could could this a
+<em>typeclass specification</em>.</p>
+<pre><code>fun foo (it: Point)
+    output(serialize(it))</code></pre><p>Which instance should this code use?</p>
+<p>We can select the proper instance in two ways:</p>
+<p>1) Specify the instance to use at the instance selection site:</p>
+<pre><code>fun foo (it: Point)
+    output(Serializable_Point.serialize(it))</code></pre><p>2) Specify the instance to use in a certain scope (e.g. file or function) with
+   an <code>use</code> declaration.</p>
+<pre><code>fun foo (it: Point)
+    use PointSlash
+    output(serialize(it))</code></pre><p>Of course, you could do <code>PointSlash.serialize(it)</code> and <code>use Serializable_Point</code>
+as well.</p>
+<p>When your two instances have automatically generated names which therefore clash
+(i.e. both are named <code>Serializable_Point</code>), you can prefix with module names to
+disambiguate them (e.g. <code>self.Serializable_Point</code> or
+<code>my_module.Serializable_Point</code>) — see the <a href="#importing-typeclasses-and-instances">Importing Typeclasses and
+Instances</a> section.</p>
+<p>Regarding <code>use</code>, the current plan is that it will be possible to override an
+<code>use</code> declaration with another, even in the same scope. For instance:</p>
+<pre><code>fun foo (it: Point)
+    use PointSlash
+    output(serialize(it))
+    use Serializable_Point
+    output(serialize(it))</code></pre><p>Nevertheless, <code>use</code> remains a <em>declaration</em> whose scope is purely static. It is
+not a <em>statement</em> (and so cannot be guarded by an if statement, etc).</p>
+<h2 id="type-derivations-and-instance-selection">Type Derivations and Instance Selection</h2>
+<p>Derived instances do complicate the instance selection mechanism somewhat.</p>
+<p>The basic issue is relatively simple. If there is a conflict between two
+instances, and both of these instances can serve as base for the creation of
+derived instance, then you&#39;ll have a conflict there as well.</p>
+<p>Consider the following example:</p>
+<pre><code>class Named $T
+    fun name (it: $T): String
+
+instance UserFirst: Named User
+    fun name (it: User): String
+        return it.first_name
+
+instance UserLast: Named User
+    fun name (it: User): String
+        return it.last_name
+
+class Stringifiable $T
+    fun to_string (it: $T): String
+
+derive instance Stringifiable $T from Named $T
+    fun to_string (it: $T): String
+        return name(it)
+
+fun foo (usr: User)
+    output(to_string(usr))</code></pre><p>Should <code>foo</code> output the users&#39;s first or last name? Say we want the last name.</p>
+<p>There is an easy ways to fix that conflict, should write <code>use UserLast</code>. This
+will have the effect of disambiguating the <em>source instance selection</em> of the
+type derivation, hence <code>foo</code> will use the <code>Stringifiable</code> instance derived from
+<code>UserLast</code>.</p>
+<p>But what if we add the following?</p>
+<pre><code>derive instance ThingNamed: Stringifiable $T
+        from Named $T
+    fun to_string (it: $T): String
+        return &quot;the thing named &#39;&quot; + name(it) + &quot;&#39;&quot;</code></pre><p>Now we also need to specify which derivation we want. We can do this in a couple
+ways:</p>
+<ol>
+<li><code>use ThingNamed</code> — always use the <code>ThingNamed</code> derivation to supply a
+<code>Stringifiable</code> when a <code>Named</code> instance exists.</li>
+<li><code>ThingNamed.to_string(usr)</code> — specifying the derivation to use explicitly at
+the use site.</li>
+<li><code>use ThingNamed(UserLast)</code></li>
+<li><code>ThingNamed(UserLast).to_string(usr)</code></li>
+</ol>
+<p>The first solution is a new form of <code>use</code> which does not specify an instance but
+an instance derivation!</p>
+<p>The second solution is symmetric to the first, we use the derivation instead of
+an instance at the instance selection site.</p>
+<p>The third and fourth solution have nothing novel: we just specify the full
+instance explicitly.</p>
+<p>The first two solutions, however, do require us to have specified <code>use UserLast</code>
+before! Otherwise, we know to use <code>ThingNamed</code>, but should it use the the
+<code>UserFirst</code> or <code>UserLast</code> instance?</p>
+<p><strong>Using</strong> an instance derivation demands <em>source instance selection</em>. This
+selection may be done manually (as in <code>use ThingNamed(UserLast)</code>) or
+automatically — if there is no ambiguity or the proper <code>use</code> statements have
+been made.</p>
+<p>Automatic source instance selection may entail a recursion problem when an
+instance derivation creates a instance of the same kind as its pre-requisite. We
+already saw a derivation like that:</p>
+<pre><code>instance Orderable Int Int
+    // ...
+
+// assume we imported this
+derive instance Reversed: Orderable $X $Y
+        from Reverse: Orderable $Y $X
+    // ...</code></pre><p>I said earlier:</p>
+<blockquote>
+<p>Instance selection will always prefer an explicit instance rather than a
+derived instance when both are in the same scope.</p>
+</blockquote>
+<p>That&#39;s because I assume that within a single file, you&#39;re aware when an explicit
+and derived instance clash.</p>
+<p>But it doesn&#39;t work like that when importing one of the two instances. In that
+case, the policy is to let them clash to bring awareness to the conflict.</p>
+<p>If you want the base behaviour, you can do <code>use Orderable_Int_Int</code> and all is
+well. But if you want the derived behaviour, you <strong>can&#39;t</strong> do <code>use Reversed</code>.
+Because that would mean the derivation would use itself as <code>Reverse</code> — an
+infinite recursion. It is therefore a compile-time error.</p>
+<p>The solution in this case is simply to do manual source instance selection, i.e.
+specify the full instance name: <code>use Reversed(Orderable_Int_Int)</code>.</p>
+<h2 id="implicit-use">Implicit <code>use</code></h2>
+<p>We need to add an important precision to what precedes.</p>
+<p>Whenever there is a typeclass constraint, the constraint acts like an implicit
+<code>use</code> statement!</p>
+<p>So the following pair of functions are always equivalent:</p>
+<pre><code>fun foo1 (it: $T) where Serializable $T
+    output(serialize(it))n
+
+fun foo2 (it: $T) where Serializable $T
+    use Serializable_$T
+    output(serialize(it))</code></pre><p>The same principle applies for typeclass&#39; constraints.</p>
+<h2 id="type-constraints-vs-type-derivations">Type Constraints vs Type Derivations</h2>
+<p>When we introduced typeclass&#39; constraints in the <a href="#typeclass-constraints">Typeclass
+Constraints</a> section, we said that a big difference
+between typeclasses with constraints on the one hand, and type derivations on
+the other hand, was that one must always request a typeclass instances, whereas
+type derivation are always &quot;active&quot; to generate instances on a by-need basis.</p>
+<p>Now we can introduce another big difference that directly falls out from that
+first difference, namely <em>when</em> instance selection occurs.</p>
+<p>Instances that implement a typeclass with type constraints cause the required
+instances to be <em>captured</em>. This means they&#39;re essentially stored inside the
+instance, and their usage is not dependent on the context in which the instance
+functions are used.</p>
+<p>For type derivations, it&#39;s some other instance selection that triggers the
+source instance selection!</p>
+<p>Just like other forms of instance selection, required instance selection is
+affected by <code>use</code> statements. Manual disambiguation is also possible with the
+<code>using</code> clause.</p>
+<pre><code>class Foo $T requires Named $T
+    // ...
+
+instance FooUser User using LastName
+    // ...
+</code></pre><p>On occasions, the capture of required instances, might lead to situations that
+are very slightly unintuitive:</p>
+<pre><code>class Reducible $T $X
+        where Sequential: Sequence $T $X
+
+    fun reduce (it: $T): $X
+
+// ...
+
+fun foo (seq: $T) where Reducible $T Point, Sequence $T Point
+    reduce(seq)</code></pre><p>In the above example, there is not guarantee that the instance selected for the
+function&#39;s <code>Sequence $T Point</code> constraint will be the same as the instance
+selected for the typeclass&#39; constraint!</p>
+<p>The first one is selected when the instance satisfying <code>Reducible $T Point</code> is
+defined, whereas the second is selected when the function <code>foo</code> is called.</p>
+<h2 id="shortcut-notation-for-parameter-types">Shortcut Notation For Parameter Types</h2>
+<p>We admit a shortcut notation for uses of unary typeclasses, so thoses two
+snippets are equivalent:</p>
+<pre><code>fun foo (mk_string: $A) where Stringifiable $A
+    // ...</code></pre><pre><code>fun foo (mk_string: Stringifiable)
+    // ...</code></pre><p>The second one sure looks nicer!</p>
+<p>There are a few reason not to use the shorthand though:</p>
+<ul>
+<li>When you need to express other constraints on the actual type.</li>
+<li>When you need to reuse the actual type for other parameters.</li>
+</ul>
+<p>For instance, these two snippets are equivalent:</p>
+<pre><code>fun foo (mk_string1: $A, mk_string2 $B)
+        where Stringifiable $A, Stringifiable $B
+    // ...</code></pre><pre><code>fun foo (mk_string1: Stringifiable, mk_string2: Stringifiable)
+    // ...</code></pre><p>In practice, names will likely need to be attributed to the underlying generic
+type when using the shortcut notation. The current plan is to use simple
+sequential identifiers preceded by a reserved string (something like <code>__$A</code>,
+<code>__$B</code>, ...).</p>
+<p>The shortcut notation can also be used for multi-parameter typeclasses, for
+instance the two following snippets are equivalent:</p>
+<pre><code>fun foo (seq: $A) where Sequence $A String
+    // ...</code></pre><pre><code>fun foo (seq: Sequence[String])
+    // ...</code></pre><p>If there are more than two parameters to the typeclass, supplemental parameters
+are separated by a comma:</p>
+<pre><code>fun foo (graph: Graph[Node, Edge]) // Graph $A Node Edge
+    // ...</code></pre><p>This is an example notation anyway, but I&#39;m wondering if using <code>Sequence String</code>
+and <code>Graph Node Edge</code> wouldn&#39;t be more pleasant? If I don&#39;t type need type-level
+operators, maybe I&#39;ll do just that.</p>
+<h2 id="empty-typeclasses">Empty Typeclasses</h2>
+<p>One may imagine that we will end up with a lot of typeclasses that define
+fine-grained behaviours. Some of those will be related by type constraints. It&#39;s
+probably a good idea to make it possible to access required instances from the
+instance that requires them.</p>
+<p>Sometimes, we would like to bundle a couple of instances together, to compose a
+more precise behaviour contract (which is what a typeclass essentially is) from
+a bunch of smaller ones.</p>
+<p>In that case, a common pattern would be to use an empty typeclass with a list of
+requirements:</p>
+<pre><code>class List $T $X where
+    Sequential $T $X,
+    Indexable $T $X,
+    Iterable $T $X</code></pre><p>Assuming we have an instance of this class, we can access the required instances
+by dot references: <code>ListInstance.Sequential_$T_$X</code>.</p>
+<p>We can also bring required instances in scope via some local import statement:
+<code>import ListInstance.Sequential_$T_$X</code>. Or if we want all of them: <code>import
+ListInstance.*</code>.</p>
+<p>Note that importing the instances brings them in scope. It pointedly <em>does not</em>
+resolve ambiguities. It is not an <code>use</code> statement! (But you can also supply
+required instances to <code>use</code>, of course.)</p>
+<h2 id="aliases">Aliases</h2>
+<p>What if you import an instance and the original author hasn&#39;t given it a nice
+name? Fortunately for you, the <code>alias</code> declaration has you covered:</p>
+<pre><code>alias PointComma = Serializable_Point</code></pre><p><code>alias</code> work for any kind of names: typeclass derivations, constructed instance
+names, ...</p>
+<pre><code>alias Reversed = Orderable_$X_$Y_from_Orderable_$Y_$X
+alias ReversedIntComp = Orderable_$X_$Y_from_Orderable_$Y_$X(Orderable_Int_Int)
+// or, using the first allias:
+alias ReversedIntComp = Reversed(Orderable_Int_Int)</code></pre><p>An alias makes its left and right part interchangeable for code in which the
+<code>alias</code> is in scope. It&#39;s not the same as giving a name to the instance when
+it&#39;s declared: in that case, no automatically generated name is attributed!</p>
+<h2 id="what-remains-to-be-done">What Remains to be Done</h2>
+<p>This post is long enough as it is (and a dry read besides), so I thought it wise
+to stop myself here.</p>
+<p>There are however a few topics that still need consideration to make for a
+truly great typeclass system.</p>
+<p>First, what in Haskell are called <em>existentials</em>, basically a way to have a type
+<code>R exists Serializable R</code> meaning that there exists some type X such that an
+instance of <code>Serializable X</code> exists, but X is not fixed, so that variables of
+type <code>R</code> can take values with different underlying types.</p>
+<p>A value of such a type is a pair of a value and a typeclass (or potentially, a
+tuple of multiple values and typeclass instances).</p>
+<p>Most notably, existentials are necessary to implemented <em>heterogeneous
+collections</em> as you can be had in most language, e.g. <code>List&lt;Serializable&gt;</code> in
+Java. Without existentials, it&#39;s impossible to specify a list of values with
+different types who happen to have a corresponding <code>Serializable</code> instance.</p>
+<p>The second important thing is to add some mechanism that help with code reuse.
+In particular, some form of delegation or late binding (e.g. Scala traits) would
+be neat. Some would advocate that a benefit of type classes is to get rid of
+that aspect of OO, but I disagree. The problem in OO in general is that
+permissions are too open by default: non-final clases and methods in Java for
+instance. As Joshua Bloch puts it in <a href="https://books.google.be/books/about/Effective_Java.html?id=ka2VUBqHiWkC&amp;redir_esc=y">Effective Java</a>: </p>
+<blockquote>
+<p>Design and document for inheritance or else prohibit it.</p>
+</blockquote>
+<p>Well done late binding is effectively a clean way to specify callbacks,
+potentially with a default behaviour in place. These callbacks may themselves
+call inside the late bound entity (class or typeclass). Effectively, this saves
+a lot of plumbing headaches.</p>
+<p>There are a couple more things that could go in, but they aren&#39;t as essential.</p>
+<p>One particular nicety I can think of is a mechanism for type unions. Not only
+boring unions (like <code>int | String</code> to specify you expect either an integer or a
+string), but also being able to specify a type <code>R</code> such that there is either an
+instance of <code>Serializable R</code> or an instance of <code>Stringifyable R</code> (or both!).
+Similar types intersection are already possible, just by putting multiple
+constraints on a type.</p>
+<p>These type unions make some <a href="/polymorphism/#ad-hoc-polymorphism">ad-hoc polymorphism</a> possible, and would be further
+well served by some form of pattern matching and <a href="https://en.wikipedia.org/wiki/Flow-sensitive_typing">flow typing</a>.</p>
+<p>But all this will have to wait for another day!</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/typeclass-scheme";
+        this.page.identifier = "typeclass-scheme";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

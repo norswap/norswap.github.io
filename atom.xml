@@ -6,6 +6,487 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Language Design Notes 1: A Precise Typeclass Scheme</title>
+      <description>
+&lt;p&gt;This is the second post in my &lt;strong&gt;&lt;a href=&quot;/language-design-notes/&quot;&gt;Language Design Notes&lt;/a&gt;&lt;/strong&gt; series.&lt;/p&gt;
+&lt;p&gt;This instalment is a bit particular, as it outlines pretty precisely (though not
+formally) a way to implement &lt;a href=&quot;https://en.wikipedia.org/wiki/Type_class&quot;&gt;typeclasses&lt;/a&gt; in an imaginary (and for the most
+part, unspecified) language. Nothing much is assumed about the language — it
+isn&amp;#39;t assumed to be purely functional for instance. The syntax is taken to look
+a bit like Python (using significant indentation).&lt;/p&gt;
+&lt;p&gt;Some context about why I wrote this, lifted from the the &lt;a href=&quot;/language-design-notes/&quot;&gt;series
+index&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As I started thinking about typeclasses more, I found the need to write down
+some form of specification of the system I was imagining, so that I could
+refer to other parts of the design, and see if it was consistent.&lt;/p&gt;
+&lt;p&gt;I found the need to be fairly precise. Or maybe I just got carried away... but
+I think the precision really helps throw in relief the small detail that
+threatens the consistency and elegance of the whole. Anyhow, this ended up
+looking more like a specification than a nice explanative article, although I
+tried to include enough examples.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not perfect, but as &lt;a href=&quot;/more-content/&quot;&gt;discussed earlier&lt;/a&gt;, I want thing to move forward, so
+here it is!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;And that being said, let&amp;#39;s dive right in!&lt;/p&gt;
+&lt;h2 id=&quot;declaring-typeclasses-and-instances&quot;&gt;Declaring Typeclasses and Instances&lt;/h2&gt;
+&lt;p&gt;This is how you declare a single-parameter typeclass:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Serializable $T
+    fun serialize (it: $T): String
+    fun deserialize (str: String): $T&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;$T&lt;/code&gt; is a generic type. Generic types all start with a dollar sign. This makes
+them easy to pick out and avoids namespace clashes with regular types. It also
+dispenses us from declaring which types are generic separately. This is not a
+problem for typeclass declarations, but it is for function declaration, where
+generic types may be mingled with normal types.&lt;/p&gt;
+&lt;p&gt;For instance, java lists the generic types before the function signature:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;T&amp;gt; String serialize (T it);&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Haskell uses the scheme we propose, but with lowercase letters for generic
+types. We&amp;#39;d like to keep lowercase letters for things in the domain of values,
+while things in the domain of types are capitalized. (That being said, types
+will also be first-class values in our language.)&lt;/p&gt;
+&lt;p&gt;This is how you create an instance of a single-parameter typeclass for a type
+called &lt;code&gt;Point&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;instance Serializable Point
+    fun serialize (it: Point): String
+        return it.x + &amp;quot;,&amp;quot; + it.y
+    fun deserialize (str: String): Point
+        val strs = str.split(&amp;quot;,&amp;quot;)
+        return Point(parse_int(strs[0]), parse_int(strs[1]))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Here is how you declare a multiple-parameter typeclass:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;enum Order { BIGGER, EQUAL, SMALLER }
+
+class Orderable $X $Y
+    fun order (x: $X, y: $Y): Order&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Here is how you create an instance of a multiple-parameter typeclass for types
+&lt;code&gt;String&lt;/code&gt; and &lt;code&gt;Char&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;instance Orderable String Char
+    fun order (x: String, y: Char): Order
+        if x.size == 0
+            return SMALLER
+        if x[0] == y
+            return x.size == 1 ? EQUAL : BIGGER
+        else
+            return x[0] &amp;gt; y ? BIGGER : SMALLER&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Note that both type parameters of &lt;code&gt;Orderable&lt;/code&gt; can be the same type:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;instance Orderable Int Int
+    fun order (x: Int, y: Int): Order
+        if (x &amp;gt; y) return BIGGER
+        if (x &amp;lt; y) return SMALLER
+        return EQUAL&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;instances-names&quot;&gt;Instances Names&lt;/h2&gt;
+&lt;p&gt;Every instance must have a name. A subsequent section (&lt;a href=&quot;#picking-instances&quot;&gt;Picking
+Instances&lt;/a&gt;) will explain why names are needed, but for the
+moment bear with me.&lt;/p&gt;
+&lt;p&gt;If a name is not given explicitly, it will be generated automatically. For
+instance, our &lt;code&gt;Serializable&lt;/code&gt; instance for &lt;code&gt;Point&lt;/code&gt; will be called
+&lt;code&gt;Serializable_Point&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;We can also give a name explicitly. Imagine we want to serialize points using
+slashes (/) because of an obscure data format we use:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;instance PointSlash: Serializable Point
+    fun serialize (it: Point): String
+        return it.x + &amp;quot;/&amp;quot; + it.y
+    fun deserialize (str: String): Point
+        val strs = str.split(&amp;quot;/&amp;quot;)
+        return Point(parse_int(strs[0]), parse_int(strs[1]))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;(The definition is the same as &lt;code&gt;Serializable_Point&lt;/code&gt;, except the comma has been replaced by a
+slash.)&lt;/p&gt;
+&lt;p&gt;This instance will be called &lt;code&gt;PointSlash&lt;/code&gt;. It will not receive an automatically
+generated name.&lt;/p&gt;
+&lt;p&gt;The scheme to build automatic names for multiple-parameter typeclasses is what
+you&amp;#39;d expect , e.g. &lt;code&gt;Orderable_Int_Int&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;deriving-typeclasses-automatically&quot;&gt;Deriving Typeclasses Automatically&lt;/h2&gt;
+&lt;p&gt;We can derive a typeclass instance from the existence of another typeclass as
+follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;derive instance Orderable $X $Y
+        from Reverse: Orderable $Y $X
+
+    fun order (x: $X, y: $Y): Order
+        val rev = Reverse.order(y, x)
+        if (rev == BIGGER)  return SMALLER
+        if (rev == SMALLER) return BIGGER
+        return EQUAL&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We call this declaration an &lt;em&gt;instance derivation&lt;/em&gt;. The instance that will
+fullfill the from-clause is called the &lt;em&gt;source instance&lt;/em&gt;. The instance derived
+from a specific source instance is simply known as a &lt;em&gt;derived instance&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Instance selection will always prefer an explicit instance rather than a derived
+instance when both are in the same scope. So our derived &lt;code&gt;Orderable&lt;/code&gt; instance
+does not cause issues when &lt;code&gt;$X&lt;/code&gt; and &lt;code&gt;$Y&lt;/code&gt; are the same type. We&amp;#39;ll talk about
+this more in the &lt;a href=&quot;#type-derivations-and-instance-selection&quot;&gt;Type Derivations and Instance
+Selection&lt;/a&gt; section.&lt;/p&gt;
+&lt;p&gt;Just like instances, instance derivations have names. Similarly, they can have
+explicit names:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;derive instance Reversed: Orderable $X $Y
+        from Reverse: Orderable $Y $X
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But otherwise an automatic name is attributed. For our example, the name would
+be &lt;code&gt;Orderable_$X_$Y_from_Orderable_$Y_$X&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;A single derivation can yield many different instances. There will of course be
+instances with different type arguments, but also instances using a different
+source instance.&lt;/p&gt;
+&lt;p&gt;Source instances can be given a name (&lt;code&gt;Reverse&lt;/code&gt; in our example) or have a name
+assigned automatically — it would be &lt;code&gt;Orderable_$X_$Y&lt;/code&gt; in our example). This,
+however, is not the true name of the source instance — which is simply the name
+of whatever instance is selected to fullfill the role of the source instance.
+Rather it&amp;#39;s an alias that can be used within the definition of the type
+derivation. It may happens that this name clashes with previously declared
+names. In this case, this name shadows the previous declaration, for the
+duration of the type derivation definition. It will be possible to access
+file-levels and imported names by prefixing them with a module name — see next
+section.&lt;/p&gt;
+&lt;p&gt;While we don&amp;#39;t declare derived instances explicitly, they also have names! These
+are derived by treating the name of the derivation as a function of the source
+instance, e.g. &lt;code&gt;Reversed(Orderable_Int_Int)&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&quot;importing-typeclasses-and-instances&quot;&gt;Importing Typeclasses and Instances&lt;/h2&gt;
+&lt;p&gt;In this imaginary language, I&amp;#39;ve decided not to specify explicitly how things
+can become imported.&lt;/p&gt;
+&lt;p&gt;Having nevertheless given it some thought, it appears clear that importing all
+instances explicitly would be cumbersome. One could therefore suppose that
+typeclass instances will get imported &lt;em&gt;implicitly&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;For instance, we could &lt;strong&gt;imagine&lt;/strong&gt; that if we import a set of types from a file,
+then all typeclass instances in the file for that set of types would get
+imported implicitly.&lt;/p&gt;
+&lt;p&gt;An instance is said to be &lt;em&gt;in scope&lt;/em&gt; of some code if they&amp;#39;re declared in the
+same file, or if they&amp;#39;ve been imported (explicitly or implicitly).&lt;/p&gt;
+&lt;p&gt;I imagine that this system will rely on a notion of &lt;em&gt;module&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;As such, it will be possible to prefix of an instance or type derivation by the
+name of its defining module — with the special keyword &lt;code&gt;self&lt;/code&gt; designating the
+current module. e.g. &lt;code&gt;self.Serializable_Point&lt;/code&gt; or
+&lt;code&gt;my_module.Serializable_Point&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;default-functions&quot;&gt;Default Functions&lt;/h2&gt;
+&lt;p&gt;Typeclass definitions are free to provide default implementations for the
+functions they declare. Such a default definition can always be overidden in the
+typeclass instances — otherwise it should just be a normal function and not a
+typeclass function!&lt;/p&gt;
+&lt;p&gt;For instance, the following class includes a default implementation for
+&lt;code&gt;receive_all&lt;/code&gt; in terms of its other function &lt;code&gt;receive&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Receiver $T $X
+    fun receive (it: $T, item: $X)
+    fun receive_all (it: $T, items: List[$T])
+        for item in items:
+            receive(it, item)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It&amp;#39;s even possible to have two functions in terms of one another — the user
+implementing the instance will have to override at least one of them.&lt;/p&gt;
+&lt;p&gt;(It would be possible to add language-level support to defining such sets of
+functions, at least one of which needs to be overriden, but I&amp;#39;m not sure the
+benefits are worth the conceptual overhead.)&lt;/p&gt;
+&lt;p&gt;There are essentially two ways to implement default methods. The first is for
+them to be some kind of template, specialized for and copied into each instance
+that does not override them. The second is to use a late binding mechanism,
+which can be especially interesting if the implementation targets supports it
+(e.g. the JVM).&lt;/p&gt;
+&lt;h2 id=&quot;typeclass-constraints&quot;&gt;Typeclass Constraints&lt;/h2&gt;
+&lt;p&gt;There are two places where it&amp;#39;s possible to constrain types based on whether
+they possess a typeclass instance: method definition and typeclass declarations.&lt;/p&gt;
+&lt;p&gt;Here is a method with a typeclass constraint:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (it: $T) where Serializable $T
+    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And here is a typeclass with a constraint:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Reducible $T $X
+        where Sequential: Sequence $T $X
+
+    fun reduce (it: $T): $X&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The function&amp;#39;s constraint prevents us from calling &lt;code&gt;foo&lt;/code&gt; with a type &lt;code&gt;$T&lt;/code&gt; that
+does not have a corresponding &lt;code&gt;Serializable $T&lt;/code&gt; instance.&lt;/p&gt;
+&lt;p&gt;Similarly, the typeclass&amp;#39; constraint prevents us from instanciating &lt;code&gt;Reducible&lt;/code&gt;
+for pair of types that do not have a corresponding &lt;code&gt;Sequence $T $X&lt;/code&gt; instance.&lt;/p&gt;
+&lt;p&gt;We call instances that satisfy a function&amp;#39;s constraints &lt;em&gt;the call instances&lt;/em&gt;,
+and the instances that satisfy a typeclass&amp;#39;s constraint the &lt;em&gt;required
+instances&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Sometimes, a typeclass with a type constraint can be very close to a type
+derivation, especially when the typeclass defines default implementations for
+all its functions. The big difference is that a class must still be implemented
+explicitly — an implementation has to be requested even if no functions have to
+be implemented. A derivation, on the other hand, is always &amp;quot;active&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Just like for source instances in type derivations (cf. the &lt;a href=&quot;#deriving-typeclasses-automatically&quot;&gt;Deriving
+Typeclasses Automatically&lt;/a&gt; section), the
+required instances may be named and have otherwise an automatically generated
+name. This is not the &amp;quot;true&amp;quot; instance name, but a local alias that may shadow
+previous declarations.&lt;/p&gt;
+&lt;p&gt;The other big difference between typeclass declarations with type constraints
+and type derivations is &lt;strong&gt;when&lt;/strong&gt; instance selection occurs. We&amp;#39;ll come back to
+it in the &lt;a href=&quot;#type-constraints-vs-type-derivations&quot;&gt;Type Constraints vs Type
+Derivations&lt;/a&gt; section.&lt;/p&gt;
+&lt;h2 id=&quot;picking-instances&quot;&gt;Picking Instances&lt;/h2&gt;
+&lt;p&gt;During the execution of our program, there are a couple times when instances
+will need to be picked. &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Direct instance selection&lt;/em&gt; — when we call a function that belong to a
+typeclass, we need to decide which instance will provide the implementation.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Call instance selection&lt;/em&gt; — selecting the instance that satisfies a typeclass
+constraint in a function (cf. last section).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Required instance selection&lt;/em&gt; — selecting the instance that satisfies a
+typeclass constraint in a typeclass (cf. last section).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;em&gt;Source instance selection&lt;/em&gt; — select the instances used as source for instance
+derivations.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Fortunately, all types of instance selections are similar, and follow the same
+rules. In each case, we know the typeclass we want to provide an instance for,
+and we have to select that instance from those that are in scope and fit the
+bill (or emit an error if no instance will do).&lt;/p&gt;
+&lt;p&gt;If there is only one instance that works, the language will know to pick it. But
+if there are ambiguities, it needs to decide on a particular instance, based on
+hints supplied by the programmer.&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ll explain the instance selection rules using &lt;em&gt;direct instance selection&lt;/em&gt;,
+and add precisions for other types of selections later, as required.&lt;/p&gt;
+&lt;h2 id=&quot;direct-instance-selection&quot;&gt;Direct Instance Selection&lt;/h2&gt;
+&lt;p&gt;Imagine that we import &lt;code&gt;Serializable_Point&lt;/code&gt; and &lt;code&gt;PointSlash&lt;/code&gt; from before, two
+instances of &lt;code&gt;Serializable Point&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Small aside&lt;/u&gt;: it would be more proper to say &amp;quot;two instances of &lt;code&gt;Serializable&lt;/code&gt;
+for the type &lt;code&gt;Point&lt;/code&gt;&amp;quot; — but that&amp;#39;s tedious. And what category does &lt;code&gt;Serializable
+Point&lt;/code&gt; even belong to? It&amp;#39;s not a typeclass (&lt;code&gt;Serializable&lt;/code&gt; is) nor an instance
+(&lt;code&gt;Serializable_Point&lt;/code&gt; is). If we really need a name, we could could this a
+&lt;em&gt;typeclass specification&lt;/em&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
+    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Which instance should this code use?&lt;/p&gt;
+&lt;p&gt;We can select the proper instance in two ways:&lt;/p&gt;
+&lt;p&gt;1) Specify the instance to use at the instance selection site:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
+    output(Serializable_Point.serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2) Specify the instance to use in a certain scope (e.g. file or function) with
+   an &lt;code&gt;use&lt;/code&gt; declaration.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
+    use PointSlash
+    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Of course, you could do &lt;code&gt;PointSlash.serialize(it)&lt;/code&gt; and &lt;code&gt;use Serializable_Point&lt;/code&gt;
+as well.&lt;/p&gt;
+&lt;p&gt;When your two instances have automatically generated names which therefore clash
+(i.e. both are named &lt;code&gt;Serializable_Point&lt;/code&gt;), you can prefix with module names to
+disambiguate them (e.g. &lt;code&gt;self.Serializable_Point&lt;/code&gt; or
+&lt;code&gt;my_module.Serializable_Point&lt;/code&gt;) — see the &lt;a href=&quot;#importing-typeclasses-and-instances&quot;&gt;Importing Typeclasses and
+Instances&lt;/a&gt; section.&lt;/p&gt;
+&lt;p&gt;Regarding &lt;code&gt;use&lt;/code&gt;, the current plan is that it will be possible to override an
+&lt;code&gt;use&lt;/code&gt; declaration with another, even in the same scope. For instance:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
+    use PointSlash
+    output(serialize(it))
+    use Serializable_Point
+    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Nevertheless, &lt;code&gt;use&lt;/code&gt; remains a &lt;em&gt;declaration&lt;/em&gt; whose scope is purely static. It is
+not a &lt;em&gt;statement&lt;/em&gt; (and so cannot be guarded by an if statement, etc).&lt;/p&gt;
+&lt;h2 id=&quot;type-derivations-and-instance-selection&quot;&gt;Type Derivations and Instance Selection&lt;/h2&gt;
+&lt;p&gt;Derived instances do complicate the instance selection mechanism somewhat.&lt;/p&gt;
+&lt;p&gt;The basic issue is relatively simple. If there is a conflict between two
+instances, and both of these instances can serve as base for the creation of
+derived instance, then you&amp;#39;ll have a conflict there as well.&lt;/p&gt;
+&lt;p&gt;Consider the following example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Named $T
+    fun name (it: $T): String
+
+instance UserFirst: Named User
+    fun name (it: User): String
+        return it.first_name
+
+instance UserLast: Named User
+    fun name (it: User): String
+        return it.last_name
+
+class Stringifiable $T
+    fun to_string (it: $T): String
+
+derive instance Stringifiable $T from Named $T
+    fun to_string (it: $T): String
+        return name(it)
+
+fun foo (usr: User)
+    output(to_string(usr))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Should &lt;code&gt;foo&lt;/code&gt; output the users&amp;#39;s first or last name? Say we want the last name.&lt;/p&gt;
+&lt;p&gt;There is an easy ways to fix that conflict, should write &lt;code&gt;use UserLast&lt;/code&gt;. This
+will have the effect of disambiguating the &lt;em&gt;source instance selection&lt;/em&gt; of the
+type derivation, hence &lt;code&gt;foo&lt;/code&gt; will use the &lt;code&gt;Stringifiable&lt;/code&gt; instance derived from
+&lt;code&gt;UserLast&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But what if we add the following?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;derive instance ThingNamed: Stringifiable $T
+        from Named $T
+    fun to_string (it: $T): String
+        return &amp;quot;the thing named &amp;#39;&amp;quot; + name(it) + &amp;quot;&amp;#39;&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now we also need to specify which derivation we want. We can do this in a couple
+ways:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;use ThingNamed&lt;/code&gt; — always use the &lt;code&gt;ThingNamed&lt;/code&gt; derivation to supply a
+&lt;code&gt;Stringifiable&lt;/code&gt; when a &lt;code&gt;Named&lt;/code&gt; instance exists.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ThingNamed.to_string(usr)&lt;/code&gt; — specifying the derivation to use explicitly at
+the use site.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;use ThingNamed(UserLast)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ThingNamed(UserLast).to_string(usr)&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first solution is a new form of &lt;code&gt;use&lt;/code&gt; which does not specify an instance but
+an instance derivation!&lt;/p&gt;
+&lt;p&gt;The second solution is symmetric to the first, we use the derivation instead of
+an instance at the instance selection site.&lt;/p&gt;
+&lt;p&gt;The third and fourth solution have nothing novel: we just specify the full
+instance explicitly.&lt;/p&gt;
+&lt;p&gt;The first two solutions, however, do require us to have specified &lt;code&gt;use UserLast&lt;/code&gt;
+before! Otherwise, we know to use &lt;code&gt;ThingNamed&lt;/code&gt;, but should it use the the
+&lt;code&gt;UserFirst&lt;/code&gt; or &lt;code&gt;UserLast&lt;/code&gt; instance?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Using&lt;/strong&gt; an instance derivation demands &lt;em&gt;source instance selection&lt;/em&gt;. This
+selection may be done manually (as in &lt;code&gt;use ThingNamed(UserLast)&lt;/code&gt;) or
+automatically — if there is no ambiguity or the proper &lt;code&gt;use&lt;/code&gt; statements have
+been made.&lt;/p&gt;
+&lt;p&gt;Automatic source instance selection may entail a recursion problem when an
+instance derivation creates a instance of the same kind as its pre-requisite. We
+already saw a derivation like that:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;instance Orderable Int Int
+    // ...
+
+// assume we imported this
+derive instance Reversed: Orderable $X $Y
+        from Reverse: Orderable $Y $X
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;I said earlier:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Instance selection will always prefer an explicit instance rather than a
+derived instance when both are in the same scope.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;That&amp;#39;s because I assume that within a single file, you&amp;#39;re aware when an explicit
+and derived instance clash.&lt;/p&gt;
+&lt;p&gt;But it doesn&amp;#39;t work like that when importing one of the two instances. In that
+case, the policy is to let them clash to bring awareness to the conflict.&lt;/p&gt;
+&lt;p&gt;If you want the base behaviour, you can do &lt;code&gt;use Orderable_Int_Int&lt;/code&gt; and all is
+well. But if you want the derived behaviour, you &lt;strong&gt;can&amp;#39;t&lt;/strong&gt; do &lt;code&gt;use Reversed&lt;/code&gt;.
+Because that would mean the derivation would use itself as &lt;code&gt;Reverse&lt;/code&gt; — an
+infinite recursion. It is therefore a compile-time error.&lt;/p&gt;
+&lt;p&gt;The solution in this case is simply to do manual source instance selection, i.e.
+specify the full instance name: &lt;code&gt;use Reversed(Orderable_Int_Int)&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;implicit-use&quot;&gt;Implicit &lt;code&gt;use&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;We need to add an important precision to what precedes.&lt;/p&gt;
+&lt;p&gt;Whenever there is a typeclass constraint, the constraint acts like an implicit
+&lt;code&gt;use&lt;/code&gt; statement!&lt;/p&gt;
+&lt;p&gt;So the following pair of functions are always equivalent:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo1 (it: $T) where Serializable $T
+    output(serialize(it))n
+
+fun foo2 (it: $T) where Serializable $T
+    use Serializable_$T
+    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The same principle applies for typeclass&amp;#39; constraints.&lt;/p&gt;
+&lt;h2 id=&quot;type-constraints-vs-type-derivations&quot;&gt;Type Constraints vs Type Derivations&lt;/h2&gt;
+&lt;p&gt;When we introduced typeclass&amp;#39; constraints in the &lt;a href=&quot;#typeclass-constraints&quot;&gt;Typeclass
+Constraints&lt;/a&gt; section, we said that a big difference
+between typeclasses with constraints on the one hand, and type derivations on
+the other hand, was that one must always request a typeclass instances, whereas
+type derivation are always &amp;quot;active&amp;quot; to generate instances on a by-need basis.&lt;/p&gt;
+&lt;p&gt;Now we can introduce another big difference that directly falls out from that
+first difference, namely &lt;em&gt;when&lt;/em&gt; instance selection occurs.&lt;/p&gt;
+&lt;p&gt;Instances that implement a typeclass with type constraints cause the required
+instances to be &lt;em&gt;captured&lt;/em&gt;. This means they&amp;#39;re essentially stored inside the
+instance, and their usage is not dependent on the context in which the instance
+functions are used.&lt;/p&gt;
+&lt;p&gt;For type derivations, it&amp;#39;s some other instance selection that triggers the
+source instance selection!&lt;/p&gt;
+&lt;p&gt;Just like other forms of instance selection, required instance selection is
+affected by &lt;code&gt;use&lt;/code&gt; statements. Manual disambiguation is also possible with the
+&lt;code&gt;using&lt;/code&gt; clause.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Foo $T requires Named $T
+    // ...
+
+instance FooUser User using LastName
+    // ...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;On occasions, the capture of required instances, might lead to situations that
+are very slightly unintuitive:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Reducible $T $X
+        where Sequential: Sequence $T $X
+
+    fun reduce (it: $T): $X
+
+// ...
+
+fun foo (seq: $T) where Reducible $T Point, Sequence $T Point
+    reduce(seq)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In the above example, there is not guarantee that the instance selected for the
+function&amp;#39;s &lt;code&gt;Sequence $T Point&lt;/code&gt; constraint will be the same as the instance
+selected for the typeclass&amp;#39; constraint!&lt;/p&gt;
+&lt;p&gt;The first one is selected when the instance satisfying &lt;code&gt;Reducible $T Point&lt;/code&gt; is
+defined, whereas the second is selected when the function &lt;code&gt;foo&lt;/code&gt; is called.&lt;/p&gt;
+&lt;h2 id=&quot;shortcut-notation-for-parameter-types&quot;&gt;Shortcut Notation For Parameter Types&lt;/h2&gt;
+&lt;p&gt;We admit a shortcut notation for uses of unary typeclasses, so thoses two
+snippets are equivalent:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (mk_string: $A) where Stringifiable $A
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;fun foo (mk_string: Stringifiable)
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The second one sure looks nicer!&lt;/p&gt;
+&lt;p&gt;There are a few reason not to use the shorthand though:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;When you need to express other constraints on the actual type.&lt;/li&gt;
+&lt;li&gt;When you need to reuse the actual type for other parameters.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For instance, these two snippets are equivalent:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (mk_string1: $A, mk_string2 $B)
+        where Stringifiable $A, Stringifiable $B
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;fun foo (mk_string1: Stringifiable, mk_string2: Stringifiable)
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In practice, names will likely need to be attributed to the underlying generic
+type when using the shortcut notation. The current plan is to use simple
+sequential identifiers preceded by a reserved string (something like &lt;code&gt;__$A&lt;/code&gt;,
+&lt;code&gt;__$B&lt;/code&gt;, ...).&lt;/p&gt;
+&lt;p&gt;The shortcut notation can also be used for multi-parameter typeclasses, for
+instance the two following snippets are equivalent:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (seq: $A) where Sequence $A String
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;fun foo (seq: Sequence[String])
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If there are more than two parameters to the typeclass, supplemental parameters
+are separated by a comma:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fun foo (graph: Graph[Node, Edge]) // Graph $A Node Edge
+    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This is an example notation anyway, but I&amp;#39;m wondering if using &lt;code&gt;Sequence String&lt;/code&gt;
+and &lt;code&gt;Graph Node Edge&lt;/code&gt; wouldn&amp;#39;t be more pleasant? If I don&amp;#39;t type need type-level
+operators, maybe I&amp;#39;ll do just that.&lt;/p&gt;
+&lt;h2 id=&quot;empty-typeclasses&quot;&gt;Empty Typeclasses&lt;/h2&gt;
+&lt;p&gt;One may imagine that we will end up with a lot of typeclasses that define
+fine-grained behaviours. Some of those will be related by type constraints. It&amp;#39;s
+probably a good idea to make it possible to access required instances from the
+instance that requires them.&lt;/p&gt;
+&lt;p&gt;Sometimes, we would like to bundle a couple of instances together, to compose a
+more precise behaviour contract (which is what a typeclass essentially is) from
+a bunch of smaller ones.&lt;/p&gt;
+&lt;p&gt;In that case, a common pattern would be to use an empty typeclass with a list of
+requirements:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class List $T $X where
+    Sequential $T $X,
+    Indexable $T $X,
+    Iterable $T $X&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Assuming we have an instance of this class, we can access the required instances
+by dot references: &lt;code&gt;ListInstance.Sequential_$T_$X&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;We can also bring required instances in scope via some local import statement:
+&lt;code&gt;import ListInstance.Sequential_$T_$X&lt;/code&gt;. Or if we want all of them: &lt;code&gt;import
+ListInstance.*&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Note that importing the instances brings them in scope. It pointedly &lt;em&gt;does not&lt;/em&gt;
+resolve ambiguities. It is not an &lt;code&gt;use&lt;/code&gt; statement! (But you can also supply
+required instances to &lt;code&gt;use&lt;/code&gt;, of course.)&lt;/p&gt;
+&lt;h2 id=&quot;aliases&quot;&gt;Aliases&lt;/h2&gt;
+&lt;p&gt;What if you import an instance and the original author hasn&amp;#39;t given it a nice
+name? Fortunately for you, the &lt;code&gt;alias&lt;/code&gt; declaration has you covered:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;alias PointComma = Serializable_Point&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;alias&lt;/code&gt; work for any kind of names: typeclass derivations, constructed instance
+names, ...&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;alias Reversed = Orderable_$X_$Y_from_Orderable_$Y_$X
+alias ReversedIntComp = Orderable_$X_$Y_from_Orderable_$Y_$X(Orderable_Int_Int)
+// or, using the first allias:
+alias ReversedIntComp = Reversed(Orderable_Int_Int)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;An alias makes its left and right part interchangeable for code in which the
+&lt;code&gt;alias&lt;/code&gt; is in scope. It&amp;#39;s not the same as giving a name to the instance when
+it&amp;#39;s declared: in that case, no automatically generated name is attributed!&lt;/p&gt;
+&lt;h2 id=&quot;what-remains-to-be-done&quot;&gt;What Remains to be Done&lt;/h2&gt;
+&lt;p&gt;This post is long enough as it is (and a dry read besides), so I thought it wise
+to stop myself here.&lt;/p&gt;
+&lt;p&gt;There are however a few topics that still need consideration to make for a
+truly great typeclass system.&lt;/p&gt;
+&lt;p&gt;First, what in Haskell are called &lt;em&gt;existentials&lt;/em&gt;, basically a way to have a type
+&lt;code&gt;R exists Serializable R&lt;/code&gt; meaning that there exists some type X such that an
+instance of &lt;code&gt;Serializable X&lt;/code&gt; exists, but X is not fixed, so that variables of
+type &lt;code&gt;R&lt;/code&gt; can take values with different underlying types.&lt;/p&gt;
+&lt;p&gt;A value of such a type is a pair of a value and a typeclass (or potentially, a
+tuple of multiple values and typeclass instances).&lt;/p&gt;
+&lt;p&gt;Most notably, existentials are necessary to implemented &lt;em&gt;heterogeneous
+collections&lt;/em&gt; as you can be had in most language, e.g. &lt;code&gt;List&amp;lt;Serializable&amp;gt;&lt;/code&gt; in
+Java. Without existentials, it&amp;#39;s impossible to specify a list of values with
+different types who happen to have a corresponding &lt;code&gt;Serializable&lt;/code&gt; instance.&lt;/p&gt;
+&lt;p&gt;The second important thing is to add some mechanism that help with code reuse.
+In particular, some form of delegation or late binding (e.g. Scala traits) would
+be neat. Some would advocate that a benefit of type classes is to get rid of
+that aspect of OO, but I disagree. The problem in OO in general is that
+permissions are too open by default: non-final clases and methods in Java for
+instance. As Joshua Bloch puts it in &lt;a href=&quot;https://books.google.be/books/about/Effective_Java.html?id=ka2VUBqHiWkC&amp;amp;redir_esc=y&quot;&gt;Effective Java&lt;/a&gt;: &lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Design and document for inheritance or else prohibit it.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Well done late binding is effectively a clean way to specify callbacks,
+potentially with a default behaviour in place. These callbacks may themselves
+call inside the late bound entity (class or typeclass). Effectively, this saves
+a lot of plumbing headaches.&lt;/p&gt;
+&lt;p&gt;There are a couple more things that could go in, but they aren&amp;#39;t as essential.&lt;/p&gt;
+&lt;p&gt;One particular nicety I can think of is a mechanism for type unions. Not only
+boring unions (like &lt;code&gt;int | String&lt;/code&gt; to specify you expect either an integer or a
+string), but also being able to specify a type &lt;code&gt;R&lt;/code&gt; such that there is either an
+instance of &lt;code&gt;Serializable R&lt;/code&gt; or an instance of &lt;code&gt;Stringifyable R&lt;/code&gt; (or both!).
+Similar types intersection are already possible, just by putting multiple
+constraints on a type.&lt;/p&gt;
+&lt;p&gt;These type unions make some &lt;a href=&quot;/polymorphism/#ad-hoc-polymorphism&quot;&gt;ad-hoc polymorphism&lt;/a&gt; possible, and would be further
+well served by some form of pattern matching and &lt;a href=&quot;https://en.wikipedia.org/wiki/Flow-sensitive_typing&quot;&gt;flow typing&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;But all this will have to wait for another day!&lt;/p&gt;
+      </description>
+      <pubDate>2019-03-31T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/typeclass-scheme</link>
+      <guid isPermaLink="true">http://norswap.com/typeclass-scheme</guid>
+    </item>
+    <item>
       <title>Language Design Notes 0: A Map of Polymorphism</title>
       <description>
 &lt;p&gt;This is the first post in &lt;a href=&quot;/language-design-notes&quot;&gt;a series&lt;/a&gt; where I write my thoughts on some aspects
@@ -138,6 +619,17 @@ of their Haskell shackle.&lt;/p&gt;
 polymorphisms. This ended up quite disjointed from what I have now written on
 typeclasses (I&amp;#39;m not done yet). Nevertheless, it&amp;#39;s not too shabby as a reference
 on polymorphism, so here goes!&lt;/p&gt;
+&lt;h3 id=&quot;1-a-precise-typeclass-scheme&quot;&gt;&lt;a href=&quot;/typeclass-scheme&quot;&gt;1. A Precise Typeclass Scheme&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;As I started thinking about typeclasses more, I found the need to write down
+some form of specification of the system I was imagining, so that I could refer
+to different parts of the design, and see if the whole was consistent.&lt;/p&gt;
+&lt;p&gt;I found the need to be fairly precise. Or maybe I just got carried away... but I
+think the precision really helps throw in relief the small details that
+threatens the consistency and elegance of the whole. Anyhow, this ended up
+looking more like a specification than a nice explanative article, although I
+tried to include enough examples.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not perfect, but as &lt;a href=&quot;/more-content/&quot;&gt;discussed earlier&lt;/a&gt;, I want thing to move forward, so
+here it is!&lt;/p&gt;
       </description>
       <pubDate>2019-03-23T23:00:00.000Z</pubDate>
       <link>http://norswap.com/language-design-notes</link>
@@ -743,594 +1235,11 @@ Online, you will find it enjoyable. For me, it&amp;#39;s a comfy show.&lt;/p&gt;
     <item>
       <title>12 Rules For Life</title>
       <description>
-&lt;p&gt;I just finished reading &lt;em&gt;12 Rules for Life: An Antidote to Chaos&lt;/em&gt; (&lt;a href=&quot;https://en.wikipedia.org/wiki/12_Rules_for_Life&quot;&gt;Wikipedia&lt;/a&gt;)
-by Jordan Peterson. I found it to be a very inspiring read.&lt;/p&gt;
-&lt;p&gt;Indeed the book is more about inspiring than delivering insights. But that&amp;#39;s
-fine, often motivation is 90% of a problem.&lt;/p&gt;
-&lt;p&gt;Peterson does more than deliver advice though, he outlines a veritable life
-philosophy, revolving around the idea of developing character in the face of
-suffering.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The meaning of life has more to do with developing character in the face of
-suffering thant with happiness.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;He preaches a philosophy of gradual self-improvement, not to reach some kind of
-awesome success, but to make life more palatable for you and others, and he
-suggests that if everyone where to do this, we really could have heaven on
-earth.&lt;/p&gt;
-&lt;p&gt;I like his grandiose style, although it sometimes rambles. But somehow the
-rambling works and the side alleys Peterson wanders into never fail to be
-interesting. There are some take-aways in the book that have only little to do
-with the main message.&lt;/p&gt;
-&lt;p&gt;Because of all of this, the book is relatively hard to summarize, and if it
-seems interesting to you, I&amp;#39;d highly suggest you to read it for yourself.&lt;/p&gt;
-&lt;p&gt;I wasn&amp;#39;t sure how to best summarize the lessons of the book in a way that would
-be useful to me or others. In the end, I chose to simply include my favorite
-quotes from each chapter/rule — usually a motivational tidbit.&lt;/p&gt;
-&lt;h2 id=&quot;1-stand-up-straight-with-your-shoulders-back&quot;&gt;1. Stand Up Straight With Your Shoulders Back&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;There is an unspeakably primordial calculator, deep within you, at the very
-foundation of your brain, far below your thoughts and feelings. It monitors
-exactly where you are positioned in society. If you&amp;#39;re low, you&amp;#39;ll be stressed
-and in constant alert. If you&amp;#39;re high you&amp;#39;ll stand confident and calm
-(serotonin will flow), and see chance as opportunity rather than risk.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
 
-&lt;blockquote&gt;
-&lt;p&gt;To stand up straight with your shoulders back is to accept the terrible
-responsibility of life, with eyes wide open. It means deciding to voluntarily
-transform the chaos of potential into the realities of habitable order. It
-means adopting the burden of self-conscious vulnerability, and accepting the
-end of the unconscious paradise of childhood, where finitude and mortality are
-only dimly comprehended. It means willingly undertaking the sacrifices
-necessary to generate a productive and meaningful reality (it means acting to
-please God, in the ancient language).&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;2-treat-yourself-like-someone-you-are-responsible-for-helping&quot;&gt;2. Treat Yourself Like Someone You Are Responsible For Helping&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;To straddle that fundamental duality is to be balanced: to have one foot
-firmly planted in order and security, and the other in chaos, possibility,
-growth and adventure. When life suddenly reveals itself as intense, gripping
-and meaningful; when time passes and you’re so engrossed in what you’re doing
-you don’t notice — it is there and then that you are located precisely on the
-border between order and chaos. You are there when — and where — it matters.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Perhaps Heaven is something you must build, and immortality something you must
-earn.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;You must determine where you are going, so that you can bargain for yourself,
-so that you don’t end up resentful, vengeful and cruel. You have to articulate
-your own principles, so that you can defend yourself against others’ taking
-inappropriate advantage of you, and so that you are secure and safe while you
-work and play. You must discipline yourself carefully. You must keep the
-promises you make to yourself, and reward yourself, so that you can trust and
-motivate yourself. You need to determine how to act toward yourself so that
-you are most likely to become and to stay a good person. It would be good to
-make the world a better place. Heaven, after all, will not arrive of its own
-accord. We will have to work to bring it about, and strengthen ourselves, so
-that we can withstand the deadly angels and flaming sword of judgment that God
-used to bar its entrance.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;3-make-friends-with-people-who-want-the-best-for-you&quot;&gt;3. Make Friends With People Who Want The Best For You&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When well-meaning counsellors place a delinquent teen among comparatively
-civilized peers, the delinquency spreads, not the stability. Down is a lot
-easier than up.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Is it possible that your contempt would be more salutary than your pity?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Before you help someone, you should find out why that person is in trouble.
-You shouldn’t merely assume that he or she is a noble victim of unjust
-circumstances and exploitation. It’s the most unlikely explanation, not the
-most probable.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Besides, if you buy the story that everything terrible just happened on its
-own, with no personal responsibility on the part of the victim, you deny that
-person all agency in the past (and, by implication, in the present and future,
-as well). In this manner, you strip him or her of all power.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Success: that’s the mystery. Virtue: that’s what’s inexplicable. To fail, you
-merely have to cultivate a few bad habits. You just have to bide your time.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Here’s something to consider: If you have a friend whose friendship you
-wouldn’t recommend to your sister, or your father, or your son, why would you
-have such a friend for yourself? You might say: out of loyalty. Well, loyalty
-is not identical to stupidity. Loyalty must be negotiated, fairly and
-honestly. Friendship is a reciprocal arrangement. You are not morally obliged
-to support someone who is making the world a worse place. Quite the opposite.
-You should choose people who want things to be better, not worse. It’s a good
-thing, not a selfish thing, to choose people who are good for you. It’s
-appropriate and praiseworthy to associate with people whose lives would be
-improved if they saw your life improve.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;4-compare-yourself-to-who-you-were-yesterday-not-to-who-someone-else-is-today&quot;&gt;4. Compare Yourself To Who You Were Yesterday, Not To Who Someone Else Is Today&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;And the direction of your sight changes. You see past the limitations that
-hemmed you in, unknowingly. New possibilities for your life emerge, and you
-work toward their realization. Your life indeed improves. And then you start
-to think, further: “Better? Perhaps that means better for me, and my family,
-and my friends — even for my enemies. But that’s not all it means. It means
-better today, in a manner that makes everything better tomorrow, and next
-week, and next year, and a decade from now, and a hundred years from now. And
-a thousand years from now. And forever.”&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;You decide to act as if existence might be justified by its goodness — if only
-you behaved properly. And it is that decision, that declaration of existential
-faith, that allows you to overcome nihilism, and resentment, and arrogance. It
-is that declaration of faith that keeps hatred of Being, with all its
-attendant evils, at bay.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Faith is the realization that the tragic irrationalities of life must be
-counterbalanced by an equally irrational commitment to the essential goodness
-of Being.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The Sermon on the Mount outlines the true nature of man, and the proper aim of
-mankind: concentrate on the day, so that you can live in the present, and
-attend completely and properly to what is right in front of you — but do that
-only after you have decided to let what is within shine forth, so that it can
-justify Being and illuminate the world. Do that only after you have determined
-to sacrifice whatever it is that must be sacrificed so that you can pursue the
-highest good.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;h2 id=&quot;5-do-not-let-your-children-do-anything-that-makes-you-dislike-them&quot;&gt;5. Do Not Let Your Children Do Anything That Makes You Dislike Them&lt;/h2&gt;
-&lt;p&gt;Norswap: I found this chapter fascinating, because it discusses a matter
-(disciplining children) to which I had never given, and gives compelling answers
-that are somewhat against the current doxa.&lt;/p&gt;
-&lt;p&gt;Children cannot be left to their device. They need to be protected, and they
-need to be socialized. Failure to properly discipline your child will make him
-unable to socialize and hurt him a lot in the long run. Such children are
-unfocused, craving for attention and affection, and that turns people off a lot,
-despite what they pretend. A kid that did not learn to share, she will be
-rejected by children and adults alike.&lt;/p&gt;
-&lt;p&gt;Parents must be a proxy for society, teaching their children what is expected of
-them, what is allowable and what is not. Their proper socialization and future
-success depends on it. Parents are &lt;em&gt;responsible&lt;/em&gt; for disciplining their
-children. If you don&amp;#39;t do it, the world will do it, in a more harsher and
-uncaring way.&lt;/p&gt;
-&lt;p&gt;Tentative rules on how to discipline children:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Limit the rules. Bad laws drive out respect for the good laws.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Suggestions: Do not bite, kick or hit, except in self-defence. Do not torture
-and bully other children, so you don’t end up in jail. Eat in a civilized and
-thankful manner, so that people are happy to have you at their house, and
-pleased to feed you. Learn to share, so other kids will play with you. Pay
-attention when spoken to by adults, so they don’t hate you and might
-therefore deign to teach you something. Go to sleep properly, and peaceably,
-so that your parents can have a private life and not resent your existence.
-Take care of your belongings, because you need to learn how and because
-you’re lucky to have them. Be good company when something fun is happening,
-so that you’re invited for the fun. Act so that other people are happy you’re
-around, so that people will want you around.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Use the least force necessary to enforce those rules.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Do parenting in pairs. So that the other parent can step in when the first
-one slips, and that discussion can be had.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Understand your own capacity to be harsh, vengeful, arrogant, resentful,
-angry and deceitful.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Act as a (caring) proxy for the real world. This will provide the child with
-opportunity, self-regard and security.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;6-set-your-house-in-perfect-order-before-you-criticize-the-world&quot;&gt;6. Set Your House In Perfect Order Before You Criticize The World&lt;/h2&gt;
-&lt;p&gt;If natural disasters are acts of god, then failure to prepare is sin. Hebrews
-blamed themselves when they fell, for not heeding god.&lt;/p&gt;
-&lt;p&gt;Clean up your own life. Relentlessly seek out opportunities for improvement, and
-take them.&lt;/p&gt;
-&lt;p&gt;Stop doing the things you know to be wrong. Trust your soul&amp;#39;s judgement, don&amp;#39;t
-question needlessly. Questions can confuse without enlightening. You don&amp;#39;t need
-an external code, although there might be reach teachings there too. Stop
-blaming others.&lt;/p&gt;
-&lt;h2 id=&quot;7-pursue-what-is-meaningful-not-what-is-expedient-&quot;&gt;7. Pursue What Is Meaningful (Not What is Expedient)&lt;/h2&gt;
-&lt;p&gt;The meaning of sacrifice: the proposition that something of greater value might be
-achieved by giving something up in the present.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If the world you are seeing is not the world you want, therefore, it’s time to
-examine your values. It’s time to rid yourself of your current
-presuppositions. It’s time to let go. It might even be time to sacrifice what
-you love best, so that you can become who you might become, instead of staying
-who you are.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Carl Jung: No tree can grow to Heaven, unless its roots reach down to Hell.
-There is no movement upward without corresponding movement down. You have to
-go to the very bottom to meet the devil, the source of your most wicked
-thoughts. Only then is enlightenment possible.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Make that an axiom: to the best of my ability I will act in a manner that leads
-to the alleviation of unnecessary pain and suffering.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Expedience — that’s hiding all the skeletons in the closet. That’s covering
-the blood you just spilled with a carpet. That’s avoiding responsibility. It’s
-cowardly, and shallow, and wrong. It’s wrong because expedience merely
-transfers the curse on your head to someone else, or to your future self, in a
-manner that will make your future, and the future generally, worse instead of
-better.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;8-tell-the-truth-or-at-least-don-t-lie&quot;&gt;8. Tell The Truth - Or, At Least, Don&amp;#39;t Lie&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If you say no to your boss, or your spouse, or your mother, when it needs to be
-said, then you transform yourself into someone who can say no when it needs to
-be said.&lt;/p&gt;
-&lt;p&gt;If you betray yourself, if you say untrue things, if you act out a lie, you
-weaken your character. If you have a weak character, then adversity will mow you
-down when it appears, as it will, inevitably.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;“Did what I want happen? No. Then my aim or my methods were wrong. I still have
-something to learn.” That is the voice of authenticity.&lt;/p&gt;
-&lt;p&gt;“Did what I want happen? No. Then the world is unfair. People are jealous, and
-too stupid to understand. It is the fault of something or someone else.” That
-is the voice of inauthenticity. It is not too far from there to “they should
-be stopped” or “they must be hurt” or “they must be destroyed.”&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Set your ambitions, even if you are uncertain about what they should be. The
-better ambitions have to do with the development of character and ability,
-rather than status and power. Status you can lose. You carry character with
-you wherever you go, and it allows you to prevail against adversity. Knowing
-this, tie a rope to a boulder. Pick up the great stone, heave it in front of
-you, and pull yourself towards it. Watch and observe while you move forward.
-Articulate your experience as clearly and carefully to yourself and others as
-you possibly can. In this manner, you will learn to proceed more effectively
-and efficiently towards your goal. And, while you are doing this, do not lie.
-Especially to yourself.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Apprehend your personal truth. Communicate it carefully, in an articulate
-manner, to yourself and others. This will ensure your security and your life
-more abundantly now, while you inhabit the structure of your current beliefs.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;If your life is not what it could be, try telling the truth. If you cling
-desperately to an ideology, or wallow in nihilism, try telling the truth. If
-you feel weak and rejected, and desperate, and confused, try telling the
-truth. In Paradise, everyone speaks the truth.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;9-assume-that-the-person-you-are-listening-to-might-know-something-you-don-t&quot;&gt;9. Assume That The Person You Are Listening To Might Know Something You Don&amp;#39;t&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The great majority of us cannot listen; we find ourselves compelled to evaluate,
-because listening is too dangerous. The first requirement is courage, and we do
-not always have it. (Carl Rogers)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Summarize the other person&amp;#39;s point (to his satisfaction) in order to understand
-him better and to not make an argument against a strawman. It also consolidates
-memory, articulation of the argument.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Sometimes it takes a long time to figure out what someone genuinely means when
-they are talking. This is because often they are articulating their ideas for
-the first time. They can’t do it without wandering down blind alleys or making
-contradictory or even nonsensical claims. This is partly because talking (and
-thinking) is often more about forgetting than about remembering. To discuss an
-event, particularly something emotional, like a death or serious illness, is
-to slowly choose what to leave behind. To begin, however, much that is not
-necessary must be put into words. The emotion-laden speaker must recount the
-whole experience, in detail. Only then can the central narrative, cause and
-consequence, come into focus or consolidate itself. Only then can the moral of
-the story be derived.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;If you listen, instead, without premature judgment, people will generally tell
-you everything they are thinking — and with very little deceit. People will
-tell you the most amazing, absurd, interesting things. Very few of your
-conversations will be boring. (You can in fact tell whether or not you are
-actually listening in this manner. If the conversation is boring, you probably
-aren’t.)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;10-be-precise-in-your-speech&quot;&gt;10. Be Precise In Your Speech&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Don’t ever underestimate the destructive power of sins of omission.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Do you truly think it is a good idea to retreat, to abandon the possibility of
-arming yourself against the rising sea of troubles, and to thereby diminish
-yourself in your own eyes? Do you truly think it wise to let the catastrophe
-grow in the shadows, while you shrink and decrease and become ever more
-afraid? Isn’t it better to prepare, to sharpen your sword, to peer into the
-darkness, and then to beard the lion in its den? Maybe you’ll get hurt.
-Probably you’ll get hurt. Life, after all, is suffering. But maybe the wound
-won’t be fatal.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Why refuse to specify, when specifying the problem would enable its solution?
-Because to specify the problem is to admit that it exists. Because to specify
-the problem is to allow yourself to know what you want, say, from friend or
-lover — and then you will know, precisely and cleanly, when you don’t get it,
-and that will hurt, sharply and specifically. But you will learn something
-from that, and use what you learn in the future—and the alternative to that
-single sharp pain is the dull ache of continued hopelessness and vague failure
-and the sense that time, precious time, is slipping by.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Why refuse to specify? Because while you are failing to define success (and
-thereby rendering it impossible) you are also refusing to define failure, to
-yourself, so that if and when you fail you won’t notice, and it won’t hurt.
-But that won’t work! You cannot be fooled so easily. You will instead carry
-with you a continual sense of disappointment in your own Being and the
-self-contempt that comes along with that and the increasing hatred for the
-world.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Say what you mean, so that you can find out what you mean. Act out what you
-say, so you can find out what happens. Then pay attention. Note your errors.
-Articulate them. Strive to correct them. That is how you discover the meaning
-of your life. That will protect you from the tragedy of your life. How could
-it be otherwise?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Confront the chaos of Being. Take aim against a sea of troubles. Specify your
-destination, and chart your course. Admit to what you want. Tell those around
-you who you are. Narrow, and gaze attentively, and move forward, forthrightly.
-Be precise in your speech.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;11-do-not-bother-children-when-they-are-skateboarding&quot;&gt;11. Do Not Bother Children When They Are Skateboarding&lt;/h2&gt;
-&lt;p&gt;This one is tense, it&amp;#39;s essentially Peterson&amp;#39;s charge against the SJW ideology.
-Very interesting, but you should just read it. I&amp;#39;ll just try to extract the
-insights that are useful in general.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Jung: If you cannot understand why someone did something, look at the
-consequences — and infer the motivation.&lt;/p&gt;
-&lt;p&gt;Not always the appropriate tool, but it can prove useful.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;When someone claims to be acting from the highest principles, for the good of
-others, there is no reason to assume that the person’s motives are genuine.
-People motivated to make things better usually aren’t concerned with changing
-other people — or, if they are, they take responsibility for making the same
-changes to themselves (and first).&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Lest we forget: ideas have consequences.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;You can be resentful because you&amp;#39;re being taken advantage of (or allow
-yourself to) or because of whiny refusal to grow up. If it&amp;#39;s not the latter,
-you have an obligation to speak up for yourself.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Men enforce a code of behaviour on each other, when working together. Do your
-work. Pull your weight. Stay awake and pay attention. Don’t whine or be
-touchy. Stand up for your friends. Don’t suck up and don’t snitch. Don’t be a
-slave to stupid rules. Don’t, in the immortal words of Arnold Schwarzenegger,
-be a girlie man. Don’t be dependent. At all. Ever. Period. The harassment that
-is part of acceptance on a working crew is a test: are you tough,
-entertaining, competent and reliable? If not, go away. Simple as that. We
-don’t need to feel sorry for you. We don’t want to put up with your
-narcissism, and we don’t want to do your work.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;When softness and harmlessness become the only consciously acceptable virtues,
-then hardness and dominance will start to exert an unconscious fascination.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;12-pet-a-cat-when-you-encounter-one-on-the-street&quot;&gt;12. Pet A Cat When You Encounter One On The Street&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Something supersedes thinking, despite its truly awesome power. When existence
-reveals itself as existentially intolerable, thinking collapses in on itself.
-In such situations — in the depths — it’s noticing, not thinking, that does
-the trick. Perhaps you might start by noticing this: when you love someone,
-it’s not despite their limitations. It’s because of their limitations. Of
-course, it’s complicated. You don’t have to be in love with every shortcoming,
-and merely accept. You shouldn’t stop trying to make life better, or let
-suffering just be. But there appear to be limits on the path to improvement
-beyond which we might not want to go, lest we sacrifice our humanity itself.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;That&amp;#39;s a conscious act of courage. Aim up, wish upon a star, then act in
-accordance with that aim. Once you are aligned with the heavens, you can
-concentrate on the day. Be careful. Put the things you can control in order.
-Repair what is in disorder, and make what is already good better. It is
-possible that you can manage, if you are careful. People are very tough.
-People can survive through much pain and loss. But to persevere they must see
-the good in Being. If they lose that, they are truly lost.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Sometimes when you call her — sometimes of her own accord — Ginger will trot
-across the street, tail held high, with a little kink at the end. Then she
-will roll on her back in front of Sikko, who wags his tail happily as a
-consequence. Afterward, if she feels like it, she might come visit you, for a
-half a minute. It’s a nice break. It’s a little extra light, on a good day,
-and a tiny respite, on a bad day.&lt;/p&gt;
-&lt;p&gt;If you pay careful attention, even on a bad day, you may be fortunate enough
-to be confronted with small opportunities of just that sort. Maybe you will
-see a little girl dancing on the street because she is all dressed up in a
-ballet costume. Maybe you will have a particularly good cup of coffee in a
-café that cares about their customers. Maybe you can steal ten or twenty
-minutes to do some little ridiculous thing that distracts you or reminds you
-that you can laugh at the absurdity of existence.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Life is good sometimes.&lt;/p&gt;
-&lt;h2 id=&quot;coda&quot;&gt;Coda&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;What shall I do with my life? Aim for Paradise, and concentrate on today.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What shall I do with the world? Conduct myself as if Being is more valuable
-than Non-Being. Act so that you are not made bitter and corrupt by the tragedy
-of existence. confront the uncertainty of the world voluntarily, and with
-faith and courage.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What shall I do when I despise what I have? Remember those who have nothing
-and strive to be grateful.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What shall I do when my enemy succeeds? Aim a little higher and be grateful
-for the lesson.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What shall I do in the next dire moment? Focus my attention on the next right
-move. When everything has become chaotic and uncertain, all that remains to
-guide you might be the character you constructed, previously, by aiming up and
-concentrating on the moment at hand. If you have failed in that, you will fail
-in the moment of crisis, and then God help you.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Failure to make the proper sacrifices, failure to reveal yourself, failure to
-live and tell the truth — all that weakens you. In that weakened state, you
-will be unable to thrive in the world, and you will be of no benefit to
-yourself or to others. You will fail and suffer, stupidly. That will corrupt
-your soul. How could it be otherwise? Life is hard enough when it is going
-well. But when it’s going badly? And I have learned through painful experience
-that nothing is going so badly that it can’t be made worse. This is why Hell
-is a bottomless pit. To suffer terribly and to know yourself as the cause:
-that is Hell.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What shall I do to strengthen my spirit? Do not tell lies, or do what you
-despise.&lt;/p&gt;
-&lt;/blockquote&gt;
       </description>
       <pubDate>2018-06-28T22:00:00.000Z</pubDate>
       <link>http://norswap.com/12-rules</link>
       <guid isPermaLink="true">http://norswap.com/12-rules</guid>
-    </item>
-    <item>
-      <title>Replacing Guilt</title>
-      <description>
-&lt;p&gt;I finished reading Nate Soares&amp;#39;s &lt;a href=&quot;http://mindingourway.com/guilt/&quot;&gt;Replacing Guilt&lt;/a&gt; series. It&amp;#39;s highly
-recommended reading if you periodically find yourself guilty over what you
-didn&amp;#39;t do or failed to achieve. Roughly, it&amp;#39;s about excising guilt as an
-ineffective motivator, and about installing a strong intrinsic motivation
-mechanism in its stead.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s well worth reading in full, there are a lot of articles, but all of them
-are relatively short and to the point. For myself, I extracted the following
-list of insights and directives, in order to remember to apply the lessons in my
-life. It&amp;#39;s about what resonated with me, so your own take-away might be quite
-different. Read the whole thing!&lt;/p&gt;
-&lt;p&gt;Some of the terminology used below might not make sense if you didn&amp;#39;t read the
-articles, but most of it is fairly general.&lt;/p&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;Guilt doesn&amp;#39;t work as a motivator.&lt;/li&gt;
-&lt;li&gt;Half-ass it with everything you&amp;#39;ve got. Do just enough to reach your goal.&lt;/li&gt;
-&lt;li&gt;Succeed, with no wasted motion.&lt;/li&gt;
-&lt;li&gt;Don&amp;#39;t fail with abandon.&lt;/li&gt;
-&lt;li&gt;Drop your &lt;em&gt;shoulds&lt;/em&gt;, consider the alternatives.&lt;/li&gt;
-&lt;li&gt;Consider not forcing yourself.&lt;/li&gt;
-&lt;li&gt;Not because you should, but because you can.&lt;/li&gt;
-&lt;li&gt;Expending willpower is a stopgap, not a solution.&lt;/li&gt;
-&lt;li&gt;Forcing yourself won&amp;#39;t work next time if it didn&amp;#39;t work last time.&lt;/li&gt;
-&lt;li&gt;Don&amp;#39;t work yourself ragged. Self-care is a goal too.&lt;/li&gt;
-&lt;li&gt;Rest in motion.&lt;/li&gt;
-&lt;li&gt;The ground state is motion - don&amp;#39;t take damage while in motion.&lt;/li&gt;
-&lt;li&gt;Rest is not a reward, it&amp;#39;s part of your activities.&lt;/li&gt;
-&lt;li&gt;Shift guilt from the instance to the pattern.&lt;/li&gt;
-&lt;li&gt;Use science to debug bad behaviour patterns.&lt;/li&gt;
-&lt;li&gt;Be a new homonculus, do some original seeing.&lt;/li&gt;
-&lt;li&gt;There is no default &amp;quot;do nothing&amp;quot; action.&lt;/li&gt;
-&lt;li&gt;Don&amp;#39;t tolerify.&lt;/li&gt;
-&lt;li&gt;After an outcome, simply locate yourself, don&amp;#39;t compare to your expectations.&lt;/li&gt;
-&lt;li&gt;Seek the best actions you can identify at the moment.&lt;/li&gt;
-&lt;li&gt;Play to win: don&amp;#39;t stop and &amp;quot;try&amp;quot;.&lt;/li&gt;
-&lt;li&gt;Don&amp;#39;t have excuses as a line of retreat.&lt;/li&gt;
-&lt;li&gt;Understand your failures is understanding what &lt;em&gt;you&lt;/em&gt; could have done better.&lt;/li&gt;
-&lt;li&gt;Assume capability in the background.&lt;/li&gt;
-&lt;li&gt;It&amp;#39;s not about effort or willpower, but focus. The path is the way.&lt;/li&gt;
-&lt;li&gt;Don&amp;#39;t bang swords, hit the ennemy.&lt;/li&gt;
-&lt;li&gt;Seek and actually do the obvious things.&lt;/li&gt;
-&lt;li&gt;Prepare and improve response patterns.&lt;/li&gt;
-&lt;li&gt;When faced with a problem, don&amp;#39;t flail. Start breaking it down, apply
-well-known and brute force approaches.&lt;/li&gt;
-&lt;li&gt;Derive confidence from being well aware of your limitations.&lt;/li&gt;
-&lt;li&gt;Odds shouldn&amp;#39;t influence your ability to commit. The best plan is still the
-best regardless of odds.&lt;/li&gt;
-&lt;li&gt;Be reckless: commit yourself fully to the best plan until a better one comes
-along.&lt;/li&gt;
-&lt;li&gt;Be defiant: refuse the accept the current state of things.&lt;/li&gt;
-&lt;li&gt;You will be measures by outcomes, not by how hard you tried.&lt;/li&gt;
-&lt;li&gt;Act to ensure the future is as good as you can make it.&lt;/li&gt;
-&lt;/ul&gt;
-      </description>
-      <pubDate>2018-06-13T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/replacing-guilt</link>
-      <guid isPermaLink="true">http://norswap.com/replacing-guilt</guid>
     </item>
   </channel>
 </rss>

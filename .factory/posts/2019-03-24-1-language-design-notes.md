@@ -21,3 +21,20 @@ typeclasses (I'm not done yet). Nevertheless, it's not too shabby as a reference
 on polymorphism, so here goes!
 
 [typeclasses]: https://en.wikipedia.org/wiki/Type_class
+
+### [1. A Precise Typeclass Scheme](/typeclass-scheme)
+
+As I started thinking about typeclasses more, I found the need to write down
+some form of specification of the system I was imagining, so that I could refer
+to different parts of the design, and see if the whole was consistent.
+
+I found the need to be fairly precise. Or maybe I just got carried away... but I
+think the precision really helps throw in relief the small details that
+threatens the consistency and elegance of the whole. Anyhow, this ended up
+looking more like a specification than a nice explanative article, although I
+tried to include enough examples.
+
+It's not perfect, but as [discussed earlier], I want thing to move forward, so
+here it is!
+
+[discussed earlier]: /more-content/

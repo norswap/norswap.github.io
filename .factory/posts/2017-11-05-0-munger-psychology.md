@@ -58,8 +58,8 @@ The phenomenon of liking and loving causing admiration also works in reverse.
 Admiration also causes or intensifies liking or love. This can be both positive,
 when liking someone admirable, or negative.
 
-Related to *[03. Disliking/Hating Tendency][three]* and
-*[10. Influence-from-Mere-Association Tendency][ten]*.
+Related to [*03. Disliking/Hating Tendency*][three] and
+[*10. Influence-from-Mere-Association Tendency*][ten].
 
 [three]: #03-disliking-hating-tendency
 [ten]: #10-influence-from-mere-association-tendency
@@ -80,8 +80,8 @@ Sibling rivalry. Historical enmity.
 
 The facts from both camps have very little overlap.
 
-Related to *[02. Liking/Loving Tendency][two]* and
-*[10. Influence-from-Mere-Association Tendency][ten]*.
+Related to [*02. Liking/Loving Tendency*][two] and
+[*10. Influence-from-Mere-Association Tendency*][ten].
 
 [two]: #02-liking-loving-tendency
 [ten]: #10-influence-from-mere-association-tendency
@@ -93,8 +93,8 @@ Related to *[02. Liking/Loving Tendency][two]* and
 The brain of man is programmed with a tendency to quickly remove doubt by
 reaching some decision.
 
-As we shall see later when we get to *[15. Social-Proof Tendency][fifteen]*
-and *[17. Stress-Influence Tendency][seventeen]*, what usually triggers
+As we shall see later when we get to [*15. Social-Proof Tendency*][fifteen]
+and [*17. Stress-Influence Tendency*][seventeen], what usually triggers
 Doubt-Avoidance Tendency is some combination of (1) puzzlement and (2) stress.
 
 [fifteen]: #15-social-proof-tendency
@@ -114,9 +114,9 @@ Also tending to be maintained in place by the anti-change tendency of the brain
 are one's previous conclusions, human loyalties, reputational identity,
 commitments, accepted role in a civilization, etc.
 
-This tendency overlaps with what is known as *[confirmation bias]*.
+This tendency overlaps with what is known as [*confirmation bias*].
 
-[confirmation bias]: https://en.wikipedia.org/wiki/Confirmation_bias
+[*confirmation bias*]: https://en.wikipedia.org/wiki/Confirmation_bias
 
 One corollary of Inconsistency-Avoidance Tendency is that a person making big
 sacrifices in the course of assuming a new identity will intensify his devotion
@@ -150,10 +150,10 @@ Simply put: curiosity helps.
 
 ## 07. Kantian Fairness Tendency
 
-Also known as *[the golden rule]*:  
+Also known as [*the golden rule*]:  
 *do unto others as you would have them do unto you*.
 
-[the golden rule]: https://en.wikipedia.org/wiki/Golden_RuleT
+[*the golden rule*]: https://en.wikipedia.org/wiki/Golden_Rule
 
 As an obverse consequence of such "fair-sharing" conduct, much reactive
 hostility occurs when fair-sharing is expected yet not provided.
@@ -172,8 +172,8 @@ We tend to reciprocate favors and (perceived) slights.
 
 > You can always tell the man off tomorrow if it is such a good idea.
 
-Interplays with *[01. Reward and Punishment Superresponse Tendency][one]* and
-*[05. Inconsistency-Avoidance Tendency][five]*.
+Interplays with [*01. Reward and Punishment Superresponse Tendency*][one] and
+[*05. Inconsistency-Avoidance Tendency*][five].
 
 [one]: #01-reward-and-punishment-superresponse-tendency
 [five]: #05-inconsistency-avoidance-tendency
@@ -203,7 +203,7 @@ Simple but often underestimated.
 Man mostly misappraises himself on the high side. This also extends to one
 person's major/minor possessions, friends, family.
 
-The *[endowment effect]*: owned, a possession suddenly becomes worth more to him
+The [*endowment effect*]: owned, a possession suddenly becomes worth more to him
 than he would pay if they were offered for sale and he didn't already own them.
 
 When members of a clique exhibit self-regard tendency, they will select new
@@ -227,8 +227,8 @@ underweigh face-to-face impressions and overweigh the applicant's past record.
 
 ## 14. Deprival-Superreaction Tendency
 
-We gain less happiness from gaining 10$ than we lose from losing 10$.
-This is also known as *[loss aversion]*.
+We gain less happiness from gaining 10$ than we lose from losing 10$. This is
+also known as [*loss aversion*].
 
 Almost getting something then having it denied will hurt as much as if it was
 already owned.
@@ -246,7 +246,7 @@ believer: not only are the ideas challenged, but the group suffers the loss of
 one of its members, and there is fear that this nonbeliever will be
 extra-convincing because he was a former member. Hence the notion of *heresy*.
 
-This tendency also interacts with *[05. Inconsistency-Avoidance Tendency][five]*:
+This tendency also interacts with [*05. Inconsistency-Avoidance Tendency*][five]:
 (1) in groupthink, (2) in continuing to pour ressources in a fruitless venture.
 
 This tendency explains gambling woes: it gives us an urge to get even after a
@@ -263,8 +263,8 @@ Young people are hardwired to respect their peers more than their parents. A
 trick parents can use: control the quality of the peers.
 
 Social proof tendency is most easily triggered in the presence of puzzlement or
-stress (see *[04. Doubt-Avoidance Tendency][four]* and
-*[17. Stress-Influence Tendency][seventeen]*), or in particular both.
+stress (see [*04. Doubt-Avoidance Tendency*][four] and
+[*17. Stress-Influence Tendency*][seventeen]), or in particular both.
 
 Because both bad and good behavior are made contagious by social proof, it 
 is important to (1) stop bad behaviour before it spreads and (2) foster and
@@ -275,8 +275,8 @@ inaction. In the presence of doubt, inaction by others becomes social proof that
 inaction is the right course.
 
 Social-proof tendency often interacts in a perverse way
-with *[08. Envy/Jealousy Tendency][eight]*
-and *[14. Deprival-Superreaction Tendency][fourteen]*: e.g. two kids vying for the
+with [*08. Envy/Jealousy Tendency*][eight]
+and [*14. Deprival-Superreaction Tendency*][fourteen]: e.g. two kids vying for the
 same toy, amongst a heap of almost identical toys.
 
 [four]: #04-doubt-avoidance-tendency
@@ -291,8 +291,8 @@ We tend to contrast things with other things that are close to hand. Paying a
 lot of money for something, because we just made a much (justifiably) bigger
 purchase. The realtor that shows awful houses before a merely bad one.
 
-Also known as *[anchoring]* and related to
-*[18. Availability-Misweighing Tendency][eighteen]*.
+Also known as [*anchoring*] and related to
+[*18. Availability-Misweighing Tendency*][eighteen].
 
 Cognition, misled by tiny changes involving low contrast, will often miss a
 trend that is destiny.
@@ -307,7 +307,7 @@ trend that is destiny.
 
 ## 17. Stress-Influence Tendency
 
-Makes *[15. Social-Proof Tendency][fifteen]* more powerful.
+Makes [*15. Social-Proof Tendency*][fifteen] more powerful.
 
 When heavy, can cause depression.
 
@@ -323,7 +323,7 @@ reverse a breakdown except through new stress.
 
 ## 18. Availability-Misweighing Tendency
 
-Also known as *[availability bias]*.
+Also known as [*availability bias*].
 
 We overvalue evidence (or increase the importance of stuff) that is readily available.
 
@@ -381,7 +381,7 @@ inevitable.
 ## 22. Authority-Misinfluence Tendency
 
 We also trust leaders in areas where they are not experts. This is known as the
-*[halo effect]*.
+[*halo effect*].
 
 [halo effect]: https://en.wikipedia.org/wiki/Halo_effect
 

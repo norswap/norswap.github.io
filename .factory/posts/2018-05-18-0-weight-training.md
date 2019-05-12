@@ -17,9 +17,9 @@ less than 2 hours per week — I achieved a nice level of fitness. I wouldn't ha
 won any strength contest, but I didn't look too bad naked and I wasn't
 completely weak. Being regular is winning, no matter how little you do.
 
-Onto the weigh training then. Like many things I do, it started as something I
+Onto the weight training then. Like many things I do, it started as something I
 was curious about and wanted to experiment with. I kinda fancy the idea of
-getting ribbed and strong, and I wanted to see what kind of results I could
+getting ripped and strong, and I wanted to see what kind of results I could
 achieve by training seriously but parsimoniously (in terms of time spent).
 
 I asked for advice on the [Slate Star Codex] Discord channel, here was my
@@ -72,14 +72,13 @@ Pointedly, it's not [bodybuilding]: the emphasis is on strength, not on size.
 This is great: I did not want to end up huge.
 
 By the way, you might be wondering how there might be such a distinction:
-doesn't a large volume of muscle entail strength? Can one be strong without
-volume?
+doesn't voluminous muscles entail strength? Can one be strong without size?
 
 First things first. Bodybuilders *are* strong, but not in the same way that
 powerlifters are. They probably can't lift as heavy. On the other hand,
 powerlifters would probably be hard pressed to perform some of the bodybuilders'
 routines (a lot of reps at high intensity, often targeting isolated muscles).
-And of course, powerlifters have volume, just much less than bodybuilders.
+And of course, powerlifters have size, just much less than bodybuilders.
 
 The second part of the explanation, I will lift straigth from
 [Wikipedia][growth]:
@@ -241,7 +240,7 @@ Anyway, that was it for the experience report. Have fun training, or whatever
 floats your boat :)
 
 [Slate Star Codex]: http://slatestarcodex.com/
-[Stronglifts]: https://stronglifts.com/
+[Stronglifts]: https://stronglifts.com/5x5/
 [powerlifting]: https://en.wikipedia.org/wiki/Powerlifting
 [weightlifting]: https://en.wikipedia.org/wiki/Olympic_weightlifting
 [bodybuilding]: https://en.wikipedia.org/wiki/Bodybuilding

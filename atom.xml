@@ -6,6 +6,393 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>The Visitor Pattern in Java 8</title>
+      <description>
+&lt;p&gt;The visitor pattern is probably one of the most (in)famous design patterns.&lt;/p&gt;
+&lt;p&gt;The problem it solves is fairly simple. In most object-oriented languages, it&amp;#39;s
+easy to add new &lt;em&gt;data-type variants&lt;/em&gt;, i.e. new sub-classes. These classes can
+naturally override the methods in the super-class/interface. However, we can&amp;#39;t
+add methods to an existing super-class without modifying it — which is not
+possible if it belongs to a library. The visitor pattern is a way to achieve
+something similar.&lt;/p&gt;
+&lt;p&gt;Imagine you want to add a &lt;code&gt;print()&lt;/code&gt; method to an existing interface called
+&lt;code&gt;Base&lt;/code&gt; that has implementations &lt;code&gt;A&lt;/code&gt; and &lt;code&gt;B&lt;/code&gt;. If we could add &lt;code&gt;print()&lt;/code&gt; to
+&lt;code&gt;Base&lt;/code&gt;, we could call &lt;code&gt;new A().print()&lt;/code&gt;. The visitor pattern will allow us to do
+&lt;code&gt;new A().accept(new PrintVisitor())&lt;/code&gt; to achieve the same thing.&lt;/p&gt;
+&lt;p&gt;For this to work, &lt;code&gt;Base&lt;/code&gt; needs to have been conceived with the visitor pattern
+in mind. It needs to declare an abstract &lt;code&gt;accept(Visitor)&lt;/code&gt; method and all its
+implementations need to implement it according to the pattern.&lt;/p&gt;
+&lt;p&gt;With this interface and requirements in mind, let&amp;#39;s see some code.&lt;/p&gt;
+&lt;h2 id=&quot;basic-example&quot;&gt;Basic Example&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface Visitor {
+    void visit (A object);
+    void visit (B object);
+}
+
+interface Base {
+    void accept (Visitor visitor);
+}
+
+class A implements Base {
+    @Override public void accept (Visitor visitor) {
+        visitor.visit(this); // calls visit(A)
+    }
+}
+
+class B implements Base {
+    @Override public void accept (Visitor visitor) {
+        visitor.visit(this); // calls visit(B)
+    }
+}
+
+class PrintVisitor implements Visitor
+{
+    @Override public void visit (A object) {
+        System.out.println(&amp;quot;printing an A&amp;quot;);
+    }
+    @Override public void visit (B object) {
+        System.out.println(&amp;quot;printing a B&amp;quot;);
+    }
+}
+
+public class Example
+{
+    public static void print (Base object) {
+        object.accept(new PrintVisitor());
+    }
+    public static void main (String[] args) {
+        print(new A());
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What happens is that the &lt;code&gt;accept()&lt;/code&gt; method declared in &lt;code&gt;Base&lt;/code&gt; must be overriden
+in all of its implementations (&lt;code&gt;Base&lt;/code&gt; could have been a class as well). The role
+of the overriden method is to redirect the execution to the correct
+&lt;code&gt;Visitor#visit&lt;/code&gt; overload. This is possible (and type-safe) because the static
+type of &lt;code&gt;this&lt;/code&gt; corresponds to its dynamic type (&lt;code&gt;A&lt;/code&gt; or &lt;code&gt;B&lt;/code&gt;) in the overriden
+method.&lt;/p&gt;
+&lt;p&gt;And honestly, that&amp;#39;s all there is to the common formulation of the visitor
+pattern. Explanations tend to contrive the point.&lt;/p&gt;
+&lt;p&gt;However, the pattern can be taken much further to supply a solution to the
+&lt;em&gt;expression problem&lt;/em&gt;. Basically, what if we have our visitor defined like above
+but then we add a new implementation of &lt;code&gt;Base&lt;/code&gt;? Currently, all implementations
+have to be known in advance, because they are hardcoded into &lt;code&gt;Visitor&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But first, let&amp;#39;s solve a small practical issue.&lt;/p&gt;
+&lt;h2 id=&quot;handling-different-signatures&quot;&gt;Handling Different Signatures&lt;/h2&gt;
+&lt;p&gt;There is an easily solvable issue with the design I presented above: both
+&lt;code&gt;accept&lt;/code&gt; and &lt;code&gt;visit&lt;/code&gt; don&amp;#39;t admit extra parameters, nor do they have return
+values.&lt;/p&gt;
+&lt;p&gt;One solution is to rewrite these methods to include the required parameters and
+return type. But doing this means that you need one &lt;code&gt;Visitor&lt;/code&gt;-like class and one
+&lt;code&gt;accept&lt;/code&gt; overload for each signature of interest.&lt;/p&gt;
+&lt;p&gt;A better solution is to use the &lt;code&gt;Visitor&lt;/code&gt; implementation to pass data around.
+Here is an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;class AddRankVisitor extends Visitor
+{
+    public int result;
+    public final int base;
+
+    public AddRankVisitor (int base) {
+        this.base = base;
+    }
+
+    @Override public void visit (A object) { set_result(base + 1); }
+    @Override public void visit (B object) { set_result(base + 2); }
+}
+
+public class Example
+{
+    public static void add_rank (Base object, int base)
+    {
+        Visitor visitor = new AddRankVisitor(base);
+        object.accept(visitor);
+        return visitor.result;
+    }
+
+    public static void main (String[] args) {
+        System.out.println(add_rank(new A(), 5)); // prints 6
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We use &lt;code&gt;result&lt;/code&gt; to represent the return value, and &lt;code&gt;base&lt;/code&gt; as a parameter. Pretty
+easy, isn&amp;#39;t it?&lt;/p&gt;
+&lt;h2 id=&quot;the-expression-problem&quot;&gt;The Expression Problem&lt;/h2&gt;
+&lt;p&gt;The original formulation of the &lt;a href=&quot;https://en.wikipedia.org/wiki/Expression_problem&quot;&gt;expression problem&lt;/a&gt; is as follow:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The goal is to define a datatype by cases, where one can add new cases to the
+datatype and new functions over the datatype, without recompiling existing
+code, and while retaining static type safety (e.g., no casts).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;If you consider it in the context of object-oriented programming, a &lt;em&gt;datatype&lt;/em&gt;
+corresponds to a parent class or interface. &lt;em&gt;New datatype cases&lt;/em&gt; are new classes
+extending the parent class or interface. &lt;em&gt;New functions&lt;/em&gt; are as thought you
+could add an abstract method to the parent class or interface, along with
+overrides for the implementing classes.&lt;/p&gt;
+&lt;p&gt;Adding a new case is simply sub-classing/implementation. Adding new functions
+can be done via the visitor pattern as seen above. But can we do both?&lt;/p&gt;
+&lt;p&gt;If you defined visitors as we did above, then if you add a new implementation of
+&lt;code&gt;Base&lt;/code&gt;, it won&amp;#39;t be handled by our &lt;code&gt;print&lt;/code&gt; and &lt;code&gt;add_rank&lt;/code&gt; methods. Like we said
+before, &lt;code&gt;Visitor&lt;/code&gt; needs to list all the implementations.&lt;/p&gt;
+&lt;p&gt;In theory, there is nothing that prevents solving the expression problem at the
+language level. In an ideal world, we&amp;#39;d just be able to add abstract extension
+methods that have to be implemented for all classes implementing the interface.
+The &lt;a href=&quot;https://en.wikipedia.org/wiki/Linker_(computing)&quot;&gt;linker&lt;/a&gt; would then verify that the method was implemented for all such
+classes, and generate the proper &lt;a href=&quot;https://en.wikipedia.org/wiki/Virtual_method_table&quot;&gt;virtual method tables&lt;/a&gt;. But no such
+object-oriented language exists.&lt;/p&gt;
+&lt;p&gt;Perhaps a more well-understood way to do this is through statically-typed
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Multiple_dispatch&quot;&gt;multi-methods&lt;/a&gt;. But I don&amp;#39;t know any actual practical language (i.e. something
+used in production) that has them, though there are academic papers on the
+subject. &lt;a href=&quot;https://nim-lang.org/docs/tut2.html#object-oriented-programming-dynamic-dispatch&quot;&gt;Nim&lt;/a&gt; has statically-typed multi-methods but you must include a default
+implementation. &lt;a href=&quot;https://blogs.msdn.microsoft.com/laurionb/2009/08/13/multimethods-in-c-4-0-with-dynamic/&quot;&gt;C# 4&lt;/a&gt; has a &lt;code&gt;dynamic&lt;/code&gt; keyword that enables multi-methods but
+without compile-time checking.&lt;/p&gt;
+&lt;p&gt;There are languages that solve the expression problem however. The foremost
+solution is &lt;a href=&quot;https://en.wikipedia.org/wiki/Type_class&quot;&gt;typeclasses&lt;/a&gt;, notably in Haskell (also read &lt;a href=&quot;/typeclass-scheme&quot;&gt;here&lt;/a&gt;
+for my thoughts on a potential typeclass system).&lt;/p&gt;
+&lt;p&gt;Basically, you can add new methods over existing types by writing new
+typeclasses and their implementations for the given types. Compared to our
+object-oriented scenario, there is no notion of inheritance, so no way to say
+that a group of types should implement the typeclass — the expectation is that
+this will be caught statically when you try to require a typeclass
+implementation for such a type.&lt;/p&gt;
+&lt;p&gt;But back to Java-land. Let&amp;#39;s see how we can approach a solution by building on
+top of the visitor pattern.&lt;/p&gt;
+&lt;h2 id=&quot;adding-a-class-to-an-existing-visitor&quot;&gt;Adding a Class to an Existing Visitor&lt;/h2&gt;
+&lt;p&gt;Let&amp;#39;s add a new implementation of &lt;code&gt;Base&lt;/code&gt; called &lt;code&gt;C&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface VisitorC extends Visitor {
+    void visit (C object);
+}
+
+class C implements Base {
+    @Override public void accept (Visitor visitor) {
+        ((VisitorC) visitor).visit(this);
+    }
+}
+
+class PrintVisitorC extends PrintVisitor implements VisitorC {
+    @Override public void visit (C object) {
+        System.out.println(&amp;quot;printing a C&amp;quot;);
+    }
+}
+
+class AddRankVisitorC extends AddRankVisitor implements VisitorC
+{
+    public AddRankVisitorC (int base) { super(base); }
+    @Override public void visit (C object) { set_result(base + 3); }
+}
+
+public class Example
+{
+    public static void print (Base object) {
+        object.accept(new PrintVisitorC());
+    }
+
+    public static void add_rank (Base object, int base)
+    {
+        VisitorC visitor = new AddRankVisitorC(base);
+        object.accept(visitor);
+        return visitor.result;
+    }
+
+    public static void main (String[] args) {
+        print(new A());
+        print(new C());
+        System.out.println(add_rank(new A(), 5)); // prints 6
+        System.out.println(add_rank(new C(), 5)); // prints 8
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Since &lt;code&gt;Visitor&lt;/code&gt; doesn&amp;#39;t have an overload for &lt;code&gt;C&lt;/code&gt;, we add this overload in an
+extension of &lt;code&gt;Visitor&lt;/code&gt; called &lt;code&gt;VisitorC&lt;/code&gt;. The only worry: &lt;code&gt;accept&lt;/code&gt; takes
+&lt;code&gt;Visitor&lt;/code&gt;, not &lt;code&gt;VisitorC&lt;/code&gt;, so we have to perform a cast.&lt;/p&gt;
+&lt;p&gt;We similarly extends &lt;code&gt;PrintVisitor&lt;/code&gt; and &lt;code&gt;AddRankVisitor&lt;/code&gt; to add an
+implementation for the &lt;code&gt;visit(C)&lt;/code&gt; overload.&lt;/p&gt;
+&lt;p&gt;Also notice how we do not need to reimplement the storage for &lt;code&gt;AddRankVisitorC&lt;/code&gt;
+if we extend &lt;code&gt;AddRankVisitor&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The trick works: we can use a &lt;code&gt;PrintVisitorC&lt;/code&gt; and &lt;code&gt;AddRankVisitorC&lt;/code&gt; to visit
+both the previous &lt;code&gt;A&lt;/code&gt; and &lt;code&gt;B&lt;/code&gt; classes but also the new &lt;code&gt;C&lt;/code&gt; class.&lt;/p&gt;
+&lt;p&gt;In the process however, we&amp;#39;ve jeopardized type safety. We could write: &lt;code&gt;new
+C().accept(new PrintVisitor())&lt;/code&gt; and the code would compile but crash at run-time
+with a &lt;code&gt;ClassCastException&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;There actually is a pretty rich literature on how to solve the expression
+problem in Java with proper statical type safety. So it &lt;em&gt;is&lt;/em&gt; possible. However,
+all these solutions have other pitfalls (in my humble opinion, worse pitfalls).
+A followup article will discuss the limitations of these solutions and why I
+feel my solution is better.&lt;/p&gt;
+&lt;p&gt;But before... we are not entirely done yet!&lt;/p&gt;
+&lt;h2 id=&quot;composing-independent-extensions&quot;&gt;Composing Independent Extensions&lt;/h2&gt;
+&lt;p&gt;The last section deals with extending our system with a new class. But what if
+you use two libraries, both of which have independently extended the visitor.
+Can you compose them back into a single usable visitor?&lt;/p&gt;
+&lt;p&gt;If the library authors have followed a couple of simple guidlines, you can!&lt;/p&gt;
+&lt;p&gt;The key idea is as follow: each time we implement / extend a visitor, we will do
+it in an interface instead of a class. We will add a corresponding class only to
+make the interface instanciable and supply the necessary storage.&lt;/p&gt;
+&lt;p&gt;With that in mind, let us revise what we have done above. First for what we had
+before adding &lt;code&gt;C&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface _PrintVisitor extends Visitor
+{
+    @Override default void visit (A object) {
+        System.out.println(&amp;quot;printing an A&amp;quot;);
+    }
+    @Override default void visit (B object) {
+        System.out.println(&amp;quot;printing a B&amp;quot;);
+    }
+}
+
+class PrintVisitor implements _PrintVisitor {}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface _AddRankVisitor extends Visitor
+{
+    int result();
+    void set_result (int result);
+    int base();
+
+    @Override default void visit (A object) { set_result(base() + 1); }
+    @Override default void visit (B object) { set_result(base() + 2); }
+}
+
+class AddRankVisitor implements _AddRankVisitor
+{
+    private int result;
+    private int base;
+
+    @Override public int result() { return result; }
+
+    @Override public void set_result (int result) {
+        this.result = result;
+    }
+
+    @Override int base() { return base; }
+
+    public AddRankVisitor (int base) {
+        this.base = base;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For &lt;code&gt;PrintVisitor&lt;/code&gt;, the class becomes an interface with a prefix &lt;code&gt;_&lt;/code&gt; and we add
+a class with an empty body — no extra work required.&lt;/p&gt;
+&lt;p&gt;For &lt;code&gt;AddRankVisitor&lt;/code&gt;, our fields are replaced with getter/setters in the
+interface and we have to implement the storage for those in the class.&lt;/p&gt;
+&lt;p&gt;Notice that with this setup, our former &lt;code&gt;Example.main&lt;/code&gt; methods (from before
+adding &lt;code&gt;C&lt;/code&gt;) still work unmodified.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s then add back &lt;code&gt;C&lt;/code&gt;, which will constitute the first of two independent
+extensions:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;// `VisitorC` and `C` remain unchanged from above!
+
+interface _PrintVisitorC extends _PrintVisitor, VisitorC
+{
+    @Override default void visit (C object) {
+        System.out.println(&amp;quot;printing a C&amp;quot;);
+    }
+}
+
+class PrintVisitorC implements _PrintVisitorC {}
+
+interface _AddRankVisitorC extends AddRankVisitor, VisitorC
+{
+    @Override default void visit (C object) { set_result(base + 3); }
+}
+
+class AddRankVisitorC extends AddRankVistor
+    implements _AddRankVisitorC
+{
+    public AddRankVisitorC (int base) { super(base); }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is a lot like what we just did for the base visitors. Like before, we don&amp;#39;t
+need to reimplement the storage for &lt;code&gt;AddRankVisitorC&lt;/code&gt; if we extend
+&lt;code&gt;AddRankVisitor&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s do another similar extension, called &lt;code&gt;D&lt;/code&gt;. This is almost the same code by
+a different name:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface VisitorD extends Visitor {
+    void visit (D object);
+}
+
+class D implements Base
+{
+    @Override public void accept (Visitor visitor) {
+        ((VisitorD) visitor).visit(this);
+    }
+}
+
+interface _PrintVisitorD extends _PrintVisitor, VisitorD
+{
+    @Override default void visit (D object) {
+        System.out.println(&amp;quot;printing a D&amp;quot;);
+    }
+}
+
+class PrintVisitorD implements _PrintVisitorD {}
+
+interface _AddRankVisitorD extends AddRankVisitor, VisitorD
+{
+    @Override default void visit (D object) { set_result(base + 4); }
+}
+
+class AddRankVisitorD extends AddRankVistor
+    implements _AddRankVisitorD
+{
+    public AddRankVisitorD (int base) { super(base); }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have our two independant extensions setup properly with interfaces,
+let&amp;#39;s compose them into a single one.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface VisitorCD
+    extends VisitorC, VisitorD {}
+
+interface _PrintVisitorCD
+    extends VisitorCD, _PrintVisitorC, _PrintVisitorD {}
+
+class PrintVisitorCD
+    implements _PrintVisitorCD {}
+
+interface _AddRankVisitorCD
+    extends VisitorCD, _AddRankVisitorC, _AddRankVisitorD {}
+
+class AddRankVisitorCD extends AddRankVistor
+    implements _AddRankVisitorCD
+{
+    public AddRankVisitorCD (int base) { super(base); }
+}
+
+public class Example
+{
+    public static void print (Base object) {
+        object.accept(new PrintVisitorCD());
+    }
+
+    public static void add_rank (Base object, int base)
+    {
+        VisitorCD visitor = new AddRankVisitorCD(base);
+        object.accept(visitor);
+        return visitor.result;
+    }
+
+    public static void main (String[] args) {
+        print(new A());
+        print(new C());
+        print(new D());
+        System.out.println(add_rank(new A(), 5)); // prints 6
+        System.out.println(add_rank(new C(), 5)); // prints 8
+        System.out.println(add_rank(new D(), 5)); // prints 9
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;#39;s it? Yep that&amp;#39;s it! And that&amp;#39;s actually the long version — which you
+should use when you expose the visitor as part of a library. Even then
+&lt;code&gt;VisitorCD&lt;/code&gt; is not capital and just helps add a tiny bit of type safety.&lt;/p&gt;
+&lt;p&gt;If you write client code and nobody is supposed to extend your visitor, you
+could just write:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;class PrintVisitorCD
+    implements _PrintVisitorC, _PrintVisitorD {}
+
+class AddRankVisitorCD
+    extends AddRankVisitor
+    implements, _AddRankVisitorC, _AddRankVisitorD
+{
+    public AddRankVisitorCD (int base) { super(base); }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Isn&amp;#39;t life beautiful?&lt;/p&gt;
+&lt;p&gt;You can consult the full final example (with &lt;code&gt;A&lt;/code&gt;, &lt;code&gt;B&lt;/code&gt;, &lt;code&gt;C&lt;/code&gt;, &lt;code&gt;D&lt;/code&gt;, &lt;code&gt;PrintVisitor&lt;/code&gt;
+and &lt;code&gt;AddRankVisitor&lt;/code&gt;) on &lt;a href=&quot;https://gist.github.com/norswap/7f3d40adb85491d440bdf026b738890a&quot;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2019-05-24T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/java-visitor-pattern</link>
+      <guid isPermaLink="true">http://norswap.com/java-visitor-pattern</guid>
+    </item>
+    <item>
       <title>The Zizek Peterson Debate</title>
       <description>
 &lt;p&gt;Having previously enjoyed and written about both &lt;a href=&quot;/zizek-ideology/&quot;&gt;Slavoj Zizek&lt;/a&gt; and &lt;a href=&quot;/12-rules/&quot;&gt;Jordan
@@ -657,8 +1044,8 @@ index&lt;/a&gt;:&lt;/p&gt;
 some form of specification of the system I was imagining, so that I could
 refer to other parts of the design, and see if it was consistent.&lt;/p&gt;
 &lt;p&gt;I found the need to be fairly precise. Or maybe I just got carried away... but
-I think the precision really helps throw in relief the small detail that
-threatens the consistency and elegance of the whole. Anyhow, this ended up
+I think the precision really helps throw in relief the small details that
+threaten the consistency and elegance of the whole. Anyhow, this ended up
 looking more like a specification than a nice explanative article, although I
 tried to include enough examples.&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s not perfect, but as &lt;a href=&quot;/more-content/&quot;&gt;discussed earlier&lt;/a&gt;, I want thing to move forward, so
@@ -1306,37 +1693,6 @@ I&amp;#39;ve encountered elsewhere — without the need to add much value person
       <pubDate>2019-03-23T23:00:00.000Z</pubDate>
       <link>http://norswap.com/more-content</link>
       <guid isPermaLink="true">http://norswap.com/more-content</guid>
-    </item>
-    <item>
-      <title>Elegant Optional Arguments in Java</title>
-      <description>
-&lt;p&gt;Today, an adventure in programming in the in-between, not quite programming in
-the small, not quite in the large either.&lt;/p&gt;
-&lt;p&gt;The problem is that we would like to have a Java method (or constructor) with
-optional parameters: parameters who take default value as arguments if not
-supplied.&lt;/p&gt;
-&lt;p&gt;The standard way to do this would be to generate overloads with only a subset of
-arguments. This is of course exponential in the number of optional parameters:
-with four of them, we&amp;#39;re already generating 16 overloads! It&amp;#39;s also dependent on
-optional parameters not sharing the same type, and requires one to remember the
-ordering of parameters.&lt;/p&gt;
-&lt;p&gt;A better solution: create a configuration object to hold all optional arguments.
-This is good, but shifts the issue of optional parameters to the instantiation
-of the configuration object. One solution is have a no-argument constructor and
-use setters to specify the non-default values. This can be relatively terse and
-elegant by means of the &lt;a href=&quot;https://dzone.com/articles/design-patterns-the-builder-pattern&quot;&gt;builder pattern&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s also possible to forego the configuration object and store the
-configuration directly on the concerned object. But there is the risk to clutter
-the object, muddling the public interface of the class. It&amp;#39;s better to separate
-concerns so that configuration data is separate from other fields (&amp;quot;work data&amp;quot;,
-stored items, ...).&lt;/p&gt;
-&lt;p&gt;And there you have it, if you require more than one or two optional parameters,
-or you feel the set of optional parameters may grow, consider whipping up
-configuration object with the builder pattern!&lt;/p&gt;
-      </description>
-      <pubDate>2019-02-12T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/java-optional-parameters</link>
-      <guid isPermaLink="true">http://norswap.com/java-optional-parameters</guid>
     </item>
   </channel>
 </rss>

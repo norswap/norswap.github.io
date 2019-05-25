@@ -21,8 +21,8 @@ index][Language Design Notes]:
 > refer to other parts of the design, and see if it was consistent.
 > 
 > I found the need to be fairly precise. Or maybe I just got carried away... but
-> I think the precision really helps throw in relief the small detail that
-> threatens the consistency and elegance of the whole. Anyhow, this ended up
+> I think the precision really helps throw in relief the small details that
+> threaten the consistency and elegance of the whole. Anyhow, this ended up
 > looking more like a specification than a nice explanative article, although I
 > tried to include enough examples.
 > 

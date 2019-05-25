@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; The Visitor Pattern in Java 8
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">The Visitor Pattern in Java 8</h1>
+      <span class="post-date">25 May 2019</span>
+<p>The visitor pattern is probably one of the most (in)famous design patterns.</p>
+<p>The problem it solves is fairly simple. In most object-oriented languages, it&#39;s
+easy to add new <em>data-type variants</em>, i.e. new sub-classes. These classes can
+naturally override the methods in the super-class/interface. However, we can&#39;t
+add methods to an existing super-class without modifying it — which is not
+possible if it belongs to a library. The visitor pattern is a way to achieve
+something similar.</p>
+<p>Imagine you want to add a <code>print()</code> method to an existing interface called
+<code>Base</code> that has implementations <code>A</code> and <code>B</code>. If we could add <code>print()</code> to
+<code>Base</code>, we could call <code>new A().print()</code>. The visitor pattern will allow us to do
+<code>new A().accept(new PrintVisitor())</code> to achieve the same thing.</p>
+<p>For this to work, <code>Base</code> needs to have been conceived with the visitor pattern
+in mind. It needs to declare an abstract <code>accept(Visitor)</code> method and all its
+implementations need to implement it according to the pattern.</p>
+<p>With this interface and requirements in mind, let&#39;s see some code.</p>
+<h2 id="basic-example">Basic Example</h2>
+<pre><code class="language-java">interface Visitor {
+    void visit (A object);
+    void visit (B object);
+}
+
+interface Base {
+    void accept (Visitor visitor);
+}
+
+class A implements Base {
+    @Override public void accept (Visitor visitor) {
+        visitor.visit(this); // calls visit(A)
+    }
+}
+
+class B implements Base {
+    @Override public void accept (Visitor visitor) {
+        visitor.visit(this); // calls visit(B)
+    }
+}
+
+class PrintVisitor implements Visitor
+{
+    @Override public void visit (A object) {
+        System.out.println(&quot;printing an A&quot;);
+    }
+    @Override public void visit (B object) {
+        System.out.println(&quot;printing a B&quot;);
+    }
+}
+
+public class Example
+{
+    public static void print (Base object) {
+        object.accept(new PrintVisitor());
+    }
+    public static void main (String[] args) {
+        print(new A());
+    }
+}</code></pre>
+<p>What happens is that the <code>accept()</code> method declared in <code>Base</code> must be overriden
+in all of its implementations (<code>Base</code> could have been a class as well). The role
+of the overriden method is to redirect the execution to the correct
+<code>Visitor#visit</code> overload. This is possible (and type-safe) because the static
+type of <code>this</code> corresponds to its dynamic type (<code>A</code> or <code>B</code>) in the overriden
+method.</p>
+<p>And honestly, that&#39;s all there is to the common formulation of the visitor
+pattern. Explanations tend to contrive the point.</p>
+<p>However, the pattern can be taken much further to supply a solution to the
+<em>expression problem</em>. Basically, what if we have our visitor defined like above
+but then we add a new implementation of <code>Base</code>? Currently, all implementations
+have to be known in advance, because they are hardcoded into <code>Visitor</code>.</p>
+<p>But first, let&#39;s solve a small practical issue.</p>
+<h2 id="handling-different-signatures">Handling Different Signatures</h2>
+<p>There is an easily solvable issue with the design I presented above: both
+<code>accept</code> and <code>visit</code> don&#39;t admit extra parameters, nor do they have return
+values.</p>
+<p>One solution is to rewrite these methods to include the required parameters and
+return type. But doing this means that you need one <code>Visitor</code>-like class and one
+<code>accept</code> overload for each signature of interest.</p>
+<p>A better solution is to use the <code>Visitor</code> implementation to pass data around.
+Here is an example:</p>
+<pre><code class="language-java">class AddRankVisitor extends Visitor
+{
+    public int result;
+    public final int base;
+
+    public AddRankVisitor (int base) {
+        this.base = base;
+    }
+
+    @Override public void visit (A object) { set_result(base + 1); }
+    @Override public void visit (B object) { set_result(base + 2); }
+}
+
+public class Example
+{
+    public static void add_rank (Base object, int base)
+    {
+        Visitor visitor = new AddRankVisitor(base);
+        object.accept(visitor);
+        return visitor.result;
+    }
+
+    public static void main (String[] args) {
+        System.out.println(add_rank(new A(), 5)); // prints 6
+    }
+}</code></pre>
+<p>We use <code>result</code> to represent the return value, and <code>base</code> as a parameter. Pretty
+easy, isn&#39;t it?</p>
+<h2 id="the-expression-problem">The Expression Problem</h2>
+<p>The original formulation of the <a href="https://en.wikipedia.org/wiki/Expression_problem">expression problem</a> is as follow:</p>
+<blockquote>
+<p>The goal is to define a datatype by cases, where one can add new cases to the
+datatype and new functions over the datatype, without recompiling existing
+code, and while retaining static type safety (e.g., no casts).</p>
+</blockquote>
+<p>If you consider it in the context of object-oriented programming, a <em>datatype</em>
+corresponds to a parent class or interface. <em>New datatype cases</em> are new classes
+extending the parent class or interface. <em>New functions</em> are as thought you
+could add an abstract method to the parent class or interface, along with
+overrides for the implementing classes.</p>
+<p>Adding a new case is simply sub-classing/implementation. Adding new functions
+can be done via the visitor pattern as seen above. But can we do both?</p>
+<p>If you defined visitors as we did above, then if you add a new implementation of
+<code>Base</code>, it won&#39;t be handled by our <code>print</code> and <code>add_rank</code> methods. Like we said
+before, <code>Visitor</code> needs to list all the implementations.</p>
+<p>In theory, there is nothing that prevents solving the expression problem at the
+language level. In an ideal world, we&#39;d just be able to add abstract extension
+methods that have to be implemented for all classes implementing the interface.
+The <a href="https://en.wikipedia.org/wiki/Linker_(computing)">linker</a> would then verify that the method was implemented for all such
+classes, and generate the proper <a href="https://en.wikipedia.org/wiki/Virtual_method_table">virtual method tables</a>. But no such
+object-oriented language exists.</p>
+<p>Perhaps a more well-understood way to do this is through statically-typed
+<a href="https://en.wikipedia.org/wiki/Multiple_dispatch">multi-methods</a>. But I don&#39;t know any actual practical language (i.e. something
+used in production) that has them, though there are academic papers on the
+subject. <a href="https://nim-lang.org/docs/tut2.html#object-oriented-programming-dynamic-dispatch">Nim</a> has statically-typed multi-methods but you must include a default
+implementation. <a href="https://blogs.msdn.microsoft.com/laurionb/2009/08/13/multimethods-in-c-4-0-with-dynamic/">C# 4</a> has a <code>dynamic</code> keyword that enables multi-methods but
+without compile-time checking.</p>
+<p>There are languages that solve the expression problem however. The foremost
+solution is <a href="https://en.wikipedia.org/wiki/Type_class">typeclasses</a>, notably in Haskell (also read <a href="/typeclass-scheme">here</a>
+for my thoughts on a potential typeclass system).</p>
+<p>Basically, you can add new methods over existing types by writing new
+typeclasses and their implementations for the given types. Compared to our
+object-oriented scenario, there is no notion of inheritance, so no way to say
+that a group of types should implement the typeclass — the expectation is that
+this will be caught statically when you try to require a typeclass
+implementation for such a type.</p>
+<p>But back to Java-land. Let&#39;s see how we can approach a solution by building on
+top of the visitor pattern.</p>
+<h2 id="adding-a-class-to-an-existing-visitor">Adding a Class to an Existing Visitor</h2>
+<p>Let&#39;s add a new implementation of <code>Base</code> called <code>C</code>.</p>
+<pre><code class="language-java">interface VisitorC extends Visitor {
+    void visit (C object);
+}
+
+class C implements Base {
+    @Override public void accept (Visitor visitor) {
+        ((VisitorC) visitor).visit(this);
+    }
+}
+
+class PrintVisitorC extends PrintVisitor implements VisitorC {
+    @Override public void visit (C object) {
+        System.out.println(&quot;printing a C&quot;);
+    }
+}
+
+class AddRankVisitorC extends AddRankVisitor implements VisitorC
+{
+    public AddRankVisitorC (int base) { super(base); }
+    @Override public void visit (C object) { set_result(base + 3); }
+}
+
+public class Example
+{
+    public static void print (Base object) {
+        object.accept(new PrintVisitorC());
+    }
+
+    public static void add_rank (Base object, int base)
+    {
+        VisitorC visitor = new AddRankVisitorC(base);
+        object.accept(visitor);
+        return visitor.result;
+    }
+
+    public static void main (String[] args) {
+        print(new A());
+        print(new C());
+        System.out.println(add_rank(new A(), 5)); // prints 6
+        System.out.println(add_rank(new C(), 5)); // prints 8
+    }
+}</code></pre>
+<p>Since <code>Visitor</code> doesn&#39;t have an overload for <code>C</code>, we add this overload in an
+extension of <code>Visitor</code> called <code>VisitorC</code>. The only worry: <code>accept</code> takes
+<code>Visitor</code>, not <code>VisitorC</code>, so we have to perform a cast.</p>
+<p>We similarly extends <code>PrintVisitor</code> and <code>AddRankVisitor</code> to add an
+implementation for the <code>visit(C)</code> overload.</p>
+<p>Also notice how we do not need to reimplement the storage for <code>AddRankVisitorC</code>
+if we extend <code>AddRankVisitor</code>.</p>
+<p>The trick works: we can use a <code>PrintVisitorC</code> and <code>AddRankVisitorC</code> to visit
+both the previous <code>A</code> and <code>B</code> classes but also the new <code>C</code> class.</p>
+<p>In the process however, we&#39;ve jeopardized type safety. We could write: <code>new
+C().accept(new PrintVisitor())</code> and the code would compile but crash at run-time
+with a <code>ClassCastException</code>.</p>
+<p>There actually is a pretty rich literature on how to solve the expression
+problem in Java with proper statical type safety. So it <em>is</em> possible. However,
+all these solutions have other pitfalls (in my humble opinion, worse pitfalls).
+A followup article will discuss the limitations of these solutions and why I
+feel my solution is better.</p>
+<p>But before... we are not entirely done yet!</p>
+<h2 id="composing-independent-extensions">Composing Independent Extensions</h2>
+<p>The last section deals with extending our system with a new class. But what if
+you use two libraries, both of which have independently extended the visitor.
+Can you compose them back into a single usable visitor?</p>
+<p>If the library authors have followed a couple of simple guidlines, you can!</p>
+<p>The key idea is as follow: each time we implement / extend a visitor, we will do
+it in an interface instead of a class. We will add a corresponding class only to
+make the interface instanciable and supply the necessary storage.</p>
+<p>With that in mind, let us revise what we have done above. First for what we had
+before adding <code>C</code>:</p>
+<pre><code class="language-java">interface _PrintVisitor extends Visitor
+{
+    @Override default void visit (A object) {
+        System.out.println(&quot;printing an A&quot;);
+    }
+    @Override default void visit (B object) {
+        System.out.println(&quot;printing a B&quot;);
+    }
+}
+
+class PrintVisitor implements _PrintVisitor {}</code></pre>
+<pre><code class="language-java">interface _AddRankVisitor extends Visitor
+{
+    int result();
+    void set_result (int result);
+    int base();
+
+    @Override default void visit (A object) { set_result(base() + 1); }
+    @Override default void visit (B object) { set_result(base() + 2); }
+}
+
+class AddRankVisitor implements _AddRankVisitor
+{
+    private int result;
+    private int base;
+
+    @Override public int result() { return result; }
+
+    @Override public void set_result (int result) {
+        this.result = result;
+    }
+
+    @Override int base() { return base; }
+
+    public AddRankVisitor (int base) {
+        this.base = base;
+    }
+}</code></pre>
+<p>For <code>PrintVisitor</code>, the class becomes an interface with a prefix <code>_</code> and we add
+a class with an empty body — no extra work required.</p>
+<p>For <code>AddRankVisitor</code>, our fields are replaced with getter/setters in the
+interface and we have to implement the storage for those in the class.</p>
+<p>Notice that with this setup, our former <code>Example.main</code> methods (from before
+adding <code>C</code>) still work unmodified.</p>
+<p>Let&#39;s then add back <code>C</code>, which will constitute the first of two independent
+extensions:</p>
+<pre><code class="language-java">// `VisitorC` and `C` remain unchanged from above!
+
+interface _PrintVisitorC extends _PrintVisitor, VisitorC
+{
+    @Override default void visit (C object) {
+        System.out.println(&quot;printing a C&quot;);
+    }
+}
+
+class PrintVisitorC implements _PrintVisitorC {}
+
+interface _AddRankVisitorC extends AddRankVisitor, VisitorC
+{
+    @Override default void visit (C object) { set_result(base + 3); }
+}
+
+class AddRankVisitorC extends AddRankVistor
+    implements _AddRankVisitorC
+{
+    public AddRankVisitorC (int base) { super(base); }
+}</code></pre>
+<p>This is a lot like what we just did for the base visitors. Like before, we don&#39;t
+need to reimplement the storage for <code>AddRankVisitorC</code> if we extend
+<code>AddRankVisitor</code>.</p>
+<p>Let&#39;s do another similar extension, called <code>D</code>. This is almost the same code by
+a different name:</p>
+<pre><code class="language-java">interface VisitorD extends Visitor {
+    void visit (D object);
+}
+
+class D implements Base
+{
+    @Override public void accept (Visitor visitor) {
+        ((VisitorD) visitor).visit(this);
+    }
+}
+
+interface _PrintVisitorD extends _PrintVisitor, VisitorD
+{
+    @Override default void visit (D object) {
+        System.out.println(&quot;printing a D&quot;);
+    }
+}
+
+class PrintVisitorD implements _PrintVisitorD {}
+
+interface _AddRankVisitorD extends AddRankVisitor, VisitorD
+{
+    @Override default void visit (D object) { set_result(base + 4); }
+}
+
+class AddRankVisitorD extends AddRankVistor
+    implements _AddRankVisitorD
+{
+    public AddRankVisitorD (int base) { super(base); }
+}</code></pre>
+<p>Now that we have our two independant extensions setup properly with interfaces,
+let&#39;s compose them into a single one.</p>
+<pre><code class="language-java">interface VisitorCD
+    extends VisitorC, VisitorD {}
+
+interface _PrintVisitorCD
+    extends VisitorCD, _PrintVisitorC, _PrintVisitorD {}
+
+class PrintVisitorCD
+    implements _PrintVisitorCD {}
+
+interface _AddRankVisitorCD
+    extends VisitorCD, _AddRankVisitorC, _AddRankVisitorD {}
+
+class AddRankVisitorCD extends AddRankVistor
+    implements _AddRankVisitorCD
+{
+    public AddRankVisitorCD (int base) { super(base); }
+}
+
+public class Example
+{
+    public static void print (Base object) {
+        object.accept(new PrintVisitorCD());
+    }
+
+    public static void add_rank (Base object, int base)
+    {
+        VisitorCD visitor = new AddRankVisitorCD(base);
+        object.accept(visitor);
+        return visitor.result;
+    }
+
+    public static void main (String[] args) {
+        print(new A());
+        print(new C());
+        print(new D());
+        System.out.println(add_rank(new A(), 5)); // prints 6
+        System.out.println(add_rank(new C(), 5)); // prints 8
+        System.out.println(add_rank(new D(), 5)); // prints 9
+    }
+}</code></pre>
+<p>That&#39;s it? Yep that&#39;s it! And that&#39;s actually the long version — which you
+should use when you expose the visitor as part of a library. Even then
+<code>VisitorCD</code> is not capital and just helps add a tiny bit of type safety.</p>
+<p>If you write client code and nobody is supposed to extend your visitor, you
+could just write:</p>
+<pre><code class="language-java">class PrintVisitorCD
+    implements _PrintVisitorC, _PrintVisitorD {}
+
+class AddRankVisitorCD
+    extends AddRankVisitor
+    implements, _AddRankVisitorC, _AddRankVisitorD
+{
+    public AddRankVisitorCD (int base) { super(base); }
+}</code></pre>
+<p>Isn&#39;t life beautiful?</p>
+<p>You can consult the full final example (with <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>PrintVisitor</code>
+and <code>AddRankVisitor</code>) on <a href="https://gist.github.com/norswap/7f3d40adb85491d440bdf026b738890a">this page</a>.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/java-visitor-pattern";
+        this.page.identifier = "java-visitor-pattern";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

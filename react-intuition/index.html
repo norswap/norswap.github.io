@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; The Intuition For React
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">The Intuition For React</h1>
+      <span class="post-date">01 Jun 2019</span>
+<p>The other day, I found <a href="https://svelte.dev/blog/virtual-dom-is-pure-overhead">this article</a> (&quot;Virtual DOM is pure overhead&quot;) on
+<a href="https://news.ycombinator.com/item?id=19950253">Hacker News</a> and started reading it. Halfway through, <a href="https://reactjs.org/">React</a> finally clicked
+for me.</p>
+<p>See, I don&#39;t do web programming, but I keep abreast of tech news, notably via
+hacker news and web frameworks always feature heavily. If you had asked me
+before what React was I could have given a generic answer (&quot;something something
+fronted framework something something state&quot;), but I couldn&#39;t have explaine why
+we actually needed React, what it improved compared to using vanilla Javascript.</p>
+<p>Well, basically, the idea is that when some event occurs (e.g. the user performs
+some input) the state of the page/application is going to change (probably
+through the effect of an event listener). When that happens, you might have to
+redraw part of the page layout.</p>
+<p>That&#39;s when things can start to become hairy. If your application is complex,
+there might many possible configurations for the layout, and so many ways in
+which the layout could change.</p>
+<p>A common approach to these kind of problems is to model the application as a
+state machine, with each state change represented as a state transition. This
+approach works, but doesn&#39;t scale too well to complex applications — the state
+machine gets too complex, it doesn&#39;t fit into your head anymore.</p>
+<p><strong>The idea behind React then is</strong>: stop <em>changing</em> the layout. Instead,
+re-render the whole layout from the state each time the state changes.</p>
+<p>That way, you don&#39;t have to worry about handling each possible change in each
+possible application state: instead you just write component that know how to
+render themselves given the state they are given.</p>
+<p>Of course, re-rendering on every change would be pretty slow, so React uses a
+&quot;Virtual DOM&quot; (just a tree mimicking the real <a href="https://www.w3.org/TR/WD-DOM/introduction.html">DOM</a>) and compares that to the
+real DOM, only replacing parts of the layout that have actually changed.</p>
+<p>That&#39;s pretty simple. I thought: well isn&#39;t that explained on <a href="https://reactjs.org/">the official
+website</a>?</p>
+<p>Well actually it does a pretty good job:</p>
+<blockquote>
+<p><strong>Declarative</strong></p>
+<p>React makes it painless to create interactive UIs. Design simple views for
+each state in your application, and React will efficiently update and render
+just the right components when your data changes.</p>
+<p>Declarative views make your code more predictable and easier to debug.</p>
+<p><strong>Component-Based</strong></p>
+<p>Build encapsulated components that manage their own state, then compose them
+to make complex UIs.</p>
+<p>Since component logic is written in JavaScript instead of templates, you can
+easily pass rich data through your app and keep state out of the DOM.</p>
+</blockquote>
+<p>But it doesn&#39;t explain that the purpose of this &quot;efficient re-rendering&quot; is to
+avoid having to keep track of the current layout yourself and change it in a
+legitimate way, which quickly becomes error prone.</p>
+<p>And that&#39;s it for today!</p>
+<hr>
+<p><strong>Post Scriptum</strong></p>
+<p>The topic of the <a href="https://svelte.dev/blog/virtual-dom-is-pure-overhead">article</a> itself is pretty interesting in its
+own right. So is the discussion at <a href="https://news.ycombinator.com/item?id=19950253">Hacker News</a>.</p>
+<p>In reeeal condensed, the article says that because the optimal manual change to
+the DOM is going to be faster than diffing + a sub-optimal DOM change performed
+by React, the virtual DOM is pure overhead. It&#39;s right, but leaves out the fact
+that all that is done for managing complexity.</p>
+<p>The article is written by Rich Harris, the author of <a href="https://svelte.dev/">the Svelte
+framework</a> — and sell Svelte&#39;s ability to basically manage complexity
+but at the same time generate the optimal change at build-time.</p>
+<p>The discussion makes other interesting points regarding the genesis of React.
+Because the algorithm is fickle I&#39;m gonna be quoting the discussion here:</p>
+<blockquote>
+<p><em>oraphalous</em>:</p>
+<p>I think this article - and many of the comments on this thread are forgetting
+the context of how DOM manipulation was typically done when the virtual DOM
+approach was introduced.</p>
+<p>Here&#39;s the gist of how folks would often update an element. You&#39;d subscribe to
+events on the root element of your component. And if your component is of any
+complexity at all - first thing you&#39;d probably do is ask jQuery to go find any
+child elements that need updating - inspecting the DOM in various ways so as
+to determine the component&#39;s current state.</p>
+<p>If your component needed to affect components higher up, or sibling to the
+current instance - then your application is often doing a search of the DOM to
+find the nodes.. and yes if you architect things well then you could avoid a
+lot of these - but let&#39;s face it, front end developers weren&#39;t typically
+renown for their application architecture skills.</p>
+<p>In short - the DOM was often used to store state. And this just isn&#39;t a very
+efficient approach.</p>
+<p>This is what I understood the claim that VDOMs are faster than the real DOM
+meant - and the article is pretty much eliding this detail.</p>
+<p>As far as I&#39;m aware React and its VDOM approach was the framework that
+deserves the credit for changing the culture of how we thought about state
+management on the frontend. That newer frameworks have been able to build upon
+this core insight - in ways that are even more efficient than the VDOM
+approach is great - but they should pay homage to that original insight and
+change in perspective React made possible.</p>
+<p>I feel this article and many of the comments here so far - fail to do that -
+and worse, seem to be trying to present React&#39;s claim of the VDOM faster than
+the DOM as some kind of toddler mistake.</p>
+</blockquote>
+<blockquote>
+<p>jasonkester:</p>
+<blockquote>
+<p>the DOM was often used to store state.</p>
+</blockquote>
+<p>Every once in a while I&#39;m reminded that I&#39;m mostly disconnected from the way
+&quot;most&quot; people build things. Thanks for this insight. It finally explains why I
+hear people talking down about &quot;jQuery developers&quot;, if that was something that
+people actually did.</p>
+<p>But wow. I&#39;ve been building javascript-heavy web stuff since the mid 90&#39;s and it
+had never occurred to me to do that. You have your object model, and each thing
+had a reference back to its DOM node and some methods to update itself if
+necessary. All jQuery did was make it less typing to initially grab the DOM node
+(or create it), and give you some shorthand for setting classes on them.</p>
+<p>It also explains why people liked React, which has always seemed completely
+overcomplicated to me, but which probably simplified things a lot if you didn&#39;t
+ever have a proper place to keep your data model.</p>
+<p>I can&#39;t imagine I was the only one who had things figured out back then,
+though. The idea you&#39;re talking about sounds pretty terrible.</p>
+</blockquote>
+<blockquote>
+<p>onion2k:</p>
+<p>Bare in mind that most people using jQuery weren&#39;t writing JavaScript
+applications. They were writing backend-driven applications with jQuery
+enhancements, so there was no real concept of frontend &#39;state&#39; that was
+separate to the DOM itself. If your frontend code needed to work with &#39;state&#39;
+like form values or element attributes you had to read them, and because there
+could be multiple separate bits of code working with the same form or element
+you had to write values back to the DOM so the next bit of code had the
+correct &#39;state&#39;.</p>
+<p>The thing that changed to make frontend development improve dramatically was
+hash based routing with ajax, and later the introduction of the history API.
+That caused frontend development to have a need to retain state between
+&#39;pages&#39;, so then was a need to find a better way to store it than using DOM
+attributes.</p>
+</blockquote>
+<blockquote>
+<p>Udik:</p>
+<blockquote>
+<p>the thing that changed to make frontend development improve
+dramatically was hash based routing with ajax...</p>
+</blockquote>
+<p>I think that what&#39;s changed is simply that people realized that it&#39;s way less
+messy to use the backend only as a data source (with ajax calls), and leave
+everything else to the frontend. The cognitive overhead of having the server
+producing html with some implicit state, then updating that state interactively,
+and then losing everything again by posting the whole page to the server, was
+simply unbearable.</p>
+<p>When I started building web applications in 2004 I had some experience in
+writing desktop apps: I simply created a js library to create and destroy UI
+elements, and wrote &quot;desktop&quot; apps running in the browser.</p>
+</blockquote>
+<p>Isn&#39;t all that positively enlightening?</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/react-intuition";
+        this.page.identifier = "react-intuition";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

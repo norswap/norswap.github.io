@@ -4,7 +4,7 @@ build: generate.js.rna
 	node $< build
 
 preview:
-	cd .. && .factory/node_modules/http-server/bin/http-server -o
+	cd .. && .factory/node_modules/live-server/live-server.js
 
 rebuild: generate.js.rna
 	rm -rf ../../web/*

@@ -232,12 +232,12 @@ after the argument list. We&#39;ll touch on the difference between the two block
 syntaxes in the <a href="#blocks-and-procs">section about blocks</a>.</p>
 </li>
 </ul>
-<h3 id="ordering">Ordering</h3>
+<h3 id="ordering-1">Ordering</h3>
 <p>Again, arguments cannot be supplied in any order. All regular and splat
 arguments must appear before any keyword and double splat arguments. A block
 conversion or block argument (only one allowed) must appear last.</p>
 <p>If the order is not respected, an error ensues.</p>
-<h3 id="assigning-arguments-to-parameters">Assigning Arguments to Parameters</h3>
+<h3 id="assigning-arguments-to-parameters-1">Assigning Arguments to Parameters</h3>
 <p>Where an error is mentionned, it is most likely an <code>ArgumentError</code>. I haven&#39;t
 re-checked everything, but it should always be the case.</p>
 <p>Here is the full procedure for figuring out how arguments are assigned to
@@ -342,7 +342,7 @@ create lambdas.</p>
 &amp;my_proc</code> or <code>proc &amp;my_lambda</code>. However, these conversions don&#39;t do anything:
 <code>lambda &amp;my_proc</code> returns <code>my_proc</code>, and the regular proc behaviour is
 preserved. The converse is true for the reverse conversion.</p>
-<h3 id="curly-brackets-vs-do-end">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
+<h3 id="curly-brackets--vs-do--end">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>
 <p>There is no semantic difference between both forms.</p>
 <p>There is one syntactic difference because the two forms have different
 precedences:</p>

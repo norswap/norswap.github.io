@@ -76,7 +76,7 @@ which don&#39;t</li>
 <li><strong>nesting</strong>: what are the surrounding modules? (often called <em>cref</em>)</li>
 </ul>
 <p>Let&#39;s look at how each type of name is resolved.</p>
-<h2 id="local-global-variables">Local &amp; Global Variables</h2>
+<h2 id="local--global-variables">Local &amp; Global Variables</h2>
 <p>Global variables are prefixed with <code>$</code> and they are easy: they are accessible
 everywhere.</p>
 <p>Local variables depend on static scopes. New scopes are create when you enter a
@@ -145,7 +145,7 @@ occurs.</p>
 that inherits/includes the class defining the variables. This means you can&#39;t
 use the <code>@@x</code> notation with the <code>eval</code> method that we will see later. However,
 you can use reflection: <code>Module#class_variable_get/set</code>.</p>
-<h2 id="constants-and-modules-">Constants (and Modules)</h2>
+<h2 id="constants-and-modules">Constants (and Modules)</h2>
 <p>Constants start with an uppercase letter, and modules are actually a kind of
 constant.</p>
 <p>Constants depend on the notion of <code>nesting</code>: you can access a constant if it is
@@ -242,7 +242,7 @@ else. What if multiple refinements conflicts? The latest innermost <code>using</
 always wins.</p>
 <p>You can get a list of modules whose refinements are visible with
 <code>Module::used_modules</code>.</p>
-<h2 id="on-which-module-are-methods-defined-">On which module are methods defined?</h2>
+<h2 id="on-which-module-are-methods-defined">On which module are methods defined?</h2>
 <p>Last, but not least, when you use the <code>def</code> keyword, on which module are the
 methods defined? The not-so-helpful answer is that these methods become instance
 methods of <em>the definee</em>. Entering certain declarations and calling certain
@@ -310,7 +310,7 @@ is, if you can avoid to go there, please do.</p>
 <p>Finally, if you experiment, you may find out you cannot define singleton method
 on the classes <code>Integer</code> and <code>Symbol</code> (e.g. <code>def Integer.foo</code>). I assume for
 performance reasons.</p>
-<h2 id="doing-better-">Doing Better?</h2>
+<h2 id="doing-better">Doing Better?</h2>
 <p>The situation is a bit hairy, to say the least. How could we simplify things?</p>
 <p>Once you wrap your head around them, globals, class and instance variables are
 rather simple. One caveat: I would allow accessing class variables whenever

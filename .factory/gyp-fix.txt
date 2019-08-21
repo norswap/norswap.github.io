@@ -1,0 +1,25 @@
+https://github.com/felixrieseberg/windows-build-tools/issues/56
+
+npm install --global --production windows-build-tools
+
+---
+
+use marked with highlightjs: https://marked.js.org/#/USING_ADVANCED.md#options
+
+remove this syntax.css file?
+
+---
+
+use <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i&display=swap" rel="stylesheet"> 
+for better norswap.com display?!
+
+---
+
+"make build" clearly borked: doesn't react to changes in resume, doesn't react to
+renaming a post...
+
+...
+
+hhm actually the second migth be because the JSON became corrupted somehow...
+
+---

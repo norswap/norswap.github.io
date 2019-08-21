@@ -244,7 +244,7 @@ own&#39;s ancestor chain:</p>
 <pre><code class="language-ruby">module M; end
 class C; prepend M; end
 C.ancestors =&gt; [M, C, ...]</code></pre>
-<h2 id="doing-better-">Doing Better?</h2>
+<h2 id="doing-better">Doing Better?</h2>
 <p>Despite its idiosyncracies, I would be hard pressed to improve on the algorithm
 without losing some of its nice properties. The key tension is that later calls
 to <code>include</code> should take precedence (to enable effective run-time

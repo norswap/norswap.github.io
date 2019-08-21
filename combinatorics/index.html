@@ -107,7 +107,7 @@ know there are <code>(n-k)!</code> ways to form permutations of a set of <em>n-k
 <p>So by dividing the total number of permutations (<code>n!</code>) by the number of
 permutations of the last <em>n-k</em> items (<code>(n-k)!</code>), we only keep one permutation
 per possible k-permutation, and that is our answer.</p>
-<h3 id="-k-combinations">(k-)Combinations</h3>
+<h3 id="k-combinations">(k-)Combinations</h3>
 <p>The are <code>C(n, k) = n! / (k! * (n-k)!)</code> ways to pick <em>k</em> items from a set of size
 <em>n</em>. For other mathematical notations, see <a href="https://en.wikipedia.org/wiki/Combination#Number_of_k-combinations">here</a>.</p>
 <p><strong>Intuition:</strong> We start from the <code>n! / (n-k)!</code> k-permutations of the set. These
@@ -127,13 +127,13 @@ as many times as we like.</p>
 <p>This time, looking at the number of permutations of a whole set doesn&#39;t make
 sense anymore, as we put back each item after picking it.</p>
 <p>Let&#39;s look at the other two questions in the presence of repetitions:</p>
-<h3 id="k-permutations-with-repetitions-or-n-tuples-">k-Permutations with repetitions (or n-tuples)</h3>
+<h3 id="k-permutations-with-repetitions-or-n-tuples">k-Permutations with repetitions (or n-tuples)</h3>
 <p>There are <code>n^k</code> ways to order <em>k</em> items from a set of size <em>n</em>, with repetition.</p>
 <p><strong>Intuition</strong>: each time we pick an item, we have <em>n</em> possibilities, and these
 possibilities just multiply for each item we pick.</p>
 <p>For instance, for a set of two balls {1, 2}, there are <code>2^3 = 8</code> ways to pick 3
 balls: 111, 112, 121, 122, 211, 212, 221, 222.</p>
-<h3 id="-k-combinations-with-repetitions-or-k-multicombination-or-multisubset-">(k-)Combinations with repetitions (or k-multicombination or multisubset)</h3>
+<h3 id="k-combinations-with-repetitions-or-k-multicombination-or-multisubset">(k-)Combinations with repetitions (or k-multicombination or multisubset)</h3>
 <p>There are <code>CC(n, k) = C(n+k-1, k) = (n+k-1)! / (k! * (n-1)!)</code> ways to pick <em>k</em>
 items from a set of size <em>n</em>, with repetition. For the proper mathematical
 notation, see <a href="https://en.wikipedia.org/wiki/Combination#Number_of_combinations_with_repetition">here</a>.</p>

@@ -24,6 +24,9 @@ generate.js.rna: generate.js
 ifeq ($(OS),Windows_NT)
 
 install:
+# Uncomment if getting a VCBuild.exe error
+#	npm install -g --production windows-build-tools
+#	npm install -g node-gyp@latest
 	npm install
 
 update:
@@ -40,11 +43,12 @@ install:
 	npm install --python=python2.7
 
 update:
-    npm update --python=python2.7
+	npm update --python=python2.7
 
 setup:
 	rm -rf node_modules
 	ln -sF node_modules_mac node_modules
+	chmod +x node_modules/live-server/live-server.js
 
 endif
 
@@ -54,4 +58,4 @@ endif
   build \
   rebuild
 
-.SILENT:
+#.SILENT:

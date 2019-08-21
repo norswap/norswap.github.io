@@ -156,7 +156,7 @@ before, `Visitor` needs to list all the implementations.
 In theory, there is nothing that prevents solving the expression problem at the
 language level. In an ideal world, we'd just be able to add abstract extension
 methods that have to be implemented for all classes implementing the interface.
-The [linker] would then verify that the method was implemented for all such
+The [linker] would then verify that these methods were implemented for all such
 classes, and generate the proper [virtual method tables][vtables]. But no such
 object-oriented language exists.
 

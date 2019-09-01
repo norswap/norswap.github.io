@@ -6,6 +6,170 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Y Combinator and Trampolines in Javascript</title>
+      <description>
+&lt;p&gt;In &lt;em&gt;&lt;a href=&quot;http://raganwald.com/2018/09/10/why-y.html&quot;&gt;Why Y? Deriving the Y Combinator in JavaScript&lt;/a&gt;&lt;/em&gt;, Reginald
+Braithwaithe (aka Raganwald) explains, step by step, how the fixed-point Y
+combinator and the long-tailed widowbird can be implemented in Javascript.&lt;/p&gt;
+&lt;p&gt;At this point, you&amp;#39;re probably wondering &lt;strong&gt;What the hell are we talking about?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Essentially, these are tools that we can use to achieve two very useful things:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Inject code at each recursive call in a recursive function.&lt;/li&gt;
+&lt;li&gt;Make a &lt;a href=&quot;https://en.wikipedia.org/wiki/Tail_call&quot;&gt;tail-recursive&lt;/a&gt; function use a fixed amount of stack space, preventing
+the fabled &lt;a href=&quot;https://en.wikipedia.org/wiki/Stack_overflow&quot;&gt;stack overflow&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Sometimes, achieving the second item is called &lt;em&gt;using a &lt;a href=&quot;https://en.wikipedia.org/wiki/Trampoline_(computing)&quot;&gt;trampoline&lt;/a&gt;&lt;/em&gt;, because
+we enter the recursive function but on &amp;quot;&lt;em&gt;recursion&lt;/em&gt;&amp;quot;, we jump right back out.&lt;/p&gt;
+&lt;p&gt;The technique is also called &amp;quot;tail-recursion elimination&amp;quot; or &amp;quot;tail call
+optimization&amp;quot;.&lt;/p&gt;
+&lt;p&gt;In this post I want to offer a very condensed version of this story that focuses
+on the results. A motivation, really. You should read &lt;a href=&quot;http://raganwald.com/2018/09/10/why-y.html&quot;&gt;Reginald&amp;#39;s article&lt;/a&gt;
+to know about the gory details.&lt;/p&gt;
+&lt;p&gt;I also &lt;a href=&quot;https://github.com/raganwald/raganwald.github.com/issues/134&quot;&gt;simplified&lt;/a&gt; the combinators&amp;#39; implementation — to make them more idiomatic,
+and, in my opinion, easier to understand.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;the-mockingbird-code-injection&quot;&gt;The Mockingbird (Code Injection)&lt;/h2&gt;
+&lt;p&gt;Let&amp;#39;s start with a recursive (JavaScript) function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const is_even = n =&amp;gt;
+    (n === 0) || !is_even(n - 1);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This implement a very inefficient way to check if a number is even. It&amp;#39;s a toy
+example, obviously.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s take our first goal first: &amp;quot;inject code at each recursive call in a
+recursive function&amp;quot;.&lt;/p&gt;
+&lt;p&gt;To achieve this, we need to rewrite the function in a different form. Here is
+the so-called &amp;quot;mockingbird form&amp;quot;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const mock_is_even = (myself, n) =&amp;gt;
+    (n === 0) || !myself(myself, n - 1);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;is_even&lt;/code&gt; now take a &lt;code&gt;myself&lt;/code&gt; function as argument, which it called recursively,
+passing itself along.&lt;/p&gt;
+&lt;p&gt;We can call &lt;code&gt;mock_is_even(mock_is_even, 10)&lt;/code&gt;, and it will behave just like
+&lt;code&gt;is_even(10)&lt;/code&gt;. So far that&amp;#39;s pretty useless.&lt;/p&gt;
+&lt;p&gt;We can re-implement &lt;code&gt;is_even&lt;/code&gt; in terms of &lt;code&gt;mock_is_even&lt;/code&gt; using the &amp;quot;mockingbird&amp;quot;
+combinator:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const mockingbird =
+    fn =&amp;gt;
+        (...args) =&amp;gt;
+            fn(fn, ...args);
+
+const is_even = mockingbird(mock_is_even);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Okay, that works: when we call &lt;code&gt;is_even(10)&lt;/code&gt;, the call becomes
+&lt;code&gt;mock_is_even(mock_is_even, 10)&lt;/code&gt;, exactly what we wanted.&lt;/p&gt;
+&lt;p&gt;What&amp;#39;s the point?&lt;/p&gt;
+&lt;p&gt;Well, now we can inject code. Assume we want to memoize the function. After all,
+the result of &lt;code&gt;is_even(X)&lt;/code&gt; will always be the same for a given &lt;code&gt;X&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const memoized = fn =&amp;gt; {
+    const map = new Map();
+    return (...args) =&amp;gt; {
+        const key = JSON.stringify(args);
+        return map[key] || (map[key] = fn(args));
+    }
+}
+
+const is_even_memo = mockingbird(memoized(mock_is_even));&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can verify it&amp;#39;s working by measuring the run time:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;console.time(&amp;#39;slow&amp;#39;);
+is_even_memo(100); // not memoized yet
+console.timeEnd(&amp;#39;slow&amp;#39;);
+
+console.time(&amp;#39;fast&amp;#39;);
+is_even_memo(100); // memoized
+console.timeEnd(&amp;#39;fast&amp;#39;);&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;the-y-combinator-better-code-injection&quot;&gt;The Y Combinator (Better Code Injection)&lt;/h2&gt;
+&lt;p&gt;This &lt;code&gt;myself(myself, ...)&lt;/code&gt; business is ugly. Can we do better? Yes.&lt;/p&gt;
+&lt;p&gt;Instead of the mockingbird form:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const mock_is_even = (myself, n) =&amp;gt;
+    (n === 0) || !myself(myself, n - 1);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can write our function in Y form:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const Y_is_even = (myself, n) =&amp;gt;
+    (n === 0) || !myself(n - 1);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And here is how we derive the &lt;code&gt;is_even&lt;/code&gt; from the Y combinator:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const Y = fn =&amp;gt; {
+    const wrapper = (...args) =&amp;gt; fn(wrapper, ...args);
+    return wrapper;
+}
+
+const is_even = Y(Y_is_even);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Injection is done the same way as before:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const is_even_memo = Y(memoized(Y_is_even));&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;#39;s explain: the Y combinator is similar to the mockingbird, but takes care of
+passing the function to itself, so that we don&amp;#39;t need to do it in Y-form
+functions, unlike in mockingbird-form.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://raganwald.com/2018/09/10/why-y.html&quot;&gt;Reginald&amp;#39;s post&lt;/a&gt; provides the traditional way to express the combinator,
+using only function parameters, whereas we &amp;quot;cheat&amp;quot; by using a variable inside
+the function. If you want to understand the Y combinator&amp;#39;s root in &lt;a href=&quot;https://en.wikipedia.org/wiki/Lambda_calculus&quot;&gt;lambda
+calculus&lt;/a&gt;, give the post a read!&lt;/p&gt;
+&lt;h2&gt;The Longtailed Widowbird&lt;br/&gt; (Tail Recursion Elimination / Trampolines)&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;#39;s move on to our second goal: &amp;quot;Make a &lt;a href=&quot;https://en.wikipedia.org/wiki/Tail_call&quot;&gt;tail-recursive&lt;/a&gt; function use a fixed
+amount of stack space, preventing the fabled &lt;a href=&quot;https://en.wikipedia.org/wiki/Stack_overflow&quot;&gt;stack overflow&lt;/a&gt;.&amp;quot;&lt;/p&gt;
+&lt;p&gt;This process will work with functions written in Y-form — but only as long as
+they are &lt;em&gt;tail-recursive&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Our &lt;code&gt;Y_is_even&lt;/code&gt; function is not tail recursive, pecause of that pesky &lt;code&gt;!&lt;/code&gt;
+operator, which is applied after the call to &lt;code&gt;myself&lt;/code&gt; returns.&lt;/p&gt;
+&lt;p&gt;Fortunately, we can rewrite it to be tail-recursive:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const Y_is_even_tailrec = (myself, n) =&amp;gt;
+    n === 0 ? true
+    n === 1 ? false
+    : myself(n - 2);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The idea behind the longtailed widowbird is that, instead of injecting code
+around the recursive function call, we will &lt;em&gt;replace&lt;/em&gt; the recursive call by code
+that returns a function (which executes the &amp;quot;recursive&amp;quot; function call).&lt;/p&gt;
+&lt;p&gt;Once we get this function, we can call it. If it does another recursive call, it
+will return another function, which we can call as well. And so on and so forth.
+We call the returned functions in a loop, until we get the final result.
+Recursion has been eliminated in favor of iteration!&lt;/p&gt;
+&lt;p&gt;Here is the longtailed widowbird combinator:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const longtailed = fn =&amp;gt; (...args0) =&amp;gt; {
+
+    class Thunk {
+        constructor (delayed) {
+            this.delayed = delayed;
+        }
+
+        evaluate() {
+            return this.delayed();
+        }
+    }
+
+    const wrapper = (...args) =&amp;gt;
+        new Thunk(() =&amp;gt; fn(wrapper, ...args));
+
+    let value = fn(wrapper, ...args0);
+
+    while (value instanceof Thunk)
+        value = value.evaluate();
+
+    return value;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let&amp;#39;s go over this.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Thunk&lt;/code&gt; class is just a way to identify the functions we need to execute in
+the loop (it&amp;#39;s used in the &lt;code&gt;value instancceof Thunk&lt;/code&gt; test). If we didn&amp;#39;t have
+this class and just tested for JavaScript&amp;#39;s &lt;code&gt;Function&lt;/code&gt; class, our combinator
+wouldn&amp;#39;t work with recursive functions that return functions!&lt;/p&gt;
+&lt;p&gt;We do the same &lt;code&gt;wrapper&lt;/code&gt; trick as in the Y combinator, but this time we also
+wrap the call in a function we store in a &lt;code&gt;Thunk&lt;/code&gt; instance.&lt;/p&gt;
+&lt;p&gt;Then we get the initial value and we start iterating, until a result is
+obtained!&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s try this!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const iter_is_even = longtailed(Y_is_even_tailrec);
+
+// No problem!
+iter_is_even(1000000);
+
+// Maximum call stack size exceeded
+is_even(1000000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Can we still memoize? Of course:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const iter_is_even_memo = longtailed(memoized(Y_is_even_tailrec));&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And that&amp;#39;s it folks! Code injection in recursive functions, and tail call
+optimization in JavaScript, easy as pie!&lt;/p&gt;
+&lt;p&gt;You can find all the code in this article collected &lt;a href=&quot;https://gist.github.com/norswap/be5fa7938f8331a252d3ff79e61e5834&quot;&gt;in this gist&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2019-08-31T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/js-trampolines</link>
+      <guid isPermaLink="true">http://norswap.com/js-trampolines</guid>
+    </item>
+    <item>
       <title>The Expression Problem in Java (Litterature Review)</title>
       <description>
 &lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/themes/prism.css&quot; rel=&quot;stylesheet&quot; /&gt;
@@ -2146,124 +2310,6 @@ well served by some form of pattern matching and &lt;a href=&quot;https://en.wik
       <pubDate>2019-03-31T22:00:00.000Z</pubDate>
       <link>http://norswap.com/typeclass-scheme</link>
       <guid isPermaLink="true">http://norswap.com/typeclass-scheme</guid>
-    </item>
-    <item>
-      <title>Language Design Notes 0: A Map of Polymorphism</title>
-      <description>
-&lt;p&gt;This is the first post in &lt;a href=&quot;/language-design-notes&quot;&gt;a series&lt;/a&gt; where I write my thoughts on some aspects
-of language design. This first installment will deal with polymorphism, what it
-is, and how it manifests in its three main forms, which we review below.&lt;/p&gt;
-&lt;h2 id=&quot;ad-hoc-polymorphism&quot;&gt;Ad-Hoc Polymorphism&lt;/h2&gt;
-&lt;p&gt;Basically polymorphism has to do with the ability to reuse the same code for
-different types of values.&lt;/p&gt;
-&lt;p&gt;Dynamically-typed languages are very polymorphic, since any storage location
-(variable, field) can hold any value.&lt;/p&gt;
-&lt;p&gt;Functions in dynamically-typed language exhibit &lt;strong&gt;ad-hoc polymorphism&lt;/strong&gt;, which
-is to say that functions may work even when supplied arguments of different
-types.&lt;/p&gt;
-&lt;p&gt;Sometimes you just don&amp;#39;t need to know the type of a value. If you&amp;#39;re just going
-to store it in a collection, for instance.&lt;/p&gt;
-&lt;p&gt;But sometimes it&amp;#39;s ultimately necessary to separate the behaviour for different
-types. This is done either through another kind of polymorphism (often
-&lt;em&gt;subtyping polymorphism&lt;/em&gt;), or by checking the type explicitly and branching out
-in different execution path on that basis. For instance:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;def foo(x):
-    if type(x) is Bar:
-        foo_bar(x)
-    elif type(x) is Baz:
-        foo_baz(x)
-    else
-        raise TypeError(&amp;quot;x is neither Bar nor Baz&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Some people also say that &lt;em&gt;overloading&lt;/em&gt; in statically-typed languages (having
-multiple functions with the same name, but differing in the type of their
-arguments) counts as polymorphism. I&amp;#39;m not anal about definitions, but
-overloading isn&amp;#39;t what I&amp;#39;m talking about here.&lt;/p&gt;
-&lt;p&gt;The problem is that (unlike every other types of &amp;quot;polymorphism&amp;quot;), overloading
-doesn&amp;#39;t compose. The specific overload that gets called must be determined
-statically. As such the type must be fully determined — we can&amp;#39;t use a type
-parameter (cf. &lt;em&gt;parametric polymorphism&lt;/em&gt;) and the specific subtype (cf.
-&lt;em&gt;subtyping polymorphism&lt;/em&gt;) isn&amp;#39;t taken into account.&lt;/p&gt;
-&lt;p&gt;Basically, you can never reuse code that calls an overloaded function for
-multiple types. Overloading is ultimately just a naming convenience: you could
-give each overload its own name and nothing would change. (There is an exception
-to that rule, see the discussion of C++ templates below.)&lt;/p&gt;
-&lt;p&gt;Nevertheless, ad-hoc polymorphism can also appear in statically typed languages,
-either via a super type (e.g. &lt;code&gt;Object&lt;/code&gt; in Java, but any shared super type will
-do) or some other wildcard type that is cast-compatible with the others (e.g.
-&lt;code&gt;void *&lt;/code&gt; in C). Using these types essentially brings us back to a &amp;quot;dynamically
-typed&amp;quot; scenario, except we can&amp;#39;t directly call functions we know exist: we have
-to cast the values to their proper types first.&lt;/p&gt;
-&lt;p&gt;In statically-typed languages, &lt;a href=&quot;https://en.wikipedia.org/wiki/Flow-sensitive_typing&quot;&gt;flow typing&lt;/a&gt; and union types (e.g. in
-&lt;a href=&quot;https://ceylon-lang.org/documentation/1.3/tour/types/&quot;&gt;Ceylon&lt;/a&gt; or &lt;a href=&quot;http://dotty.epfl.ch/docs/reference/new-types/union-types.html&quot;&gt;Scala&lt;/a&gt;) can help make ad-hoc
-polymorphism more palatable.&lt;/p&gt;
-&lt;h2 id=&quot;subtypinginclusion-polymorphism&quot;&gt;Subtyping/Inclusion Polymorphism&lt;/h2&gt;
-&lt;p&gt;Another popular type of polymorphism is &lt;strong&gt;subtyping (or inclusion)
-polymorphism&lt;/strong&gt;. This is your standard object-oriented class and sub-class
-scenario, but also includes things like interface implementations, traits, etc.&lt;/p&gt;
-&lt;p&gt;This one works for both dynamically- and statically-typed languages. It&amp;#39;s
-straightforward in statically-typed languages: you put a type on a parameter,
-and the function can also accept any argument that is a subtype of that type.&lt;/p&gt;
-&lt;p&gt;Dynamically-typed languages of the OO variety also have inheritance, but in that
-case I&amp;#39;m not sure if it should be considered as subtyping or ad-hoc polymorphism
-(and it matters little). The thing is that you can have OO polymorphism without
-even sharing a superclass. A function can call a method on an object, and has
-long as the object does implement a method by that name, it will work.&lt;/p&gt;
-&lt;p&gt;Said otherwise, the interfaces can be left implicit, the following method is
-polymorphic for any object that has both a &lt;code&gt;bar()&lt;/code&gt; and &lt;code&gt;baz()&lt;/code&gt; method.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;def foo(x):
-    x.bar()
-    x.baz()&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;parametric-polymorphism&quot;&gt;Parametric Polymorphism&lt;/h2&gt;
-&lt;p&gt;Finally, last of the big three, we have &lt;strong&gt;parametric polymorphism&lt;/strong&gt;. There are a
-few famous examples of that: generics in Java and C#, templates in C++.
-Basically you endow bits of code (typically functions and data structures) with
-type parameters that allow specializing the code for the given type.&lt;/p&gt;
-&lt;p&gt;At its most basic, parametric polymorphism for functions is the equivalent of
-ad-hoc polymorphism for statically-typed languages: it allows you to call the
-same code with values different types, but also preserves the specific type
-being used.&lt;/p&gt;
-&lt;p&gt;Since the parametrized code must range over multiple types, the available
-information is limited. At worse, you know nothing, but you can also have a
-&lt;a href=&quot;https://docs.oracle.com/javase/tutorial/java/generics/bounded.html&quot;&gt;type bound&lt;/a&gt; that gives a common supertype (if also using &lt;em&gt;subtyping
-polymorphism&lt;/em&gt;) or some other information that constraint the valid type
-arguments.&lt;/p&gt;
-&lt;p&gt;So, like ad-hoc polymorphism, if you ultimately want to do something specific to
-the actual type, you either have to perform a cast, or rely on subtyping polymorphism.&lt;/p&gt;
-&lt;p&gt;We can further distinguish different realization of parametric polymorphism.
-With Java and C# generics, the same (binary) code is used regardless of the
-actual type arguments being used. In C++ templates, the code is automatically
-duplicated and specialized for the specific type arguments. This has both pros
-and cons. While Java/C# are limited to accepting object types (i.e. pointers) as
-type arguments, C++ can accept any pointer, structure or primitive type — even
-if they have different size in memory. The downside is that all the duplication
-can bloat the binary size, something significantly so.&lt;/p&gt;
-&lt;p&gt;C++ templates are essentially a form of (turing-complete!) macro-expansion. They
-are compiled using something called &amp;quot;two phase lookup&amp;quot;. The template definition
-is checked for basic syntactic errors, but the check for the existence of the
-function calls in the template only occurs when the template is instantiated for
-particular type arguments. An interesting consequence of this is that templates
-can &amp;quot;redeem&amp;quot; overloading: the same source code can now call different overloads
-by virtue of being specialized automatically by C++.&lt;/p&gt;
-&lt;p&gt;And by the way, yes, C macros can also be regarded as polymorphism. They can
-redeem overloading in the same way as templates, though C doesn&amp;#39;t have
-overloading — but that can be papered over by using the &lt;a href=&quot;http://gcc.gnu.org/onlinedocs/gcc/Typeof.html&quot;&gt;&lt;code&gt;typeof&lt;/code&gt; GCC
-extension&lt;/a&gt;. A big difference is that C macros cannot be called automatically —
-if you write a specializable function with it, you&amp;#39;ll have to instantiated it
-yourself for any type you want to use it with! More advanced types of macros
-(e.g. Lisp macros) may take things even further.&lt;/p&gt;
-&lt;p&gt;Java and C# generics also differ in one different respect: the erasure or
-reification of type arguments. C# actually makes the type arguments available to
-the user code, which can use it to perform type checks, type casts, type
-reflection... Type arguments are essentially converted to additional arguments
-of the generic function. Java, on the other hand, &lt;em&gt;erases&lt;/em&gt; the type arguments
-form the bytecode it generates, so the aforementioned use cases are not
-possible.&lt;/p&gt;
-&lt;p&gt;Downsides of reified generics? Apparently, performance. It&amp;#39;s hard to find a good
-analysis of that claim, but Gilad Bracha &lt;a href=&quot;https://gbracha.blogspot.com/2018/10/reified-generics-search-for-cure.html&quot;&gt;made it&lt;/a&gt; based on his
-work on the Dart VM, and I&amp;#39;m inclined to believe it. Still the statement isn&amp;#39;t
-qualified: how bad is it, really?&lt;/p&gt;
-      </description>
-      <pubDate>2019-03-23T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/polymorphism</link>
-      <guid isPermaLink="true">http://norswap.com/polymorphism</guid>
     </item>
   </channel>
 </rss>

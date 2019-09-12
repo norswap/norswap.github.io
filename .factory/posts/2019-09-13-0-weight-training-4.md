@@ -1,0 +1,600 @@
+---
+layout: post
+title: "Weight Training: Cut Edition"
+---
+
+Previously: [One] / [Two] / [Three]
+
+[One]: /weight-training
+[Two]: /weight-training-2
+[Three]: /weight-training-3
+
+In [my last post on the topic][Three], I said I was going to go on a cut. Well,
+now the cut is done, let's discuss a bit!
+
+Was it a success? Well my stated goal was to acquire a six-pack, so in that
+sense, no. But I learned a ton, and I did visibly lose a considerable amount of
+fat and slimmed down from 90 kg to 83 kg over 15 weeks.
+
+I scrupulously transcribed my daily caloric expenditure and intake in a
+[spreadsheet][cut]. All the numbers and metrics I discuss in this article are
+recorded there!
+
+[cut]: https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing
+
+## Beginnings
+
+Initially, I went for a 700 kcal daily deficit. This would add up to a 4900 kcal
+deficit per week, which represents about 630 grams of fat. As it turns out, this
+is exactly 0.7% of my starting bodyweight of 90 kg, which is the recommended
+weekly loss.
+
+I did struggle with the strict regimen initially. This was not an issue of will,
+but rather an issue of organization. Too often I accidentally overshot my goal —
+in fact my average daily deficit in the first four weeks was a measly 385. Oops.
+
+A remark on my method here: while I'm a fan of using a Fitbit smartwatch to
+track caloric expenditure, it does add a bit of logistical uncertainty, as you
+must estimate what the expenditure will be by the end of the day. Mostly, I
+adapted to cope with this by having very light dinner meals, and potentially a
+snack before going to bed. I'll have more to say about the Fitbit towards the
+end of the article.
+
+After four weeks, I ran a *refeed* week, where I ate at maintenance. This is
+done to prevent *metabolic adaptation* in which your body gets used to get less
+calories and adapts to burn less of them. That week was also a deload week where
+I decreased my weights at the gym (otherwise I kept training using the
+[previously outlined program][Three]).
+
+In the second four-week period, I was able to average between 600 and 700
+kcal of deficit daily - yay!
+
+## Is It Working?
+
+So we have our caloric deficit down. But is it actually working as expected?
+
+To do this I compared my recorded weight to two measures of the estimated weight
+given the recorded caloric deficit. The first estimated weight is global: it's
+my starting weight minus the fat weight loss predicted from the cumulated
+caloric deficit. The second estimated weight is local: it's computed in the same
+way but only for one week, starting from the starting weight just before that
+week.
+
+In order to predict the fat loss from a caloric deficit, you simply need to know
+that a kilogram of fat is equivalent to about 7700 kcal (or 3500 kcal to a
+pound).
+
+To ascertain whether I was on track, I further computed two weekly metrics: the
+*average local error* is the difference between the average locally predicted
+weight and my average weight for that week ; the *average global error* is the
+same, but using the average globally predicted weight instead.
+
+Taking these averages allows smoothing over the noise inherent to weight
+measurements: there can be big variations in water weight from one day to the
+other (even though I always weighed myself in the morning after going to the
+bathroom and before drinking anything).
+
+Another thing I did to be able to track my progress was compute a *smoothed*
+weight measurement: the daily smoothed weight is the average of the the weight
+in a 5 day window surrounding the day under consideration. This was also the
+basis I used to compute the local weight estimation.
+
+After the initial 5 week period (4 weeks + refeed week), I had lost 1.3 kg.
+That is slighty (about 200 g) more than the model predicted. In general, the
+average local and global errors were small (<= 100 g, either above or under)
+during this period.
+
+After the second 5 week period, I had lost 3.6 kg in total, a whole kilogram
+more than the global prediction! The data was much more noisy here, mostly the
+global error increases in the negatives (underestimation) but it shot back
+towards zero because of a weight measurement bump that normalized quickly. The
+local error varied between 0 and -500g (underestimation).
+
+There is only one remaining uncertainty: was this weight loss fat loss... or
+muscle loss?
+
+This is quite tricky to measure. The impedance scale I bought isn't worth shit.
+Methods requiring a [fat caliper] are janky... They require multiple measurements,
+sometimes in location you can't access on your own (back of the arm, shoulder
+blade). I bought a cheap one and it's also not quite clear how much you need to
+press.
+
+[fat caliper]: https://www.amazon.fr/CZ-Store-Adipom%C3%A8tre-%E2%9C%AE%E2%9C%AE100-GARANTIE-ANS%E2%9C%AE%E2%9C%AE-Pince-grasse-%E2%9C%AEOFFERT/dp/B072MBCSXD/ref=sr_1_3?__mk_fr_FR=%EF%BF%BDM%EF%BF%BD%25u017D%EF%BF%BD%EF%BF%BD&keywords=fat+caliper&qid=1568237305&s=gateway&sr=8-3
+
+The impedance scale at my gym (Basic Fit) seems a bit more accurate though,
+reporting 17% body fat somewhere within the second four-week period, and 14% at
+the end of the cut.
+
+In my spreadsheet, I estimated my starting percentage at 18% (based on visual
+comparison to some online reference), which — assuming 100% of weight loss is
+fat loss — would put me at 16.7% at the end of the four weeks period and 11.2%
+at the end of the cut.
+
+There is another method, which consists of taking measurements of your waist and
+your neck (using a regular meter), and which is *reportedly* relatively accurate —
+you can find a calculator [here][calculator].
+
+[calculator]: http://fitness.bizcalcs.com/Calculator.asp?Calc=Body-Fat-Navy
+
+All the research points to the fact that, given a moderate deficit (the figure
+of 0.7% of your starting bodyweight is often given), the overwhelming majority
+of the weight loss should be fat — if you keep doing resistance (weight)
+training and intaking enough proteins, which I did.
+
+There is a theory that you can only mobilize so much calories from fat mass
+daily. Let's look into it.
+
+## A Detour: How Fast Can You Actually Lose Fat?
+
+There is a theory saying that there is a limit on the calories that can be made
+available from fat over a given time period. However, it's not quite clear what
+that limit is.
+
+A [2005 study] in theoretical biology found it to be 31 kcal per pound of body
+fat daily (about 68 kcal per kilo). However, the author [reportedly] later
+developped a better model that brought the number down to about 22 kcal per
+pound (48.5 kcal per kilo).
+
+[reportedly]: https://reddit.com/r/loseit/comments/fo07j/if_youre_trying_to_lose_weight_keep_in_mind_that/c1hd7q1/
+
+There are a couple of caveats here. First, this is only one study. Second, this
+is theoretical biology: it's not possible to measure the calories fat gives out
+directly, so this was established using indirect measurements and a theoretical
+model.
+
+[2005 study]: https://www.sciencedirect.com/science/article/pii/S0022519304004175
+
+Third, the data for this study was taken from a 1950 study that starved 36
+military men over a period of six months. I wasn't able to get a copy of [the
+original], but found [an informal report] from a now-dead website called *Mad
+Science Museum* (yup, my hobbies lead me down weird rabbit holes). The report is
+quite a "fun" read (the experiment would never by approved by any modern ethics
+board):
+
+> The stress proved too much for one of the men, twenty-four-year-old Franklin
+> Watkins. He began having vivid, disturbing dreams of cannibalism in which he
+> was eating the flesh of an old man. On trips into town (before the buddy
+> system had been implemented),he cheated extravagantly, downing milk shakes and
+> sundaes. Finally Keys confronted him, and Watkins broke down sobbing. Then he
+> grew angry and threatened to kill Keys and take his own life.
+
+But the take-away for our purposes was that:
+
+> He designed the meals to be carbohydrate rich and protein poor, simulating
+> what people in Europe might be eating, with an emphasis on potatoes, cabbage,
+> macaroni, and whole wheat bread (all in meager amounts). Despite the reduction
+> in food, Keys insisted the men maintain their active lifestyle, including the
+> 22-miles of walking each week.
+
+From what I know this is the abolute worse you can do to preserve muscle mass.
+An effective muscle-preserving mass diet should include plenty of proteins, as
+well as resistance training (to actually use the muscles — walking is no
+substitute).
+
+[the original]: https://psycnet.apa.org/record/1951-02195-000
+[an informal report]: https://archive.wphna.org/wp-content/uploads/2016/01/2005-Mad-Science-Museum-Ancel-Keys-Starvation.pdf
+
+This is not mentionned in the paper. On the whole, I'm not impressed with this
+paper at all, and it's kinda sad when a neophyte like myself can poke huge holes
+in a paper that seems to hold such sway — even the Stronger by Science guys
+[quote it]. I must say, though, that for a result that seems this important, it
+has preciously little citations (only 21 according to Google Scholar).
+
+The starvation experiment also had an extremely long duration (6 months). I
+didn't dig in the math of the 2005 paper, but I wouldn't be surprised that this
+ends up screwing up the results as well, as the body will necessarily go into
+some kind of profundly weird dysfunction given such extreme conditions.
+
+[quote it]: https://www.strongerbyscience.com/realistic-training-goals/
+
+This study was popularized in the fitness community by one [Lyle McDonald], to
+the point that the 31 kcal/lb figure is often quoted as "Lyle McDonald's rule of
+31". However, Lyle McDonald himself now [says] that dieters can blow right past
+the 31 figure if they eat enough protein and perform resistance training. He
+also advocates the effectiveness of a short-duration (two weeks or less) rapid
+fat loss diet where the caloric intake is sometimes less than 1000 kcal per day.
+
+[Lyle McDonald]: https://bodyrecomposition.com/
+[says]: https://web.archive.org/web/20130728210211/forums.lylemcdonald.com/showthread.php?t=12760
+
+In general, the reasonable consensus seems that the 22 kcal/lb figure can be
+taken as a safe lower bound for fat loss and that it is likely possible to
+exceed it without eating into muscles much for trained individuals.
+
+In my case, given my starting weight of 90 kg and assuming 18% body fat, the
+safe 22 kcal/lb figure would have come down to a 785 kcal daily deficit, which
+is close to the 700 kcal deficit I got from the 0.7% body weight heuristic.
+
+The idea that you can only mobilize so much calories from fat mass has one
+important consequence. Assuming you want to lose fat at the maximum "safe" rate,
+you will have to reduce your caloric deficit as your fat mass decreases!
+
+But, on the other hand, there is the phenomenon of *metabolic adaptation*
+wherein your body becomes more efficient and is able to squeeze more calories
+from nutrients. So keeping a fixed deficit might not be a bad idea. As we'll see
+later, some step can be taken to combat metabolic adaptation.
+
+## Getting Serious & The Diet
+
+But back to my cut. When we left off, I had completed 10 weeks of cut, including
+two refeed weeks, and lost 3.6 kg.
+
+It's funny how memory goes: I thought I recalled hardship from that period,
+which is why I decided to increase my deficit to 1000 kcal per day. But this
+is actually not borne out in the numbers: in fact, I lost one kilogram more than
+estimated!
+
+It is true however that I wasn't going as fast as I could have: I was generally
+undershooting the 700 kcal deficit goal by about 50 kcal, and the first
+four weeks I had vastly undershot the goal. I was hoping that the cut would not
+take much more than 3 months, and 9 weeks in, this meant only one month left!
+
+Hence, the next two weeks I ran a 1000 kcal deficit... and nothing bad happened.
+
+However, the increased deficit made my diet start being difficult. My daily
+energy expenditure (as reported by the Fitbit smartwatch) will vary between 2400
+and 3800 kcal daily. If I sit in a chair all day with no activity at all, it
+will tend towards 2400. A lot of walking around or other activity assorted with
+an intense 2 hours training session will push sometimes push it in the 3600-4000
+range (interestingly, there is a lot more variation at the top than at the
+bottom).
+
+With a 1000 kcal deficit, it means that in a low-activity day, I could end up
+with a 1400 kcal budget at worst. This was problematic because I didn't
+alter my diet all that much: I kept eating the same kind of food I did before,
+making sure to get about 2g of proteins per kg of lean mass. So when you eat a 1200
+kcal burrito for lunch, that doesn't leave a whole lot more calories for the
+rest of the day. 
+
+Regarding that 2g of proteins per kg of lean mass? I frequently undershot that
+goal, but I think I got at least 140g per day, which is already plenty and is
+*said* to be enough to prevent muscle loss. That being said, with the 1000 kcal
+deficit, it was clearly becoming difficult to even hit that diminished protein
+goal.
+
+My answer to that challenge was to do something I hadn't done yet: add cardio to
+my training regimen on non-workout days. This ensured that every day saw a
+minimum of physical activity, making it easier to hit my protein goals.
+
+After these two weeks, my weight loss was now 5.32kg. I also decided to have
+another refeed week. Again, I'm kind of puzzled as to why I did this. Sure, a
+1000 kcal deficit is not nothing, but going by the numbers, everything was going
+according to plan.
+
+I followed this last refeed week by two final dieting week, one at a target 700
+deficit (effectively: 635 average) and one at a target 1000 deficit
+(effectively: 715). But for that last one I had the good excuse that it was the
+final week before my thesis' deadline...
+
+Final tally: 7.02 kg lost in 14 weeks, including 3 refeed weeks.
+
+## Metabolic Adaptation & Supplements
+
+As promised, a short discussion of metabolic adaptation. Metabolic adaptation is
+[difficult] because it does not have any single cause. When in significant
+caloric deficit, your body will silmultaneously become more conservative in its
+energy use, lowering your base metabolic rate (BMR) but it will also become more
+efficient and effectively squeeze out more calories out of the food you consume
+(you could say it "waste less" calories instead).
+
+[difficult]: https://www.strongerbyscience.com/metabolic-adaptation/
+
+What can you do about it? There are many things you can do to mitigate the
+potential for metabolic adaptation that are basically good recommendations at
+any time t: eat enough proteins, get enough sleep, don't be too stressed. But
+there are two more active interventions.
+
+The first is to break your diet and run a "refeed".
+
+The idea is akin to that of a "cheat day" or "cheat meal", but ran over a longer
+period of time. The term can apparently reference different things, but in the
+kind of refeed I have in mind here, you eat at maintenance — so very different
+from a cheat meal where you're allowed to gorge on whatever food you like.
+
+Cheat days apparently not enough to offset metabolic adaptation, hence the
+recommendation of running a whole refeed week.
+
+Another important benefit of refeed weeks is that they offer a psychological
+reprieve in a months-long dieting process.
+
+I should add that — having implemented ample refeeds — I saw no metabolic
+adaptation effects. Would there have been some if I hadn't done the refeed? Hard
+to say. These problems are known to be much more prevalent when you get to lower
+body fat levels (towards or beyond the 10% boundary for men).
+
+If you want know much, much more about metabolic adaptation, check out [The
+Metabolic Adaptation Manual][manual].
+
+[manual]: https://www.strongerbyscience.com/metabolic-adaptation/
+
+The second intervention you can run is through use of supplements. There aren't
+really any magical fat loss supplements, with maybe the exception of caffeine. I
+managed to get my hand on the [Examine's fat loss supplement
+guide][examine-guide] and implemented what they recommended: caffeine,
+synephedrine, white willow extract and yohimbine.
+
+I wasn't always consistent with it — I ran out of white willow extract at some
+point and had to reorder. Same with Yohimbine for the end of the cut.
+
+Honestly, I'm not sure these did much, and my inconsistencies certainly didn't
+impact the data. The only thing that did seem to have an effect was increasing
+my caffeine consumption (through coffee). Caffeine has also other benefits for
+weight training that are well supported ([one][cone], [two][ctwo]).
+
+Caveats: given that I'm a relatively tall man, I might have needed to increase
+the recommended doses (which are given irrespective of gender, size or weight).
+I also [read later] that Yohimbine works better fasted and before workout —
+which is not at all how I used it.
+
+[examine-guide]: https://examine.com/supplements/fat-loss/
+[read later]: https://examine.com/supplements/yohimbine/
+[cone]: https://www.strongerbyscience.com/caffeine/
+[ctwo]: https://examine.com/supplements/caffeine/
+
+## Results & Intepretation
+
+Okay, so I already gave the results, and much of the interpretation above. But
+there are still things to highlight.
+
+So I lost 7 kilos. The final average global error was a mere -161 g — meaning
+that I lost 161 g more than predicted based on the recorded caloric deficit.
+During the process, the average global error went as high as -1000 g. Such
+variance is not necessarily unexpected.
+
+The big question: was it all fat? Quite clearly (and visibly) fat was a big part
+of it. As for whether muscle was part of the equation, that's hard to tell as I
+didn't measure body fat during the process, except twice at they gym (once
+during on May 3rd (second week) at 17.2% and once on August 17th (two weeks
+after the end of the cut) at 14%.
+
+We can also use the spreadsheet data to compute the bodyfat reached when
+assuming that 100% of the weight loss was fat. Supposing a 18% starting bodyfat
+percentage, the end result is 11.15%. This seems too low (mostly visually), but
+an alternative explanation to muscle loss is that part of this is water weight
+due to diminished carbs intake. I don't buy that explanation though — I weighted
+82.7 on 17th August, about the same than at the end of the cut, and by then any
+carbs restriction effect should have been gone.
+
+Another explanation: I didn't set my initial body fat percentage high enough.
+Setting the initial percentage at 20% brings the final percentage to 13.32% —
+closer to the 14% impedance scale measurement.
+
+Another potential confounder here is muscle gain. When I started the cut, I was
+still making steady strength gains in the program I outlined [last time][Three]
+— it's not unconceivable to have made some small gains here even in a deficit.
+
+More relevant, I started training my abs and glutes much more vigorously (I
+wasn't targetting them at all before) during the last three weeks of the cut.
+There, I clearly made some muscle gains — at least a little bit of which I
+expect to have been made during those weeks.
+
+Two more signs we can look at for muscle loss is fatigue and what happened after
+the cut. Regarding fatigue, I didn't really progress my heavy pre-existing lifts
+(deadlift, bench press, squat, etc) during the cut — but that was expected. In
+reality, I had to deload the squat and the deadlift them fairly early in the
+cycle for technique reasons (a [further section](#the-exercise-corner) of this article will talk about
+that — it's not connected to the cut). The bench and overhead press plateaued,
+while the rest of the program progressed rather nicely. I didn't feel tired at
+all.
+
+Regarding what happened after the cut, my weight did not shot back up. I
+actually only had one week of training after the cut, and then a full week of
+holiday with no weight training (but a lot of walking). But even after, my
+weight didn't suddenly shot up even when I started running a caloric excess.
+This means there probably wasn't some easily recoverable "muscle memory" — but
+also that the body didn't overcompensate by storing lots of fat after the end of
+the diet.
+
+So yeah... it worked rather well, but the jury is still split on whether it
+worked optimally (no muscle lost) or not.
+
+Lazy Edit: So, if we ignore the issue of gained muscles AND if we assume that
+the caloric trackins is accurate, there might be a way to know, which is to
+solve the equations `WL = FL + ML`, `CD = FL * 7700 + ML * 1540`, where `WL`,
+`FL` and `ML` are weight loss, fat loss and muscle loss, while `CD` is the
+caloric deficit. 7700 is the number of kcal in a kg of fat, while 1540 is the
+number of kcal in a kg of muscle (thanks [Colton] for finding [that info]).
+
+I might try to run this upon my data, but I'm not optimistic, given that the
+assumptions are pretty damn huge, and that the global error for the 100% fat
+model is pretty low.
+
+[Colton]: http://www.coltondillion.com/
+[that info]: https://thestrongkitchen.com/blog/post/how-many-calories-does-it-take-to-build-a-pound-of-muscle
+
+## Lessons
+
+What would I do differently next time?
+
+First off, be much more careful with my tracking and discipline (knowing full
+well the occasional slip-up will happen).
+
+Next, I would try running a ~900 kcal deficit immediately. Mind you, I'm not
+100% convinced that this is the right idea, but I think it's worth trying for a
+4 week duration. The benefit is obviously a shorter diet. The risk is that this
+is too much and muscle loss results.
+
+Given my current body fat percentage and weight, a 900 kcal deficit is
+equivalent to requiring 77 kcal per kilo of muscle (35 kcal per pound) — which
+many people believe is safe. What is especially annoying here is that it will be
+hard to tell fat loss apart from muscle loss. I could use the neck-waist
+measurement method and the gym's impedance scale to try and estalish trends
+here, however.
+
+I would also keep the refeeds after each 4 week period.
+
+I can imagine playing with the length of the cut too. Assuming my body fat
+percentage doesn't increase (tall order), doing 4 weeks of cutting with a 900
+kcal deficit would bring me to 10.5% body fat (assuming 100% fat loss). Two
+weeks would bring me down to 12.3%.
+
+I would maybe drop the supplements, except caffeine. I might want to try to use
+Yohimbine "properly", i.e. in a mostly fasted state and before a workout.
+
+Regarding caffeine, I would cycle off of it from for a few weeks before the cut,
+and then progressively ramp it up during the cut: drink something like one daily
+cup of robusta the first week, two the second, etc.
+
+I'm excited to see if the second time is the charm for the six-pack :D
+
+## The Exercise Corner
+
+How'd I do on my program meanwhile? 
+
+Let's first tackle the big lifts. The deadlift progressed to 185 kg until June.
+The squat was deloaded almost immediately, and kept being deloaded for poor
+form. In both of these lifts, I'd come to realize I had progressively adopted
+terrible form. I was desegmenting the deadlift: shooting my ass up and then
+pulling instead of pushing through the ground. I was doing something similar on
+the squat: bending forward too much so that my ass could go up and finally
+contribute to the lift. Both of these put a lot of strain on my lower back who
+had dutifully adapted. Symptomatically, deloading these lifts did not made them
+seem much easier after a bit.
+
+After a bit of diagnostic, the issues seemed to be that my glutes and my abs
+were too weak. So in went [a new regimen of ab training][abs] as well as
+glute-specific exercises, most notably the [hip thrust].
+
+[abs]: https://www.youtube.com/watch?v=qk97w6ZmV90
+[hip thrust]: https://www.youtube.com/watch?v=xDmFkJxPzeM
+
+These have worked wonder to strengthen these muscles, but I haven't had time to
+reload the lifts yet. And since I'm switching program for now, it might be a
+while before I see my old records (which I'm invalidating anyway, because of
+poor form).
+
+The bench mostly stagnated, never really going much over that 100kg barrier, I
+managed 3x102 at times and then had to deload. The overhead press also stagnated
+and I also deloaded it. The problem there is arching the back too much, though
+I'm not entirely sure how to get rid of that — I'm hoping stronger abs will
+help.
+
+The rest of the program mostly saw progress as some movements were still fairly
+new when I started the cut. Nothing went down, anyhow. Triceps, in particular,
+saw a lot of progress.
+
+## What's Next?
+
+The wise man said: after each cut must come a bulk. And so it is.
+
+I'm taking it somewhat more seriously than I did before. It feels like the
+careful attention to my calories during the cut as motivated me to be more
+serious now. I'm particularly attentive at ingesting more than enough proteins,
+and making an effort at timing them right too (something I started doing during
+the cut already).
+
+Since I started reliably eating more than maintenance calories (aiming for
+100-300 more), I sometimes overshot my calories goal whenever my caloric
+expenditure is a bit lower or on rest days. I must be careful with that. I think
+I have taken too much fat at the start of the year before the start of my cut by
+overeating. At that time, quite puzzlingly, I aimed to eat a certain amount of
+calories per day instead of basing it on the fitbit data. No idea why I did it
+like that `¯\_(ツ)_/¯`
+
+I must also pay attention to my sleep more. I've tended to push my sleep time
+further and further away and only my determination to at least get up for lunch
+has saved me. But often, sleep time ends up suffering in the process. I've been
+**damn busy** towards and since the end of the cut (you'd think handing in the
+thesis would mean work was over, but then you have to tackle everything that
+fell by the wayside on the way there).
+
+I'm also trying out the [Intermediate Build] program from Jeremy Ethier. Since I
+got quite a bit of value from his [free full-body program][fullbody] and his
+content in general, it seemed a safe value proposition. I'm currently tackling
+the first week and so far I'm enjoying it. We'll see come result time!
+
+[Intermediate Build]: https://my.builtwithscience.com/p/intermediate-build-program
+[fullbody]: https://builtwithscience.com/best-full-body-workout/
+
+Finally, if I find the time I'd like to analyse my cut data a bit more. In
+particular, I'd like to run a multivariable linear regression on my data in
+order to see if I can find a systematic bias in the caloric intake or
+expenditure estimations. I'm not too optimistic here either: a non-naive model
+would include things like the hours classified by Fitbit as workout every day as
+well as their caloric estimations, as well as a labelling of how certain I am of
+my caloric intake measurements (things that come in a box are easy to measure,
+restaurant food is a wild guess).
+
+## A Note on The Fitbit
+
+It is known that the Fitbit is not the most accurate means of measuring energy
+expenditure. If you look at the figures, this [literature review] paints a
+rather appalling picture, with many studies finding that the Fitbit under- or
+overestimates calories spent in activity by as much as 60% (and even more, in a
+few cases).
+
+Of course, the fact that studies have such varied results is a big red flag.
+Either the Fitbit is totally random, or some studies are crap. Well, in my
+experience (and as can be seen in my data), the Fitbit is far from random. On
+the other hand, I have seen my share of crap studies.
+
+If anything, the Fitbit was consistent — the same activity (in my case workouts
+and walking) tends to yield similar caloric estimations. If it does happen to be
+biased in certain cases, it looks like I was fortunate enough to have the biases
+cancel each other out.
+
+Returning to the literature review, things look better when you look at the
+details:
+
+> Findings suggested that Fitbit was more likely to markedly overestimate energy
+> expenditure when worn on the wrist and when walking at normal adult walking
+> speeds on flat surfaces. On the contrary, Fitbit was more likely to
+> underestimate energy expenditure when worn on the torso, with a tendency to
+> markedly underestimate energy expenditure during inclined ambulation, during
+> activities with constrained or variable body motion throughout the activity,
+> and during simulated household or sporting activities that involve
+> stop-and-start ambulation. Findings from 1 study for measures of energy
+> expenditure in free-living settings suggested that Fitbit and doubly labelled
+> water may provide similar measures of total energy expenditure over a 2-week
+> period. However, findings from a few studies in free-living settings suggested
+> that Fitbit devices may provide notable underestimations of daily energy
+> expenditure compared with a SenseWear accelerometer.
+
+Given my relatively high caloric expenditure numbers, I'm not too worried about
+underestimations.
+
+Also apparently [SenseWear overestimates energy expenditure][sensewear]?
+
+I kept saying "the Fitbit", but of course there is no such thing:
+
+> Most of the studies included in this review were published in the last 2
+> years, with studies primarily examining measurement accuracy for models of
+> Fitbit activity trackers introduced prior to 2015.
+
+I used the Charge 2 (2016) until June and the Charge 3 (2018) after. It's
+possible things improved since 2015. I saw no difference in measurements between
+the Charge 2 and the Charge 3 however.
+
+[literature review]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6107736/
+[sensewear]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5360603/
+
+So what? Well, obviously take what the Fitbit says (and what everybody says
+about the Fitbit) with a pinch of salt. The best thing is to do like I did:
+collect your own data and come to your own conclusions.
+
+Personally, I find the Fitbit super helpful to set a proper caloric intake.
+
+What's the alternative? Using a macro calculator [like this one]. The caloric
+recommendation really depends on what goal (I chose "muscle gain") and "activity
+level" you set. With "lightly active" (true of me outside of workouts — and I
+did say I wanted to gain muscle, they don't build themselves), I get a 3185 kcal
+recommendation. Using my working hypothesis that the Fitbit is accurate, the
+average daily expenditure *during my cut* was 3190, and building muscle means I
+have to add 200-300 kcal on top of that. Oops.
+
+On the other hand, choosing "very active" puts me at 4000 daily kcal. That's
+likely too much — I only hit 3700 kcal expenditure on workout days, and then not
+each time. So you have to choose "moderately active" to get a more reasonable
+3591 kcal recommendation. How could I know this?
+
+A promising avenue is the aformentioned Jeremy Ethier's program, which includes
+a nutrition spreadsheet. The initial estimate is wildly off (saying I should eat
+3113 kcal for muscle gain) but it automatically uses your recorded weight and
+caloric intake to adjust the TDEE (total daily energy expenditure). I might try
+to use that and see if it gives good results.
+
+[like this one]: https://www.calculators.tech/macro-calculator
+
+And with these final comments, I'm done. This turned out much longer than I
+expected. Hopefully, someone will be able to get some useful information out of
+this!

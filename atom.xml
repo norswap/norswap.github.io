@@ -6,6 +6,452 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Weight Training: Cut Edition</title>
+      <description>
+&lt;p&gt;Previously: &lt;a href=&quot;/weight-training&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/weight-training-2&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/weight-training-3&quot;&gt;Three&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;In &lt;a href=&quot;/weight-training-3&quot;&gt;my last post on the topic&lt;/a&gt;, I said I was going to go on a cut. Well,
+now the cut is done, let&amp;#39;s discuss a bit!&lt;/p&gt;
+&lt;p&gt;Was it a success? Well my stated goal was to acquire a six-pack, so in that
+sense, no. But I learned a ton, and I did visibly lose a considerable amount of
+fat and slimmed down from 90 kg to 83 kg over 15 weeks.&lt;/p&gt;
+&lt;p&gt;I scrupulously transcribed my daily caloric expenditure and intake in a
+&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing&quot;&gt;spreadsheet&lt;/a&gt;. All the numbers and metrics I discuss in this article are
+recorded there!&lt;/p&gt;
+&lt;h2 id=&quot;beginnings&quot;&gt;Beginnings&lt;/h2&gt;
+&lt;p&gt;Initially, I went for a 700 kcal daily deficit. This would add up to a 4900 kcal
+deficit per week, which represents about 630 grams of fat. As it turns out, this
+is exactly 0.7% of my starting bodyweight of 90 kg, which is the recommended
+weekly loss.&lt;/p&gt;
+&lt;p&gt;I did struggle with the strict regimen initially. This was not an issue of will,
+but rather an issue of organization. Too often I accidentally overshot my goal —
+in fact my average daily deficit in the first four weeks was a measly 385. Oops.&lt;/p&gt;
+&lt;p&gt;A remark on my method here: while I&amp;#39;m a fan of using a Fitbit smartwatch to
+track caloric expenditure, it does add a bit of logistical uncertainty, as you
+must estimate what the expenditure will be by the end of the day. Mostly, I
+adapted to cope with this by having very light dinner meals, and potentially a
+snack before going to bed. I&amp;#39;ll have more to say about the Fitbit towards the
+end of the article.&lt;/p&gt;
+&lt;p&gt;After four weeks, I ran a &lt;em&gt;refeed&lt;/em&gt; week, where I ate at maintenance. This is
+done to prevent &lt;em&gt;metabolic adaptation&lt;/em&gt; in which your body gets used to get less
+calories and adapts to burn less of them. That week was also a deload week where
+I decreased my weights at the gym (otherwise I kept training using the
+&lt;a href=&quot;/weight-training-3&quot;&gt;previously outlined program&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In the second four-week period, I was able to average between 600 and 700
+kcal of deficit daily - yay!&lt;/p&gt;
+&lt;h2 id=&quot;is-it-working&quot;&gt;Is It Working?&lt;/h2&gt;
+&lt;p&gt;So we have our caloric deficit down. But is it actually working as expected?&lt;/p&gt;
+&lt;p&gt;To do this I compared my recorded weight to two measures of the estimated weight
+given the recorded caloric deficit. The first estimated weight is global: it&amp;#39;s
+my starting weight minus the fat weight loss predicted from the cumulated
+caloric deficit. The second estimated weight is local: it&amp;#39;s computed in the same
+way but only for one week, starting from the starting weight just before that
+week.&lt;/p&gt;
+&lt;p&gt;In order to predict the fat loss from a caloric deficit, you simply need to know
+that a kilogram of fat is equivalent to about 7700 kcal (or 3500 kcal to a
+pound).&lt;/p&gt;
+&lt;p&gt;To ascertain whether I was on track, I further computed two weekly metrics: the
+&lt;em&gt;average local error&lt;/em&gt; is the difference between the average locally predicted
+weight and my average weight for that week ; the &lt;em&gt;average global error&lt;/em&gt; is the
+same, but using the average globally predicted weight instead.&lt;/p&gt;
+&lt;p&gt;Taking these averages allows smoothing over the noise inherent to weight
+measurements: there can be big variations in water weight from one day to the
+other (even though I always weighed myself in the morning after going to the
+bathroom and before drinking anything).&lt;/p&gt;
+&lt;p&gt;Another thing I did to be able to track my progress was compute a &lt;em&gt;smoothed&lt;/em&gt;
+weight measurement: the daily smoothed weight is the average of the the weight
+in a 5 day window surrounding the day under consideration. This was also the
+basis I used to compute the local weight estimation.&lt;/p&gt;
+&lt;p&gt;After the initial 5 week period (4 weeks + refeed week), I had lost 1.3 kg.
+That is slighty (about 200 g) more than the model predicted. In general, the
+average local and global errors were small (&amp;lt;= 100 g, either above or under)
+during this period.&lt;/p&gt;
+&lt;p&gt;After the second 5 week period, I had lost 3.6 kg in total, a whole kilogram
+more than the global prediction! The data was much more noisy here, mostly the
+global error increases in the negatives (underestimation) but it shot back
+towards zero because of a weight measurement bump that normalized quickly. The
+local error varied between 0 and -500g (underestimation).&lt;/p&gt;
+&lt;p&gt;There is only one remaining uncertainty: was this weight loss fat loss... or
+muscle loss?&lt;/p&gt;
+&lt;p&gt;This is quite tricky to measure. The impedance scale I bought isn&amp;#39;t worth shit.
+Methods requiring a &lt;a href=&quot;https://www.amazon.fr/CZ-Store-Adipom%C3%A8tre-%E2%9C%AE%E2%9C%AE100-GARANTIE-ANS%E2%9C%AE%E2%9C%AE-Pince-grasse-%E2%9C%AEOFFERT/dp/B072MBCSXD/ref=sr_1_3?__mk_fr_FR=%EF%BF%BDM%EF%BF%BD%25u017D%EF%BF%BD%EF%BF%BD&amp;amp;keywords=fat+caliper&amp;amp;qid=1568237305&amp;amp;s=gateway&amp;amp;sr=8-3&quot;&gt;fat caliper&lt;/a&gt; are janky... They require multiple measurements,
+sometimes in location you can&amp;#39;t access on your own (back of the arm, shoulder
+blade). I bought a cheap one and it&amp;#39;s also not quite clear how much you need to
+press.&lt;/p&gt;
+&lt;p&gt;The impedance scale at my gym (Basic Fit) seems a bit more accurate though,
+reporting 17% body fat somewhere within the second four-week period, and 14% at
+the end of the cut.&lt;/p&gt;
+&lt;p&gt;In my spreadsheet, I estimated my starting percentage at 18% (based on visual
+comparison to some online reference), which — assuming 100% of weight loss is
+fat loss — would put me at 16.7% at the end of the four weeks period and 11.2%
+at the end of the cut.&lt;/p&gt;
+&lt;p&gt;There is another method, which consists of taking measurements of your waist and
+your neck (using a regular meter), and which is &lt;em&gt;reportedly&lt;/em&gt; relatively accurate —
+you can find a calculator &lt;a href=&quot;http://fitness.bizcalcs.com/Calculator.asp?Calc=Body-Fat-Navy&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;All the research points to the fact that, given a moderate deficit (the figure
+of 0.7% of your starting bodyweight is often given), the overwhelming majority
+of the weight loss should be fat — if you keep doing resistance (weight)
+training and intaking enough proteins, which I did.&lt;/p&gt;
+&lt;p&gt;There is a theory that you can only mobilize so much calories from fat mass
+daily. Let&amp;#39;s look into it.&lt;/p&gt;
+&lt;h2 id=&quot;a-detour-how-fast-can-you-actually-lose-fat&quot;&gt;A Detour: How Fast Can You Actually Lose Fat?&lt;/h2&gt;
+&lt;p&gt;There is a theory saying that there is a limit on the calories that can be made
+available from fat over a given time period. However, it&amp;#39;s not quite clear what
+that limit is.&lt;/p&gt;
+&lt;p&gt;A &lt;a href=&quot;https://www.sciencedirect.com/science/article/pii/S0022519304004175&quot;&gt;2005 study&lt;/a&gt; in theoretical biology found it to be 31 kcal per pound of body
+fat daily (about 68 kcal per kilo). However, the author &lt;a href=&quot;https://reddit.com/r/loseit/comments/fo07j/if_youre_trying_to_lose_weight_keep_in_mind_that/c1hd7q1/&quot;&gt;reportedly&lt;/a&gt; later
+developped a better model that brought the number down to about 22 kcal per
+pound (48.5 kcal per kilo).&lt;/p&gt;
+&lt;p&gt;There are a couple of caveats here. First, this is only one study. Second, this
+is theoretical biology: it&amp;#39;s not possible to measure the calories fat gives out
+directly, so this was established using indirect measurements and a theoretical
+model.&lt;/p&gt;
+&lt;p&gt;Third, the data for this study was taken from a 1950 study that starved 36
+military men over a period of six months. I wasn&amp;#39;t able to get a copy of &lt;a href=&quot;https://psycnet.apa.org/record/1951-02195-000&quot;&gt;the
+original&lt;/a&gt;, but found &lt;a href=&quot;https://archive.wphna.org/wp-content/uploads/2016/01/2005-Mad-Science-Museum-Ancel-Keys-Starvation.pdf&quot;&gt;an informal report&lt;/a&gt; from a now-dead website called &lt;em&gt;Mad
+Science Museum&lt;/em&gt; (yup, my hobbies lead me down weird rabbit holes). The report is
+quite a &amp;quot;fun&amp;quot; read (the experiment would never by approved by any modern ethics
+board):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The stress proved too much for one of the men, twenty-four-year-old Franklin
+Watkins. He began having vivid, disturbing dreams of cannibalism in which he
+was eating the flesh of an old man. On trips into town (before the buddy
+system had been implemented),he cheated extravagantly, downing milk shakes and
+sundaes. Finally Keys confronted him, and Watkins broke down sobbing. Then he
+grew angry and threatened to kill Keys and take his own life.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;But the take-away for our purposes was that:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;He designed the meals to be carbohydrate rich and protein poor, simulating
+what people in Europe might be eating, with an emphasis on potatoes, cabbage,
+macaroni, and whole wheat bread (all in meager amounts). Despite the reduction
+in food, Keys insisted the men maintain their active lifestyle, including the
+22-miles of walking each week.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;From what I know this is the abolute worse you can do to preserve muscle mass.
+An effective muscle-preserving mass diet should include plenty of proteins, as
+well as resistance training (to actually use the muscles — walking is no
+substitute).&lt;/p&gt;
+&lt;p&gt;This is not mentionned in the paper. On the whole, I&amp;#39;m not impressed with this
+paper at all, and it&amp;#39;s kinda sad when a neophyte like myself can poke huge holes
+in a paper that seems to hold such sway — even the Stronger by Science guys
+&lt;a href=&quot;https://www.strongerbyscience.com/realistic-training-goals/&quot;&gt;quote it&lt;/a&gt;. I must say, though, that for a result that seems this important, it
+has preciously little citations (only 21 according to Google Scholar).&lt;/p&gt;
+&lt;p&gt;The starvation experiment also had an extremely long duration (6 months). I
+didn&amp;#39;t dig in the math of the 2005 paper, but I wouldn&amp;#39;t be surprised that this
+ends up screwing up the results as well, as the body will necessarily go into
+some kind of profundly weird dysfunction given such extreme conditions.&lt;/p&gt;
+&lt;p&gt;This study was popularized in the fitness community by one &lt;a href=&quot;https://bodyrecomposition.com/&quot;&gt;Lyle McDonald&lt;/a&gt;, to
+the point that the 31 kcal/lb figure is often quoted as &amp;quot;Lyle McDonald&amp;#39;s rule of
+31&amp;quot;. However, Lyle McDonald himself now &lt;a href=&quot;https://web.archive.org/web/20130728210211/forums.lylemcdonald.com/showthread.php?t=12760&quot;&gt;says&lt;/a&gt; that dieters can blow right past
+the 31 figure if they eat enough protein and perform resistance training. He
+also advocates the effectiveness of a short-duration (two weeks or less) rapid
+fat loss diet where the caloric intake is sometimes less than 1000 kcal per day.&lt;/p&gt;
+&lt;p&gt;In general, the reasonable consensus seems that the 22 kcal/lb figure can be
+taken as a safe lower bound for fat loss and that it is likely possible to
+exceed it without eating into muscles much for trained individuals.&lt;/p&gt;
+&lt;p&gt;In my case, given my starting weight of 90 kg and assuming 18% body fat, the
+safe 22 kcal/lb figure would have come down to a 785 kcal daily deficit, which
+is close to the 700 kcal deficit I got from the 0.7% body weight heuristic.&lt;/p&gt;
+&lt;p&gt;The idea that you can only mobilize so much calories from fat mass has one
+important consequence. Assuming you want to lose fat at the maximum &amp;quot;safe&amp;quot; rate,
+you will have to reduce your caloric deficit as your fat mass decreases!&lt;/p&gt;
+&lt;p&gt;But, on the other hand, there is the phenomenon of &lt;em&gt;metabolic adaptation&lt;/em&gt;
+wherein your body becomes more efficient and is able to squeeze more calories
+from nutrients. So keeping a fixed deficit might not be a bad idea. As we&amp;#39;ll see
+later, some step can be taken to combat metabolic adaptation.&lt;/p&gt;
+&lt;h2 id=&quot;getting-serious--the-diet&quot;&gt;Getting Serious &amp;amp; The Diet&lt;/h2&gt;
+&lt;p&gt;But back to my cut. When we left off, I had completed 10 weeks of cut, including
+two refeed weeks, and lost 3.6 kg.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s funny how memory goes: I thought I recalled hardship from that period,
+which is why I decided to increase my deficit to 1000 kcal per day. But this
+is actually not borne out in the numbers: in fact, I lost one kilogram more than
+estimated!&lt;/p&gt;
+&lt;p&gt;It is true however that I wasn&amp;#39;t going as fast as I could have: I was generally
+undershooting the 700 kcal deficit goal by about 50 kcal, and the first
+four weeks I had vastly undershot the goal. I was hoping that the cut would not
+take much more than 3 months, and 9 weeks in, this meant only one month left!&lt;/p&gt;
+&lt;p&gt;Hence, the next two weeks I ran a 1000 kcal deficit... and nothing bad happened.&lt;/p&gt;
+&lt;p&gt;However, the increased deficit made my diet start being difficult. My daily
+energy expenditure (as reported by the Fitbit smartwatch) will vary between 2400
+and 3800 kcal daily. If I sit in a chair all day with no activity at all, it
+will tend towards 2400. A lot of walking around or other activity assorted with
+an intense 2 hours training session will push sometimes push it in the 3600-4000
+range (interestingly, there is a lot more variation at the top than at the
+bottom).&lt;/p&gt;
+&lt;p&gt;With a 1000 kcal deficit, it means that in a low-activity day, I could end up
+with a 1400 kcal budget at worst. This was problematic because I didn&amp;#39;t
+alter my diet all that much: I kept eating the same kind of food I did before,
+making sure to get about 2g of proteins per kg of lean mass. So when you eat a 1200
+kcal burrito for lunch, that doesn&amp;#39;t leave a whole lot more calories for the
+rest of the day. &lt;/p&gt;
+&lt;p&gt;Regarding that 2g of proteins per kg of lean mass? I frequently undershot that
+goal, but I think I got at least 140g per day, which is already plenty and is
+&lt;em&gt;said&lt;/em&gt; to be enough to prevent muscle loss. That being said, with the 1000 kcal
+deficit, it was clearly becoming difficult to even hit that diminished protein
+goal.&lt;/p&gt;
+&lt;p&gt;My answer to that challenge was to do something I hadn&amp;#39;t done yet: add cardio to
+my training regimen on non-workout days. This ensured that every day saw a
+minimum of physical activity, making it easier to hit my protein goals.&lt;/p&gt;
+&lt;p&gt;After these two weeks, my weight loss was now 5.32kg. I also decided to have
+another refeed week. Again, I&amp;#39;m kind of puzzled as to why I did this. Sure, a
+1000 kcal deficit is not nothing, but going by the numbers, everything was going
+according to plan.&lt;/p&gt;
+&lt;p&gt;I followed this last refeed week by two final dieting week, one at a target 700
+deficit (effectively: 635 average) and one at a target 1000 deficit
+(effectively: 715). But for that last one I had the good excuse that it was the
+final week before my thesis&amp;#39; deadline...&lt;/p&gt;
+&lt;p&gt;Final tally: 7.02 kg lost in 14 weeks, including 3 refeed weeks.&lt;/p&gt;
+&lt;h2 id=&quot;metabolic-adaptation--supplements&quot;&gt;Metabolic Adaptation &amp;amp; Supplements&lt;/h2&gt;
+&lt;p&gt;As promised, a short discussion of metabolic adaptation. Metabolic adaptation is
+&lt;a href=&quot;https://www.strongerbyscience.com/metabolic-adaptation/&quot;&gt;difficult&lt;/a&gt; because it does not have any single cause. When in significant
+caloric deficit, your body will silmultaneously become more conservative in its
+energy use, lowering your base metabolic rate (BMR) but it will also become more
+efficient and effectively squeeze out more calories out of the food you consume
+(you could say it &amp;quot;waste less&amp;quot; calories instead).&lt;/p&gt;
+&lt;p&gt;What can you do about it? There are many things you can do to mitigate the
+potential for metabolic adaptation that are basically good recommendations at
+any time t: eat enough proteins, get enough sleep, don&amp;#39;t be too stressed. But
+there are two more active interventions.&lt;/p&gt;
+&lt;p&gt;The first is to break your diet and run a &amp;quot;refeed&amp;quot;.&lt;/p&gt;
+&lt;p&gt;The idea is akin to that of a &amp;quot;cheat day&amp;quot; or &amp;quot;cheat meal&amp;quot;, but ran over a longer
+period of time. The term can apparently reference different things, but in the
+kind of refeed I have in mind here, you eat at maintenance — so very different
+from a cheat meal where you&amp;#39;re allowed to gorge on whatever food you like.&lt;/p&gt;
+&lt;p&gt;Cheat days apparently not enough to offset metabolic adaptation, hence the
+recommendation of running a whole refeed week.&lt;/p&gt;
+&lt;p&gt;Another important benefit of refeed weeks is that they offer a psychological
+reprieve in a months-long dieting process.&lt;/p&gt;
+&lt;p&gt;I should add that — having implemented ample refeeds — I saw no metabolic
+adaptation effects. Would there have been some if I hadn&amp;#39;t done the refeed? Hard
+to say. These problems are known to be much more prevalent when you get to lower
+body fat levels (towards or beyond the 10% boundary for men).&lt;/p&gt;
+&lt;p&gt;If you want know much, much more about metabolic adaptation, check out &lt;a href=&quot;https://www.strongerbyscience.com/metabolic-adaptation/&quot;&gt;The
+Metabolic Adaptation Manual&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The second intervention you can run is through use of supplements. There aren&amp;#39;t
+really any magical fat loss supplements, with maybe the exception of caffeine. I
+managed to get my hand on the &lt;a href=&quot;https://examine.com/supplements/fat-loss/&quot;&gt;Examine&amp;#39;s fat loss supplement
+guide&lt;/a&gt; and implemented what they recommended: caffeine,
+synephedrine, white willow extract and yohimbine.&lt;/p&gt;
+&lt;p&gt;I wasn&amp;#39;t always consistent with it — I ran out of white willow extract at some
+point and had to reorder. Same with Yohimbine for the end of the cut.&lt;/p&gt;
+&lt;p&gt;Honestly, I&amp;#39;m not sure these did much, and my inconsistencies certainly didn&amp;#39;t
+impact the data. The only thing that did seem to have an effect was increasing
+my caffeine consumption (through coffee). Caffeine has also other benefits for
+weight training that are well supported (&lt;a href=&quot;https://www.strongerbyscience.com/caffeine/&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;https://examine.com/supplements/caffeine/&quot;&gt;two&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Caveats: given that I&amp;#39;m a relatively tall man, I might have needed to increase
+the recommended doses (which are given irrespective of gender, size or weight).
+I also &lt;a href=&quot;https://examine.com/supplements/yohimbine/&quot;&gt;read later&lt;/a&gt; that Yohimbine works better fasted and before workout —
+which is not at all how I used it.&lt;/p&gt;
+&lt;h2 id=&quot;results--intepretation&quot;&gt;Results &amp;amp; Intepretation&lt;/h2&gt;
+&lt;p&gt;Okay, so I already gave the results, and much of the interpretation above. But
+there are still things to highlight.&lt;/p&gt;
+&lt;p&gt;So I lost 7 kilos. The final average global error was a mere -161 g — meaning
+that I lost 161 g more than predicted based on the recorded caloric deficit.
+During the process, the average global error went as high as -1000 g. Such
+variance is not necessarily unexpected.&lt;/p&gt;
+&lt;p&gt;The big question: was it all fat? Quite clearly (and visibly) fat was a big part
+of it. As for whether muscle was part of the equation, that&amp;#39;s hard to tell as I
+didn&amp;#39;t measure body fat during the process, except twice at they gym (once
+during on May 3rd (second week) at 17.2% and once on August 17th (two weeks
+after the end of the cut) at 14%.&lt;/p&gt;
+&lt;p&gt;We can also use the spreadsheet data to compute the bodyfat reached when
+assuming that 100% of the weight loss was fat. Supposing a 18% starting bodyfat
+percentage, the end result is 11.15%. This seems too low (mostly visually), but
+an alternative explanation to muscle loss is that part of this is water weight
+due to diminished carbs intake. I don&amp;#39;t buy that explanation though — I weighted
+82.7 on 17th August, about the same than at the end of the cut, and by then any
+carbs restriction effect should have been gone.&lt;/p&gt;
+&lt;p&gt;Another explanation: I didn&amp;#39;t set my initial body fat percentage high enough.
+Setting the initial percentage at 20% brings the final percentage to 13.32% —
+closer to the 14% impedance scale measurement.&lt;/p&gt;
+&lt;p&gt;Another potential confounder here is muscle gain. When I started the cut, I was
+still making steady strength gains in the program I outlined &lt;a href=&quot;/weight-training-3&quot;&gt;last time&lt;/a&gt;
+— it&amp;#39;s not unconceivable to have made some small gains here even in a deficit.&lt;/p&gt;
+&lt;p&gt;More relevant, I started training my abs and glutes much more vigorously (I
+wasn&amp;#39;t targetting them at all before) during the last three weeks of the cut.
+There, I clearly made some muscle gains — at least a little bit of which I
+expect to have been made during those weeks.&lt;/p&gt;
+&lt;p&gt;Two more signs we can look at for muscle loss is fatigue and what happened after
+the cut. Regarding fatigue, I didn&amp;#39;t really progress my heavy pre-existing lifts
+(deadlift, bench press, squat, etc) during the cut — but that was expected. In
+reality, I had to deload the squat and the deadlift them fairly early in the
+cycle for technique reasons (a &lt;a href=&quot;#the-exercise-corner&quot;&gt;further section&lt;/a&gt; of this article will talk about
+that — it&amp;#39;s not connected to the cut). The bench and overhead press plateaued,
+while the rest of the program progressed rather nicely. I didn&amp;#39;t feel tired at
+all.&lt;/p&gt;
+&lt;p&gt;Regarding what happened after the cut, my weight did not shot back up. I
+actually only had one week of training after the cut, and then a full week of
+holiday with no weight training (but a lot of walking). But even after, my
+weight didn&amp;#39;t suddenly shot up even when I started running a caloric excess.
+This means there probably wasn&amp;#39;t some easily recoverable &amp;quot;muscle memory&amp;quot; — but
+also that the body didn&amp;#39;t overcompensate by storing lots of fat after the end of
+the diet.&lt;/p&gt;
+&lt;p&gt;So yeah... it worked rather well, but the jury is still split on whether it
+worked optimally (no muscle lost) or not.&lt;/p&gt;
+&lt;p&gt;Lazy Edit: So, if we ignore the issue of gained muscles AND if we assume that
+the caloric trackins is accurate, there might be a way to know, which is to
+solve the equations &lt;code&gt;WL = FL + ML&lt;/code&gt;, &lt;code&gt;CD = FL * 7700 + ML * 1540&lt;/code&gt;, where &lt;code&gt;WL&lt;/code&gt;,
+&lt;code&gt;FL&lt;/code&gt; and &lt;code&gt;ML&lt;/code&gt; are weight loss, fat loss and muscle loss, while &lt;code&gt;CD&lt;/code&gt; is the
+caloric deficit. 7700 is the number of kcal in a kg of fat, while 1540 is the
+number of kcal in a kg of muscle (thanks &lt;a href=&quot;http://www.coltondillion.com/&quot;&gt;Colton&lt;/a&gt; for finding &lt;a href=&quot;https://thestrongkitchen.com/blog/post/how-many-calories-does-it-take-to-build-a-pound-of-muscle&quot;&gt;that info&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;I might try to run this upon my data, but I&amp;#39;m not optimistic, given that the
+assumptions are pretty damn huge, and that the global error for the 100% fat
+model is pretty low.&lt;/p&gt;
+&lt;h2 id=&quot;lessons&quot;&gt;Lessons&lt;/h2&gt;
+&lt;p&gt;What would I do differently next time?&lt;/p&gt;
+&lt;p&gt;First off, be much more careful with my tracking and discipline (knowing full
+well the occasional slip-up will happen).&lt;/p&gt;
+&lt;p&gt;Next, I would try running a ~900 kcal deficit immediately. Mind you, I&amp;#39;m not
+100% convinced that this is the right idea, but I think it&amp;#39;s worth trying for a
+4 week duration. The benefit is obviously a shorter diet. The risk is that this
+is too much and muscle loss results.&lt;/p&gt;
+&lt;p&gt;Given my current body fat percentage and weight, a 900 kcal deficit is
+equivalent to requiring 77 kcal per kilo of muscle (35 kcal per pound) — which
+many people believe is safe. What is especially annoying here is that it will be
+hard to tell fat loss apart from muscle loss. I could use the neck-waist
+measurement method and the gym&amp;#39;s impedance scale to try and estalish trends
+here, however.&lt;/p&gt;
+&lt;p&gt;I would also keep the refeeds after each 4 week period.&lt;/p&gt;
+&lt;p&gt;I can imagine playing with the length of the cut too. Assuming my body fat
+percentage doesn&amp;#39;t increase (tall order), doing 4 weeks of cutting with a 900
+kcal deficit would bring me to 10.5% body fat (assuming 100% fat loss). Two
+weeks would bring me down to 12.3%.&lt;/p&gt;
+&lt;p&gt;I would maybe drop the supplements, except caffeine. I might want to try to use
+Yohimbine &amp;quot;properly&amp;quot;, i.e. in a mostly fasted state and before a workout.&lt;/p&gt;
+&lt;p&gt;Regarding caffeine, I would cycle off of it from for a few weeks before the cut,
+and then progressively ramp it up during the cut: drink something like one daily
+cup of robusta the first week, two the second, etc.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m excited to see if the second time is the charm for the six-pack :D&lt;/p&gt;
+&lt;h2 id=&quot;the-exercise-corner&quot;&gt;The Exercise Corner&lt;/h2&gt;
+&lt;p&gt;How&amp;#39;d I do on my program meanwhile? &lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s first tackle the big lifts. The deadlift progressed to 185 kg until June.
+The squat was deloaded almost immediately, and kept being deloaded for poor
+form. In both of these lifts, I&amp;#39;d come to realize I had progressively adopted
+terrible form. I was desegmenting the deadlift: shooting my ass up and then
+pulling instead of pushing through the ground. I was doing something similar on
+the squat: bending forward too much so that my ass could go up and finally
+contribute to the lift. Both of these put a lot of strain on my lower back who
+had dutifully adapted. Symptomatically, deloading these lifts did not made them
+seem much easier after a bit.&lt;/p&gt;
+&lt;p&gt;After a bit of diagnostic, the issues seemed to be that my glutes and my abs
+were too weak. So in went &lt;a href=&quot;https://www.youtube.com/watch?v=qk97w6ZmV90&quot;&gt;a new regimen of ab training&lt;/a&gt; as well as
+glute-specific exercises, most notably the &lt;a href=&quot;https://www.youtube.com/watch?v=xDmFkJxPzeM&quot;&gt;hip thrust&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;These have worked wonder to strengthen these muscles, but I haven&amp;#39;t had time to
+reload the lifts yet. And since I&amp;#39;m switching program for now, it might be a
+while before I see my old records (which I&amp;#39;m invalidating anyway, because of
+poor form).&lt;/p&gt;
+&lt;p&gt;The bench mostly stagnated, never really going much over that 100kg barrier, I
+managed 3x102 at times and then had to deload. The overhead press also stagnated
+and I also deloaded it. The problem there is arching the back too much, though
+I&amp;#39;m not entirely sure how to get rid of that — I&amp;#39;m hoping stronger abs will
+help.&lt;/p&gt;
+&lt;p&gt;The rest of the program mostly saw progress as some movements were still fairly
+new when I started the cut. Nothing went down, anyhow. Triceps, in particular,
+saw a lot of progress.&lt;/p&gt;
+&lt;h2 id=&quot;whats-next&quot;&gt;What&amp;#39;s Next?&lt;/h2&gt;
+&lt;p&gt;The wise man said: after each cut must come a bulk. And so it is.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m taking it somewhat more seriously than I did before. It feels like the
+careful attention to my calories during the cut as motivated me to be more
+serious now. I&amp;#39;m particularly attentive at ingesting more than enough proteins,
+and making an effort at timing them right too (something I started doing during
+the cut already).&lt;/p&gt;
+&lt;p&gt;Since I started reliably eating more than maintenance calories (aiming for
+100-300 more), I sometimes overshot my calories goal whenever my caloric
+expenditure is a bit lower or on rest days. I must be careful with that. I think
+I have taken too much fat at the start of the year before the start of my cut by
+overeating. At that time, quite puzzlingly, I aimed to eat a certain amount of
+calories per day instead of basing it on the fitbit data. No idea why I did it
+like that &lt;code&gt;¯\_(ツ)_/¯&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I must also pay attention to my sleep more. I&amp;#39;ve tended to push my sleep time
+further and further away and only my determination to at least get up for lunch
+has saved me. But often, sleep time ends up suffering in the process. I&amp;#39;ve been
+&lt;strong&gt;damn busy&lt;/strong&gt; towards and since the end of the cut (you&amp;#39;d think handing in the
+thesis would mean work was over, but then you have to tackle everything that
+fell by the wayside on the way there).&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m also trying out the &lt;a href=&quot;https://my.builtwithscience.com/p/intermediate-build-program&quot;&gt;Intermediate Build&lt;/a&gt; program from Jeremy Ethier. Since I
+got quite a bit of value from his &lt;a href=&quot;https://builtwithscience.com/best-full-body-workout/&quot;&gt;free full-body program&lt;/a&gt; and his
+content in general, it seemed a safe value proposition. I&amp;#39;m currently tackling
+the first week and so far I&amp;#39;m enjoying it. We&amp;#39;ll see come result time!&lt;/p&gt;
+&lt;p&gt;Finally, if I find the time I&amp;#39;d like to analyse my cut data a bit more. In
+particular, I&amp;#39;d like to run a multivariable linear regression on my data in
+order to see if I can find a systematic bias in the caloric intake or
+expenditure estimations. I&amp;#39;m not too optimistic here either: a non-naive model
+would include things like the hours classified by Fitbit as workout every day as
+well as their caloric estimations, as well as a labelling of how certain I am of
+my caloric intake measurements (things that come in a box are easy to measure,
+restaurant food is a wild guess).&lt;/p&gt;
+&lt;h2 id=&quot;a-note-on-the-fitbit&quot;&gt;A Note on The Fitbit&lt;/h2&gt;
+&lt;p&gt;It is known that the Fitbit is not the most accurate means of measuring energy
+expenditure. If you look at the figures, this &lt;a href=&quot;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6107736/&quot;&gt;literature review&lt;/a&gt; paints a
+rather appalling picture, with many studies finding that the Fitbit under- or
+overestimates calories spent in activity by as much as 60% (and even more, in a
+few cases).&lt;/p&gt;
+&lt;p&gt;Of course, the fact that studies have such varied results is a big red flag.
+Either the Fitbit is totally random, or some studies are crap. Well, in my
+experience (and as can be seen in my data), the Fitbit is far from random. On
+the other hand, I have seen my share of crap studies.&lt;/p&gt;
+&lt;p&gt;If anything, the Fitbit was consistent — the same activity (in my case workouts
+and walking) tends to yield similar caloric estimations. If it does happen to be
+biased in certain cases, it looks like I was fortunate enough to have the biases
+cancel each other out.&lt;/p&gt;
+&lt;p&gt;Returning to the literature review, things look better when you look at the
+details:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Findings suggested that Fitbit was more likely to markedly overestimate energy
+expenditure when worn on the wrist and when walking at normal adult walking
+speeds on flat surfaces. On the contrary, Fitbit was more likely to
+underestimate energy expenditure when worn on the torso, with a tendency to
+markedly underestimate energy expenditure during inclined ambulation, during
+activities with constrained or variable body motion throughout the activity,
+and during simulated household or sporting activities that involve
+stop-and-start ambulation. Findings from 1 study for measures of energy
+expenditure in free-living settings suggested that Fitbit and doubly labelled
+water may provide similar measures of total energy expenditure over a 2-week
+period. However, findings from a few studies in free-living settings suggested
+that Fitbit devices may provide notable underestimations of daily energy
+expenditure compared with a SenseWear accelerometer.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Given my relatively high caloric expenditure numbers, I&amp;#39;m not too worried about
+underestimations.&lt;/p&gt;
+&lt;p&gt;Also apparently &lt;a href=&quot;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5360603/&quot;&gt;SenseWear overestimates energy expenditure&lt;/a&gt;?&lt;/p&gt;
+&lt;p&gt;I kept saying &amp;quot;the Fitbit&amp;quot;, but of course there is no such thing:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Most of the studies included in this review were published in the last 2
+years, with studies primarily examining measurement accuracy for models of
+Fitbit activity trackers introduced prior to 2015.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I used the Charge 2 (2016) until June and the Charge 3 (2018) after. It&amp;#39;s
+possible things improved since 2015. I saw no difference in measurements between
+the Charge 2 and the Charge 3 however.&lt;/p&gt;
+&lt;p&gt;So what? Well, obviously take what the Fitbit says (and what everybody says
+about the Fitbit) with a pinch of salt. The best thing is to do like I did:
+collect your own data and come to your own conclusions.&lt;/p&gt;
+&lt;p&gt;Personally, I find the Fitbit super helpful to set a proper caloric intake.&lt;/p&gt;
+&lt;p&gt;What&amp;#39;s the alternative? Using a macro calculator &lt;a href=&quot;https://www.calculators.tech/macro-calculator&quot;&gt;like this one&lt;/a&gt;. The caloric
+recommendation really depends on what goal (I chose &amp;quot;muscle gain&amp;quot;) and &amp;quot;activity
+level&amp;quot; you set. With &amp;quot;lightly active&amp;quot; (true of me outside of workouts — and I
+did say I wanted to gain muscle, they don&amp;#39;t build themselves), I get a 3185 kcal
+recommendation. Using my working hypothesis that the Fitbit is accurate, the
+average daily expenditure &lt;em&gt;during my cut&lt;/em&gt; was 3190, and building muscle means I
+have to add 200-300 kcal on top of that. Oops.&lt;/p&gt;
+&lt;p&gt;On the other hand, choosing &amp;quot;very active&amp;quot; puts me at 4000 daily kcal. That&amp;#39;s
+likely too much — I only hit 3700 kcal expenditure on workout days, and then not
+each time. So you have to choose &amp;quot;moderately active&amp;quot; to get a more reasonable
+3591 kcal recommendation. How could I know this?&lt;/p&gt;
+&lt;p&gt;A promising avenue is the aformentioned Jeremy Ethier&amp;#39;s program, which includes
+a nutrition spreadsheet. The initial estimate is wildly off (saying I should eat
+3113 kcal for muscle gain) but it automatically uses your recorded weight and
+caloric intake to adjust the TDEE (total daily energy expenditure). I might try
+to use that and see if it gives good results.&lt;/p&gt;
+&lt;p&gt;And with these final comments, I&amp;#39;m done. This turned out much longer than I
+expected. Hopefully, someone will be able to get some useful information out of
+this!&lt;/p&gt;
+      </description>
+      <pubDate>2019-09-12T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/weight-training-4</link>
+      <guid isPermaLink="true">http://norswap.com/weight-training-4</guid>
+    </item>
+    <item>
       <title>Y Combinator and Trampolines in Javascript</title>
       <description>
 &lt;p&gt;In &lt;em&gt;&lt;a href=&quot;http://raganwald.com/2018/09/10/why-y.html&quot;&gt;Why Y? Deriving the Y Combinator in JavaScript&lt;/a&gt;&lt;/em&gt;, Reginald
@@ -1511,7 +1957,7 @@ here&lt;/a&gt;.&lt;/p&gt;
     <item>
       <title>Even More Anime</title>
       <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/every-anime/&quot;&gt;Every Anime I Ever Watch&lt;/a&gt;, &lt;a href=&quot;/more-anime/&quot;&gt;More Anime I Watched&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Previously: &lt;a href=&quot;/every-anime/&quot;&gt;Every Anime I Ever Watched&lt;/a&gt; / &lt;a href=&quot;/more-anime/&quot;&gt;More Anime I Watched&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;This time: even more anime. And actually, one or two live-action TV shows that
 have nothing to do with anime. And two animated movies.&lt;/p&gt;
 &lt;h2 id=&quot;gurren-lagann-the-movie-childhoods-end&quot;&gt;Gurren Lagann The Movie: Childhood&amp;#39;s End&lt;/h2&gt;
@@ -1829,487 +2275,6 @@ and as such, the first few episodes were somewhat boring to watch.&lt;/p&gt;
       <pubDate>2019-04-21T22:00:00.000Z</pubDate>
       <link>http://norswap.com/even-more-anime</link>
       <guid isPermaLink="true">http://norswap.com/even-more-anime</guid>
-    </item>
-    <item>
-      <title>Language Design Notes 1: A Precise Typeclass Scheme</title>
-      <description>
-&lt;p&gt;This is the second post in my &lt;strong&gt;&lt;a href=&quot;/language-design-notes/&quot;&gt;Language Design Notes&lt;/a&gt;&lt;/strong&gt; series.&lt;/p&gt;
-&lt;p&gt;This instalment is a bit particular, as it outlines pretty precisely (though not
-formally) a way to implement &lt;a href=&quot;https://en.wikipedia.org/wiki/Type_class&quot;&gt;typeclasses&lt;/a&gt; in an imaginary (and for the most
-part, unspecified) language. Nothing much is assumed about the language — it
-isn&amp;#39;t assumed to be purely functional for instance. The syntax is taken to look
-a bit like Python (using significant indentation).&lt;/p&gt;
-&lt;p&gt;Some context about why I wrote this, lifted from the the &lt;a href=&quot;/language-design-notes/&quot;&gt;series
-index&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;As I started thinking about typeclasses more, I found the need to write down
-some form of specification of the system I was imagining, so that I could
-refer to other parts of the design, and see if it was consistent.&lt;/p&gt;
-&lt;p&gt;I found the need to be fairly precise. Or maybe I just got carried away... but
-I think the precision really helps throw in relief the small details that
-threaten the consistency and elegance of the whole. Anyhow, this ended up
-looking more like a specification than a nice explanative article, although I
-tried to include enough examples.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s not perfect, but as &lt;a href=&quot;/more-content/&quot;&gt;discussed earlier&lt;/a&gt;, I want thing to move forward, so
-here it is!&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;And that being said, let&amp;#39;s dive right in!&lt;/p&gt;
-&lt;h2 id=&quot;declaring-typeclasses-and-instances&quot;&gt;Declaring Typeclasses and Instances&lt;/h2&gt;
-&lt;p&gt;This is how you declare a single-parameter typeclass:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Serializable $T
-    fun serialize (it: $T): String
-    fun deserialize (str: String): $T&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;$T&lt;/code&gt; is a generic type. Generic types all start with a dollar sign. This makes
-them easy to pick out and avoids namespace clashes with regular types. It also
-dispenses us from declaring which types are generic separately. This is not a
-problem for typeclass declarations, but it is for function declaration, where
-generic types may be mingled with normal types.&lt;/p&gt;
-&lt;p&gt;For instance, java lists the generic types before the function signature:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;T&amp;gt; String serialize (T it);&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Haskell uses the scheme we propose, but with lowercase letters for generic
-types. We&amp;#39;d like to keep lowercase letters for things in the domain of values,
-while things in the domain of types are capitalized. (That being said, types
-will also be first-class values in our language.)&lt;/p&gt;
-&lt;p&gt;This is how you create an instance of a single-parameter typeclass for a type
-called &lt;code&gt;Point&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;instance Serializable Point
-    fun serialize (it: Point): String
-        return it.x + &amp;quot;,&amp;quot; + it.y
-    fun deserialize (str: String): Point
-        val strs = str.split(&amp;quot;,&amp;quot;)
-        return Point(parse_int(strs[0]), parse_int(strs[1]))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Here is how you declare a multiple-parameter typeclass:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;enum Order { BIGGER, EQUAL, SMALLER }
-
-class Orderable $X $Y
-    fun order (x: $X, y: $Y): Order&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Here is how you create an instance of a multiple-parameter typeclass for types
-&lt;code&gt;String&lt;/code&gt; and &lt;code&gt;Char&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;instance Orderable String Char
-    fun order (x: String, y: Char): Order
-        if x.size == 0
-            return SMALLER
-        if x[0] == y
-            return x.size == 1 ? EQUAL : BIGGER
-        else
-            return x[0] &amp;gt; y ? BIGGER : SMALLER&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Note that both type parameters of &lt;code&gt;Orderable&lt;/code&gt; can be the same type:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;instance Orderable Int Int
-    fun order (x: Int, y: Int): Order
-        if (x &amp;gt; y) return BIGGER
-        if (x &amp;lt; y) return SMALLER
-        return EQUAL&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;instances-names&quot;&gt;Instances Names&lt;/h2&gt;
-&lt;p&gt;Every instance must have a name. A subsequent section (&lt;a href=&quot;#picking-instances&quot;&gt;Picking
-Instances&lt;/a&gt;) will explain why names are needed, but for the
-moment bear with me.&lt;/p&gt;
-&lt;p&gt;If a name is not given explicitly, it will be generated automatically. For
-instance, our &lt;code&gt;Serializable&lt;/code&gt; instance for &lt;code&gt;Point&lt;/code&gt; will be called
-&lt;code&gt;Serializable_Point&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;We can also give a name explicitly. Imagine we want to serialize points using
-slashes (/) because of an obscure data format we use:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;instance PointSlash: Serializable Point
-    fun serialize (it: Point): String
-        return it.x + &amp;quot;/&amp;quot; + it.y
-    fun deserialize (str: String): Point
-        val strs = str.split(&amp;quot;/&amp;quot;)
-        return Point(parse_int(strs[0]), parse_int(strs[1]))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;(The definition is the same as &lt;code&gt;Serializable_Point&lt;/code&gt;, except the comma has been replaced by a
-slash.)&lt;/p&gt;
-&lt;p&gt;This instance will be called &lt;code&gt;PointSlash&lt;/code&gt;. It will not receive an automatically
-generated name.&lt;/p&gt;
-&lt;p&gt;The scheme to build automatic names for multiple-parameter typeclasses is what
-you&amp;#39;d expect , e.g. &lt;code&gt;Orderable_Int_Int&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;deriving-typeclasses-automatically&quot;&gt;Deriving Typeclasses Automatically&lt;/h2&gt;
-&lt;p&gt;We can derive a typeclass instance from the existence of another typeclass as
-follows:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;derive instance Orderable $X $Y
-        from Reverse: Orderable $Y $X
-
-    fun order (x: $X, y: $Y): Order
-        val rev = Reverse.order(y, x)
-        if (rev == BIGGER)  return SMALLER
-        if (rev == SMALLER) return BIGGER
-        return EQUAL&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We call this declaration an &lt;em&gt;instance derivation&lt;/em&gt;. The instance that will
-fullfill the from-clause is called the &lt;em&gt;source instance&lt;/em&gt;. The instance derived
-from a specific source instance is simply known as a &lt;em&gt;derived instance&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;Instance selection will always prefer an explicit instance rather than a derived
-instance when both are in the same scope. So our derived &lt;code&gt;Orderable&lt;/code&gt; instance
-does not cause issues when &lt;code&gt;$X&lt;/code&gt; and &lt;code&gt;$Y&lt;/code&gt; are the same type. We&amp;#39;ll talk about
-this more in the &lt;a href=&quot;#type-derivations-and-instance-selection&quot;&gt;Type Derivations and Instance
-Selection&lt;/a&gt; section.&lt;/p&gt;
-&lt;p&gt;Just like instances, instance derivations have names. Similarly, they can have
-explicit names:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;derive instance Reversed: Orderable $X $Y
-        from Reverse: Orderable $Y $X
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But otherwise an automatic name is attributed. For our example, the name would
-be &lt;code&gt;Orderable_$X_$Y_from_Orderable_$Y_$X&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;A single derivation can yield many different instances. There will of course be
-instances with different type arguments, but also instances using a different
-source instance.&lt;/p&gt;
-&lt;p&gt;Source instances can be given a name (&lt;code&gt;Reverse&lt;/code&gt; in our example) or have a name
-assigned automatically — it would be &lt;code&gt;Orderable_$X_$Y&lt;/code&gt; in our example). This,
-however, is not the true name of the source instance — which is simply the name
-of whatever instance is selected to fullfill the role of the source instance.
-Rather it&amp;#39;s an alias that can be used within the definition of the type
-derivation. It may happens that this name clashes with previously declared
-names. In this case, this name shadows the previous declaration, for the
-duration of the type derivation definition. It will be possible to access
-file-levels and imported names by prefixing them with a module name — see next
-section.&lt;/p&gt;
-&lt;p&gt;While we don&amp;#39;t declare derived instances explicitly, they also have names! These
-are derived by treating the name of the derivation as a function of the source
-instance, e.g. &lt;code&gt;Reversed(Orderable_Int_Int)&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&quot;importing-typeclasses-and-instances&quot;&gt;Importing Typeclasses and Instances&lt;/h2&gt;
-&lt;p&gt;In this imaginary language, I&amp;#39;ve decided not to specify explicitly how things
-can become imported.&lt;/p&gt;
-&lt;p&gt;Having nevertheless given it some thought, it appears clear that importing all
-instances explicitly would be cumbersome. One could therefore suppose that
-typeclass instances will get imported &lt;em&gt;implicitly&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;For instance, we could &lt;strong&gt;imagine&lt;/strong&gt; that if we import a set of types from a file,
-then all typeclass instances in the file for that set of types would get
-imported implicitly.&lt;/p&gt;
-&lt;p&gt;An instance is said to be &lt;em&gt;in scope&lt;/em&gt; of some code if they&amp;#39;re declared in the
-same file, or if they&amp;#39;ve been imported (explicitly or implicitly).&lt;/p&gt;
-&lt;p&gt;I imagine that this system will rely on a notion of &lt;em&gt;module&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;As such, it will be possible to prefix of an instance or type derivation by the
-name of its defining module — with the special keyword &lt;code&gt;self&lt;/code&gt; designating the
-current module. e.g. &lt;code&gt;self.Serializable_Point&lt;/code&gt; or
-&lt;code&gt;my_module.Serializable_Point&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;default-functions&quot;&gt;Default Functions&lt;/h2&gt;
-&lt;p&gt;Typeclass definitions are free to provide default implementations for the
-functions they declare. Such a default definition can always be overidden in the
-typeclass instances — otherwise it should just be a normal function and not a
-typeclass function!&lt;/p&gt;
-&lt;p&gt;For instance, the following class includes a default implementation for
-&lt;code&gt;receive_all&lt;/code&gt; in terms of its other function &lt;code&gt;receive&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Receiver $T $X
-    fun receive (it: $T, item: $X)
-    fun receive_all (it: $T, items: List[$T])
-        for item in items:
-            receive(it, item)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It&amp;#39;s even possible to have two functions in terms of one another — the user
-implementing the instance will have to override at least one of them.&lt;/p&gt;
-&lt;p&gt;(It would be possible to add language-level support to defining such sets of
-functions, at least one of which needs to be overriden, but I&amp;#39;m not sure the
-benefits are worth the conceptual overhead.)&lt;/p&gt;
-&lt;p&gt;There are essentially two ways to implement default methods. The first is for
-them to be some kind of template, specialized for and copied into each instance
-that does not override them. The second is to use a late binding mechanism,
-which can be especially interesting if the implementation targets supports it
-(e.g. the JVM).&lt;/p&gt;
-&lt;h2 id=&quot;typeclass-constraints&quot;&gt;Typeclass Constraints&lt;/h2&gt;
-&lt;p&gt;There are two places where it&amp;#39;s possible to constrain types based on whether
-they possess a typeclass instance: method definition and typeclass declarations.&lt;/p&gt;
-&lt;p&gt;Here is a method with a typeclass constraint:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (it: $T) where Serializable $T
-    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And here is a typeclass with a constraint:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Reducible $T $X
-        where Sequential: Sequence $T $X
-
-    fun reduce (it: $T): $X&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The function&amp;#39;s constraint prevents us from calling &lt;code&gt;foo&lt;/code&gt; with a type &lt;code&gt;$T&lt;/code&gt; that
-does not have a corresponding &lt;code&gt;Serializable $T&lt;/code&gt; instance.&lt;/p&gt;
-&lt;p&gt;Similarly, the typeclass&amp;#39; constraint prevents us from instanciating &lt;code&gt;Reducible&lt;/code&gt;
-for pair of types that do not have a corresponding &lt;code&gt;Sequence $T $X&lt;/code&gt; instance.&lt;/p&gt;
-&lt;p&gt;We call instances that satisfy a function&amp;#39;s constraints &lt;em&gt;the call instances&lt;/em&gt;,
-and the instances that satisfy a typeclass&amp;#39;s constraint the &lt;em&gt;required
-instances&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;Sometimes, a typeclass with a type constraint can be very close to a type
-derivation, especially when the typeclass defines default implementations for
-all its functions. The big difference is that a class must still be implemented
-explicitly — an implementation has to be requested even if no functions have to
-be implemented. A derivation, on the other hand, is always &amp;quot;active&amp;quot;.&lt;/p&gt;
-&lt;p&gt;Just like for source instances in type derivations (cf. the &lt;a href=&quot;#deriving-typeclasses-automatically&quot;&gt;Deriving
-Typeclasses Automatically&lt;/a&gt; section), the
-required instances may be named and have otherwise an automatically generated
-name. This is not the &amp;quot;true&amp;quot; instance name, but a local alias that may shadow
-previous declarations.&lt;/p&gt;
-&lt;p&gt;The other big difference between typeclass declarations with type constraints
-and type derivations is &lt;strong&gt;when&lt;/strong&gt; instance selection occurs. We&amp;#39;ll come back to
-it in the &lt;a href=&quot;#type-constraints-vs-type-derivations&quot;&gt;Type Constraints vs Type
-Derivations&lt;/a&gt; section.&lt;/p&gt;
-&lt;h2 id=&quot;picking-instances&quot;&gt;Picking Instances&lt;/h2&gt;
-&lt;p&gt;During the execution of our program, there are a couple times when instances
-will need to be picked. &lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Direct instance selection&lt;/em&gt; — when we call a function that belong to a
-typeclass, we need to decide which instance will provide the implementation.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Call instance selection&lt;/em&gt; — selecting the instance that satisfies a typeclass
-constraint in a function (cf. last section).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Required instance selection&lt;/em&gt; — selecting the instance that satisfies a
-typeclass constraint in a typeclass (cf. last section).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Source instance selection&lt;/em&gt; — select the instances used as source for instance
-derivations.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Fortunately, all types of instance selections are similar, and follow the same
-rules. In each case, we know the typeclass we want to provide an instance for,
-and we have to select that instance from those that are in scope and fit the
-bill (or emit an error if no instance will do).&lt;/p&gt;
-&lt;p&gt;If there is only one instance that works, the language will know to pick it. But
-if there are ambiguities, it needs to decide on a particular instance, based on
-hints supplied by the programmer.&lt;/p&gt;
-&lt;p&gt;We&amp;#39;ll explain the instance selection rules using &lt;em&gt;direct instance selection&lt;/em&gt;,
-and add precisions for other types of selections later, as required.&lt;/p&gt;
-&lt;h2 id=&quot;direct-instance-selection&quot;&gt;Direct Instance Selection&lt;/h2&gt;
-&lt;p&gt;Imagine that we import &lt;code&gt;Serializable_Point&lt;/code&gt; and &lt;code&gt;PointSlash&lt;/code&gt; from before, two
-instances of &lt;code&gt;Serializable Point&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;u&gt;Small aside&lt;/u&gt;: it would be more proper to say &amp;quot;two instances of &lt;code&gt;Serializable&lt;/code&gt;
-for the type &lt;code&gt;Point&lt;/code&gt;&amp;quot; — but that&amp;#39;s tedious. And what category does &lt;code&gt;Serializable
-Point&lt;/code&gt; even belong to? It&amp;#39;s not a typeclass (&lt;code&gt;Serializable&lt;/code&gt; is) nor an instance
-(&lt;code&gt;Serializable_Point&lt;/code&gt; is). If we really need a name, we could could this a
-&lt;em&gt;typeclass specification&lt;/em&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
-    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Which instance should this code use?&lt;/p&gt;
-&lt;p&gt;We can select the proper instance in two ways:&lt;/p&gt;
-&lt;p&gt;1) Specify the instance to use at the instance selection site:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
-    output(Serializable_Point.serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2) Specify the instance to use in a certain scope (e.g. file or function) with
-   an &lt;code&gt;use&lt;/code&gt; declaration.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
-    use PointSlash
-    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Of course, you could do &lt;code&gt;PointSlash.serialize(it)&lt;/code&gt; and &lt;code&gt;use Serializable_Point&lt;/code&gt;
-as well.&lt;/p&gt;
-&lt;p&gt;When your two instances have automatically generated names which therefore clash
-(i.e. both are named &lt;code&gt;Serializable_Point&lt;/code&gt;), you can prefix with module names to
-disambiguate them (e.g. &lt;code&gt;self.Serializable_Point&lt;/code&gt; or
-&lt;code&gt;my_module.Serializable_Point&lt;/code&gt;) — see the &lt;a href=&quot;#importing-typeclasses-and-instances&quot;&gt;Importing Typeclasses and
-Instances&lt;/a&gt; section.&lt;/p&gt;
-&lt;p&gt;Regarding &lt;code&gt;use&lt;/code&gt;, the current plan is that it will be possible to override an
-&lt;code&gt;use&lt;/code&gt; declaration with another, even in the same scope. For instance:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (it: Point)
-    use PointSlash
-    output(serialize(it))
-    use Serializable_Point
-    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Nevertheless, &lt;code&gt;use&lt;/code&gt; remains a &lt;em&gt;declaration&lt;/em&gt; whose scope is purely static. It is
-not a &lt;em&gt;statement&lt;/em&gt; (and so cannot be guarded by an if statement, etc).&lt;/p&gt;
-&lt;h2 id=&quot;type-derivations-and-instance-selection&quot;&gt;Type Derivations and Instance Selection&lt;/h2&gt;
-&lt;p&gt;Derived instances do complicate the instance selection mechanism somewhat.&lt;/p&gt;
-&lt;p&gt;The basic issue is relatively simple. If there is a conflict between two
-instances, and both of these instances can serve as base for the creation of
-derived instance, then you&amp;#39;ll have a conflict there as well.&lt;/p&gt;
-&lt;p&gt;Consider the following example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Named $T
-    fun name (it: $T): String
-
-instance UserFirst: Named User
-    fun name (it: User): String
-        return it.first_name
-
-instance UserLast: Named User
-    fun name (it: User): String
-        return it.last_name
-
-class Stringifiable $T
-    fun to_string (it: $T): String
-
-derive instance Stringifiable $T from Named $T
-    fun to_string (it: $T): String
-        return name(it)
-
-fun foo (usr: User)
-    output(to_string(usr))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Should &lt;code&gt;foo&lt;/code&gt; output the users&amp;#39;s first or last name? Say we want the last name.&lt;/p&gt;
-&lt;p&gt;There is an easy ways to fix that conflict, should write &lt;code&gt;use UserLast&lt;/code&gt;. This
-will have the effect of disambiguating the &lt;em&gt;source instance selection&lt;/em&gt; of the
-type derivation, hence &lt;code&gt;foo&lt;/code&gt; will use the &lt;code&gt;Stringifiable&lt;/code&gt; instance derived from
-&lt;code&gt;UserLast&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;But what if we add the following?&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;derive instance ThingNamed: Stringifiable $T
-        from Named $T
-    fun to_string (it: $T): String
-        return &amp;quot;the thing named &amp;#39;&amp;quot; + name(it) + &amp;quot;&amp;#39;&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now we also need to specify which derivation we want. We can do this in a couple
-ways:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;use ThingNamed&lt;/code&gt; — always use the &lt;code&gt;ThingNamed&lt;/code&gt; derivation to supply a
-&lt;code&gt;Stringifiable&lt;/code&gt; when a &lt;code&gt;Named&lt;/code&gt; instance exists.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ThingNamed.to_string(usr)&lt;/code&gt; — specifying the derivation to use explicitly at
-the use site.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;use ThingNamed(UserLast)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ThingNamed(UserLast).to_string(usr)&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The first solution is a new form of &lt;code&gt;use&lt;/code&gt; which does not specify an instance but
-an instance derivation!&lt;/p&gt;
-&lt;p&gt;The second solution is symmetric to the first, we use the derivation instead of
-an instance at the instance selection site.&lt;/p&gt;
-&lt;p&gt;The third and fourth solution have nothing novel: we just specify the full
-instance explicitly.&lt;/p&gt;
-&lt;p&gt;The first two solutions, however, do require us to have specified &lt;code&gt;use UserLast&lt;/code&gt;
-before! Otherwise, we know to use &lt;code&gt;ThingNamed&lt;/code&gt;, but should it use the the
-&lt;code&gt;UserFirst&lt;/code&gt; or &lt;code&gt;UserLast&lt;/code&gt; instance?&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Using&lt;/strong&gt; an instance derivation demands &lt;em&gt;source instance selection&lt;/em&gt;. This
-selection may be done manually (as in &lt;code&gt;use ThingNamed(UserLast)&lt;/code&gt;) or
-automatically — if there is no ambiguity or the proper &lt;code&gt;use&lt;/code&gt; statements have
-been made.&lt;/p&gt;
-&lt;p&gt;Automatic source instance selection may entail a recursion problem when an
-instance derivation creates a instance of the same kind as its pre-requisite. We
-already saw a derivation like that:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;instance Orderable Int Int
-    // ...
-
-// assume we imported this
-derive instance Reversed: Orderable $X $Y
-        from Reverse: Orderable $Y $X
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;I said earlier:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Instance selection will always prefer an explicit instance rather than a
-derived instance when both are in the same scope.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;That&amp;#39;s because I assume that within a single file, you&amp;#39;re aware when an explicit
-and derived instance clash.&lt;/p&gt;
-&lt;p&gt;But it doesn&amp;#39;t work like that when importing one of the two instances. In that
-case, the policy is to let them clash to bring awareness to the conflict.&lt;/p&gt;
-&lt;p&gt;If you want the base behaviour, you can do &lt;code&gt;use Orderable_Int_Int&lt;/code&gt; and all is
-well. But if you want the derived behaviour, you &lt;strong&gt;can&amp;#39;t&lt;/strong&gt; do &lt;code&gt;use Reversed&lt;/code&gt;.
-Because that would mean the derivation would use itself as &lt;code&gt;Reverse&lt;/code&gt; — an
-infinite recursion. It is therefore a compile-time error.&lt;/p&gt;
-&lt;p&gt;The solution in this case is simply to do manual source instance selection, i.e.
-specify the full instance name: &lt;code&gt;use Reversed(Orderable_Int_Int)&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;implicit-use&quot;&gt;Implicit &lt;code&gt;use&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;We need to add an important precision to what precedes.&lt;/p&gt;
-&lt;p&gt;Whenever there is a typeclass constraint, the constraint acts like an implicit
-&lt;code&gt;use&lt;/code&gt; statement!&lt;/p&gt;
-&lt;p&gt;So the following pair of functions are always equivalent:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo1 (it: $T) where Serializable $T
-    output(serialize(it))n
-
-fun foo2 (it: $T) where Serializable $T
-    use Serializable_$T
-    output(serialize(it))&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The same principle applies for typeclass&amp;#39; constraints.&lt;/p&gt;
-&lt;h2 id=&quot;type-constraints-vs-type-derivations&quot;&gt;Type Constraints vs Type Derivations&lt;/h2&gt;
-&lt;p&gt;When we introduced typeclass&amp;#39; constraints in the &lt;a href=&quot;#typeclass-constraints&quot;&gt;Typeclass
-Constraints&lt;/a&gt; section, we said that a big difference
-between typeclasses with constraints on the one hand, and type derivations on
-the other hand, was that one must always request a typeclass instances, whereas
-type derivation are always &amp;quot;active&amp;quot; to generate instances on a by-need basis.&lt;/p&gt;
-&lt;p&gt;Now we can introduce another big difference that directly falls out from that
-first difference, namely &lt;em&gt;when&lt;/em&gt; instance selection occurs.&lt;/p&gt;
-&lt;p&gt;Instances that implement a typeclass with type constraints cause the required
-instances to be &lt;em&gt;captured&lt;/em&gt;. This means they&amp;#39;re essentially stored inside the
-instance, and their usage is not dependent on the context in which the instance
-functions are used.&lt;/p&gt;
-&lt;p&gt;For type derivations, it&amp;#39;s some other instance selection that triggers the
-source instance selection!&lt;/p&gt;
-&lt;p&gt;Just like other forms of instance selection, required instance selection is
-affected by &lt;code&gt;use&lt;/code&gt; statements. Manual disambiguation is also possible with the
-&lt;code&gt;using&lt;/code&gt; clause.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Foo $T requires Named $T
-    // ...
-
-instance FooUser User using LastName
-    // ...
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;On occasions, the capture of required instances, might lead to situations that
-are very slightly unintuitive:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Reducible $T $X
-        where Sequential: Sequence $T $X
-
-    fun reduce (it: $T): $X
-
-// ...
-
-fun foo (seq: $T) where Reducible $T Point, Sequence $T Point
-    reduce(seq)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In the above example, there is not guarantee that the instance selected for the
-function&amp;#39;s &lt;code&gt;Sequence $T Point&lt;/code&gt; constraint will be the same as the instance
-selected for the typeclass&amp;#39; constraint!&lt;/p&gt;
-&lt;p&gt;The first one is selected when the instance satisfying &lt;code&gt;Reducible $T Point&lt;/code&gt; is
-defined, whereas the second is selected when the function &lt;code&gt;foo&lt;/code&gt; is called.&lt;/p&gt;
-&lt;h2 id=&quot;shortcut-notation-for-parameter-types&quot;&gt;Shortcut Notation For Parameter Types&lt;/h2&gt;
-&lt;p&gt;We admit a shortcut notation for uses of unary typeclasses, so thoses two
-snippets are equivalent:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (mk_string: $A) where Stringifiable $A
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;fun foo (mk_string: Stringifiable)
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The second one sure looks nicer!&lt;/p&gt;
-&lt;p&gt;There are a few reason not to use the shorthand though:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;When you need to express other constraints on the actual type.&lt;/li&gt;
-&lt;li&gt;When you need to reuse the actual type for other parameters.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;For instance, these two snippets are equivalent:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (mk_string1: $A, mk_string2 $B)
-        where Stringifiable $A, Stringifiable $B
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;fun foo (mk_string1: Stringifiable, mk_string2: Stringifiable)
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In practice, names will likely need to be attributed to the underlying generic
-type when using the shortcut notation. The current plan is to use simple
-sequential identifiers preceded by a reserved string (something like &lt;code&gt;__$A&lt;/code&gt;,
-&lt;code&gt;__$B&lt;/code&gt;, ...).&lt;/p&gt;
-&lt;p&gt;The shortcut notation can also be used for multi-parameter typeclasses, for
-instance the two following snippets are equivalent:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (seq: $A) where Sequence $A String
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;fun foo (seq: Sequence[String])
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If there are more than two parameters to the typeclass, supplemental parameters
-are separated by a comma:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;fun foo (graph: Graph[Node, Edge]) // Graph $A Node Edge
-    // ...&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This is an example notation anyway, but I&amp;#39;m wondering if using &lt;code&gt;Sequence String&lt;/code&gt;
-and &lt;code&gt;Graph Node Edge&lt;/code&gt; wouldn&amp;#39;t be more pleasant? If I don&amp;#39;t type need type-level
-operators, maybe I&amp;#39;ll do just that.&lt;/p&gt;
-&lt;h2 id=&quot;empty-typeclasses&quot;&gt;Empty Typeclasses&lt;/h2&gt;
-&lt;p&gt;One may imagine that we will end up with a lot of typeclasses that define
-fine-grained behaviours. Some of those will be related by type constraints. It&amp;#39;s
-probably a good idea to make it possible to access required instances from the
-instance that requires them.&lt;/p&gt;
-&lt;p&gt;Sometimes, we would like to bundle a couple of instances together, to compose a
-more precise behaviour contract (which is what a typeclass essentially is) from
-a bunch of smaller ones.&lt;/p&gt;
-&lt;p&gt;In that case, a common pattern would be to use an empty typeclass with a list of
-requirements:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class List $T $X where
-    Sequential $T $X,
-    Indexable $T $X,
-    Iterable $T $X&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Assuming we have an instance of this class, we can access the required instances
-by dot references: &lt;code&gt;ListInstance.Sequential_$T_$X&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;We can also bring required instances in scope via some local import statement:
-&lt;code&gt;import ListInstance.Sequential_$T_$X&lt;/code&gt;. Or if we want all of them: &lt;code&gt;import
-ListInstance.*&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Note that importing the instances brings them in scope. It pointedly &lt;em&gt;does not&lt;/em&gt;
-resolve ambiguities. It is not an &lt;code&gt;use&lt;/code&gt; statement! (But you can also supply
-required instances to &lt;code&gt;use&lt;/code&gt;, of course.)&lt;/p&gt;
-&lt;h2 id=&quot;aliases&quot;&gt;Aliases&lt;/h2&gt;
-&lt;p&gt;What if you import an instance and the original author hasn&amp;#39;t given it a nice
-name? Fortunately for you, the &lt;code&gt;alias&lt;/code&gt; declaration has you covered:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;alias PointComma = Serializable_Point&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;alias&lt;/code&gt; work for any kind of names: typeclass derivations, constructed instance
-names, ...&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;alias Reversed = Orderable_$X_$Y_from_Orderable_$Y_$X
-alias ReversedIntComp = Orderable_$X_$Y_from_Orderable_$Y_$X(Orderable_Int_Int)
-// or, using the first allias:
-alias ReversedIntComp = Reversed(Orderable_Int_Int)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;An alias makes its left and right part interchangeable for code in which the
-&lt;code&gt;alias&lt;/code&gt; is in scope. It&amp;#39;s not the same as giving a name to the instance when
-it&amp;#39;s declared: in that case, no automatically generated name is attributed!&lt;/p&gt;
-&lt;h2 id=&quot;what-remains-to-be-done&quot;&gt;What Remains to be Done&lt;/h2&gt;
-&lt;p&gt;This post is long enough as it is (and a dry read besides), so I thought it wise
-to stop myself here.&lt;/p&gt;
-&lt;p&gt;There are however a few topics that still need consideration to make for a
-truly great typeclass system.&lt;/p&gt;
-&lt;p&gt;First, what in Haskell are called &lt;em&gt;existentials&lt;/em&gt;, basically a way to have a type
-&lt;code&gt;R exists Serializable R&lt;/code&gt; meaning that there exists some type X such that an
-instance of &lt;code&gt;Serializable X&lt;/code&gt; exists, but X is not fixed, so that variables of
-type &lt;code&gt;R&lt;/code&gt; can take values with different underlying types.&lt;/p&gt;
-&lt;p&gt;A value of such a type is a pair of a value and a typeclass (or potentially, a
-tuple of multiple values and typeclass instances).&lt;/p&gt;
-&lt;p&gt;Most notably, existentials are necessary to implemented &lt;em&gt;heterogeneous
-collections&lt;/em&gt; as you can be had in most language, e.g. &lt;code&gt;List&amp;lt;Serializable&amp;gt;&lt;/code&gt; in
-Java. Without existentials, it&amp;#39;s impossible to specify a list of values with
-different types who happen to have a corresponding &lt;code&gt;Serializable&lt;/code&gt; instance.&lt;/p&gt;
-&lt;p&gt;The second important thing is to add some mechanism that help with code reuse.
-In particular, some form of delegation or late binding (e.g. Scala traits) would
-be neat. Some would advocate that a benefit of type classes is to get rid of
-that aspect of OO, but I disagree. The problem in OO in general is that
-permissions are too open by default: non-final clases and methods in Java for
-instance. As Joshua Bloch puts it in &lt;a href=&quot;https://books.google.be/books/about/Effective_Java.html?id=ka2VUBqHiWkC&amp;amp;redir_esc=y&quot;&gt;Effective Java&lt;/a&gt;: &lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Design and document for inheritance or else prohibit it.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Well done late binding is effectively a clean way to specify callbacks,
-potentially with a default behaviour in place. These callbacks may themselves
-call inside the late bound entity (class or typeclass). Effectively, this saves
-a lot of plumbing headaches.&lt;/p&gt;
-&lt;p&gt;There are a couple more things that could go in, but they aren&amp;#39;t as essential.&lt;/p&gt;
-&lt;p&gt;One particular nicety I can think of is a mechanism for type unions. Not only
-boring unions (like &lt;code&gt;int | String&lt;/code&gt; to specify you expect either an integer or a
-string), but also being able to specify a type &lt;code&gt;R&lt;/code&gt; such that there is either an
-instance of &lt;code&gt;Serializable R&lt;/code&gt; or an instance of &lt;code&gt;Stringifyable R&lt;/code&gt; (or both!).
-Similar types intersection are already possible, just by putting multiple
-constraints on a type.&lt;/p&gt;
-&lt;p&gt;These type unions make some &lt;a href=&quot;/polymorphism/#ad-hoc-polymorphism&quot;&gt;ad-hoc polymorphism&lt;/a&gt; possible, and would be further
-well served by some form of pattern matching and &lt;a href=&quot;https://en.wikipedia.org/wiki/Flow-sensitive_typing&quot;&gt;flow typing&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;But all this will have to wait for another day!&lt;/p&gt;
-      </description>
-      <pubDate>2019-03-31T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/typeclass-scheme</link>
-      <guid isPermaLink="true">http://norswap.com/typeclass-scheme</guid>
     </item>
   </channel>
 </rss>

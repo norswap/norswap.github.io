@@ -3,9 +3,9 @@ layout: post
 title: "Even More Anime"
 ---
 
-Previously: [Every Anime I Ever Watch], [More Anime I Watched]
+Previously: [Every Anime I Ever Watched] / [More Anime I Watched]
 
-[Every Anime I Ever Watch]: /every-anime/
+[Every Anime I Ever Watched]: /every-anime/
 [More Anime I Watched]: /more-anime/
 
 This time: even more anime. And actually, one or two live-action TV shows that

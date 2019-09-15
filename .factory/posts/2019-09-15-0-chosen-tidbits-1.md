@@ -1,0 +1,218 @@
+---
+title: "Chose Tidbits: June 2019"
+layout: post
+---
+
+As some may know, I read a whole lot. So I thought to start a series to
+highlight the most interesting things I've read recently, along with some quotes
+or explanations why I liked it.
+
+We're starting with stuff I read in June. More to follow when I have more time
+and enough material!
+
+--------------------------------------------------------------------------------
+
+[Weirding Diary: 8][weirding]
+
+[weirding]: https://www.ribbonfarm.com/2019/05/27/weirding-diary-8/
+
+> It doesn’t matter if everything else gets cheaper with Moore’s Law, if rent,
+> healthcare, and education costs race ahead of income. Those three costs drive
+> hard choices, and that is putting existential pressures on institutions.
+
+<!-- -->
+
+> In the near future, all schools at all levels will either be de facto
+> rentier-elite finishing schools, or indoctrination schools for socialist
+> revolutionaries.
+
+--------------------------------------------------------------------------------
+
+[Identify the valuable squares on your life’s chessboard][visakanv]
+
+[visakanv]: http://visakanv.com/1000/0764-identify-the-valuable-squares-on-your-lifes-chessboard/
+
+> I know what to do. I need to step outside the day-to-day challenges and
+> struggles. I need to see the bigger picture and be clear about what my
+> priorities are. What do I want? What do I not need to care about? I’m thinking
+> of a conversation or exchange I had with someone about why people struggle to
+> cope with everyday life – and I think that conversation went to a place that
+> was something like… people are trying to do more than they can, instead of
+> focusing on what’s most important. It’s a sort of… hedging. You hedge your
+> bets because you don’t know what’s important, and so you try to do a little
+> bit of everything. Better to score a few points in every bucket, than to put
+> all your points in the wrong bucket. But the best thing you can do is to put
+> most or all of your points in the right bucket. And can you know what the
+> right bucket is? In a sort of probablistic sense, yes! Imagine a sort of…
+> landscape, a grid. A chessboard, let’s say. 64 squares. That’s your life,
+> that’s the number of things you could theoretically possibly Every day you
+> have maybe 3-5 points you can assign to squares on the chessboard. You could
+> put all the points on one square, or you could distribute them across multiple
+> squares. The thing I think I ought to figure out is, which are the most
+> valuable squares? Do I know this? I think I know it subconsciously, and I
+> think I need to articulate it.
+
+--------------------------------------------------------------------------------
+
+[A Master Class in Jazz Performance and Creativity with Pianist Kenny
+Werner][jazz]
+
+[jazz]: https://www.youtube.com/watch?v=Un3p614XExc
+
+This one is dense and packed with insight. If you do any kind of performance or
+even just practice a trainable skill, it's sure to resonate with you and give
+you an idea or two.
+
+Here are some of the most striking insight for me, but again, yours will likely
+be different:
+
+- Performance is about playing well within your zone of comfort.
+
+- Two reasons a performance doesn't go well: lack of technique or not releasing
+  yourself to the zone. Don't criticize yourself in performance.
+
+- Brainwash yourself to love every sound you make. When a musician enjoys what
+  he does, that's half the attraction. Don't react when you touch your
+  instrument — that gets in the way.
+
+- You don't need to be unsatisfied in order to get better.
+
+- Practicing is not playing and enjoying. You should focus on the difficulties,
+  on what you can't do yet. Specifically on those parts, don't get side-tracked,
+  that's not efficient.
+
+--------------------------------------------------------------------------------
+
+[Epistemic Learned Helplessness][helpless]
+
+[helpless]: https://slatestarcodex.com/2019/06/03/repost-epistemic-learned-helplessness/
+
+> A friend recently complained about how many people lack the basic skill of
+> believing arguments. That is, if you have a valid argument for something, then
+> you should accept the conclusion. Even if the conclusion is unpopular, or
+> inconvenient, or you don’t like it. He envisioned an art of rationality that
+> would make people believe something after it had been proven to them.
+>
+> And I nodded my head, because it sounded reasonable enough, and it wasn’t
+> until a few hours later that I thought about it again and went “Wait, no, that
+> would be a terrible idea.”
+
+--------------------------------------------------------------------------------
+
+[Asymmetric Weapons Gone Bad][asymmetric]
+
+[asymmetric]: https://slatestarcodex.com/2019/06/06/asymmetric-weapons-gone-bad/
+
+> Every day we do things that we can’t easily justify. If someone were to argue
+> that we shouldn’t do the thing, they would win easily. We would respond by
+> cutting that person out of our life, and continuing to do the thing.
+
+--------------------------------------------------------------------------------
+
+[Social Status: Down the Rabbit Hole][status]
+
+[status]: https://meltingasphalt.com/social-status-down-the-rabbit-hole/
+
+There are two hierarchies of social status: dominance and prestige.
+
+> - Avoidance vs. approach. Dominance works by inspiring fear and other
+>   "avoidance" instincts, so that low-status people try to steer clear of
+>   dominant individuals. Prestige, on the other hand, inspires admiration and
+>   other "approach" instincts, so low-status people actively seek out
+>   prestigious individuals and enjoy spending time around them.
+> 
+> - Taking vs. giving. The perks of dominance are taken by force by the
+>   high-status (dominant) individual. The perks of prestige, on the other hand,
+>   are given to the high-status (prestigious) individual, freely, by the
+>   low-status admirer.
+> 
+> - Entitlement vs. gratitude. Dominant individuals expect deference from others
+>   and treat it as their natural right. Prestigious individuals, on the other
+>   hand, often make an elaborate show of humility when accepting the deference
+>   of others. Performers bow as they're being applauded. Oscar-winners
+>   profusely thank their supporters. Lay people often blush and smile awkwardly
+>   when they're being celebrated, e.g., at a birthday party. To do otherwise —
+>   to act entitled to admiration — would risk alienating one's supporters.
+
+--------------------------------------------------------------------------------
+
+[MLP: Immanetizing The Equestrian][mlp]
+
+[mlp]: https://www.gwern.net/MLP
+
+(Note: MLP means "My Little Poney". Yup.)
+
+> One of the ways in which MLP is unusual is, in addition to episodes
+> criticizing communism or egalitarianism, its implicit capitalist economy (in
+> contrast to most media where markets or capitalism are portrayed negatively
+> when any attention is paid to them); Equestria is not post-scarcity by magical
+> fiat but is capitalist to the core, and its prosperity is due the capitalism
+> and competition. And this capitalism contributes to the self-actualization of
+> ponies: to gain a sense of self-worth which is genuine and grounded in
+> reality, one must discover something one does well (finding one’s cutie-mark),
+> which is of value to one’s peers and society, and said value is only honestly
+> expressed when freely expressed against a background of genuinely competitive
+> options.
+
+<!-- -->
+
+> Is it an accident that Jordan B. Peterson appeals to a similar demographic as
+> MLP, or that he conveys a similar message in his books like 12 Rules for Life?
+> He retells the cliches with conviction inside a societal vacuum. There is
+> still hope, you can always change, if you start now, you can “"clean your
+> room"”, and tame the chaos (Discord?) in your life to find a talent or niche
+> and develop into a valued social role that can provide a sense of self-worth…
+> There are some people who need to hear that specific message, just as there
+> are people who need to read Atlas Shrugged (while there are other people for
+> whom that’s the worst book possible—the right book for the right person). Both
+> Peterson and MLP provide specific recommendations (if not necessarily
+> flowcharts). But the key step is to simply start. Sometimes it takes just a
+> word, an admission to oneself that one has made a mistake up until now, to
+> reach out: “I’m sorry”. “I was wrong.” “I can’t do this any longer.” Saying
+> that it’s “too late” or that “a leopard can’t change its spots” is an
+> abdication of freedom and personal responsibility; when there is a choice to
+> which one has always said “no” before, the next time, one can say “yes”. The
+> tragedy of Voldemort in Harry Potter and the Deathly Hallows is he succumbs,
+> like Walter in Breaking Bad, to the deadly sin of pride: not that he was a
+> neglected child or that his soul is mutilated by murder, but that at the end,
+> when he’s already lost, Harry gives him a final chance, and in front of
+> everypony, he is unable to swallow his pride and surrender, and cannot, will
+> not, choose to stop being Voldemort and become only Tom Riddle again; that is
+> when he is truly damned and the end of his story.
+
+--------------------------------------------------------------------------------
+
+[Change Is Bad][change]
+
+[change]: https://thezvi.wordpress.com/2017/07/20/change-is-bad/
+
+> The more optimized things currently are, the less likely any given change is
+> to be good.
+
+--------------------------------------------------------------------------------
+
+[What is ergodicity?][ergodicity]
+
+[ergodicity]: https://larspsyll.wordpress.com/2016/11/23/what-is-ergodicity-2/
+
+> Suppose you are concerned with determining what the most visited parks in a
+> city are. One idea is to take a momentary snapshot: to see how many people are
+> this moment in park A, how many are in park B and so on. Another idea is to
+> look at one individual (or few of them) and to follow him for a certain period
+> of time, e.g. a year. Then, you observe how often the individual is going to
+> park A, how often he is going to park B and so on.
+> 
+> Thus, you obtain two different results: one statistical analysis over the
+> entire ensemble of people at a certain moment in time, and one statistical
+> analysis for one person over a certain period of time. The first one may not
+> be representative for a longer period of time, while the second one may not be
+> representative for all the people.
+> 
+> The idea is that an ensemble is ergodic if the two types of statistics give
+> the same result. Many ensembles, like the human populations, are not ergodic.
+> 
+> We trust that a good/bad experience at a restaurant will repeat, but not that
+> if more black persons commit crimes, no black person is to be trusted.
+> 
+> The answer is that the ensemble of meal in a restaurant is more or less
+> ergodic, while the ensemble of black people is not at all ergodic.

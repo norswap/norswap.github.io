@@ -1,5 +1,5 @@
 ---
-title: "Chose Tidbits: June 2019"
+title: "Chosen Tidbits: June 2019"
 layout: post
 ---
 

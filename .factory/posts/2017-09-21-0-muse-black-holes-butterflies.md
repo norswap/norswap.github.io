@@ -26,7 +26,9 @@ Without further ado, [the album][listen].
 ![Muse - Black Holes & Butterflies Album Cover](/posts/muse-black-holes-butterflies/cover2.jpg)
 
 <hr>
+
 ### [Listen on YouTube][listen]
+
 <hr>
 
 [listen]: https://www.youtube.com/playlist?list=PLiZkNl164CsD_jMZcBIMLrAh1V0Oakq6L

@@ -258,6 +258,10 @@ async function build (incremental)
 
 // --------------------------------------------------------------------------------
 
+function normalize_path(path) {
+    return path.replace(/\\/g, '/')
+}
+
 async function create (dir, file)
 {
     switch (dir) {
@@ -279,8 +283,47 @@ async function create (dir, file)
     }
 }
 
-async function rename (dir, old, cur)
+// TODO: The new provisions for making renaming work well in '.factory/top/'
+//       should be ported to also work with posts, drafts and pages.
+
+// TODO: The provisons for '.factory/top' should be ported to create, unlink, ..
+
+// TODO: We should detect on start that new files have been added/modified, etc.
+
+async function rename (dir_path, old, cur)
 {
+    if (dir_path.includes('.factory/top/'))
+    {
+        const split = dir_path.split('.factory/top/')
+        let old_loc
+        let cur_loc
+        if (split.length == 1) {
+            old_loc = `../${old}`
+            cur_loc = `../${cur}`
+        } else {
+            const top_dir_path = split.last()
+            old_loc = `../${top_dir_path}/${old}`
+            cur_loc = `../${top_dir_path}/${cur}`
+        }
+
+        const old_exists = await fsp.access(old_loc)
+              .then(_ => true).catch(e => false)
+        console.log(old_loc)
+        console.log(old_exists)
+        
+        if (old_exists)
+            return fsp.rename(old_loc, cur_loc)
+                .then  (_ => console.log(`Renamed ${old_loc} to ${cur_loc}`))
+                .catch (e => console.log(e.message))
+        else {
+            const cur_factory_loc = dir_path + '/' + cur
+            return fsp.copyFile(cur_factory_loc, cur_loc)
+                .then  (_ => console.log(`Copied ${cur_factory_loc} to ${cur_loc}`))
+                .catch (e => console.log(e.message))
+        }        
+    }
+    
+    const dir = dir_path.split('/').last()
     switch (dir) {
         case 'posts':
         case 'pages':
@@ -289,13 +332,11 @@ async function rename (dir, old, cur)
             const old_loc = '../' + permalink(type, old)
             const cur_loc = '../' + permalink(type, cur)
             await fsp.rename(old_loc, cur_loc)
-                .then  (_ => console.log(`Moved ${old_loc} to ${cur_loc}`))
+                .then  (_ => console.log(`Renamed ${old_loc} to ${cur_loc}`))
                 .catch (e => console.log(e.message))
             break
-        case 'top':
-            await fsp.rename(`../${old}`, `../${cur}`)
-                .then  (_ => console.log(`Moved ../${old} to ../${cur}`))
-                .catch (e => console.log(e.message))
+        default:
+            console.log(`[Rename] Unrecognized top directory: '${dir}'`)
             break
     }
 }
@@ -317,7 +358,7 @@ async function unlink (dir, filename)
     }
 }
 
-function debounce (events)
+async function debounce (events)
 {
     const map = {}
     // eliminate duplicate events
@@ -352,6 +393,13 @@ function debounce (events)
             }
             delete map[JSON.stringify(modify)]
         }
+        // Ignore all directory changes.
+        else if (event.action == watcher.actions.MODIFIED) {
+            const path = normalize_path(event.directory) + '/' + event.file
+            const stat = await fsp.lstat(path)
+            if (stat.isDirectory())
+                delete map[JSON.stringify(event)]
+        }
     }
 
     return Object.values(map)
@@ -368,7 +416,7 @@ async function watch()
         lock = new Promise((r, _) => resolve = r)
         await old_lock
         let promises = []
-        for (event of debounce(events)) {
+        for (event of await debounce(events)) {
             const path = event.directory.replace(/\\/g, '/') // normalize
             const dir  = path.split('/').last()
             if (dir == '.factory') continue
@@ -381,7 +429,7 @@ async function watch()
                     promises.push(unlink(dir, event.file))
                     break
                 case watcher.actions.RENAMED:
-                    promises.push(rename(dir, event.oldFile, event.newFile))
+                    promises.push(rename(path, event.oldFile, event.newFile))
                     break
             }
         }

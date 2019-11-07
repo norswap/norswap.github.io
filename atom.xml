@@ -6,6 +6,17 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Thesis Done!</title>
+      <description>
+&lt;p&gt;I successfully defended my thesis &amp;quot;&lt;em&gt;Principled Procedural Parsing&lt;/em&gt;&amp;quot; on the 17th
+of October!&lt;/p&gt;
+&lt;p&gt;You can &lt;a href=&quot;/pubs/thesis.pdf&quot;&gt;download it here&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2019-11-06T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/thesis</link>
+      <guid isPermaLink="true">http://norswap.com/thesis</guid>
+    </item>
+    <item>
       <title>Chosen Tidbits: June 2019</title>
       <description>
 &lt;p&gt;As some may know, I read a whole lot. So I thought to start a series to
@@ -2045,104 +2056,6 @@ where the author didn&amp;#39;t enable it. I wish they&amp;#39;d change that.&lt
       <pubDate>2019-05-11T22:00:00.000Z</pubDate>
       <link>http://norswap.com/youtube-transcripts</link>
       <guid isPermaLink="true">http://norswap.com/youtube-transcripts</guid>
-    </item>
-    <item>
-      <title>Streaming Music From Phone to Computer</title>
-      <description>
-&lt;p&gt;I keep my full music library (50+ GB of music) synced with the external SD card
-on my (Android) phone. Occasionaly, it is handy to stream music to a computer.
-Notably, my work laptop only has a 256GB of disk, so streaming lets me save
-space, not to mention avoid syncing pains.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s not incredibly obvious how to do this however, even after some quick
-googling. Hence this post.&lt;/p&gt;
-&lt;h2 id=&quot;the-simple-solution&quot;&gt;The Simple Solution&lt;/h2&gt;
-&lt;p&gt;This works well on home wifi networks.&lt;/p&gt;
-&lt;p&gt;We&amp;#39;re going to use the DLNA/UPnP protocols to stream from our phone to a computer.&lt;/p&gt;
-&lt;p&gt;On my (Android) phone, I use the &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.findhdmusic.app.upnpcast&quot;&gt;Hi-Fi Cast&lt;/a&gt; app. It&amp;#39;s basically a music player
-with the ability to stream to media servers (including &lt;a href=&quot;https://en.wikipedia.org/wiki/Chromecast&quot;&gt;Chromecast&lt;/a&gt;, which is
-also handy to stream to TVs).&lt;/p&gt;
-&lt;p&gt;On the computer, you&amp;#39;ll need to install &lt;a href=&quot;https://kodi.tv/&quot;&gt;Kodi&lt;/a&gt;. Normally, Kodi is used more to
-stream from the computer to other devices (typically a Smart TV) but here we
-want to stream &lt;strong&gt;to&lt;/strong&gt; Kodi. This is going to take some simple configuration.&lt;/p&gt;
-&lt;p&gt;We&amp;#39;re going to follow the instructions from &lt;a href=&quot;https://kodi.wiki/view/UPnP/Client&quot;&gt;here&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;To turn on XBMC&amp;#39;s UPnP client, in Kodi go to Settings -&amp;gt; Services -&amp;gt; UPnP and
-enable &amp;quot;Allow control of Kodi via UPnP&amp;quot;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Note you need to be at least in &amp;quot;Standard&amp;quot; configuration mode (not &amp;quot;Basic&amp;quot;) to
-do this, and enabling UPnP (on the same page) is a pre-requisite.&lt;/p&gt;
-&lt;p&gt;Aside: If you&amp;#39;d like to stream from your computer to your phone &lt;em&gt;while picking what to
-play from your phone&lt;/em&gt;, you can enable &amp;quot;Share my libraries&amp;quot; (you need to import
-some media into Kodi, otherwise this is useless).&lt;/p&gt;
-&lt;p&gt;Now, in Hi-Fi cast go to the menu -&amp;gt; Playback Devices. Your computer should
-appear with the name &amp;quot;Kodi (&amp;lt;computer name&amp;gt;)&amp;quot;. Select it and enjoy streaming
-to your computer.&lt;/p&gt;
-&lt;p&gt;What if it doesn&amp;#39;t work? There might be some OS configuration options to set.
-In particular, on Windows, &amp;quot;Control Panel -&amp;gt; Network and Sharing Center -&amp;gt;
-Advanced sharing settings -&amp;gt; Media Streaming&amp;quot; might be relevant.&lt;/p&gt;
-&lt;p&gt;Another class of issues relate to the network you&amp;#39;re on. If you have control of
-the network configuration (i.e. the configuration of your internet router) and
-are technically literate, you can try to see if there is anything fishy going on
-there.&lt;/p&gt;
-&lt;p&gt;I wanted to stream my music not only at home, but also at work, where this naive
-setup didn&amp;#39;t work. Making it work there is the object of the next section.&lt;/p&gt;
-&lt;h2 id=&quot;streaming-on-restricted-networks&quot;&gt;Streaming on Restricted Networks&lt;/h2&gt;
-&lt;p&gt;I wanted to stream my music at work (I work at a University). The simple
-solution didn&amp;#39;t work. Obviously, the network had some kind of restriction on
-protocols or ports being used.&lt;/p&gt;
-&lt;p&gt;After &lt;a href=&quot;https://forum.kodi.tv/showthread.php?tid=341162&quot;&gt;some advanced investigation foo&lt;/a&gt;, I managed to figure out
-the problem.&lt;/p&gt;
-&lt;p&gt;Basically, the auto-discovery protocol was blocked on the campus network. Which
-is quite understanble really — I can imagine some kind of broadcasting is
-involved, which isn&amp;#39;t optimal when you&amp;#39;re tight on bandwidth.&lt;/p&gt;
-&lt;p&gt;The solution is then to directly input the address of the playback device (the
-computer&amp;#39;s IP address + the port on which Kodi listens for incoming streams),
-which is supported by Hi-Fi cast (under &amp;quot;Playback Devices&amp;quot;, select the drop-down
-(&amp;quot;...&amp;quot;) menu and then &amp;quot;Add UPnP Renderer&amp;quot;).&lt;/p&gt;
-&lt;p&gt;But what is this address? That&amp;#39;s where I had to &lt;a href=&quot;https://forum.kodi.tv/showthread.php?tid=341162&quot;&gt;investigate&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Ultimately I ended up scanning my machine (a Mac) for listening ports by running
-the command &lt;code&gt;sudo lsof -i -n -P | grep TCP&lt;/code&gt;. This turned out that Kodi was
-listening on 1912, 1655, and 9090, with 1655 being the one we are interested in.&lt;/p&gt;
-&lt;p&gt;The renderer address to add to Hi-Fi Cast is thus &lt;code&gt;http://&amp;lt;ip&amp;gt;:1655/&lt;/code&gt;. The IP
-address should be the local one (on campus we actually have public IPs!).&lt;/p&gt;
-&lt;p&gt;You can find your local IP (probably you want IPv4 — something like
-&amp;quot;192.168.0.42&amp;quot;) by running &lt;code&gt;ifconfig&lt;/code&gt; on Mac and looking for &amp;quot;en0&amp;quot;. On Windows,
-run &lt;code&gt;ipconfig /all&lt;/code&gt; and look for &amp;quot;Local Area Connection&amp;quot;.&lt;/p&gt;
-&lt;h2 id=&quot;alternatives&quot;&gt;Alternatives&lt;/h2&gt;
-&lt;p&gt;If that doesn&amp;#39;t work, an alternative is to set up some kind of server on your
-phone to serve files, and to connect to it with your computer.&lt;/p&gt;
-&lt;p&gt;I used the excellent &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.icecoldapps.serversultimate&amp;amp;hl=en&quot;&gt;Servers Ultimate&lt;/a&gt; app for this (it&amp;#39;s a trial and costs 9€
-after that — it&amp;#39;s probably possible to fish for alternatives though!).&lt;/p&gt;
-&lt;p&gt;Two kind of servers that work are &amp;quot;FTP Server&amp;quot; (not native nor proxy!) and
-&amp;quot;WebDAV Server&amp;quot;. I ran them with the default options, on ports 2121 and 8484
-(respectively). Of the two, FTP worked on both Windows and Mac while I couldn&amp;#39;t
-get WebDAV to work on Windows.&lt;/p&gt;
-&lt;p&gt;(In case you&amp;#39;d be tempted to try an SMB server, don&amp;#39;t. Unless your device is
-rooted, you can&amp;#39;t select the default port (455) because Android forbids
-listening on ports in the 0-1024 range. Windows (and apparently, Linux?) won&amp;#39;t
-be able to connect to it. Mac is reported to work, but it didn&amp;#39;t work for me
-with Servers Ultimate... It did work with &lt;a href=&quot;https://play.google.com/store/apps/details?id=fr.webrox.landrive&quot;&gt;another app&lt;/a&gt; though, but I still had
-issues. I think I had to create user accounts, and the Mac wouldn&amp;#39;t disconnect
-the network share, I had to issue a &lt;a href=&quot;https://apple.stackexchange.com/questions/256209/&quot;&gt;&lt;code&gt;umount&lt;/code&gt; command&lt;/a&gt;.)&lt;/p&gt;
-&lt;p&gt;Don&amp;#39;t forget to change the directory you want to share — you probably don&amp;#39;t want
-to make your whole phone accessible, esp. if you&amp;#39;re not gonna set a password.&lt;/p&gt;
-&lt;p&gt;I wanted to share a directory on my SD card, and for that I had to find its
-exact path (which you can do using a disk usage application like &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.mobile_infographics_tools.mydrive&quot;&gt;this
-one&lt;/a&gt;). For me the SD card was at &lt;code&gt;/storage/0000-0000&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Once the server is running you can access it by typing its address + port in the
-Explorer address bar. e.g. &lt;code&gt;ftp://192.168.0.101:2121/&lt;/code&gt; for FTP. On Mac, in the
-Finder you need to do &amp;quot;Go &amp;gt; Connect to Server...&amp;quot; and enter the same thing.&lt;/p&gt;
-&lt;p&gt;For WebDav, on Mac you use &lt;code&gt;http&lt;/code&gt; (or &lt;code&gt;https&lt;/code&gt; if you use SSL): e.g.
-&lt;code&gt;http://192.168.0.101:8484/&lt;/code&gt;. I couldn&amp;#39;t make it work on Windows, but in theory
-you&amp;#39;d type &lt;code&gt;\\192.168.0.101@8484\DavWWWRoot\&lt;/code&gt; (the last part is important and is
-a special Windows keyword). If you use SSL, you need to write
-&lt;code&gt;\\192.168.0.101@SLL@8484\DavWWWRoot\&lt;/code&gt; instead. &lt;a href=&quot;https://www.webdavsystem.com/server/access/windows/&quot;&gt;More instructions
-here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;And that&amp;#39;s it — happy listening!&lt;/p&gt;
-      </description>
-      <pubDate>2019-04-28T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/stream-from-phone</link>
-      <guid isPermaLink="true">http://norswap.com/stream-from-phone</guid>
     </item>
   </channel>
 </rss>

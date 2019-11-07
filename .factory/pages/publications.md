@@ -3,6 +3,12 @@ layout: page
 title: Publications
 ---
 
+**Principled Procedural Parsing**  
+Nicolas Laurent  
+*PhD Thesis (UCLouvain)*  
+*Louvain-La-Neuve, Belgium, October 17 2019*  
+[\[PDF\]](/pubs/thesis.pdf)
+
 **Red Shift: Procedural Shift-Reduce Parsing**  
 Nicolas Laurent  
 *The 10th ACM SIGPLAN International Conference on Software Language Engineering  

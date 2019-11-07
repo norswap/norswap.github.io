@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Wrangling Fitbit&#39;s and Google Sheets&#39; API
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Wrangling Fitbit&#39;s and Google Sheets&#39; API</h1>
+      <span class="post-date">08 Nov 2019</span>
+<p>In my post about <a href="/weight-training-4/">my cut phase</a> I showcased <a href="https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing">the spreadsheet</a> I used to track my
+calorie deficit, my weight, as well as the predicted weight based on the
+deficit.</p>
+<p>The big downside of the spreadsheet was having to manually input the value, and
+this is something I wanted to automate using Fitbit&#39;s and Google Sheets&#39;
+respective APIs.</p>
+<p>This is now done, and I&#39;ve published it as an <a href="https://observablehq.com/@norswap/fitbit/2">Observable notebook</a> (for
+posterity&#39;s sake, the code is also <a href="fitbit_google_sheets.tgz">archived here</a>).</p>
+<p>The notebook has some explanations (and full setup instructions) but I&#39;ll give a
+few details.</p>
+<p>Basically you specify the ID of a new spreadsheet in the notebook, as well as a
+time period of interest, and then you can hit a button that will populate the
+spreadsheet with calories in / calories out / weight / caloric surplus or
+deficit / smoothed weight.</p>
+<p>I had initially planned for this project to do much more — basically recreate
+<a href="https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing">the whole spreadsheet</a>, but I realized this was overkill and
+would add a lot of complication.</p>
+<p>One particularly thorny issue is that the app I use to track my weight sometimes
+desyncs from Fitbit, and it doesn&#39;t seem possible to sync older measurement
+after the fact. These can be added to the sheet manually, but then any logic
+that re-creates the sheet must be able to identify &amp; preserve these manually
+entered entries!</p>
+<p>Ultimately, this is enough. I can just hit the button and then copy/paste the
+entries to the real spreadsheet instead of entering them manually.</p>
+<p>Of course, I spent way more time on building this thing than I would have
+manually copying values in the foreseeable future. But I learned things! Namely:</p>
+<ul>
+<li>The Google Sheet and Fitbit API</li>
+<li>Implementing a simple OAuth 2.0 flow</li>
+<li>Using Observable notebooks</li>
+<li>Some finer points of Javascript (e.g. how promises relate to &quot;thenables&quot;)</li>
+</ul>
+<p>I found Observable to be particularly interesting. Of course I could have
+trivially built the same thing as a local webpage, but Observable makes it
+easier to share with people and easier to access from other devices (including
+phones). It&#39;s also nice to be able to do good looking literate programming.</p>
+<p>I didn&#39;t really need the spreadsheet-like reactive/update-on-change quality of
+Observable, but that&#39;s certainly interesting too.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/fitbit-google-sheets";
+        this.page.identifier = "fitbit-google-sheets";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

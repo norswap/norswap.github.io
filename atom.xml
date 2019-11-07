@@ -6,6 +6,52 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Wrangling Fitbit&#39;s and Google Sheets&#39; API</title>
+      <description>
+&lt;p&gt;In my post about &lt;a href=&quot;/weight-training-4/&quot;&gt;my cut phase&lt;/a&gt; I showcased &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing&quot;&gt;the spreadsheet&lt;/a&gt; I used to track my
+calorie deficit, my weight, as well as the predicted weight based on the
+deficit.&lt;/p&gt;
+&lt;p&gt;The big downside of the spreadsheet was having to manually input the value, and
+this is something I wanted to automate using Fitbit&amp;#39;s and Google Sheets&amp;#39;
+respective APIs.&lt;/p&gt;
+&lt;p&gt;This is now done, and I&amp;#39;ve published it as an &lt;a href=&quot;https://observablehq.com/@norswap/fitbit/2&quot;&gt;Observable notebook&lt;/a&gt; (for
+posterity&amp;#39;s sake, the code is also &lt;a href=&quot;fitbit_google_sheets.tgz&quot;&gt;archived here&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;The notebook has some explanations (and full setup instructions) but I&amp;#39;ll give a
+few details.&lt;/p&gt;
+&lt;p&gt;Basically you specify the ID of a new spreadsheet in the notebook, as well as a
+time period of interest, and then you can hit a button that will populate the
+spreadsheet with calories in / calories out / weight / caloric surplus or
+deficit / smoothed weight.&lt;/p&gt;
+&lt;p&gt;I had initially planned for this project to do much more — basically recreate
+&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing&quot;&gt;the whole spreadsheet&lt;/a&gt;, but I realized this was overkill and
+would add a lot of complication.&lt;/p&gt;
+&lt;p&gt;One particularly thorny issue is that the app I use to track my weight sometimes
+desyncs from Fitbit, and it doesn&amp;#39;t seem possible to sync older measurement
+after the fact. These can be added to the sheet manually, but then any logic
+that re-creates the sheet must be able to identify &amp;amp; preserve these manually
+entered entries!&lt;/p&gt;
+&lt;p&gt;Ultimately, this is enough. I can just hit the button and then copy/paste the
+entries to the real spreadsheet instead of entering them manually.&lt;/p&gt;
+&lt;p&gt;Of course, I spent way more time on building this thing than I would have
+manually copying values in the foreseeable future. But I learned things! Namely:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The Google Sheet and Fitbit API&lt;/li&gt;
+&lt;li&gt;Implementing a simple OAuth 2.0 flow&lt;/li&gt;
+&lt;li&gt;Using Observable notebooks&lt;/li&gt;
+&lt;li&gt;Some finer points of Javascript (e.g. how promises relate to &amp;quot;thenables&amp;quot;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I found Observable to be particularly interesting. Of course I could have
+trivially built the same thing as a local webpage, but Observable makes it
+easier to share with people and easier to access from other devices (including
+phones). It&amp;#39;s also nice to be able to do good looking literate programming.&lt;/p&gt;
+&lt;p&gt;I didn&amp;#39;t really need the spreadsheet-like reactive/update-on-change quality of
+Observable, but that&amp;#39;s certainly interesting too.&lt;/p&gt;
+      </description>
+      <pubDate>2019-11-07T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/fitbit-google-sheets</link>
+      <guid isPermaLink="true">http://norswap.com/fitbit-google-sheets</guid>
+    </item>
+    <item>
       <title>Animes, Shows &amp; Movies Reviews 4</title>
       <description>
 &lt;p&gt;Previously: Previously: &lt;a href=&quot;/every-anime/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/more-anime/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/even-more-anime/&quot;&gt;Three&lt;/a&gt;&lt;/p&gt;
@@ -2239,80 +2285,6 @@ ridiculing the form.&lt;/p&gt;
       <pubDate>2019-05-17T22:00:00.000Z</pubDate>
       <link>http://norswap.com/zizek-peterson</link>
       <guid isPermaLink="true">http://norswap.com/zizek-peterson</guid>
-    </item>
-    <item>
-      <title>One Year of Weightlifting</title>
-      <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/weight-training&quot;&gt;Starting Weight Training&lt;/a&gt;, &lt;a href=&quot;/weight-training-2&quot;&gt;More Weightlifting
-Observations&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Been lifting for more than one year now! So what&amp;#39;s new compared to last time?&lt;/p&gt;
-&lt;p&gt;The last post ended in me saying training got me tired and switching to training
-only twice a week instead of three. This ended up lasting a bit less than three
-months until early-January, and in retrospect, it was a mistake. I probably
-should have done some kind of &lt;a href=&quot;https://builtwithscience.com/deload-week/&quot;&gt;deload week&lt;/a&gt; instead and (a) eaten more, (b)
-slept more. More on this later. It&amp;#39;s not entirely borne out in the data, but
-that period felt like a slog in terms of progress.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;progress.png&quot; alt=&quot;Graph of weight lifted over time.&quot;&gt;&lt;/p&gt;
-&lt;p&gt;There is about two weeks of data missing between that graph and &lt;a href=&quot;/weight-training-2#progression&quot;&gt;the
-last&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;What else can be seen there? The 160kg squat is my new elusive nemesis. My max
-is once 2x157.5kg currently. Deadlift stalled at 160kg for a bit, but then took
-off. I finally broke 100kg on the bench press.&lt;/p&gt;
-&lt;h1 id=&quot;revamped-program&quot;&gt;Revamped Program&lt;/h1&gt;
-&lt;p&gt;I finally changed my program! Or more properly, extended it. Previously, I&amp;#39;d
-been running classical &lt;a href=&quot;https://stronglifts.com/5x5/&quot;&gt;Stronglifts&lt;/a&gt; which had two workouts: squat, bench press
-and barbell row for workout A; squat again, overhead press and deadlift for
-workout B. What I did was drop the barbell row altogether (I described my
-frustration with it &lt;a href=&quot;/weight-training-2&quot;&gt;last time&lt;/a&gt; and it did return), and drop the squat from
-workout B.&lt;/p&gt;
-&lt;p&gt;To supplement this, I integrated exercises from Jeremy Ethier&amp;#39;s &lt;a href=&quot;https://builtwithscience.com/best-full-body-workout/&quot;&gt;full body
-workout&lt;/a&gt;, excepted the &amp;quot;High to Low Cable Flies&amp;quot; — couldn&amp;#39;t fit it in
-the schedule and this requires two cables systems, which tend to be fairly busy
-machines.&lt;/p&gt;
-&lt;p&gt;I effected this change at around the start of March, as you can see from the row
-disappearing from the graph above. There is also a correlation with the deadlift
-finally taking off.&lt;/p&gt;
-&lt;p&gt;To track the new workout, I&amp;#39;m using (in addition to the Stronglifts app) an app
-called &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.selahsoft.workoutlog&quot;&gt;Simple Workout Log&lt;/a&gt;. I&amp;#39;m afraid it doesn&amp;#39;t generate a graph for all
-exercises, and generating one per exercise would be unwieldy however.&lt;/p&gt;
-&lt;p&gt;The workout is more body-building oriented than my previous strictly
-power-lifting routine. Except for the barbell row, all the Stronglifts lifts
-(the &amp;quot;big lifts&amp;quot;) also appear in the new workout. For them I kept the
-Stronglifts progression and the focus on lifting heavy. For the other exercises
-however I used Jeremy&amp;#39;s guideline.&lt;/p&gt;
-&lt;p&gt;The result was increased volume. I finally look somewhat obviously muscular.
-Although a lot of that had to do with nutrition.&lt;/p&gt;
-&lt;h1 id=&quot;nutrition--measurements&quot;&gt;Nutrition &amp;amp; Measurements&lt;/h1&gt;
-&lt;p&gt;In January, I started actively tracking both my calorie expenditure (with a
-&lt;a href=&quot;https://www.fitbit.com/be/charge2&quot;&gt;Fitbit Charge 2&lt;/a&gt; that was actually loaned to me by my colleague Sana for
-data-mining purposes) and my calorie expenses (using the &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.myfitnesspal.android&quot;&gt;MyFitnessPal&lt;/a&gt; app,
-just like about everybody).&lt;/p&gt;
-&lt;p&gt;The goal was to eat more to enable gains. My objective was to try to reach 3200
-calories every day, and 3600 up to 4000 on workout days.&lt;/p&gt;
-&lt;p&gt;That (later and the workout change outlined above) worked nicely in enabling
-some further mass gains.&lt;/p&gt;
-&lt;p&gt;I also bought a smart scale, but I&amp;#39;m not that happy with it. It&amp;#39;s accurate on
-weight, but the bodyfat percentage given is wildly off: it has me at 13% which
-would have me quite ripped — a more accurate scale gives 17%, which is in line
-with picture references. Still, it can tell you if you&amp;#39;re trending up or down
-and some indication of the magnitude. Here&amp;#39;s &lt;a href=&quot;https://www.amazon.fr/gp/product/B07GWCC412/&quot;&gt;what I bought&lt;/a&gt; so you can avoid
-it. The more accurate scale is a big one at the gym. Apparently you have to look
-for &amp;quot;dual frequencies&amp;quot; scales, but I couldn&amp;#39;t find any.&lt;/p&gt;
-&lt;p&gt;I did get a lot of mileage out of a &lt;a href=&quot;https://www.amazon.fr/gp/product/B07BMNDW7F&quot;&gt;kitchen scale&lt;/a&gt; however, in order to get
-more correct inputs into MyFitnessPal.&lt;/p&gt;
-&lt;h1 id=&quot;next-up-cutting&quot;&gt;Next Up: Cutting&lt;/h1&gt;
-&lt;p&gt;The next step is already underway: I&amp;#39;m going to &amp;quot;cut&amp;quot; to reduce bodyfat and
-obtain the sacro-sanct six pack.&lt;/p&gt;
-&lt;p&gt;I probably could have gained some more, but now feels like a nice time to try to
-achieve this milestone, while I&amp;#39;m finishing my PhD and still have flexibility in
-my schedule. It&amp;#39;s always harder to do something on the first go, as there are
-things to figure out, and mistakes will necessarily be made.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve been easing into it for three weeks, and early signs are encouraging.
-However, a full discussion will have to wait for later!&lt;/p&gt;
-      </description>
-      <pubDate>2019-05-11T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/weight-training-3</link>
-      <guid isPermaLink="true">http://norswap.com/weight-training-3</guid>
     </item>
   </channel>
 </rss>

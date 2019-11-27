@@ -6,6 +6,18 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Models of Generics and Metaprogramming Article</title>
+      <description>
+&lt;p&gt;I recently came accross this page:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://thume.ca/2019/07/14/a-tour-of-metaprogramming-models-for-generics/&quot;&gt;Models of Generics and Metaprogramming: Go, Rust, Swift, D and More&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It is in a similar vein as the article I wrote earlier on &lt;a href=&quot;/polymorphism&quot;&gt;polymorphism&lt;/a&gt; (though
+probably better written). It&amp;#39;s pretty nice, go check it out.&lt;/p&gt;
+      </description>
+      <pubDate>2019-11-25T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/generics-models</link>
+      <guid isPermaLink="true">http://norswap.com/generics-models</guid>
+    </item>
+    <item>
       <title>Wrangling Fitbit&#39;s and Google Sheets&#39; API</title>
       <description>
 &lt;p&gt;In my post about &lt;a href=&quot;/weight-training-4/&quot;&gt;my cut phase&lt;/a&gt; I showcased &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing&quot;&gt;the spreadsheet&lt;/a&gt; I used to track my
@@ -2157,134 +2169,6 @@ and &lt;code&gt;AddRankVisitor&lt;/code&gt;) on &lt;a href=&quot;https://gist.gi
       <pubDate>2019-05-24T22:00:00.000Z</pubDate>
       <link>http://norswap.com/java-visitor-pattern</link>
       <guid isPermaLink="true">http://norswap.com/java-visitor-pattern</guid>
-    </item>
-    <item>
-      <title>The Zizek Peterson Debate</title>
-      <description>
-&lt;p&gt;Having previously enjoyed and written about both &lt;a href=&quot;/zizek-ideology/&quot;&gt;Slavoj Zizek&lt;/a&gt; and &lt;a href=&quot;/12-rules/&quot;&gt;Jordan
-Peterson&lt;/a&gt;, I was interested to learn they&amp;#39;d have a debate. Billed as &amp;quot;The Debate
-of the Century&amp;quot;, its official title was &amp;quot;Happiness: Capitalism vs. Marxism&amp;quot;.&lt;/p&gt;
-&lt;p&gt;Having watched it (&lt;a href=&quot;https://www.youtube.com/watch?v=lsWndfzuOc4&quot;&gt;video&lt;/a&gt;), I regret to inform you it was neither of those
-things. But I nonetheless found it interesting.&lt;/p&gt;
-&lt;p&gt;The debate can best be seen as a collection of interesting ideas from both
-authors with occasional bridges being thrown accross.&lt;/p&gt;
-&lt;h2 id=&quot;peteresons-opening-statement&quot;&gt;Petereson&amp;#39;s Opening Statement&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=lsWndfzuOc4&amp;amp;t=899s&quot;&gt;(Video Timestamp)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Peterson opens with a 30-minutes speech where he criticizes the communist
-manifesto, which he&amp;#39;d re-read for the occasion. I&amp;#39;d say his criticism is
-essentially well-placed, &lt;em&gt;but&lt;/em&gt; as many are &lt;a href=&quot;http://archive.is/l1kc9&quot;&gt;quick to point out&lt;/a&gt;,
-attacking the manifesto isn&amp;#39;t perhaps attacking Communism or even Marxism as its
-strongest point. Still, that criticism would be salutary for most &amp;quot;communists&amp;quot;
-I&amp;#39;ve talked to (which, unfortunately were more fanboys than rigorous
-intellectuals). Another issue is that it&amp;#39;s hard to pin down what communism &lt;em&gt;is&lt;/em&gt;
-with its constellation of thinkers. At least Marxism is closed off now that Marx
-is dead and he never amended his manifesto that I know of.&lt;/p&gt;
-&lt;p&gt;I was surprised (and a bit disappointed) that Peterson didn&amp;#39;t seem more
-knowledgeable about communism. He makes a big deal out of how he obsessed about
-the cold war, and it would seem to me that understanding the ideological roots
-of the Soviet Union would be pretty important. Similarly, he&amp;#39;s crusading against
-&amp;quot;post-modern neo-marxists&amp;quot; and it&amp;#39;s strange not to understand or at least know
-your opponent&amp;#39;s ideas.&lt;/p&gt;
-&lt;p&gt;The statement has some interesting ideas though, including the statement that
-&amp;quot;almost all ideas are wrong&amp;quot;.&lt;/p&gt;
-&lt;h2 id=&quot;zizeks-opening-statement&quot;&gt;Zizek&amp;#39;s Opening Statement&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=lsWndfzuOc4&amp;amp;t=2776s&quot;&gt;(Video Timestamp)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Zizek&amp;#39;s opening statement is probably the most interesting part of the debate.
-You can find a transcript of it &lt;a href=&quot;http://archive.is/2XONl&quot;&gt;here&lt;/a&gt;. In typical Zizek fashion,
-it&amp;#39;s made of many idea nuggets only tenuously linked to one other — although
-there is a link, all the more difficult to follow in the spoken form.&lt;/p&gt;
-&lt;p&gt;Zizek makes many interesting points. First, on how happiness is often the wrong
-yardstick:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;In our daily lives, we pretend to desire things which we do not really desire,
-so that ultimately the worst thing that can happen is to get what we
-officially desire. So, I agree that human life of freedom and dignity does not
-consist just in searching for happiness, no matter how much we spiritualise
-it, or in the effort to actualise our inner potentials. We have to find some
-meaningful cause beyond the mere struggle for pleasurable survival.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Second on how modernity is characterized by the absence of authority (and
-divinity) that could impose meaning from above, and how it&amp;#39;s impossible to go
-back to this pre-modern state of affairs.&lt;/p&gt;
-&lt;p&gt;He sees the rejections of some systemic failures of capitalism onto external
-causes (from Donald Trump to migrants).&lt;/p&gt;
-&lt;p&gt;His thoughts on social constructionism vs evolutionary psychology (comparing
-them, of all things, to French cuisine) are also worth a listen/read.&lt;/p&gt;
-&lt;p&gt;What&amp;#39;s perhaps most surprising is that Zizek doesn&amp;#39;t defend Marxism, which he
-squarely throws under the bus as failed. He doesn&amp;#39;t do much to defend Communism
-either, but points a problem with capitalism on what Marx called &amp;quot;commons&amp;quot; (I
-wrote &lt;a href=&quot;/commons/&quot;&gt;about commons&lt;/a&gt; before). Capitalism threatens the commons due to its
-self-reproducing nature, though he points out that communism had this
-self-reproducing nature to (&amp;quot;the historical necessity of progress towards
-communism&amp;quot;, though — fittingly — this drive was much more centralized).&lt;/p&gt;
-&lt;p&gt;In fact, this was a surprise for many, but both men tended to agree a whole lot,
-with only surface differences (some, though not all, could be chalked to their
-vastly different backgrounds). The tone of the debate was also noted to be very
-cordial and respectful, something I really appreciated.&lt;/p&gt;
-&lt;p&gt;Zizek&amp;#39;s conclusion is, in his words &amp;quot;pessimistic&amp;quot;: we will continue to slide
-towards disaster, maybe some catastrophes can shake us out of our ruts.&lt;/p&gt;
-&lt;p&gt;I encourage you to &lt;a href=&quot;https://www.youtube.com/watch?v=lsWndfzuOc4&quot;&gt;watch the video&lt;/a&gt; or &lt;a href=&quot;http://archive.is/2XONl&quot;&gt;read the transcript&lt;/a&gt;
-(or both), this part is the most interesting.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;d say this reminds me a lot of what I&amp;#39;ve &lt;a href=&quot;/zizek-ideology/&quot;&gt;seen from him&lt;/a&gt;
-already. Some idea make a reappearance, other are newly developed, but it&amp;#39;s
-clear these are coherent thoughts from the same thinker.&lt;/p&gt;
-&lt;h2 id=&quot;further-comments&quot;&gt;Further Comments&lt;/h2&gt;
-&lt;p&gt;The rest of the debate was (if memory serves) also interesting, but it gets even
-more disjointed. Zizek was hard to follow in his prepared statement, he becomes
-increasingly erratic in the rest of the debates. It&amp;#39;s funny to see Peterson
-almost sweating from concentration trying to discern a thread.&lt;/p&gt;
-&lt;p&gt;Like I said before, I appreciated immensely that both men seemed pretty much on
-agreement (as well they should, adopting neither deluded far-left or far-right
-opinions), and that the debate was cordial, even mutually admirative at times.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s also &lt;em&gt;entertaining&lt;/em&gt; to watch, and I suspect this was the mode in which most
-people consumed the debate.&lt;/p&gt;
-&lt;p&gt;Peterson is his usual intensely-driven professorial self, which I personally
-enjoy — while Zizek is his tick-ridden idiosyncratic self. He&amp;#39;s also quite
-semi-intentionally quite funny. It&amp;#39;s hard not to crack up when — out of time for
-his remarks, he starts telling a Slovenian joke, then after the first sentence
-interrupts himself to add &amp;quot;I will finish immediately&amp;quot; before finishing the joke.&lt;/p&gt;
-&lt;p&gt;If you&amp;#39;re curious, here&amp;#39;s &lt;a href=&quot;https://www.youtube.com/watch?v=lsWndfzuOc4&amp;amp;feature=youtu.be&amp;amp;t=6336&quot;&gt;the timestamp for the joke&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Regarding how the debate was receiving, judging from Twitter and some quick
-google, pretty well on the center-right, and pretty badly on the left (broadly).&lt;/p&gt;
-&lt;p&gt;A good criticism is the one made &lt;a href=&quot;http://archive.is/l1kc9&quot;&gt;by Benjamin Studebaker&lt;/a&gt;. His
-argument abbreviated:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;There are three necessary features which distinguish a bad Marx paper:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;The paper contains a close reading of the Manifesto.&lt;/li&gt;
-&lt;li&gt;The paper contains almost no references to any other texts, either by Marx or by other socialist thinkers.&lt;/li&gt;
-&lt;li&gt;The paper contains a long digression about all the reasons the Soviet Union was terrible. I call this the “tankie-bashing” bit.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;http://archive.is/l1kc9&quot;&gt;The article&lt;/a&gt; also has a nice summary of Peterson&amp;#39;s opening
-statement.&lt;/p&gt;
-&lt;p&gt;His charge against Peterson&amp;#39;s argument is followed with how he thinks Zizek
-should have replied to defend communism. It&amp;#39;s quite interesting, but it&amp;#39;s not
-what the debate ended up being.&lt;/p&gt;
-&lt;p&gt;Other commentators &lt;a href=&quot;http://archive.is/IkI0e&quot;&gt;opted for snide&lt;/a&gt;, which I think is sad — although the linked
-live commentary &lt;em&gt;is&lt;/em&gt; quite funny.&lt;/p&gt;
-&lt;p&gt;Other than that, multiple commentators (&lt;a href=&quot;http://archive.is/PHLu5&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;http://archive.is/MY9q5&quot;&gt;two&lt;/a&gt;) pointed that the &amp;quot;Debate
-of the Century&amp;quot; was overhyped (overmarketed, really), and seemed poorly prepared
-by its protagonists. And I must agree. Zizek is particularly culpable here, for
-talking about wherever he felt like that was tenuously related rather than
-sticking to &amp;quot;his camp&amp;quot;, but I feel like the resulting discussing ended up more
-interesting because of it.&lt;/p&gt;
-&lt;p&gt;And sure, the level of the discussion might have been unappealing to all the
-critcial theorists that were widely read. But precisely due to the marketing,
-this event had the possibility to reach a much wider audience. And if you think
-something wrong was said therein, you ought to engage the content rather than
-ridiculing the form.&lt;/p&gt;
-&lt;p&gt;Ultimately, &lt;a href=&quot;https://www.youtube.com/watch?v=lsWndfzuOc4&quot;&gt;make your own opinion&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Bonus: &lt;a href=&quot;https://www.iep.utm.edu/zizek/&quot;&gt;Zizek on the Internet Encyclopedia of Philosophy&lt;/a&gt;&lt;/p&gt;
-&lt;!-- original: https://pastebin.com/SNsDQ5SF --&gt;
-&lt;!-- https://www.currentaffairs.org/2019/04/how-zizek-should-have-replied-to-jordan-peterson --&gt;
-&lt;!-- https://nowtoronto.com/culture/books/jordan-peterson-slavoj-zizek-debate/ --&gt;
-&lt;!-- https://www.theguardian.com/world/2019/apr/20/jordan-peterson-slavoj-zizek-happiness-capitalism-marxism --&gt;
-&lt;!-- https://www.currentaffairs.org/2019/04/live-commentary-on-the-zizek-peterson-debate --&gt;
-      </description>
-      <pubDate>2019-05-17T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/zizek-peterson</link>
-      <guid isPermaLink="true">http://norswap.com/zizek-peterson</guid>
     </item>
   </channel>
 </rss>

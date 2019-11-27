@@ -159,3 +159,11 @@ work on the Dart VM, and I'm inclined to believe it. Still the statement isn't
 qualified: how bad is it, really?
 
 [reified-slow]: https://gbracha.blogspot.com/2018/10/reified-generics-search-for-cure.html
+
+---
+
+If you liked this article, you might also want to check out ["Models of Generics
+and Metaprogramming: Go, Rust, Swift, D and More"][models] by Tristan Hume. It
+complements the present article nicely.
+
+[models]: https://thume.ca/2019/07/14/a-tour-of-metaprogramming-models-for-generics/

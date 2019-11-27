@@ -1,5 +1,5 @@
 ---
-title: "Music Piracy Miniguide"
+title: "Music Download Miniguide"
 layout: post
 ---
 
@@ -9,8 +9,8 @@ Nowadays, it is easier than ever to listen to music: just use [Spotify] or
 [Spotify]: https://play.spotify.com
 [Deezer]: http://www.deezer.com/
 
-Call me old-fashioned, but I don't like to be dependent on an internet connection.
-I'm also a bit of a pirate at heart `P)`. So let's get started.
+Call me old-fashioned, but I don't like to be dependent on an internet
+connection. So let's get started!
 
 ## Single Tracks
 

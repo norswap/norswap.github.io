@@ -4,9 +4,10 @@ const moment      = require('moment')
 const escape_html = require('escape-html')
 const tmp         = require('tmp-promise')
 const fsp         = require('fs').promises
-const mkdirp      = require('mkdirp-promise')
-const watcher     = require('@atom/nsfw')
-const path        = require('path')
+const fse         = require('fs-extra')
+const chokidar    = require('chokidar')
+const npath       = require('path')
+const touch       = require('touch')
 
 // --------------------------------------------------------------------------------
 
@@ -157,14 +158,14 @@ async function generate_page (type, filename, incremental) // relative filename
             return
         }
     }
-
+    
     const date = moment(filename.slice(0, 10), 'YYYY-MM-DD')
     const layout = type == 'draft' ? 'post' : type
     const obj = matter(await fsp.readFile(src_loc, {encoding: 'utf-8'}))
     const meta = obj.data
     if (meta.title) meta.title = escape_html(meta.title)
     const content = marked(obj.content)
-    await mkdirp('../' + plink)
+    await fse.mkdirp('../' + plink)
 .   /!output(dst_loc)
 .   /!include('page.dna')
     console.log(`Created ${dst_loc}`)
@@ -210,7 +211,7 @@ async function generate_index_page (posts, page, num_pages)
     if (page == 1) {
         output = '../index.html'
     } else {
-        await mkdirp('../' + page);
+        await fse.mkdirp('../' + page);
         output = `../${page}/index.html`
     }
 
@@ -258,195 +259,116 @@ async function build (incremental)
 
 // --------------------------------------------------------------------------------
 
-function normalize_path(path) {
-    return path.replace(/\\/g, '/')
+function top_relpath(dir, base)
+{
+    dir = dir.replace(new RegExp('top/?'), '')
+    return dir == '' ? base : `${dir}/${base}`
 }
 
-async function create (dir, file)
+async function create (dir, base)
 {
+     if (dir.startsWith('top')) {
+        const relpath = top_relpath(dir, base)
+        await fsp.copyFile(`${dir}/${base}`, '../' + relpath)
+            .then  (_ => console.log('Copied to ../' + relpath))
+            .catch (e => console.log(e.message))
+        return
+    }
     switch (dir) {
         case 'posts':
         case 'pages':
         case 'drafts':
             const kind = dir.slice(0, -1)
-            await generate_page(kind, file)
+            await generate_page(kind, base)
 .           /!stdout()
-            break
-        case 'top':
-            await fsp.copyFile(`${dir}/${file}`, `../${file}`)
-                .then  (_ => console.log(`Created ../${file}`))
-                // On Windows (at least), renames will cause a creation event on
-                // the old file, causing this to fail. Don't emit a message.
-                // https://github.com/Axosoft/nsfw/issues/26
-                .catch (e => console.log(e.message))
+            // TODO hackfix, marks the source as updated so that the next
+            //  incremental run will update the post cache with proper values
+            touch(`${dir}/${base}`)
             break
     }
 }
 
-// TODO: The new provisions for making renaming work well in '.factory/top/'
-//       should be ported to also work with posts, drafts and pages.
-
-// TODO: The provisons for '.factory/top' should be ported to create, unlink, ..
-
-// TODO: We should detect on start that new files have been added/modified, etc.
-
-async function rename (dir_path, old, cur)
+async function unlink (dir, base)
 {
-    if (dir_path.includes('.factory/top/'))
-    {
-        const split = dir_path.split('.factory/top/')
-        let old_loc
-        let cur_loc
-        if (split.length == 1) {
-            old_loc = `../${old}`
-            cur_loc = `../${cur}`
-        } else {
-            const top_dir_path = split.last()
-            old_loc = `../${top_dir_path}/${old}`
-            cur_loc = `../${top_dir_path}/${cur}`
-        }
-
-        const old_exists = await fsp.access(old_loc)
-              .then(_ => true).catch(e => false)
-        console.log(old_loc)
-        console.log(old_exists)
-        
-        if (old_exists)
-            return fsp.rename(old_loc, cur_loc)
-                .then  (_ => console.log(`Renamed ${old_loc} to ${cur_loc}`))
-                .catch (e => console.log(e.message))
-        else {
-            const cur_factory_loc = dir_path + '/' + cur
-            return fsp.copyFile(cur_factory_loc, cur_loc)
-                .then  (_ => console.log(`Copied ${cur_factory_loc} to ${cur_loc}`))
-                .catch (e => console.log(e.message))
-        }        
+    if (dir.startsWith('top')) {
+        const relpath = top_relpath(dir, base)
+        await fsp.unlink('../' + relpath)
+            .then  (_ => console.log('Deleted ../' + relpath))
+            .catch (e => console.log(e.message))
+        return
     }
-    
-    const dir = dir_path.split('/').last()
     switch (dir) {
         case 'posts':
         case 'pages':
         case 'drafts':
             const type = dir.slice(0, -1)
-            const old_loc = '../' + permalink(type, old)
-            const cur_loc = '../' + permalink(type, cur)
-            await fsp.rename(old_loc, cur_loc)
-                .then  (_ => console.log(`Renamed ${old_loc} to ${cur_loc}`))
-                .catch (e => console.log(e.message))
-            break
-        default:
-            console.log(`[Rename] Unrecognized top directory: '${dir}'`)
+            await delete_page(type, base)
             break
     }
 }
 
-async function unlink (dir, filename)
+async function create_dir (dir, base)
 {
-    switch (dir) {
-        case 'posts':
-        case 'pages':
-        case 'drafts':
-            const type = dir.slice(0, -1)
-            await delete_page(type, filename)
-            break
-        case 'top':
-            await fsp.unlink(`../${filename}`)
-                .then  (_ => console.log(`Deleted ../${filename}`))
-                .catch (e => console.log(e.message))
-            break
-    }
+    if (!dir.startsWith('top')) return
+    const path    = `${dir}/${base}`
+    const relpath = top_relpath(dir, base)
+    await fse.copy(path, '../' + relpath)
+        .then  (_ => console.log('Copied dir to ../' + relpath))
+        .catch (e => console.log(e.message))
 }
 
-async function debounce (events)
+async function unlink_dir (dir, base)
 {
-    const map = {}
-    // eliminate duplicate events
-    events.forEach(it => map[JSON.stringify(it)] = it)
-
-    for (event of Object.values(map))
-    {
-        // On Windows (at least), renames will cause a creation event on the old
-        // file. Here we delete it. (https://github.com/Axosoft/nsfw/issues/26)
-        // It also generates a modify event on the the new file, which we also
-        // delete.
-        if (event.action == watcher.actions.RENAMED) {
-            const create_old = {
-                action: watcher.actions.CREATED,
-                directory: event.directory,
-                file: event.oldFile
-            }
-            const modify_new = {
-                action: watcher.actions.MODIFIED,
-                directory: event.directory,
-                file: event.newFile
-            }
-            delete map[JSON.stringify(create_old)]
-            delete map[JSON.stringify(modify_new)]
-        }
-        // On Windows (at least), creations also cause a corresponding modification.
-        else if (event.action == watcher.actions.CREATED) {
-            const modify = {
-                action: watcher.actions.MODIFIED,
-                directory: event.directory,
-                file: event.file
-            }
-            delete map[JSON.stringify(modify)]
-        }
-        // Ignore all directory changes.
-        else if (event.action == watcher.actions.MODIFIED) {
-            const path = normalize_path(event.directory) + '/' + event.file
-            const stat = await fsp.lstat(path)
-            if (stat.isDirectory())
-                delete map[JSON.stringify(event)]
-        }
-    }
-
-    return Object.values(map)
+    if (!dir.startsWith('top')) return
+    const relpath = top_relpath(dir, base)
+    await fsp.rmdir('../' + relpath, {recursive: true})
+        .then  (_ => console.log('Deleted dir ../' + relpath))
+        .catch (e => console.log(e.message))
 }
 
 async function watch()
 {
     await parse_post_cache()
-    let lock = Promise.resolve()
-    const cwd = path.resolve('.')
-    const watching = await watcher(path.resolve(cwd), async (events) => {
-        let resolve
-        const old_lock = lock
-        lock = new Promise((r, _) => resolve = r)
-        await old_lock
-        let promises = []
-        for (event of await debounce(events)) {
-            const path = event.directory.replace(/\\/g, '/') // normalize
-            const dir  = path.split('/').last()
-            if (dir == '.factory') continue
-            switch (event.action) {
-                case watcher.actions.CREATED:
-                case watcher.actions.MODIFIED:
-                    promises.push(create(dir, event.file))
-                    break
-                case watcher.actions.DELETED:
-                    promises.push(unlink(dir, event.file))
-                    break
-                case watcher.actions.RENAMED:
-                    promises.push(rename(path, event.oldFile, event.newFile))
-                    break
-            }
+
+    const processor = async (event, path) =>
+    {
+        path = path.replace(/\\/g, '/')
+        const split = path.split('/')
+        const is_top_path = path.startsWith('top/')
+
+        if (split.length > 2 && !is_top_path) {
+            console.log('Illegal directory nesting: ' + path)
+            return
         }
 
-        if (promises.length > 0) {
-            await Promise.all(promises)
-            await Promise.all([
-                generate_index_pages_and_atom(),
-                write_post_cache()])
-            lowest_post_change = Infinity
-            console.log('') // skip a line before next set of events
-        }
-        resolve()
-    },
-    {debounceMS: 1000}) // bogus events tend to be fired, even so
+        const base = split.last()
+        const dir  = npath.dirname(path)
 
-    watching.start()
+        switch (event) {
+            case 'add':
+            case 'change':
+                await create(dir, base)
+                break
+            case 'unlink':
+                await unlink(dir, base)
+                break
+            case 'addDir':
+                await create_dir(dir, base)
+                break
+            case 'unlinkDir':
+                await unlink_dir(dir, base)
+                break
+        }  
+    }
+
+    const paths = ['top', 'posts', 'pages', 'drafts']
+    const options = {ignoreInitial: true, awaitWriteFinish: true, cwd: '.'}
+    const watcher = await chokidar.watch(paths, options)
+        .on('add',          path => processor('add',        path))
+        .on('change',       path => processor('change',     path))
+        .on('unlink',       path => processor('unlink',     path))
+        .on('addDir',       path => processor('addDir',     path))
+        .on('unlinkDir',    path => processor('unlinkDir',  path))
 }
 
 // --------------------------------------------------------------------------------
@@ -467,10 +389,28 @@ switch (process.argv[2]) // assumes node <script> <arg>
 // --------------------------------------------------------------------------------
 // NOTES
 //
-// # Potential Improvements:
+// # TODO
 //
-// - Make incremental build also track the deletion of pages and assets (not
-//  only posts).
+// - Make incremental build also track the deletion of pages and `top/` content
+//   (not only posts).
+//      - We cannot simply a simple 'sync' like-mechanism for `top/` - it
+//        couldn't handle deletions since the root also contains things
+//        generated from posts.
 //
-// - Watching does not recursively track the changes in the top/ directories
-//   (only direct changes).
+// - Delete a top directory with files in it causes errors to be printed.
+//   Fine for now.
+//
+// - Since the FS watcher does not process by batch anymore, we can't regenerate
+//   the index and atom like we did before.
+//      - Either we lock every processor run, sequentializing all I/O (my guess:
+//        will change nothing).
+//      - Or we rebuild the index separately (good solution).
+//      - BUT the post cache now contains stale data...
+//          - hackfix: source is touched (see "hackfix" above)
+//          - probably want to rethink this cache thing in the long run
+//
+//  - Live-privew causes changes to the file, causing an infinite loop between
+//    itself and watch...
+//      - Hackfix solution to deploy: make a map from files to last change and
+//        refuse to update if last change too recent (one or two secs?)
+

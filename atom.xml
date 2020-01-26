@@ -6,6 +6,219 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>What We (Don&#39;t) Know About Nutrition: Red Meat</title>
+      <description>
+&lt;p&gt;While I was writing another article related to nutrition (coming out soon), I
+found myself plunging rather deep in a particular nutritional rabbit-hole.
+Namely: is red meat consumption bad for you?&lt;/p&gt;
+&lt;p&gt;The commonly accepted idea is that it is. But as we&amp;#39;ll see, there actually is
+little evidence that it is the case.&lt;/p&gt;
+&lt;p&gt;I think my investigation of this is an excellent way to demonstrate quite a few
+interesting ideas:&lt;/p&gt;
+&lt;h4&gt;It&#39;s incredibly difficult to link diet to health outcomes, and the impact
+variations in reasonable diets have is fairly small.&lt;/h4&gt;
+
+&lt;p&gt;This was the original point I was trying to make with the red meat litterature
+example.&lt;/p&gt;
+&lt;p&gt;If you have no egregious nutrient deficiencies and you keep your bodyfat
+percentage in check, I believe the impact of nutrition on your long-term health
+will be a couple percents (at best) change in the chance to get or not get some
+kind of cancer, etc.&lt;/p&gt;
+&lt;p&gt;You should also sleep well and do some exercise, but those are
+non-nutrition-related.&lt;/p&gt;
+&lt;h4&gt;You shouldn&#39;t necessarily trust the consensus in some branches of science (like nutrition).&lt;/h4&gt;
+
+&lt;p&gt;However, that doesn&amp;#39;t mean you should just stick to whatever opinion you had
+before, which is probably not based on facts, or merely on anecdote.&lt;/p&gt;
+&lt;p&gt;Instead, you should research the topic yourself (preferrably) or find people
+whose scientific judgement you trust (not easy, people tend to pick a camp).&lt;/p&gt;
+&lt;h4&gt;It&#39;s hard to do good science.&lt;/h4&gt;
+
+&lt;p&gt;Even the published litterature is rife with confounders and bias. And people
+forget that correlation doesn&amp;#39;t imply causation.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s also some bad faith going on in some higher instances.&lt;/p&gt;
+&lt;p&gt;Bonus: cool Slate Star Codex articles about confounders: &lt;a href=&quot;https://slatestarcodex.com/2014/04/26/stop-confounding-yourself-stop-confounding-yourself/&quot;&gt;one&lt;/a&gt;,
+&lt;a href=&quot;https://slatestarcodex.com/2019/06/24/you-need-more-confounders/&quot;&gt;two&lt;/a&gt;.&lt;/p&gt;
+&lt;h4&gt;Absence of evidence is evidence of absence.&lt;/h4&gt;
+
+&lt;p&gt;I stole this one from &lt;a href=&quot;https://www.lesswrong.com/posts/mnS2WYLCGJP2kQkRn/absence-of-evidence-is-evidence-of-absence&quot;&gt;LessWrong&lt;/a&gt;, but basically it means that if you try to
+find evidence of X (e.g. red meat increases mortality), and you find none or
+very little, that&amp;#39;s evidence that X is probably not true.&lt;/p&gt;
+&lt;p&gt;And last but not least:&lt;/p&gt;
+&lt;h4&gt;Relax, that ribeye steak is probably not going to kill you.&lt;/h4&gt;
+
+&lt;p&gt;So let&amp;#39;s get right into it.&lt;/p&gt;
+&lt;h2 id=&quot;anecdotes-and-confounders&quot;&gt;Anecdotes and Confounders&lt;/h2&gt;
+&lt;p&gt;It&amp;#39;s easy to find exemples of people who&amp;#39;ve follow a non-conventional diet
+(veganism, keto, carnivore) for a long time and seem to be doing quite fine.
+It&amp;#39;s also easy to find the opposite, but if you dig, you&amp;#39;ll often find other
+factors that can explain adverse health outcomes. The only way to link food and
+health outcomes is to do studies with fairly large populations... and to do them
+well. Your experience with your zombie-looking vegan neighbour and y our fat
+meathead friend don&amp;#39;t prove anything.&lt;/p&gt;
+&lt;p&gt;To give an example how studies can go astray, let&amp;#39;s talk about red meat. Red
+meat gets a bad rap as a cause of cancer and heart diseases, but no studies has
+ever found that red meat &lt;em&gt;causes&lt;/em&gt; those. Instead, quite a few studies have found
+that high red meat consumption is &lt;em&gt;correlated&lt;/em&gt; with these issues (and
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Correlation_does_not_imply_causation&quot;&gt;correlation does not imply causation&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;This is still pretty bad... excepted if the study fail to control relevant
+variables. The first that they should look for is bodyfat percentage. If you eat
+more meat but you also eat more of everything, yes, your health outcomes are
+going to look much gloomier, no surprise. Maybe it means you eat less vegetables
+and your gut flora suffers, also an issue. Unfortunately, poor control of
+confounders is the norm.&lt;/p&gt;
+&lt;h2 id=&quot;an-outrageous-guideline&quot;&gt;An Outrageous Guideline&lt;/h2&gt;
+&lt;p&gt;Something interesting occurred recently (November 2019). The prestigious &amp;quot;Annals
+of Internal Medicine&amp;quot; journal published some &lt;a href=&quot;https://annals.org/aim/fullarticle/2752328/unprocessed-red-meat-processed-meat-consumption-dietary-guideline-recommendations-from&quot;&gt;dietary guidelines&lt;/a&gt; for red meat
+consumption:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The panel suggests that adults continue current unprocessed red meat
+consumption (weak recommendation, low-certainty evidence). Similarly, the
+panel suggests adults continue current processed meat consumption (weak
+recommendation, low-certainty evidence).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The panel&amp;#39;s recommendation was based on 5 meta-reviews (more properly
+&amp;quot;systematic review and meta-analysis&amp;quot;). Three of those (&lt;a href=&quot;https://annals.org/aim/fullarticle/2752320/red-processed-meat-consumption-risk-all-cause-mortality-cardiometabolic-outcomes&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;https://annals.org/aim/fullarticle/2752321/reduction-red-processed-meat-intake-cancer-mortality-incidence-systematic-review&quot;&gt;2&lt;/a&gt;,
+&lt;a href=&quot;https://annals.org/aim/fullarticle/2752327/patterns-red-processed-meat-consumption-risk-cardiometabolic-cancer-outcomes-systematic&quot;&gt;3&lt;/a&gt;) looked at &amp;quot;observational studies&amp;quot; which study meat consumption in the
+context of people&amp;#39;s existing habits. These tend to be highly-confounded, for the
+reasons I explained above. In, in fact, the studies were found to be confounded:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Limitation: Inadequate adjustment for known confounders, residual confounding
+due to observational design, and recall bias associated with dietary
+measurement.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- --&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Limitations: Limited causal inferences due to residual confounding in observational
+studies, risk of bias due to limitations in diet assessment and adjustment for
+confounders, recall bias in dietary assessment, and insufficient data for
+planned subgroup analyses&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- --&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Limitations: Observational studies are prone to residual confounding, and
+these studies provide low- or very-low-certainty evidence according to the
+GRADE criteria.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A &lt;a href=&quot;https://annals.org/aim/fullarticle/2752323/health-related-values-preferences-regarding-meat-consumption-mixed-methods-systematic&quot;&gt;fourth review&lt;/a&gt; just considered people&amp;#39;s preference and concludes they
+really like meat, even when faced with potential health consequences.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://annals.org/aim/fullarticle/2752326/effect-lower-versus-higher-red-meat-intake-cardiometabolic-cancer-outcomes&quot;&gt;fifth meta-review&lt;/a&gt; (&lt;a href=&quot;https://www.gwern.net/docs/longevity/2019-zeraatkar.pdf&quot;&gt;pdf&lt;/a&gt;) is more interesting, as it reviews
+&lt;em&gt;randomized&lt;/em&gt; trials. Instead of observing people&amp;#39;s existing diet, diets are
+assigned to people randomly, which reduces confounding with other factors. But
+unfortunately, there are very few studies who did this over a long period of
+time (which is necessary to assess health outcomes), for ethical reasons. The
+conclusion ends being up based on a single study, which found no adverse health
+outcomes. Unfortunately, it&amp;#39;s not a low-red-meat study, but a low-fat-diet study
+in which the low-fat group ended up consuming less red meat than the control
+group: on average 1.4 less &amp;quot;servings&amp;quot; per week, which is not huge.&lt;/p&gt;
+&lt;h2 id=&quot;from-ignorance-to-knowledge&quot;&gt;From Ignorance to Knowledge&lt;/h2&gt;
+&lt;p&gt;All this may sound silly — do we actually know anything?&lt;/p&gt;
+&lt;p&gt;Well, yes we do! What this tells us is that there is no blatant evidence (or not
+even &lt;em&gt;much&lt;/em&gt; evidence) for the hypothesis that red meat increases mortality.&lt;/p&gt;
+&lt;p&gt;From the data we have (and the goal of these studies is to be relatively
+comprehensive, including all studies whose data can be exploited which are not
+methodologically hopeless), we know that:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;It is highly unlikely that eating more red meat decreases mortality.&lt;/li&gt;
+&lt;li&gt;It is unlikely that eating less red meat increases mortality.&lt;/li&gt;
+&lt;li&gt;It is highly unlikely that eating more red meat &lt;em&gt;significantly&lt;/em&gt; increases
+mortality.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;(1) is already consensus. As for (2), it is certainly &lt;em&gt;possible&lt;/em&gt; that red meat
+increases mortality (though (1) is &lt;em&gt;possible&lt;/em&gt; too) but if that were the case,
+we&amp;#39;d expect to see much stronger evidence. Regarding (3), even if there is an
+increase in mortality, it is unlikely to be high.&lt;/p&gt;
+&lt;p&gt;To distinguish (2) and (3), let&amp;#39;s think about them in another way. The paucity
+of evidence that we see means that either red meat doesn&amp;#39;t increase mortality at
+all (2), or that it does increase mortality, but ever so slightly so that it&amp;#39;s
+hard to distinguish the mortality of red-meat-eaters compared to that of
+non-red-meat-eaters.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s important to note that we learned something: we went from a state of not
+having evidence to a state of having evidence, with the evidence favoring the
+null hypothesis: that red meat consumption matters very little.&lt;/p&gt;
+&lt;p&gt;If you draw a line representing a continuum of hypotheses, from -100 = &amp;quot;red meat
+consumption decreases mortality&amp;quot; to 0 = &amp;quot;red meat consumption doesn&amp;#39;t change
+morality&amp;quot; to 100 = &amp;quot;red meat consumption increases mortality, the evidence we
+have puts us at around 1.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;                 👇 evidence points here
+-100 ---------- 0 ---------- 100
+meat 👼      meat 🤷     meat ☠️ &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;controversy-and-the-shills&quot;&gt;Controversy and The Shills&lt;/h2&gt;
+&lt;p&gt;The good people at the Harvard School of Public Health weren&amp;#39;t too happy with
+the Annals of Internal Medicine&amp;#39;s guidelines, as evidenced by &lt;a href=&quot;https://www.hsph.harvard.edu/nutritionsource/2019/09/30/flawed-guidelines-red-processed-meat/&quot;&gt;this article&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I should probably warn you, I&amp;#39;m going to say bad things about the good people of
+the Harvard School of Public Health.&lt;/p&gt;
+&lt;p&gt;In my opinion, their most egregious statement is the following:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The publication of these studies and the meat guidelines in a major medical
+journal is unfortunate because following the new guidelines may potentially
+harm individuals’ health, public health, and planetary health. It may also
+harm the credibility of nutrition science and erode public trust in scientific
+research. In addition, it may lead to further misuse of systematic reviews and
+meta-analyses, which could ultimately result in further confusion among the
+general public and health professionals.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;You should the (pretty short) article yourself. Essentially it tries to convince
+you that these guidelines are &lt;em&gt;a bad thing&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;One of their better argument is that the recommendations are bad because it says
+environmental considerations are out of scope. That is a whole other can of
+worm, and I personally don&amp;#39;t have an opinion on what the environmental impact of
+meat production is. This also veers political. But personally, I&amp;#39;m not very
+interested in the recommendation but rather in the question: &amp;quot;Is red meat bad
+for your health?&amp;quot;.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s here that Harvard sins, because they try to say that it is bad for your
+health. In the Q&amp;amp;A section of the article, they give a mostly accurate and fair
+criticism of the meta-reviews. But then they try to spin this by saying that the
+meta-reviews show that red meat consumption is bad for you. Except, as we
+already said, it shows very very weak evidence of that.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s update our graph from before:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;                 👇 evidence points here
+-100 ---------- 0 ---------- 100
+meat 👼      meat 🤷    | meat ☠️ 
+                       👆
+                    where Harvard SPH says the evidence points&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And that&amp;#39;s why they&amp;#39;re being disingenuous.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s also plug &lt;a href=&quot;https://old.reddit.com/r/gwern/comments/dbw577/effect_of_lower_versus_higher_red_meat_intake_on/f266lfq/&quot;&gt;the reaction of Gwern Branwern&lt;/a&gt; on that article:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You don&amp;#39;t see any problem with the Noble Lie? &amp;#39;They should not publish these
+results showing our nutrition research is bullshit, because it may justifiably
+erode public trust to know that nutrition research is bullshit, and it might
+spark further research which would lead to &amp;quot;further confusion&amp;quot; as the bullshit
+is further exposed; we don&amp;#39;t think there is any downside to lying to the
+public about meat consumption, damaging lifestyles and ignore the possibility
+that our own mistaken results are themselves damaging public health but will
+pretend it&amp;#39;s a one-sided wager - &amp;quot;heads we win tails meat loses&amp;quot;.&amp;#39;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;By the way, remember I spoke about people whose scientific judgement you trust?
+Gwern is someone like that, he has great in-depth research up &lt;a href=&quot;https://www.gwern.net/&quot;&gt;on his
+website&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Is Harvard really anti-meat? Well...&lt;/p&gt;
+&lt;h2 id=&quot;tmao--the-red-scare&quot;&gt;TMAO &amp;amp; The Red Scare&lt;/h2&gt;
+&lt;p&gt;Harvard is a big entity, which is probably not anti-meat as a whole.&lt;/p&gt;
+&lt;p&gt;That being said, Harvard Medical School did publish &lt;a href=&quot;https://www.health.harvard.edu/staying-healthy/red-meat-tmao-and-your-heart&quot;&gt;this online article&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A substance called trimethylamine N-oxide, which is produced when your body
+digests red meat, may raise the risk of cardiovascular problems.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Finally! A causal link from red meat to harm. Hallelujah!&lt;/p&gt;
+&lt;p&gt;Well they only reference (and not even link) is to &lt;a href=&quot;https://jamanetwork.com/journals/jama/article-abstract/2734678&quot;&gt;a paywalled editorial&lt;/a&gt;, but
+there is actually &lt;a href=&quot;https://academic.oup.com/eurheartj/article-abstract/40/7/583/5232723&quot;&gt;pretty solid research&lt;/a&gt; linking red meat with high TMAO. Case
+solved?&lt;/p&gt;
+&lt;p&gt;Well no, because the link between TMAO and cardiovascular problems is shaky, see
+for instance &lt;a href=&quot;https://www.sciencedirect.com/science/article/abs/pii/S1043276016301448&quot;&gt;this paper&lt;/a&gt; and this &lt;a href=&quot;https://lesslikely.com/nutrition/tmao-mendelian-randomization/&quot;&gt;quite nicely written
+article&lt;/a&gt; titled &amp;quot;How TMAO Fooled Us&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Apparently, fish increases TMAO even more than red meat, but everyone knows that
+fish is healhty! Some people really aren&amp;#39;t bothered by apparent contradictions.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Well that&amp;#39;s it for today. I hope this was entertaining/interesting.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Psst, if you&amp;#39;re looking for the conclusions, they&amp;#39;re actually at the &lt;a href=&quot;#&quot;&gt;top&lt;/a&gt;
+of the article!&lt;/em&gt;&lt;/p&gt;
+      </description>
+      <pubDate>2020-01-25T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/red-meat</link>
+      <guid isPermaLink="true">http://norswap.com/red-meat</guid>
+    </item>
+    <item>
       <title>Models of Generics and Metaprogramming Article</title>
       <description>
 &lt;p&gt;I recently came accross this page:&lt;/p&gt;
@@ -1782,393 +1995,6 @@ elements, and wrote &amp;quot;desktop&amp;quot; apps running in the browser.&lt;
       <pubDate>2019-05-31T22:00:00.000Z</pubDate>
       <link>http://norswap.com/react-intuition</link>
       <guid isPermaLink="true">http://norswap.com/react-intuition</guid>
-    </item>
-    <item>
-      <title>The Visitor Pattern in Java 8</title>
-      <description>
-&lt;p&gt;The visitor pattern is probably one of the most (in)famous design patterns.&lt;/p&gt;
-&lt;p&gt;The problem it solves is fairly simple. In most object-oriented languages, it&amp;#39;s
-easy to add new &lt;em&gt;data-type variants&lt;/em&gt;, i.e. new sub-classes. These classes can
-naturally override the methods in the super-class/interface. However, we can&amp;#39;t
-add methods to an existing super-class without modifying it — which is not
-possible if it belongs to a library. The visitor pattern is a way to achieve
-something similar.&lt;/p&gt;
-&lt;p&gt;Imagine you want to add a &lt;code&gt;print()&lt;/code&gt; method to an existing interface called
-&lt;code&gt;Base&lt;/code&gt; that has implementations &lt;code&gt;A&lt;/code&gt; and &lt;code&gt;B&lt;/code&gt;. If we could add &lt;code&gt;print()&lt;/code&gt; to
-&lt;code&gt;Base&lt;/code&gt;, we could call &lt;code&gt;new A().print()&lt;/code&gt;. The visitor pattern will allow us to do
-&lt;code&gt;new A().accept(new PrintVisitor())&lt;/code&gt; to achieve the same thing.&lt;/p&gt;
-&lt;p&gt;For this to work, &lt;code&gt;Base&lt;/code&gt; needs to have been conceived with the visitor pattern
-in mind. It needs to declare an abstract &lt;code&gt;accept(Visitor)&lt;/code&gt; method and all its
-implementations need to implement it according to the pattern.&lt;/p&gt;
-&lt;p&gt;With this interface and requirements in mind, let&amp;#39;s see some code.&lt;/p&gt;
-&lt;h2 id=&quot;basic-example&quot;&gt;Basic Example&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface Visitor {
-    void visit (A object);
-    void visit (B object);
-}
-
-interface Base {
-    void accept (Visitor visitor);
-}
-
-class A implements Base {
-    @Override public void accept (Visitor visitor) {
-        visitor.visit(this); // calls visit(A)
-    }
-}
-
-class B implements Base {
-    @Override public void accept (Visitor visitor) {
-        visitor.visit(this); // calls visit(B)
-    }
-}
-
-class PrintVisitor implements Visitor
-{
-    @Override public void visit (A object) {
-        System.out.println(&amp;quot;printing an A&amp;quot;);
-    }
-    @Override public void visit (B object) {
-        System.out.println(&amp;quot;printing a B&amp;quot;);
-    }
-}
-
-public class Example
-{
-    public static void print (Base object) {
-        object.accept(new PrintVisitor());
-    }
-    public static void main (String[] args) {
-        print(new A());
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What happens is that the &lt;code&gt;accept()&lt;/code&gt; method declared in &lt;code&gt;Base&lt;/code&gt; must be overriden
-in all of its implementations (&lt;code&gt;Base&lt;/code&gt; could have been a class as well). The role
-of the overriden method is to redirect the execution to the correct
-&lt;code&gt;Visitor#visit&lt;/code&gt; overload. This is possible (and type-safe) because the static
-type of &lt;code&gt;this&lt;/code&gt; corresponds to its dynamic type (&lt;code&gt;A&lt;/code&gt; or &lt;code&gt;B&lt;/code&gt;) in the overriden
-method.&lt;/p&gt;
-&lt;p&gt;And honestly, that&amp;#39;s all there is to the common formulation of the visitor
-pattern. Explanations tend to contrive the point.&lt;/p&gt;
-&lt;p&gt;However, the pattern can be taken much further to supply a solution to the
-&lt;em&gt;expression problem&lt;/em&gt;. Basically, what if we have our visitor defined like above
-but then we add a new implementation of &lt;code&gt;Base&lt;/code&gt;? Currently, all implementations
-have to be known in advance, because they are hardcoded into &lt;code&gt;Visitor&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;But first, let&amp;#39;s solve a small practical issue.&lt;/p&gt;
-&lt;h2 id=&quot;handling-different-signatures&quot;&gt;Handling Different Signatures&lt;/h2&gt;
-&lt;p&gt;There is an easily solvable issue with the design I presented above: both
-&lt;code&gt;accept&lt;/code&gt; and &lt;code&gt;visit&lt;/code&gt; don&amp;#39;t admit extra parameters, nor do they have return
-values.&lt;/p&gt;
-&lt;p&gt;One solution is to rewrite these methods to include the required parameters and
-return type. But doing this means that you need one &lt;code&gt;Visitor&lt;/code&gt;-like class and one
-&lt;code&gt;accept&lt;/code&gt; overload for each signature of interest.&lt;/p&gt;
-&lt;p&gt;A better solution is to use the &lt;code&gt;Visitor&lt;/code&gt; implementation to pass data around.
-Here is an example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;class AddRankVisitor extends Visitor
-{
-    public int result;
-    public final int base;
-
-    public AddRankVisitor (int base) {
-        this.base = base;
-    }
-
-    @Override public void visit (A object) { set_result(base + 1); }
-    @Override public void visit (B object) { set_result(base + 2); }
-}
-
-public class Example
-{
-    public static void add_rank (Base object, int base)
-    {
-        Visitor visitor = new AddRankVisitor(base);
-        object.accept(visitor);
-        return visitor.result;
-    }
-
-    public static void main (String[] args) {
-        System.out.println(add_rank(new A(), 5)); // prints 6
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We use &lt;code&gt;result&lt;/code&gt; to represent the return value, and &lt;code&gt;base&lt;/code&gt; as a parameter. Pretty
-easy, isn&amp;#39;t it?&lt;/p&gt;
-&lt;h2 id=&quot;the-expression-problem&quot;&gt;The Expression Problem&lt;/h2&gt;
-&lt;p&gt;The original formulation of the &lt;a href=&quot;https://en.wikipedia.org/wiki/Expression_problem&quot;&gt;expression problem&lt;/a&gt; is as follow:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The goal is to define a datatype by cases, where one can add new cases to the
-datatype and new functions over the datatype, without recompiling existing
-code, and while retaining static type safety (e.g., no casts).&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;If you consider it in the context of object-oriented programming, a &lt;em&gt;datatype&lt;/em&gt;
-corresponds to a parent class or interface. &lt;em&gt;New datatype cases&lt;/em&gt; are new classes
-extending the parent class or interface. &lt;em&gt;New functions&lt;/em&gt; are as thought you
-could add an abstract method to the parent class or interface, along with
-overrides for the implementing classes.&lt;/p&gt;
-&lt;p&gt;Adding a new case is simply sub-classing/implementation. Adding new functions
-can be done via the visitor pattern as seen above. But can we do both?&lt;/p&gt;
-&lt;p&gt;If you defined visitors as we did above, then if you add a new implementation of
-&lt;code&gt;Base&lt;/code&gt;, it won&amp;#39;t be handled by our &lt;code&gt;print&lt;/code&gt; and &lt;code&gt;add_rank&lt;/code&gt; methods. Like we said
-before, &lt;code&gt;Visitor&lt;/code&gt; needs to list all the implementations.&lt;/p&gt;
-&lt;p&gt;In theory, there is nothing that prevents solving the expression problem at the
-language level. In an ideal world, we&amp;#39;d just be able to add abstract extension
-methods that have to be implemented for all classes implementing the interface.
-The &lt;a href=&quot;https://en.wikipedia.org/wiki/Linker_(computing)&quot;&gt;linker&lt;/a&gt; would then verify that these methods were implemented for all such
-classes, and generate the proper &lt;a href=&quot;https://en.wikipedia.org/wiki/Virtual_method_table&quot;&gt;virtual method tables&lt;/a&gt;. But no such
-object-oriented language exists.&lt;/p&gt;
-&lt;p&gt;Perhaps a more well-understood way to do this is through statically-typed
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Multiple_dispatch&quot;&gt;multi-methods&lt;/a&gt;. But I don&amp;#39;t know any actual practical language (i.e. something
-used in production) that has them, though there are academic papers on the
-subject. &lt;a href=&quot;https://nim-lang.org/docs/tut2.html#object-oriented-programming-dynamic-dispatch&quot;&gt;Nim&lt;/a&gt; has statically-typed multi-methods but you must include a default
-implementation. &lt;a href=&quot;https://blogs.msdn.microsoft.com/laurionb/2009/08/13/multimethods-in-c-4-0-with-dynamic/&quot;&gt;C# 4&lt;/a&gt; has a &lt;code&gt;dynamic&lt;/code&gt; keyword that enables multi-methods but
-without compile-time checking.&lt;/p&gt;
-&lt;p&gt;There are languages that solve the expression problem however. The foremost
-solution is &lt;a href=&quot;https://en.wikipedia.org/wiki/Type_class&quot;&gt;typeclasses&lt;/a&gt;, notably in Haskell (also read &lt;a href=&quot;/typeclass-scheme&quot;&gt;here&lt;/a&gt;
-for my thoughts on a potential typeclass system).&lt;/p&gt;
-&lt;p&gt;Basically, you can add new methods over existing types by writing new
-typeclasses and their implementations for the given types. Compared to our
-object-oriented scenario, there is no notion of inheritance, so no way to say
-that a group of types should implement the typeclass — the expectation is that
-this will be caught statically when you try to require a typeclass
-implementation for such a type.&lt;/p&gt;
-&lt;p&gt;But back to Java-land. Let&amp;#39;s see how we can approach a solution by building on
-top of the visitor pattern.&lt;/p&gt;
-&lt;h2 id=&quot;adding-a-class-to-an-existing-visitor&quot;&gt;Adding a Class to an Existing Visitor&lt;/h2&gt;
-&lt;p&gt;Let&amp;#39;s add a new implementation of &lt;code&gt;Base&lt;/code&gt; called &lt;code&gt;C&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface VisitorC extends Visitor {
-    void visit (C object);
-}
-
-class C implements Base {
-    @Override public void accept (Visitor visitor) {
-        ((VisitorC) visitor).visit(this);
-    }
-}
-
-class PrintVisitorC extends PrintVisitor implements VisitorC {
-    @Override public void visit (C object) {
-        System.out.println(&amp;quot;printing a C&amp;quot;);
-    }
-}
-
-class AddRankVisitorC extends AddRankVisitor implements VisitorC
-{
-    public AddRankVisitorC (int base) { super(base); }
-    @Override public void visit (C object) { set_result(base + 3); }
-}
-
-public class Example
-{
-    public static void print (Base object) {
-        object.accept(new PrintVisitorC());
-    }
-
-    public static void add_rank (Base object, int base)
-    {
-        VisitorC visitor = new AddRankVisitorC(base);
-        object.accept(visitor);
-        return visitor.result;
-    }
-
-    public static void main (String[] args) {
-        print(new A());
-        print(new C());
-        System.out.println(add_rank(new A(), 5)); // prints 6
-        System.out.println(add_rank(new C(), 5)); // prints 8
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Since &lt;code&gt;Visitor&lt;/code&gt; doesn&amp;#39;t have an overload for &lt;code&gt;C&lt;/code&gt;, we add this overload in an
-extension of &lt;code&gt;Visitor&lt;/code&gt; called &lt;code&gt;VisitorC&lt;/code&gt;. The only worry: &lt;code&gt;accept&lt;/code&gt; takes
-&lt;code&gt;Visitor&lt;/code&gt;, not &lt;code&gt;VisitorC&lt;/code&gt;, so we have to perform a cast.&lt;/p&gt;
-&lt;p&gt;We similarly extends &lt;code&gt;PrintVisitor&lt;/code&gt; and &lt;code&gt;AddRankVisitor&lt;/code&gt; to add an
-implementation for the &lt;code&gt;visit(C)&lt;/code&gt; overload.&lt;/p&gt;
-&lt;p&gt;Also notice how we do not need to reimplement the storage for &lt;code&gt;AddRankVisitorC&lt;/code&gt;
-if we extend &lt;code&gt;AddRankVisitor&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The trick works: we can use a &lt;code&gt;PrintVisitorC&lt;/code&gt; and &lt;code&gt;AddRankVisitorC&lt;/code&gt; to visit
-both the previous &lt;code&gt;A&lt;/code&gt; and &lt;code&gt;B&lt;/code&gt; classes but also the new &lt;code&gt;C&lt;/code&gt; class.&lt;/p&gt;
-&lt;p&gt;In the process however, we&amp;#39;ve jeopardized type safety. We could write: &lt;code&gt;new
-C().accept(new PrintVisitor())&lt;/code&gt; and the code would compile but crash at run-time
-with a &lt;code&gt;ClassCastException&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;There actually is a pretty rich literature on how to solve the expression
-problem in Java with proper statical type safety. So it &lt;em&gt;is&lt;/em&gt; possible. However,
-all these solutions have other pitfalls (in my humble opinion, worse pitfalls).
-A followup article will discuss the limitations of these solutions and why I
-feel my solution is better.&lt;/p&gt;
-&lt;p&gt;But before... we are not entirely done yet!&lt;/p&gt;
-&lt;h2 id=&quot;composing-independent-extensions&quot;&gt;Composing Independent Extensions&lt;/h2&gt;
-&lt;p&gt;The last section deals with extending our system with a new class. But what if
-you use two libraries, both of which have independently extended the visitor.
-Can you compose them back into a single usable visitor?&lt;/p&gt;
-&lt;p&gt;If the library authors have followed a couple of simple guidlines, you can!&lt;/p&gt;
-&lt;p&gt;The key idea is as follow: each time we implement / extend a visitor, we will do
-it in an interface instead of a class. We will add a corresponding class only to
-make the interface instanciable and supply the necessary storage.&lt;/p&gt;
-&lt;p&gt;With that in mind, let us revise what we have done above. First for what we had
-before adding &lt;code&gt;C&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface _PrintVisitor extends Visitor
-{
-    @Override default void visit (A object) {
-        System.out.println(&amp;quot;printing an A&amp;quot;);
-    }
-    @Override default void visit (B object) {
-        System.out.println(&amp;quot;printing a B&amp;quot;);
-    }
-}
-
-class PrintVisitor implements _PrintVisitor {}&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface _AddRankVisitor extends Visitor
-{
-    int result();
-    void set_result (int result);
-    int base();
-
-    @Override default void visit (A object) { set_result(base() + 1); }
-    @Override default void visit (B object) { set_result(base() + 2); }
-}
-
-class AddRankVisitor implements _AddRankVisitor
-{
-    private int result;
-    private int base;
-
-    @Override public int result() { return result; }
-
-    @Override public void set_result (int result) {
-        this.result = result;
-    }
-
-    @Override int base() { return base; }
-
-    public AddRankVisitor (int base) {
-        this.base = base;
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For &lt;code&gt;PrintVisitor&lt;/code&gt;, the class becomes an interface with a prefix &lt;code&gt;_&lt;/code&gt; and we add
-a class with an empty body — no extra work required.&lt;/p&gt;
-&lt;p&gt;For &lt;code&gt;AddRankVisitor&lt;/code&gt;, our fields are replaced with getter/setters in the
-interface and we have to implement the storage for those in the class.&lt;/p&gt;
-&lt;p&gt;Notice that with this setup, our former &lt;code&gt;Example.main&lt;/code&gt; methods (from before
-adding &lt;code&gt;C&lt;/code&gt;) still work unmodified.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s then add back &lt;code&gt;C&lt;/code&gt;, which will constitute the first of two independent
-extensions:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;// `VisitorC` and `C` remain unchanged from above!
-
-interface _PrintVisitorC extends _PrintVisitor, VisitorC
-{
-    @Override default void visit (C object) {
-        System.out.println(&amp;quot;printing a C&amp;quot;);
-    }
-}
-
-class PrintVisitorC implements _PrintVisitorC {}
-
-interface _AddRankVisitorC extends AddRankVisitor, VisitorC
-{
-    @Override default void visit (C object) { set_result(base + 3); }
-}
-
-class AddRankVisitorC extends AddRankVistor
-    implements _AddRankVisitorC
-{
-    public AddRankVisitorC (int base) { super(base); }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This is a lot like what we just did for the base visitors. Like before, we don&amp;#39;t
-need to reimplement the storage for &lt;code&gt;AddRankVisitorC&lt;/code&gt; if we extend
-&lt;code&gt;AddRankVisitor&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s do another similar extension, called &lt;code&gt;D&lt;/code&gt;. This is almost the same code by
-a different name:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface VisitorD extends Visitor {
-    void visit (D object);
-}
-
-class D implements Base
-{
-    @Override public void accept (Visitor visitor) {
-        ((VisitorD) visitor).visit(this);
-    }
-}
-
-interface _PrintVisitorD extends _PrintVisitor, VisitorD
-{
-    @Override default void visit (D object) {
-        System.out.println(&amp;quot;printing a D&amp;quot;);
-    }
-}
-
-class PrintVisitorD implements _PrintVisitorD {}
-
-interface _AddRankVisitorD extends AddRankVisitor, VisitorD
-{
-    @Override default void visit (D object) { set_result(base + 4); }
-}
-
-class AddRankVisitorD extends AddRankVistor
-    implements _AddRankVisitorD
-{
-    public AddRankVisitorD (int base) { super(base); }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now that we have our two independant extensions setup properly with interfaces,
-let&amp;#39;s compose them into a single one.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;interface VisitorCD
-    extends VisitorC, VisitorD {}
-
-interface _PrintVisitorCD
-    extends VisitorCD, _PrintVisitorC, _PrintVisitorD {}
-
-class PrintVisitorCD
-    implements _PrintVisitorCD {}
-
-interface _AddRankVisitorCD
-    extends VisitorCD, _AddRankVisitorC, _AddRankVisitorD {}
-
-class AddRankVisitorCD extends AddRankVistor
-    implements _AddRankVisitorCD
-{
-    public AddRankVisitorCD (int base) { super(base); }
-}
-
-public class Example
-{
-    public static void print (Base object) {
-        object.accept(new PrintVisitorCD());
-    }
-
-    public static void add_rank (Base object, int base)
-    {
-        VisitorCD visitor = new AddRankVisitorCD(base);
-        object.accept(visitor);
-        return visitor.result;
-    }
-
-    public static void main (String[] args) {
-        print(new A());
-        print(new C());
-        print(new D());
-        System.out.println(add_rank(new A(), 5)); // prints 6
-        System.out.println(add_rank(new C(), 5)); // prints 8
-        System.out.println(add_rank(new D(), 5)); // prints 9
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;That&amp;#39;s it? Yep that&amp;#39;s it! And that&amp;#39;s actually the long version — which you
-should use when you expose the visitor as part of a library. Even then
-&lt;code&gt;VisitorCD&lt;/code&gt; is not capital and just helps add a tiny bit of type safety.&lt;/p&gt;
-&lt;p&gt;If you write client code and nobody is supposed to extend your visitor, you
-could just write:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;class PrintVisitorCD
-    implements _PrintVisitorC, _PrintVisitorD {}
-
-class AddRankVisitorCD
-    extends AddRankVisitor
-    implements, _AddRankVisitorC, _AddRankVisitorD
-{
-    public AddRankVisitorCD (int base) { super(base); }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Isn&amp;#39;t life beautiful?&lt;/p&gt;
-&lt;p&gt;You can consult the full final example (with &lt;code&gt;A&lt;/code&gt;, &lt;code&gt;B&lt;/code&gt;, &lt;code&gt;C&lt;/code&gt;, &lt;code&gt;D&lt;/code&gt;, &lt;code&gt;PrintVisitor&lt;/code&gt;
-and &lt;code&gt;AddRankVisitor&lt;/code&gt;) on &lt;a href=&quot;https://gist.github.com/norswap/7f3d40adb85491d440bdf026b738890a&quot;&gt;this page&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2019-05-24T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/java-visitor-pattern</link>
-      <guid isPermaLink="true">http://norswap.com/java-visitor-pattern</guid>
     </item>
   </channel>
 </rss>

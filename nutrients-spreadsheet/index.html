@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; The Big Nutrient Spreadsheet
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">The Big Nutrient Spreadsheet</h1>
+      <span class="post-date">28 Jan 2020</span>
+<p>As part of my journey into weightlifting (<a href="/weight-training">1</a>, <a href="/weight-training-2">2</a>, <a href="/weight-training-3">3</a>, <a href="/weight-training-4">4</a>), I&#39;ve been
+increasingly interested in nutrition.</p>
+<p>I thought to push this a bit further and try to figure out which nutrients I&#39;m
+getting in my diet, which I&#39;m lacking, and how I can remedy that. I didn&#39;t quite
+get around to that last part, but here are my results so far, as well as the
+tech I built to help me (spoiler: it&#39;s a spreadsheet).</p>
+<h2 id="essential-nutrients">(Essential) Nutrients</h2>
+<p>What does our body <a href="https://en.wikipedia.org/wiki/Nutrient#Essential_nutrients">actually need</a>?</p>
+<ul>
+<li>Fat (actually <a href="https://en.wikipedia.org/wiki/Essential_fatty_acid">essential fatty acids</a>)</li>
+<li>Proteins (actually <a href="https://en.wikipedia.org/wiki/Essential_amino_acid">essential amino acids</a>)</li>
+<li><a href="https://en.wikipedia.org/wiki/Vitamin#Recommended_levels">Essential Vitamins</a> (13 of them)</li>
+<li><a href="https://en.wikipedia.org/wiki/Mineral_(nutrient)#Roles_in_biological_processes">Essential Minerals</a> (15 of them)</li>
+</ul>
+<p>Additionally, <a href="https://en.wikipedia.org/wiki/Nutrient#Conditionally_essential_nutrients">some substances</a> can be synthesized by our bodies but can be
+(should be?) ingested directly, for instance <a href="https://en.wikipedia.org/wiki/Choline">choline</a>.</p>
+<p>Some other substances are non-essential but you really want to have them, most
+notably fibers.</p>
+<p>And finally, yet other substance are non-essential but might have beneficial
+effects, such as various <a href="https://en.wikipedia.org/wiki/Antioxidant">antioxidants</a>.</p>
+<p>And, it goes without saying, adequate calorie intake and hydration.</p>
+<p>In this article I&#39;m going to focus on the vitamins and the minerals</p>
+<p>Why? First, it&#39;s more likely to have deficiency in those. It&#39;s also much harder
+to reach the recommended daily intake values. Nevertheless, I&#39;ve included some
+remarks on fats in an <a href="#app1">Appendix 1</a>.</p>
+<h2 id="the-nutrient-spreadsheet">The Nutrient Spreadsheet</h2>
+<p>The goal was simple. First, to make a spreadsheet were each row was a food, and
+each column was a nutrient. Second, to have a way to autofill the nutrient
+values from some online database to avoid tediously copying ~30 values into a
+spreadsheet for each food item I was interested in.</p>
+<p>You can view the resulting spreadsheet with some food items <a href="https://docs.google.com/spreadsheets/d/1f9kR2aJmVRCyRsmB-CXURuy2Y4zkysuoNfl9uOM7NLw/edit?usp=sharing">here</a>.</p>
+<p>I used the same setup as <a href="https://norswap.com/fitbit-google-sheets/">when I made a Fitbit spreadsheet</a>: there
+is an Observable notebook with controls that help filling the spreadsheet.</p>
+<p>In particular, you get a food item you&#39;re interested in from <a href="https://fdc.nal.usda.gov/index.html">Food Data Central</a>
+(or FDC for the hip kids — it&#39;s the best nutrient database I could find,
+maintained by the US Department of Agriculture) and then instruct the notebook
+to export the nutrient values to a row in the spreadsheet.</p>
+<p>Unfortunately, FDC does not track <em>every</em> essential nutrients. I reviewed the
+essential nutrients it does not cover, to make sure nothing too important was
+left out — the result of that analysis is in <a href="#app2">Appendix 2</a> (It&#39;s quite
+interesting, I might extend the analysis to all essential nutrients sometime.)
+Basically, you should be fine for all the nutrients not covered, especially if
+you drink milk regularly. If not, maybe just check your iodine intake.</p>
+<p>If you want to make your own spreadsheet, it&#39;s also possible! Fork this
+<a href="https://observablehq.com/@norswap/nutrition-spreadsheet">Observable notebook</a> and follow the instructions under the
+&quot;Setup&quot; heading to create your own.</p>
+<h2 id="misc-remarks-nutrients--bio-availability">Misc Remarks: Nutrients &amp; Bio-Availability</h2>
+<p>An obvious question about this kind of analyzis is: are nutrients the only thing
+that matters? To which I&#39;d tend to answer &quot;mostly, but&quot;.</p>
+<p>First, some non-essential nutrients are quite important (such as fibers, as we
+mentionned before). And because we can subsist on essential nutrients doesn&#39;t
+mean we can&#39;t benefit from non-essential nutrients, or even non-nutrients such
+as antioxidants.</p>
+<p>Second, the co-occurence of nutrients and other substances matters a great deal.
+In particular, it determines <a href="https://en.wikipedia.org/wiki/Bioavailability">bioavailability</a>: how much of the nutrients
+present in food we can actually absorb, as well as how fast they can be absorbed
+(the two being sometimes interrelated). For instance, liquid foods will be
+absorbed much faster.</p>
+<p>This is a factor to keep in mind when considering supplements, though a bit of
+careful googling will help you a great deal. [For instance][curcumine], you&#39;ll
+learn never to buy a curcumin supplement that doesn&#39;t also include piperine or
+some lipids, because otherwise you won&#39;t actually absorb most of it.</p>
+<p>(An important point to make is that you don&#39;t actually absorb all the nutrients
+in real food either, and the intake recommendations do take this into account.)</p>
+<p>In general, it&#39;s hard to know what matters and how (much) it will impact health.
+I belabored this point in <a href="/red-meat/">my article about red meat</a>. If you have no
+deficiencies, do not consume lots of well-known harmful substances (e.g. trans
+fats) and keep your bodyfat in check, it&#39;s going to be very hard to ascertain if
+(for instance) eating whole foods is going to be much better than drinking
+<a href="https://en.wikipedia.org/wiki/Soylent_(meal_replacement)">Soylent</a> in the long run.</p>
+<hr>
+<p>And that&#39;s it for today!</p>
+<p>I still have to actually analyze what nutrients I am getting and not getting and
+how I could fix the situation. I&#39;m hoping to report on that at some point, but
+it&#39;s not currently super high in my list of priorities.</p>
+<hr>
+<hr>
+<div id=app1></div>
+
+<h2 id="appendix-1---notes-on-the-many-kinds-of-fats">Appendix 1 - Notes on (The Many Kinds of) Fats</h2>
+<p><strong>Disclaimer:</strong> These are just compiled notes from my own googling and
+wikipedia&#39;ing. They mostly reflect &quot;the generally accepted idea&quot; — I wouldn&#39;t
+even go as far as to say &quot;the scientific consensus&quot;, which I haven&#39;t research
+(because it&#39;s harder).</p>
+<p>There is a complex hierarchy of different kinds of fat:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Saturated_fat">Saturated Fat</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Unsaturated_fat">Unsaturated Fat</a><ul>
+<li><a href="https://en.wikipedia.org/wiki/Monounsaturated_fat">Monounsaturated Fat</a><ul>
+<li><a href="https://en.wikipedia.org/wiki/Omega-7_fatty_acid">Omega-7 Fatty Acid</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Omega-9_fatty_acid">Omega-9 Fatty Acid</a></li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Polyunsaturated_fat">Polyunsaturated Fat</a><ul>
+<li><a href="https://en.wikipedia.org/wiki/Omega-3_fatty_acid">Omega-3 Fatty Acid</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Omega-6_fatty_acid">Omega-6 Fatty Acid</a></li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Trans_fat">Trans Fat</a></li>
+</ul>
+</li>
+</ul>
+<p>Each category further includes multiple kinds of fatty acids.</p>
+<p>Despite this variety, only two kinds of fatty acids are essential:
+alpha-linolenic acid (ALA, an Omega-3) and linoleic acid (LA, an Omega-6 — note
+the missing &quot;n&quot; when compared to ALA). We can synthesize the rest from those
+two.</p>
+<p>The consensus regarding fat is that the unsaturated fats are the &quot;healthy&quot; fats.
+Saturated fats are not inherently bad, but increased consumption is linked with
+heart disease (though <a href="https://en.wikipedia.org/wiki/Saturated_fat#Association_with_diseases">the studies are sometimes
+contradictory</a>). Trans fats are mostly artificial, and those
+artificial trans fats should be avoided as their consumption is strongly linked
+to heart disease.</p>
+<p>In general, Omega-3 are regarded as having a variety of health benefits, though
+(a) <a href="https://en.wikipedia.org/wiki/Omega-3_fatty_acid#Health_effects">a lot of these claims are shaky</a>, and consuming a lot of omega-3
+does not seem to procure additional advantages.</p>
+<p>Besides ALA, the other two kinds of Omega-3 deserve a mention, namely EPA and
+DHA (I&#39;ll spare you the full names). Both can be synthesized from ALA though at
+low rates (8%) and the ability decreases with age, so it might be a good idea to
+get them from your diet.</p>
+<p>There is also some talk of optimal ratios between Omega-3 and Omega-6, though
+without much substantiation. A typical western diet has 14-25 more Omega-6
+compared to Omega-3, while some people advocate a 4:1 or even 1:1 ratio.</p>
+<p>The 1:1 ratio seems crazy to me, as only some fishes and seafood (such as salmon
+and mackerel) as well as some seeds (chia, flax) have more Omega-3 than Omega-6.
+There are a couple others (<a href="https://en.wikipedia.org/wiki/Fatty_acid_ratio_in_food">big list here</a>).</p>
+<p>To top it off, it&#39;s quite hard to find precise ratios for animal sources,
+because it depends on nutrition. For instance, beef will vary between a 2:1
+ratio for grass-fed beef to 6:1 for grain-fed beef (I also found the
+alternatives figures of 1:1 and 4:1, respectively).</p>
+<p>In Belgium at least, finding what your beef is being fed is also quite hard. I
+researched nutrition for the &quot;Belgian blue bull&quot; breed, and they seem to be fed
+mostly beetroot and hay, depending on the seasons. This opens even more
+questions: what is the nutritive impact of beetroots? Of hay (&quot;grass-fed&quot; beef
+is allowed hay, but is it different from the stuff the cows graze from the
+ground?).</p>
+<p>As a side note, while finding omega-3 and omega-6 values is hard, it&#39;s almost
+impossible to find usable nutritive values for omega-7 and omega-9.</p>
+<p>It&#39;s probably a good idea to get more Omega-3, but there is scant evidence and
+little urgence here.</p>
+<p>Finally, we can talk about Cholesterol. Cholesterol is a lipid, but is not a
+&quot;fat&quot; (which are chemically triglycerides).</p>
+<p>There&#39;s HDL cholesterol (&quot;good cholesterol&quot;) and LDL cholesterol (&quot;bad
+cholesterol&quot;, whose excess is likely to cause arterial narrowing). Like
+omega-3/6, the key here might be in the ration between both. It also seems that
+omega-3 and omega-7 could help with lowering LDL / increasing HDL.</p>
+<p>Again, I haven&#39;t researched this. Someone on the LessWrong slack made the case
+that high LDL wasn&#39;t bad if other markers (like omega-3/6 ratio) were okay. Just
+googling for it you&#39;ll find <a href="https://academic.oup.com/eurheartj/article/38/32/2459/3745109">this</a>:</p>
+<blockquote>
+<p>Consistent evidence from numerous and multiple different types of clinical and
+genetic studies unequivocally establishes that LDL causes atherosclerotic
+cardiovascular disease.</p>
+</blockquote>
+<p>and <a href="https://bmjopen.bmj.com/content/6/6/e010401">that</a>:</p>
+<blockquote>
+<p>High LDL-C is inversely associated with mortality in most people over
+60 years. This finding is inconsistent with the cholesterol hypothesis (ie,
+that cholesterol, particularly LDL-C, is inherently atherogenic). [...]</p>
+</blockquote>
+<p>At least, this suggests to me that <em>maybe</em> the story is not as simple as &quot;LDL =
+bad&quot;. Other factors may be at play, and correlations may pollute the studies.</p>
+<div id=app2></div>
+
+<h2 id="appendix-2---vitamins--minerals-not-covered-by-fdc">Appendix 2 - Vitamins &amp; Minerals Not Covered by FDC</h2>
+<p>FDC tracks most of the essential nutrients (and then some), but not all. Let&#39;s
+talk quickly about these forgotten children.</p>
+<h4 id="chloride-cl">Chloride (Cl)</h4>
+<p>Yes, it&#39;s the stuff they put in swimming pool, but it&#39;s also about 60% of what
+table salt (NaCl) is made of by weight. The recommended daily intake is 2.3g and
+you probably get that by salt only.</p>
+<h4 id="chromium-cr">Chromium (Cr)</h4>
+<p>The recommended daily intake is 35 mcg (or μg — a microgram). The estimated
+intake for European adults is 57-83 mcg/day while another study found that the
+average for Mexican adults was 30 mcg/day. It&#39;s hard to get accurate estimate of
+this element for food items because it depends very strongly on the soil used to
+grow plants and the feed given to animals. Anyhow, your intake of this mineral
+should be fine.</p>
+<h4 id="fluoride-f-">Fluoride (F-)</h4>
+<p>Yes, that&#39;s the stuff they put in toothpaste (or sometimes in the water supply
+in the US). It&#39;s good for your teeth and bones... and after a cursory search I
+couldn&#39;t really find what else it&#39;s good for. The recommended daily intake is 4
+mg, and toothpaste will have at least 1000 ppm (part per million) of it — hence
+about 1 mg of fluoride per gram of toothpaste. Black tea has about 0.8 mg/cup.
+It&#39;s otherwise pretty rare and maybe that&#39;s good because this stuff isn&#39;t good
+in excess. Just wash your teeth at least once a day and you&#39;ll be fine.</p>
+<h4 id="iodine-i−">Iodine (I−)</h4>
+<p>The recommended daily intake is 150 mcg. Salmon has 28 mcg/100g. Seaweed
+contains <strong>tons</strong> of it — kombu kelp up to 3k mcg/g, while wakame seaweed (the
+neon green one you can get on the side at the Japanese) contains 40-60 mcg/g.
+Yes, those figure are per <em>gram</em>. Milk also has a lot, about 250 mcg per liter.
+Iodine is needed by the thyroid (at least 70 mcg to avoid problems).</p>
+<h4 id="molybdenum-mo">Molybdenum (Mo)</h4>
+<p>Average daily intake varies between 120 and 240 mcg/day, which is higher than
+dietary recommendation of 45 mcg, so don&#39;t worry too much about it. It&#39;s in
+small amount (5-10 mcg) in many, many things, but there&#39;s a ton in liver (150
+mcg / 100g) and a lot in cereals, bread, rice &amp; almonds (20-30 mcg/100g).</p>
+<h4 id="vitamin-b12-cobalamine">Vitamin B12 (Cobalamine)</h4>
+<p>The recommended daily intake is 2.4 mcgg. Milk has 0.5 mcg/100mL. It&#39;s also
+found in an <a href="https://fic.colruytgroup.com/productinfo/en/cogo/1828040">energy drink</a> I favor.</p>
+    </div>
+
+    <hr>
+    <div id="mc_embed_signup">
+      <form action="//norswap.us15.list-manage.com/subscribe/post?u=ed54e8af45409496579de0a77&amp;id=ef486ce844"
+          method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+          target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+          <label for="mce-EMAIL">Liked this post? Subscribe for blog updates.</label>
+          <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ed54e8af45409496579de0a77_ef486ce844" tabindex="-1" value="">
+          </div>
+          <div class="clear">
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/nutrients-spreadsheet";
+        this.page.identifier = "nutrients-spreadsheet";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

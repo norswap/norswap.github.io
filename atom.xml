@@ -6,6 +6,214 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>The Big Nutrient Spreadsheet</title>
+      <description>
+&lt;p&gt;As part of my journey into weightlifting (&lt;a href=&quot;/weight-training&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;/weight-training-2&quot;&gt;2&lt;/a&gt;, &lt;a href=&quot;/weight-training-3&quot;&gt;3&lt;/a&gt;, &lt;a href=&quot;/weight-training-4&quot;&gt;4&lt;/a&gt;), I&amp;#39;ve been
+increasingly interested in nutrition.&lt;/p&gt;
+&lt;p&gt;I thought to push this a bit further and try to figure out which nutrients I&amp;#39;m
+getting in my diet, which I&amp;#39;m lacking, and how I can remedy that. I didn&amp;#39;t quite
+get around to that last part, but here are my results so far, as well as the
+tech I built to help me (spoiler: it&amp;#39;s a spreadsheet).&lt;/p&gt;
+&lt;h2 id=&quot;essential-nutrients&quot;&gt;(Essential) Nutrients&lt;/h2&gt;
+&lt;p&gt;What does our body &lt;a href=&quot;https://en.wikipedia.org/wiki/Nutrient#Essential_nutrients&quot;&gt;actually need&lt;/a&gt;?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Fat (actually &lt;a href=&quot;https://en.wikipedia.org/wiki/Essential_fatty_acid&quot;&gt;essential fatty acids&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Proteins (actually &lt;a href=&quot;https://en.wikipedia.org/wiki/Essential_amino_acid&quot;&gt;essential amino acids&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Vitamin#Recommended_levels&quot;&gt;Essential Vitamins&lt;/a&gt; (13 of them)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Mineral_(nutrient)#Roles_in_biological_processes&quot;&gt;Essential Minerals&lt;/a&gt; (15 of them)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Additionally, &lt;a href=&quot;https://en.wikipedia.org/wiki/Nutrient#Conditionally_essential_nutrients&quot;&gt;some substances&lt;/a&gt; can be synthesized by our bodies but can be
+(should be?) ingested directly, for instance &lt;a href=&quot;https://en.wikipedia.org/wiki/Choline&quot;&gt;choline&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Some other substances are non-essential but you really want to have them, most
+notably fibers.&lt;/p&gt;
+&lt;p&gt;And finally, yet other substance are non-essential but might have beneficial
+effects, such as various &lt;a href=&quot;https://en.wikipedia.org/wiki/Antioxidant&quot;&gt;antioxidants&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And, it goes without saying, adequate calorie intake and hydration.&lt;/p&gt;
+&lt;p&gt;In this article I&amp;#39;m going to focus on the vitamins and the minerals&lt;/p&gt;
+&lt;p&gt;Why? First, it&amp;#39;s more likely to have deficiency in those. It&amp;#39;s also much harder
+to reach the recommended daily intake values. Nevertheless, I&amp;#39;ve included some
+remarks on fats in an &lt;a href=&quot;#app1&quot;&gt;Appendix 1&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;the-nutrient-spreadsheet&quot;&gt;The Nutrient Spreadsheet&lt;/h2&gt;
+&lt;p&gt;The goal was simple. First, to make a spreadsheet were each row was a food, and
+each column was a nutrient. Second, to have a way to autofill the nutrient
+values from some online database to avoid tediously copying ~30 values into a
+spreadsheet for each food item I was interested in.&lt;/p&gt;
+&lt;p&gt;You can view the resulting spreadsheet with some food items &lt;a href=&quot;https://docs.google.com/spreadsheets/d/1f9kR2aJmVRCyRsmB-CXURuy2Y4zkysuoNfl9uOM7NLw/edit?usp=sharing&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I used the same setup as &lt;a href=&quot;https://norswap.com/fitbit-google-sheets/&quot;&gt;when I made a Fitbit spreadsheet&lt;/a&gt;: there
+is an Observable notebook with controls that help filling the spreadsheet.&lt;/p&gt;
+&lt;p&gt;In particular, you get a food item you&amp;#39;re interested in from &lt;a href=&quot;https://fdc.nal.usda.gov/index.html&quot;&gt;Food Data Central&lt;/a&gt;
+(or FDC for the hip kids — it&amp;#39;s the best nutrient database I could find,
+maintained by the US Department of Agriculture) and then instruct the notebook
+to export the nutrient values to a row in the spreadsheet.&lt;/p&gt;
+&lt;p&gt;Unfortunately, FDC does not track &lt;em&gt;every&lt;/em&gt; essential nutrients. I reviewed the
+essential nutrients it does not cover, to make sure nothing too important was
+left out — the result of that analysis is in &lt;a href=&quot;#app2&quot;&gt;Appendix 2&lt;/a&gt; (It&amp;#39;s quite
+interesting, I might extend the analysis to all essential nutrients sometime.)
+Basically, you should be fine for all the nutrients not covered, especially if
+you drink milk regularly. If not, maybe just check your iodine intake.&lt;/p&gt;
+&lt;p&gt;If you want to make your own spreadsheet, it&amp;#39;s also possible! Fork this
+&lt;a href=&quot;https://observablehq.com/@norswap/nutrition-spreadsheet&quot;&gt;Observable notebook&lt;/a&gt; and follow the instructions under the
+&amp;quot;Setup&amp;quot; heading to create your own.&lt;/p&gt;
+&lt;h2 id=&quot;misc-remarks-nutrients--bio-availability&quot;&gt;Misc Remarks: Nutrients &amp;amp; Bio-Availability&lt;/h2&gt;
+&lt;p&gt;An obvious question about this kind of analyzis is: are nutrients the only thing
+that matters? To which I&amp;#39;d tend to answer &amp;quot;mostly, but&amp;quot;.&lt;/p&gt;
+&lt;p&gt;First, some non-essential nutrients are quite important (such as fibers, as we
+mentionned before). And because we can subsist on essential nutrients doesn&amp;#39;t
+mean we can&amp;#39;t benefit from non-essential nutrients, or even non-nutrients such
+as antioxidants.&lt;/p&gt;
+&lt;p&gt;Second, the co-occurence of nutrients and other substances matters a great deal.
+In particular, it determines &lt;a href=&quot;https://en.wikipedia.org/wiki/Bioavailability&quot;&gt;bioavailability&lt;/a&gt;: how much of the nutrients
+present in food we can actually absorb, as well as how fast they can be absorbed
+(the two being sometimes interrelated). For instance, liquid foods will be
+absorbed much faster.&lt;/p&gt;
+&lt;p&gt;This is a factor to keep in mind when considering supplements, though a bit of
+careful googling will help you a great deal. [For instance][curcumine], you&amp;#39;ll
+learn never to buy a curcumin supplement that doesn&amp;#39;t also include piperine or
+some lipids, because otherwise you won&amp;#39;t actually absorb most of it.&lt;/p&gt;
+&lt;p&gt;(An important point to make is that you don&amp;#39;t actually absorb all the nutrients
+in real food either, and the intake recommendations do take this into account.)&lt;/p&gt;
+&lt;p&gt;In general, it&amp;#39;s hard to know what matters and how (much) it will impact health.
+I belabored this point in &lt;a href=&quot;/red-meat/&quot;&gt;my article about red meat&lt;/a&gt;. If you have no
+deficiencies, do not consume lots of well-known harmful substances (e.g. trans
+fats) and keep your bodyfat in check, it&amp;#39;s going to be very hard to ascertain if
+(for instance) eating whole foods is going to be much better than drinking
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Soylent_(meal_replacement)&quot;&gt;Soylent&lt;/a&gt; in the long run.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;And that&amp;#39;s it for today!&lt;/p&gt;
+&lt;p&gt;I still have to actually analyze what nutrients I am getting and not getting and
+how I could fix the situation. I&amp;#39;m hoping to report on that at some point, but
+it&amp;#39;s not currently super high in my list of priorities.&lt;/p&gt;
+&lt;hr&gt;
+&lt;hr&gt;
+&lt;div id=app1&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;appendix-1---notes-on-the-many-kinds-of-fats&quot;&gt;Appendix 1 - Notes on (The Many Kinds of) Fats&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Disclaimer:&lt;/strong&gt; These are just compiled notes from my own googling and
+wikipedia&amp;#39;ing. They mostly reflect &amp;quot;the generally accepted idea&amp;quot; — I wouldn&amp;#39;t
+even go as far as to say &amp;quot;the scientific consensus&amp;quot;, which I haven&amp;#39;t research
+(because it&amp;#39;s harder).&lt;/p&gt;
+&lt;p&gt;There is a complex hierarchy of different kinds of fat:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Saturated_fat&quot;&gt;Saturated Fat&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Unsaturated_fat&quot;&gt;Unsaturated Fat&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Monounsaturated_fat&quot;&gt;Monounsaturated Fat&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Omega-7_fatty_acid&quot;&gt;Omega-7 Fatty Acid&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Omega-9_fatty_acid&quot;&gt;Omega-9 Fatty Acid&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Polyunsaturated_fat&quot;&gt;Polyunsaturated Fat&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Omega-3_fatty_acid&quot;&gt;Omega-3 Fatty Acid&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Omega-6_fatty_acid&quot;&gt;Omega-6 Fatty Acid&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Trans_fat&quot;&gt;Trans Fat&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each category further includes multiple kinds of fatty acids.&lt;/p&gt;
+&lt;p&gt;Despite this variety, only two kinds of fatty acids are essential:
+alpha-linolenic acid (ALA, an Omega-3) and linoleic acid (LA, an Omega-6 — note
+the missing &amp;quot;n&amp;quot; when compared to ALA). We can synthesize the rest from those
+two.&lt;/p&gt;
+&lt;p&gt;The consensus regarding fat is that the unsaturated fats are the &amp;quot;healthy&amp;quot; fats.
+Saturated fats are not inherently bad, but increased consumption is linked with
+heart disease (though &lt;a href=&quot;https://en.wikipedia.org/wiki/Saturated_fat#Association_with_diseases&quot;&gt;the studies are sometimes
+contradictory&lt;/a&gt;). Trans fats are mostly artificial, and those
+artificial trans fats should be avoided as their consumption is strongly linked
+to heart disease.&lt;/p&gt;
+&lt;p&gt;In general, Omega-3 are regarded as having a variety of health benefits, though
+(a) &lt;a href=&quot;https://en.wikipedia.org/wiki/Omega-3_fatty_acid#Health_effects&quot;&gt;a lot of these claims are shaky&lt;/a&gt;, and consuming a lot of omega-3
+does not seem to procure additional advantages.&lt;/p&gt;
+&lt;p&gt;Besides ALA, the other two kinds of Omega-3 deserve a mention, namely EPA and
+DHA (I&amp;#39;ll spare you the full names). Both can be synthesized from ALA though at
+low rates (8%) and the ability decreases with age, so it might be a good idea to
+get them from your diet.&lt;/p&gt;
+&lt;p&gt;There is also some talk of optimal ratios between Omega-3 and Omega-6, though
+without much substantiation. A typical western diet has 14-25 more Omega-6
+compared to Omega-3, while some people advocate a 4:1 or even 1:1 ratio.&lt;/p&gt;
+&lt;p&gt;The 1:1 ratio seems crazy to me, as only some fishes and seafood (such as salmon
+and mackerel) as well as some seeds (chia, flax) have more Omega-3 than Omega-6.
+There are a couple others (&lt;a href=&quot;https://en.wikipedia.org/wiki/Fatty_acid_ratio_in_food&quot;&gt;big list here&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;To top it off, it&amp;#39;s quite hard to find precise ratios for animal sources,
+because it depends on nutrition. For instance, beef will vary between a 2:1
+ratio for grass-fed beef to 6:1 for grain-fed beef (I also found the
+alternatives figures of 1:1 and 4:1, respectively).&lt;/p&gt;
+&lt;p&gt;In Belgium at least, finding what your beef is being fed is also quite hard. I
+researched nutrition for the &amp;quot;Belgian blue bull&amp;quot; breed, and they seem to be fed
+mostly beetroot and hay, depending on the seasons. This opens even more
+questions: what is the nutritive impact of beetroots? Of hay (&amp;quot;grass-fed&amp;quot; beef
+is allowed hay, but is it different from the stuff the cows graze from the
+ground?).&lt;/p&gt;
+&lt;p&gt;As a side note, while finding omega-3 and omega-6 values is hard, it&amp;#39;s almost
+impossible to find usable nutritive values for omega-7 and omega-9.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s probably a good idea to get more Omega-3, but there is scant evidence and
+little urgence here.&lt;/p&gt;
+&lt;p&gt;Finally, we can talk about Cholesterol. Cholesterol is a lipid, but is not a
+&amp;quot;fat&amp;quot; (which are chemically triglycerides).&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s HDL cholesterol (&amp;quot;good cholesterol&amp;quot;) and LDL cholesterol (&amp;quot;bad
+cholesterol&amp;quot;, whose excess is likely to cause arterial narrowing). Like
+omega-3/6, the key here might be in the ration between both. It also seems that
+omega-3 and omega-7 could help with lowering LDL / increasing HDL.&lt;/p&gt;
+&lt;p&gt;Again, I haven&amp;#39;t researched this. Someone on the LessWrong slack made the case
+that high LDL wasn&amp;#39;t bad if other markers (like omega-3/6 ratio) were okay. Just
+googling for it you&amp;#39;ll find &lt;a href=&quot;https://academic.oup.com/eurheartj/article/38/32/2459/3745109&quot;&gt;this&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Consistent evidence from numerous and multiple different types of clinical and
+genetic studies unequivocally establishes that LDL causes atherosclerotic
+cardiovascular disease.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;and &lt;a href=&quot;https://bmjopen.bmj.com/content/6/6/e010401&quot;&gt;that&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;High LDL-C is inversely associated with mortality in most people over
+60 years. This finding is inconsistent with the cholesterol hypothesis (ie,
+that cholesterol, particularly LDL-C, is inherently atherogenic). [...]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;At least, this suggests to me that &lt;em&gt;maybe&lt;/em&gt; the story is not as simple as &amp;quot;LDL =
+bad&amp;quot;. Other factors may be at play, and correlations may pollute the studies.&lt;/p&gt;
+&lt;div id=app2&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;appendix-2---vitamins--minerals-not-covered-by-fdc&quot;&gt;Appendix 2 - Vitamins &amp;amp; Minerals Not Covered by FDC&lt;/h2&gt;
+&lt;p&gt;FDC tracks most of the essential nutrients (and then some), but not all. Let&amp;#39;s
+talk quickly about these forgotten children.&lt;/p&gt;
+&lt;h4 id=&quot;chloride-cl&quot;&gt;Chloride (Cl)&lt;/h4&gt;
+&lt;p&gt;Yes, it&amp;#39;s the stuff they put in swimming pool, but it&amp;#39;s also about 60% of what
+table salt (NaCl) is made of by weight. The recommended daily intake is 2.3g and
+you probably get that by salt only.&lt;/p&gt;
+&lt;h4 id=&quot;chromium-cr&quot;&gt;Chromium (Cr)&lt;/h4&gt;
+&lt;p&gt;The recommended daily intake is 35 mcg (or μg — a microgram). The estimated
+intake for European adults is 57-83 mcg/day while another study found that the
+average for Mexican adults was 30 mcg/day. It&amp;#39;s hard to get accurate estimate of
+this element for food items because it depends very strongly on the soil used to
+grow plants and the feed given to animals. Anyhow, your intake of this mineral
+should be fine.&lt;/p&gt;
+&lt;h4 id=&quot;fluoride-f-&quot;&gt;Fluoride (F-)&lt;/h4&gt;
+&lt;p&gt;Yes, that&amp;#39;s the stuff they put in toothpaste (or sometimes in the water supply
+in the US). It&amp;#39;s good for your teeth and bones... and after a cursory search I
+couldn&amp;#39;t really find what else it&amp;#39;s good for. The recommended daily intake is 4
+mg, and toothpaste will have at least 1000 ppm (part per million) of it — hence
+about 1 mg of fluoride per gram of toothpaste. Black tea has about 0.8 mg/cup.
+It&amp;#39;s otherwise pretty rare and maybe that&amp;#39;s good because this stuff isn&amp;#39;t good
+in excess. Just wash your teeth at least once a day and you&amp;#39;ll be fine.&lt;/p&gt;
+&lt;h4 id=&quot;iodine-i−&quot;&gt;Iodine (I−)&lt;/h4&gt;
+&lt;p&gt;The recommended daily intake is 150 mcg. Salmon has 28 mcg/100g. Seaweed
+contains &lt;strong&gt;tons&lt;/strong&gt; of it — kombu kelp up to 3k mcg/g, while wakame seaweed (the
+neon green one you can get on the side at the Japanese) contains 40-60 mcg/g.
+Yes, those figure are per &lt;em&gt;gram&lt;/em&gt;. Milk also has a lot, about 250 mcg per liter.
+Iodine is needed by the thyroid (at least 70 mcg to avoid problems).&lt;/p&gt;
+&lt;h4 id=&quot;molybdenum-mo&quot;&gt;Molybdenum (Mo)&lt;/h4&gt;
+&lt;p&gt;Average daily intake varies between 120 and 240 mcg/day, which is higher than
+dietary recommendation of 45 mcg, so don&amp;#39;t worry too much about it. It&amp;#39;s in
+small amount (5-10 mcg) in many, many things, but there&amp;#39;s a ton in liver (150
+mcg / 100g) and a lot in cereals, bread, rice &amp;amp; almonds (20-30 mcg/100g).&lt;/p&gt;
+&lt;h4 id=&quot;vitamin-b12-cobalamine&quot;&gt;Vitamin B12 (Cobalamine)&lt;/h4&gt;
+&lt;p&gt;The recommended daily intake is 2.4 mcgg. Milk has 0.5 mcg/100mL. It&amp;#39;s also
+found in an &lt;a href=&quot;https://fic.colruytgroup.com/productinfo/en/cogo/1828040&quot;&gt;energy drink&lt;/a&gt; I favor.&lt;/p&gt;
+      </description>
+      <pubDate>2020-01-27T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/nutrients-spreadsheet</link>
+      <guid isPermaLink="true">http://norswap.com/nutrients-spreadsheet</guid>
+    </item>
+    <item>
       <title>What We (Don&#39;t) Know About Nutrition: Red Meat</title>
       <description>
 &lt;p&gt;While I was writing another article related to nutrition (coming out soon), I
@@ -1846,155 +2054,6 @@ solution.&lt;/p&gt;
       <pubDate>2019-08-20T22:00:00.000Z</pubDate>
       <link>http://norswap.com/expression-problem-java</link>
       <guid isPermaLink="true">http://norswap.com/expression-problem-java</guid>
-    </item>
-    <item>
-      <title>The Intuition For React</title>
-      <description>
-&lt;p&gt;The other day, I found &lt;a href=&quot;https://svelte.dev/blog/virtual-dom-is-pure-overhead&quot;&gt;this article&lt;/a&gt; (&amp;quot;Virtual DOM is pure overhead&amp;quot;) on
-&lt;a href=&quot;https://news.ycombinator.com/item?id=19950253&quot;&gt;Hacker News&lt;/a&gt; and started reading it. Halfway through, &lt;a href=&quot;https://reactjs.org/&quot;&gt;React&lt;/a&gt; finally clicked
-for me.&lt;/p&gt;
-&lt;p&gt;See, I don&amp;#39;t do web programming, but I keep abreast of tech news, notably via
-hacker news and web frameworks always feature heavily. If you had asked me
-before what React was I could have given a generic answer (&amp;quot;something something
-fronted framework something something state&amp;quot;), but I couldn&amp;#39;t have explaine why
-we actually needed React, what it improved compared to using vanilla Javascript.&lt;/p&gt;
-&lt;p&gt;Well, basically, the idea is that when some event occurs (e.g. the user performs
-some input) the state of the page/application is going to change (probably
-through the effect of an event listener). When that happens, you might have to
-redraw part of the page layout.&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s when things can start to become hairy. If your application is complex,
-there might many possible configurations for the layout, and so many ways in
-which the layout could change.&lt;/p&gt;
-&lt;p&gt;A common approach to these kind of problems is to model the application as a
-state machine, with each state change represented as a state transition. This
-approach works, but doesn&amp;#39;t scale too well to complex applications — the state
-machine gets too complex, it doesn&amp;#39;t fit into your head anymore.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;The idea behind React then is&lt;/strong&gt;: stop &lt;em&gt;changing&lt;/em&gt; the layout. Instead,
-re-render the whole layout from the state each time the state changes.&lt;/p&gt;
-&lt;p&gt;That way, you don&amp;#39;t have to worry about handling each possible change in each
-possible application state: instead you just write component that know how to
-render themselves given the state they are given.&lt;/p&gt;
-&lt;p&gt;Of course, re-rendering on every change would be pretty slow, so React uses a
-&amp;quot;Virtual DOM&amp;quot; (just a tree mimicking the real &lt;a href=&quot;https://www.w3.org/TR/WD-DOM/introduction.html&quot;&gt;DOM&lt;/a&gt;) and compares that to the
-real DOM, only replacing parts of the layout that have actually changed.&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s pretty simple. I thought: well isn&amp;#39;t that explained on &lt;a href=&quot;https://reactjs.org/&quot;&gt;the official
-website&lt;/a&gt;?&lt;/p&gt;
-&lt;p&gt;Well actually it does a pretty good job:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Declarative&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;React makes it painless to create interactive UIs. Design simple views for
-each state in your application, and React will efficiently update and render
-just the right components when your data changes.&lt;/p&gt;
-&lt;p&gt;Declarative views make your code more predictable and easier to debug.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Component-Based&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Build encapsulated components that manage their own state, then compose them
-to make complex UIs.&lt;/p&gt;
-&lt;p&gt;Since component logic is written in JavaScript instead of templates, you can
-easily pass rich data through your app and keep state out of the DOM.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;But it doesn&amp;#39;t explain that the purpose of this &amp;quot;efficient re-rendering&amp;quot; is to
-avoid having to keep track of the current layout yourself and change it in a
-legitimate way, which quickly becomes error prone.&lt;/p&gt;
-&lt;p&gt;And that&amp;#39;s it for today!&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Post Scriptum&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The topic of the &lt;a href=&quot;https://svelte.dev/blog/virtual-dom-is-pure-overhead&quot;&gt;article&lt;/a&gt; itself is pretty interesting in its
-own right. So is the discussion at &lt;a href=&quot;https://news.ycombinator.com/item?id=19950253&quot;&gt;Hacker News&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;In reeeal condensed, the article says that because the optimal manual change to
-the DOM is going to be faster than diffing + a sub-optimal DOM change performed
-by React, the virtual DOM is pure overhead. It&amp;#39;s right, but leaves out the fact
-that all that is done for managing complexity.&lt;/p&gt;
-&lt;p&gt;The article is written by Rich Harris, the author of &lt;a href=&quot;https://svelte.dev/&quot;&gt;the Svelte
-framework&lt;/a&gt; — and sell Svelte&amp;#39;s ability to basically manage complexity
-but at the same time generate the optimal change at build-time.&lt;/p&gt;
-&lt;p&gt;The discussion makes other interesting points regarding the genesis of React.
-Because the algorithm is fickle I&amp;#39;m gonna be quoting the discussion here:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;oraphalous&lt;/em&gt;:&lt;/p&gt;
-&lt;p&gt;I think this article - and many of the comments on this thread are forgetting
-the context of how DOM manipulation was typically done when the virtual DOM
-approach was introduced.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s the gist of how folks would often update an element. You&amp;#39;d subscribe to
-events on the root element of your component. And if your component is of any
-complexity at all - first thing you&amp;#39;d probably do is ask jQuery to go find any
-child elements that need updating - inspecting the DOM in various ways so as
-to determine the component&amp;#39;s current state.&lt;/p&gt;
-&lt;p&gt;If your component needed to affect components higher up, or sibling to the
-current instance - then your application is often doing a search of the DOM to
-find the nodes.. and yes if you architect things well then you could avoid a
-lot of these - but let&amp;#39;s face it, front end developers weren&amp;#39;t typically
-renown for their application architecture skills.&lt;/p&gt;
-&lt;p&gt;In short - the DOM was often used to store state. And this just isn&amp;#39;t a very
-efficient approach.&lt;/p&gt;
-&lt;p&gt;This is what I understood the claim that VDOMs are faster than the real DOM
-meant - and the article is pretty much eliding this detail.&lt;/p&gt;
-&lt;p&gt;As far as I&amp;#39;m aware React and its VDOM approach was the framework that
-deserves the credit for changing the culture of how we thought about state
-management on the frontend. That newer frameworks have been able to build upon
-this core insight - in ways that are even more efficient than the VDOM
-approach is great - but they should pay homage to that original insight and
-change in perspective React made possible.&lt;/p&gt;
-&lt;p&gt;I feel this article and many of the comments here so far - fail to do that -
-and worse, seem to be trying to present React&amp;#39;s claim of the VDOM faster than
-the DOM as some kind of toddler mistake.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;jasonkester:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;the DOM was often used to store state.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Every once in a while I&amp;#39;m reminded that I&amp;#39;m mostly disconnected from the way
-&amp;quot;most&amp;quot; people build things. Thanks for this insight. It finally explains why I
-hear people talking down about &amp;quot;jQuery developers&amp;quot;, if that was something that
-people actually did.&lt;/p&gt;
-&lt;p&gt;But wow. I&amp;#39;ve been building javascript-heavy web stuff since the mid 90&amp;#39;s and it
-had never occurred to me to do that. You have your object model, and each thing
-had a reference back to its DOM node and some methods to update itself if
-necessary. All jQuery did was make it less typing to initially grab the DOM node
-(or create it), and give you some shorthand for setting classes on them.&lt;/p&gt;
-&lt;p&gt;It also explains why people liked React, which has always seemed completely
-overcomplicated to me, but which probably simplified things a lot if you didn&amp;#39;t
-ever have a proper place to keep your data model.&lt;/p&gt;
-&lt;p&gt;I can&amp;#39;t imagine I was the only one who had things figured out back then,
-though. The idea you&amp;#39;re talking about sounds pretty terrible.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;onion2k:&lt;/p&gt;
-&lt;p&gt;Bare in mind that most people using jQuery weren&amp;#39;t writing JavaScript
-applications. They were writing backend-driven applications with jQuery
-enhancements, so there was no real concept of frontend &amp;#39;state&amp;#39; that was
-separate to the DOM itself. If your frontend code needed to work with &amp;#39;state&amp;#39;
-like form values or element attributes you had to read them, and because there
-could be multiple separate bits of code working with the same form or element
-you had to write values back to the DOM so the next bit of code had the
-correct &amp;#39;state&amp;#39;.&lt;/p&gt;
-&lt;p&gt;The thing that changed to make frontend development improve dramatically was
-hash based routing with ajax, and later the introduction of the history API.
-That caused frontend development to have a need to retain state between
-&amp;#39;pages&amp;#39;, so then was a need to find a better way to store it than using DOM
-attributes.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Udik:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;the thing that changed to make frontend development improve
-dramatically was hash based routing with ajax...&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;I think that what&amp;#39;s changed is simply that people realized that it&amp;#39;s way less
-messy to use the backend only as a data source (with ajax calls), and leave
-everything else to the frontend. The cognitive overhead of having the server
-producing html with some implicit state, then updating that state interactively,
-and then losing everything again by posting the whole page to the server, was
-simply unbearable.&lt;/p&gt;
-&lt;p&gt;When I started building web applications in 2004 I had some experience in
-writing desktop apps: I simply created a js library to create and destroy UI
-elements, and wrote &amp;quot;desktop&amp;quot; apps running in the browser.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Isn&amp;#39;t all that positively enlightening?&lt;/p&gt;
-      </description>
-      <pubDate>2019-05-31T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/react-intuition</link>
-      <guid isPermaLink="true">http://norswap.com/react-intuition</guid>
     </item>
   </channel>
 </rss>

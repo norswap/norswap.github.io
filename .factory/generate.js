@@ -116,9 +116,7 @@ async function parse_post_cache()
 {
     posts = JSON.parse(await fsp.readFile('posts.json'),
                        (k,v) => k == 'date' ? moment(v) : v)
-
     post_exists = new Array(posts.length).fill(false)
-
 }
 
 async function write_post_cache()
@@ -281,9 +279,7 @@ async function create (dir, base)
             const kind = dir.slice(0, -1)
             await generate_page(kind, base)
 .           /!stdout()
-            // TODO hackfix, marks the source as updated so that the next
-            //  incremental run will update the post cache with proper values
-            touch(`${dir}/${base}`)
+            write_post_cache() // potentially wasteful
             break
     }
 }
@@ -397,11 +393,12 @@ switch (process.argv[2]) // assumes node <script> <arg>
 //        couldn't handle deletions since the root also contains things
 //        generated from posts.
 //
-// - Delete a top directory with files in it causes errors to be printed.
+// - Deleting a top directory with files in it causes errors to be printed.
 //   Fine for now.
 //
 // - Since the FS watcher does not process by batch anymore, we can't regenerate
 //   the index and atom like we did before.
+//      - Like we did before = at the end of a batch ??
 //      - Either we lock every processor run, sequentializing all I/O (my guess:
 //        will change nothing).
 //      - Or we rebuild the index separately (good solution).
@@ -409,8 +406,17 @@ switch (process.argv[2]) // assumes node <script> <arg>
 //          - hackfix: source is touched (see "hackfix" above)
 //          - probably want to rethink this cache thing in the long run
 //
-//  - Live-privew causes changes to the file, causing an infinite loop between
-//    itself and watch...
-//      - Hackfix solution to deploy: make a map from files to last change and
-//        refuse to update if last change too recent (one or two secs?)
+// - In watch mode, we write the post cache on every post update.
+//   This is potentially wasteful. Alternatives:
+//      - Use a sqlite database instead.
+//      - Collect all changed files, install an interrupt handler and have it
+//        touch every file at interrupt time. This way we will know the cache
+//        content are stale, at the feeble cost of rebuilding a perfectly good
+//        file. Use the `touch` function for this.
+//
+// - ribosome.js streams its changes to file, causing live-server to pickup many
+//   small changes. This can't even be worked around by setting a higher wait
+//   time, as the individual changes are still picked up and just bundled
+//   together.
+//      - Can only be fixed by getting rid of ribosome.
 

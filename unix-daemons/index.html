@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Shell Deep Dive: Easy Unix Daemons (on macOS too)
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Shell Deep Dive: Easy Unix Daemons (on macOS too)</h1>
+      <span class="post-date">29 Feb 2020</span>
+<p>I&#39;ve been setting up my new work machine recently, and while doing so I
+encountered an interesting challenge.</p>
+<p>I wanted to setup a proxy to the company&#39;s VPN as a daemon. Here was my feature
+wishlist:</p>
+<ul>
+<li>Runs in the background.</li>
+<li>Starts at startup or login.</li>
+<li>Can be manually killed / relaunched.</li>
+<li>Output visible (e.g. via log files).</li>
+<li>Restarts automatically if it stops for some reason.</li>
+</ul>
+<p>Now, there are daemons systems build into most OSes. For macOS this is <code>launchd</code>
+(for &quot;launch daemon&quot;). On Linux it&#39;s most likely than not <code>systemd</code>, though are
+other systems, like the venerable <code>sysvinit</code> and <code>OpenRC</code>.</p>
+<p>Even before starting however, I knew (from reputation and past personal
+experiences) that those systems sucked mightily. The less I had to deal / rely
+on them, the better. But I&#39;ll expand on that <a href="#startup">later</a>.</p>
+<p>In the end I did actually use <code>launchd</code> to launch at startup. I&#39;m not providing
+details for linux, but <a href="https://unix.stackexchange.com/questions/233468/how-does-systemd-use-etc-init-d-scripts">look here for pointers about systemd</a> (and
+by the same occasion note that I&#39;m right: this is a mess).</p>
+<h2 id="running-in-the-background">Running in the Background</h2>
+<p>Your daemon system will run jobs in the background for you. Nevertheless it&#39;s
+quite interesting to take a small detour to see how one can run a job in the
+background from the user shell. In fact this is how I stumbled upon the
+backbone of my solution.</p>
+<p>The obvious way is to append <code>&amp;</code> at the end of your command. This runs in the
+background, but the command is now a child of the current shell, and will be
+terminated along with the shell.</p>
+<p>The traditional approach in this case is to do something like <code>nohup &lt;command&gt; &amp;
+disown</code>. <a href="https://unix.stackexchange.com/a/148698">Here is a very thorough explanation of that command.</a>
+But basically: <code>disown</code> just removes the command from the list of the shell&#39;s
+job while <code>nohup</code> redirects the terminal output to a file called <code>nohup.out</code> in
+the current directory (or you can just redirect it yourself), as well as closes
+terminal input. Using either <code>disown</code> or <code>nohup</code> (or both) will prevent the
+command from being killed when the shell is killed (it prevents the sending of
+the <code>SIGHUP</code> signal (&quot;signal hang up&quot;), which is &quot;a signal sent to a process
+when its controlling terminal is closed&quot;).</p>
+<p>So this works rather nicely.</p>
+<p>But I have an even better solution: use <code>screen</code>.</p>
+<p>In short, <code>screen</code> lets you start a virtual shell that you can &quot;attach&quot; to a
+real shell, or &quot;detach&quot; from. So you can use it to run a command in its own
+shell, which you can recall at will, in any real shell.</p>
+<p>The advantages of <code>screen</code> is that you can use it for job control. We couldn&#39;t
+have used normal shell job control (using the command <code>jobs</code>) because it is
+shell-specific (not shared between different shell instances). So you can&#39;t use
+it as soon as you close the original shell used to run the command. And if you
+want to kill the command at that point, you need to find out its PID and use
+<code>pkill</code>.</p>
+<p>But with <code>screen</code>, you can do this, from any shell:</p>
+<pre><code class="language-bash">$ screen -dm &lt;command&gt;           # start command in background
+$ screen -dm -S &lt;name&gt; &lt;command&gt; # ... and give it a specific name
+$ screen -ls                     # list all running screens
+$ screen -r &lt;name&gt;               # (re)attach to the given screen
+$ screen -S &lt;name&gt; -X quit       # kill the given screen</code></pre>
+<p>Since some of those are not super intuitive, I propose the use of the following
+aliases and functions:</p>
+<pre><code class="language-bash">alias sjobls=&#39;screen -ls&#39;
+alias sjoba=&#39;screen -r&#39;
+alias sjobmk=&#39;screen -dm -S&#39;
+
+sjobk() {
+    screen -S $1 -X quit
+}</code></pre>
+<p>Final tip: when you attach to the screen, it&#39;s <code>ctrl+a d</code> (or <code>cmd+a d</code> on mac)
+to detach.</p>
+<h2 id="repeating-the-command">Repeating the Command</h2>
+<p>To repeat a command in <code>bash</code>, with 3 seconds of delay between each execution,
+you&#39;d normaly do:</p>
+<pre><code class="language-bash">while true; do &lt;command&gt;; sleep 3; done</code></pre>
+<p>Which you can turn into the following function:</p>
+<pre><code class="language-bash">repeat() {
+    while true; do $1; sleep 3; done
+}</code></pre>
+<p><strong>IMPORTANT POINT:</strong> Making a function was a mistake. This is also valid for
+other functions that will be presented later. It should be a script to be put
+somewhere on the path instead. Why?</p>
+<ol>
+<li><p>By making it a script, you can use a shebang (<code>#!</code>) to specify the shell
+(<code>bash</code>, <code>zsh</code>, ...) used to run it, making it usable whatever shell you
+decide to run as a user.</p>
+</li>
+<li><p>Functions are normally not inherited by sub-shells. In Bash, it&#39;s actually
+possible to export them anyway by using <code>export -f &lt;function&gt;</code>. And as we&#39;ll
+see later, we really want to use subshells.</p>
+</li>
+</ol>
+<p>This remark, aside, there is a couple improvements we might want to make to our
+function.</p>
+<p>First, we&#39;d like to be able to pass an optional argument specifying the duration of
+  the delay between two command runs.</p>
+<p>Second, we&#39;d like the command to be not only a simple command, but also a whole
+pipeline (including pipes <code>|</code> and redirects <code>&gt;</code>). But if we try the naive way,
+we&#39;ll rune into a parser issue.</p>
+<p>Consider the command <code>echo &quot;x&quot; | cat -n</code>. This prints <code>1 x</code> to standard output
+(<code>-n</code> is the option for line numbering). Then try running <code>repeat echo &quot;x&quot; | cat
+-n</code>. This <em>should</em> output <code>1 x</code> multiple times. Instead it prints <code>1 x</code>, then <code>2
+x</code>, then <code>3 x</code>, etc. This is because the command is interpreted as <code>(repeat echo
+&quot;a&quot;) | cat</code> and not <code>repeat (echo &quot;a&quot; | cat)</code> (note the use of parentheses here
+is not valid Bash syntax).</p>
+<p>How to pass a pipe then? We have to quote it, then pass it as a parameter to
+<code>bash -c</code>. e.g. <code>repeat &#39;echo &quot;a&quot; | cat -n&#39;</code> This is by no means perfect — it
+gets annoying when dealing with commands that already have multiple level of
+quotations: for instance <code>echo &quot;&#39;a&#39;&quot;</code> should have been quoted <code>&#39;echo &quot;\&#39;a\&#39;&quot;&#39;</code>.
+But it&#39;s still a good step forward.</p>
+<p>With all the considerations factored in, we get the following function:</p>
+<pre><code class="language-bash">repeat() {
+    local OPT OPTIND OPTARG T=3
+    while getopts &quot;:t:&quot; OPT; do
+        case $OPT in
+            t)  T=$OPTARG;;
+            \?) echo &quot;Usage: repeat [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    while true; do bash -c &quot;$*&quot;; sleep $T; done
+}
+export -f repeat</code></pre>
+<p>For a brief description of argument handling: the option string <code>:t:</code> says that
+to disable getopt&#39;s normal error output (first colon <code>:</code>): we&#39;ll do it ourselves
+with the <code>\?</code> option. The <code>t:</code> part says we expect an optional argument <code>t</code> that
+takes a value (the second colon <code>:</code>). The variable <code>OPT</code> receives the option
+letter in the loop, while <code>OPTARG</code> received the option value (if any). <code>OPTIND</code>
+is set the index of the next (unprocessed) argument. The loop stop when all
+options have been processed. The <code>shift $((OPTIND - 1))</code> removes all processed
+options from the list of arguments (accessible via <code>$*</code>, <code>$@</code> and <code>$1</code>, <code>$2</code>,
+...). Check <a href="https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/">this tutorial</a> for more information.</p>
+<p>An important note on <code>bash -c &quot;$*&quot;</code>: <code>&quot;$*&quot;</code> will expand to all remaining
+arguments, <em>quoted as a single parameter</em>. In this way, <code>repeat</code> can be used
+with or without quoting whenever supported: <code>repeat echo &quot;x&quot;</code> or <code>repeat &#39;echo
+&quot;x&quot; | cat -n&#39;</code> (using pipes while not quoting still doesn&#39;t work).</p>
+<p>The alternative to <code>&quot;$*&quot;</code> is <code>&quot;$@&quot;</code> which expands to the same arguments, but
+quoted individually. Since <code>bash -c</code> expects a single argument, this wouldn&#39;t
+work when used without quotes. We&#39;ll however use <code>&quot;$@&quot;</code> later!</p>
+<h2 id="getting-the-process-output">Getting The Process&#39; Output</h2>
+<p>A simple way to get the process&#39; output even though it runs in the background is
+simply to redirect it. Because of how we built it, this is even compatible with
+our <code>repeat</code> function.</p>
+<p>But if we&#39;re going to use <code>screen</code>, we can simply attach to the screen and see
+what&#39;s going on.</p>
+<p>This has, however, two slight issues:</p>
+<ul>
+<li>The logs are lost in case the machine shuts down. Here, simply using the <code>tee</code>
+command (<a href="http://man7.org/linux/man-pages/man1/tee.1.html">manpage</a>) works: <code>&lt;command&gt; | tee logfile</code> enables us to
+benefit from both logs and screen output.</li>
+</ul>
+<ul>
+<li>If the command terminates, then the screen shuts down and the output is lost.
+Not necessarily a problem if you log, but it is if you don&#39;t.</li>
+</ul>
+<p>(At this point, I&#39;ll note that for my proxy I don&#39;t really care about long-time
+logs, I just want to be able to know what&#39;s happening <em>right now</em>, sometimes.
+Also proper log management requires some thought, as &quot;just append forever&quot; might
+work in practice, but it makes fussy me shudder.)</p>
+<p>To solve that second issue, I introduced a function called <code>remain</code>, which would
+take a command as parameter (much like <code>repeat</code>) and run a shell once that
+command exited.</p>
+<p>You can actually achieve that quite easily with just <code>&lt;command&gt;; bash</code>, as long
+as the command exits by itself. By hitting <code>ctrl+c</code> in the screen (and thus
+sending <code>SIGINT</code>), you&#39;ll shut down the whole chain, just like in a regular
+shell. </p>
+<p>But imagine you want to kill the command, while still being able to peruse the
+output in the shell? (Again, quite relevant to my use case: stop trying to
+connect to the proxy, but let me see what&#39;s going on.) Well that&#39;s possible too:</p>
+<pre><code class="language-bash">remain() {
+    trap &quot;echo Interrupted by user&quot; SIGINT
+    bash -c &quot;$*&quot;
+    exec bash
+}
+export -f remain</code></pre>
+<p>This traps <code>SIGINT</code>, making it echo a message rather than letting it kill the
+screen. We run our command using <code>bash -c</code> (again, to enable passing whole
+pipelines to the function). We end by <code>exec bash</code> which makes the process
+becomes bash. We could just have written <code>bash</code> there instead, this is just a
+tiny bit more economical.</p>
+<h2 id="quoting-woes">Quoting Woes</h2>
+<p>It&#39;s time for a little confession: <code>repeat</code> and <code>remain</code> are not entirely robust
+as-is.</p>
+<p>Consider that we want to use <code>remain</code> with <code>repeat</code>:</p>
+<pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code></pre><p>What happens is that the <code>bash -c</code> line expands to <code>bash -c &#39;repeat echo &quot;x&quot; |
+cat -n&#39;</code> — the outer quotes have been stripped! This will misbeheave in repeat,
+producing the wrong <code>1 x</code>, <code>2 x</code> (etc) output rather than straight <code>1 x</code> each
+time.</p>
+<p>We cannot &quot;just&quot; use <code>&quot;$@&quot;</code> instead of <code>&quot;$*&quot;</code> either: <code>bash -c &quot;$@&quot;</code> would
+expand to <code>bash -c &#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code> — but <code>bash -c</code> expects a
+single argument!</p>
+<p><strong>Important note:</strong> I&#39;m slighlty simplifying here. In particular here, <code>bash -c
+&quot;$@&quot;</code> would not <em>literally</em> expand to <code>bash -c &#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code>.
+Instead the shell would perform expansion and the result would be an
+interpretation like &quot;invoke <code>bash</code> with three parameters of value <code>-c</code>, <code>repeat</code>
+and <code>repeat&#39; &#39;echo &quot;x&quot; | cat -n</code> on which no further expansion must be
+performed&quot;. Otherwise, <code>&quot;$@&quot;</code> wouldn&#39;t work with parameters containing single
+quotes!</p>
+<p>The solution is to re-insert the quotes manually. for this we introduce a
+function called <code>quote_args</code>, which takes a series of arguments and sets <code>ARGS</code>
+to the concatenation of all those arguments with quotes inserted around each of
+them.</p>
+<pre><code class="language-bash">quote_args() {
+    ARGS=&#39;&#39;
+    for ARG in &quot;$@&quot;; do
+        ARGS+=\&#39;$ARG\&#39;\ 
+    done
+}
+export -f quote_args</code></pre>
+<p>Then we can patch <code>repeat</code> and <code>remain</code> with it:</p>
+<pre><code class="language-bash">repeat() {
+    local OPT OPTIND OPTARG T=3
+    while getopts &quot;:t:&quot; OPT; do
+        case $OPT in
+            t)  T=$OPTARG;;
+            \?) echo &quot;Usage: repeat [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    quote_args &quot;$@&quot;
+    while true; do bash -c &quot;$ARGS&quot;; sleep $T; done
+}
+export -f repeat
+
+remain() {
+    trap &quot;echo Interrupted by user&quot; SIGINT
+    quote_args &quot;$@&quot;
+    bash -c &quot;$ARGS&quot;
+    exec bash
+}
+export -f remain</code></pre>
+<p>So in our example, we end up with <code>ARGS</code> containing <code>&#39;repeat&#39; &#39;echo &quot;x&quot; | cat
+-n&#39;</code>. Using <code>&quot;$ARGS&quot;</code> then produces a single argument where the individual
+arguments are properly quoted: <code>&quot;&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;&quot;</code>. Note that in
+this case we are literally expanding to that, and that <code>quote_args</code> is not meant
+to be used with arguments that contain literal single quotes!</p>
+<h2 id="putting-the-pieces-together">Putting the Pieces Together</h2>
+<p>Now that we have a repeating mechanism and one to be able to preserve the
+output, we still need to combine those things together, and then to combine them
+with <code>screen</code>.</p>
+<p>Let&#39;s consider a simpler but useful case first. If we want to use <code>screen</code> for
+job control, it&#39;d make sense to have a command that:</p>
+<ol>
+<li>Calls <code>remain</code> so that we can check on the output after the job is &quot;done&quot;.</li>
+<li>Can take pipes just like we did in <code>repeat</code> and <code>remain</code>, and not just a
+single command. Additionally, <code>screen</code> can&#39;t normally take Bash function
+calls as parameter (that&#39;s because it passes its arguments to <code>exec</code>, not
+<code>bash</code>). Our fix will allow that.</li>
+</ol>
+<p>For this simple(r) case, I&#39;m making a function called <code>sjob</code> (for &quot;screen job&quot;)
+that takes an optional <code>-n</code> option to set the job name (equivalent to <code>screen</code>&#39;s
+own <code>-S</code> parameter) and (a) parameter(s) to specify the command, similar to
+<code>remain</code> and <code>repeat</code>.</p>
+<pre><code class="language-bash">sjob() {
+    local OPT OPTIND OPTARG N=sjob
+    while getopts &quot;:n:&quot; OPT; do
+        case $OPT in
+            n)  N=$OPTARG;;
+            \?) echo &quot;Usage: sjob [-n &lt;Name&gt;] &lt;command&gt;&quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    quote_args &quot;$@&quot;
+    screen -dm -S $N bash -c &quot;remain $ARGS&quot;
+}
+export -f sjob</code></pre>
+<p>You can see all our previous tricks: option handling, <code>quote_args</code> and a direct
+call to <code>remain</code>.</p>
+<p>Now for the full shebub, we also want to throw <code>repeat</code> in the mix. Since this
+is going to be run by some kind of init system (<code>launchd</code>, <code>systemd</code>, ...), we
+also want to make sure that the command is only run once even if the function is
+called multiple times. We&#39;ll use a unique name + <code>screen -ls</code> to ensure that.</p>
+<pre><code class="language-bash">daemon() {
+    local OPT OPTIND OPTARG T=3 N=daemon
+    while getopts &quot;:n:t:&quot; OPT; do
+        case $OPT in
+            t)  T=$OPTARG;;
+            n)  N=$OPTARG;;
+            \?) echo &quot;Usage: daemon [-n &lt;Name&gt;] [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    # Only run if the daemon by this name is not already running.
+    (screen -ls | grep -q $N) &amp;&amp; return
+    sjob -n $N repeat -t $T &quot;$@&quot;
+}
+export -f daemon</code></pre>
+<p>Note that this doesn&#39;t use <code>quote_args</code>: <code>sjob</code> can handle that, and we use
+<code>&quot;$@&quot;</code> meaning the arguments we receive (minus the processed options) will be
+passed as &quot;as-is&quot; and not unduly split because of stripped quotes.</p>
+<h2 id="calling-at-startup-mac-only">Calling at Startup (mac-only)</h2>
+<div id=startup />
+
+<p>Only one step remains: actually running our <code>daemon</code> function with the command
+as parameter on startup.</p>
+<p>In a better world, we&#39;d just need to plop down a script in a directory, and be
+done with it. That&#39;s what most Linux distribution <em>attempt</em> to do (typically the
+directory is <code>/etc/init.d</code>). However, here is <a href="https://gist.github.com/mrowe/8b617a8b12a6248d48b8">the skeleton</a> for what you&#39;re
+supposed to do in Debian and &quot;I can&#39;t even&quot; — there is just too much ceremony to
+be handled upfront.</p>
+<p>Ideally, you should be able to just run every script in the directory, period.
+Need to log? Add that in your script. Need to relaunch the command if it dies?
+Add that in your script (e.g. <code>repeat</code>). This skeleton strikes me as very
+un-unixy.</p>
+<p>For sure this is probably very robust, and you might want system daemons to use
+such a system. For 99% of the things <em>I</em> want to run at startup, this is
+massively overkill.</p>
+<p>But this is mac we&#39;re talking about, so we&#39;re not even there. Instead you have
+to configure a <em>stupid xml file</em>.</p>
+<div class=nsep></div>
+
+<p>So here is my plan: if I&#39;m going to go through these pains once, I might as well
+make so that the script being run runs all scripts in a given directory (in my
+case I chose <code>~/startup</code>).</p>
+<p>I followed <a href="https://medium.com/@fahimhossain_16989/adding-startup-scripts-to-launch-daemon-on-mac-os-x-sierra-10-12-6-7e0318c74de1">this guide</a> (warning: not fully trustworthy, for
+instance it has you setup a system-level daemon instead of user-level, which is
+a bad idea), and you can refer to <a href="https://www.launchd.info/">this very handy reference</a>. But
+for those who want the short of it (at least at the time of writing), keep
+reading.</p>
+<p>What you&#39;ll want to do is create a <code>.plist</code> file. I called mine
+<code>com.startup.plist</code>, after the previous tutorial.</p>
+<p>At this point you get a choice: make it a &quot;LaunchDaemon&quot; (system-level, run at
+boot time) or a &quot;LaunchAgent&quot; (user-level, run on logon). If you going to run
+Bash, you most certainly want a LaunchAgent (otherwise your commands will end up
+being run as root, in a root shell, which for one does not inherit your Bash
+profile). LaunchDaemons also have a bunch of restriction on file permissions,
+path of programs/scripts being run (can&#39;t be in home directories), ...</p>
+<p>LaunchAgents must be created in <code>~/Library/LaunchAgents</code> (run only for the
+current user) or <code>/Library/LaunchAgents</code> (run for all users). For LaunchDaemons,
+it&#39;s <code>/Library/LaunchDaemons</code> (there are also other dirs for the system&#39;s own
+agents and daemons, see <a href="https://www.launchd.info/">the ref</a>).</p>
+<p>Personally, I like to keep my config files together, so I&#39;ve set this up as a
+symlink, and it works. The file itself will need to have read permissions, so
+<code>chmod 644 com.startup.plist</code>.</p>
+<p>Here is what the content of the file should be:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+  &lt;dict&gt;
+    &lt;key&gt;EnvironmentVariables&lt;/key&gt;
+    &lt;dict&gt;
+      &lt;key&gt;PATH&lt;/key&gt;
+      &lt;string&gt;/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:&lt;/string&gt;
+    &lt;/dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;com.startup&lt;/string&gt;
+    &lt;key&gt;Program&lt;/key&gt;
+    &lt;string&gt;/Users/norswap/bin/startup&lt;/string&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;KeepAlive&lt;/key&gt;
+    &lt;false/&gt;
+    &lt;key&gt;LaunchOnlyOnce&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;StandardOutPath&lt;/key&gt;
+    &lt;string&gt;/tmp/startup.stdout&lt;/string&gt;
+    &lt;key&gt;StandardErrorPath&lt;/key&gt;
+    &lt;string&gt;/tmp/startup.stderr&lt;/string&gt;
+  &lt;/dict&gt;
+&lt;/plist&gt;</code></pre>
+<p>This is verbose but actually pretty straightforward. Notice the log files. The
+program being run is my <code>startup</code> script:</p>
+<pre><code>#!/bin/bash
+P=/Users/norswap/startup
+for file in $P/*
+do
+    $file
+done</code></pre><p>The shebang (<code>#!/bin/bash</code>) is actually important and <code>launchd</code> will complain
+if it&#39;s not present.</p>
+<p>And here is an example of file in <code>~/startup</code>, namely the one I use to run my
+VPN (with confidential details redacted).</p>
+<pre><code>#!/bin/bash -l
+daemon -n proxyvpn &#39;echo &lt;password&gt; | openconnect --script-tun \
+    --script &quot;ocproxy -D 9999&quot; -u &lt;username&gt; -passwd-on-stdin &lt;vpn address&gt;&#39;</code></pre><p>Two notes. First off, don&#39;t write your password in a readable bash script unless you want
+your local sysadmin to berate and/or murder you.</p>
+<p>Second, note how the script specifies <code>bash -l</code> after the shebang to get a
+&quot;login shell&quot; — login shell source <code>.bash_profile</code> while other don&#39;t, and that&#39;s
+where we defined our <code>daemon</code> function!</p>
+<p>If you want to know more about the different types of shell (login, interactive)
+and how Bash decides which config file to source, read this <a href="https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization">life-saving guide
+on shell initialization</a>.</p>
+<div class=nsep></div>
+
+<p>You&#39;ll probably want to test all of this. To do so you can run:</p>
+<pre><code>launchctl load -w ~/Library/LaunchAgents/com.startup.plist</code></pre><p>The <code>-w</code> option ignores some file where the agent can be disabled for some
+nefarious reasons. I didn&#39;t need it, but it doesn&#39;t hurt either.</p>
+<p>You might see stuff about a <code>start</code> command that can in the place of <code>load</code>.
+That didn&#39;t work for me (but it might be because my <code>plist</code> file is too
+primitive).</p>
+<p>Similarly, you might read about the <code>unload</code> command, but for me it always said
+that the agent wasn&#39;t loaded. I guess that whenever if you use an agent to run a
+script that returns, the agent is not considered to be &quot;loaded&quot;.</p>
+<p>Now, if you do need to debug issues with <code>launchd</code>, you can first check the
+<code>/tmp/startup.stdout</code> and <code>/tmp/startup.stderr</code> specified in the plist file.</p>
+<p>You can also run <code>tail -f /var/log/system.log</code> before you run the <code>load</code> command
+in another shell. This will give you messages such as the following if things go
+wrong.</p>
+<pre><code>Service could not initialize: 19D76: xpcproxy + 15636
+com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78</code></pre><h2 id="parting-thoughts">Parting Thoughts</h2>
+<p>When I started my &quot;quest&quot; for a quick daemon setup, I didn&#39;t think it would end
+taking as much time, nor require me to go so deep (but then, getting lost in the
+depths seems like a recurring theme on this blog and in my life).</p>
+<p>Truth be told, this was a lot of fun. The issues I encountered were just right
+for my skill level to solve.</p>
+<p>That being said, this still shows how arcane shell logic, and especially the
+Bash language can be. I&#39;ve said to whomever could hear that I prefer to use some
+scripting language (Ruby, Python, Javascript) rather than Bash.</p>
+<p>I didn&#39;t take my own advice because I thought this would be as simple as
+cobbling a couple of commands together. Ha ha.</p>
+<p>Would it have been easier with a proper language though? Well, it would have
+alleviated the quoting issues. While the issue is not super difficult and the
+fix is simple, understanding and debugging it took quite some time. Option
+handling would also probably haven been slightly easier. A lot of the other
+difficulties were shell-specific though, so I&#39;m not so sure it would have bought
+<em>so much</em> time in this case.</p>
+<p>Finally, if you absolutely have to work in Bash, you could do worse than check
+the <a href="https://github.com/dylanaraps/pure-bash-bible">Pure Bash Bible</a> to see if it includes a recipe for whatever you&#39;re trying
+to achieve. I&#39;m also re-plugging the <a href="https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization">shell initialization guide</a>.</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/unix-daemons";
+        this.page.identifier = "unix-daemons";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

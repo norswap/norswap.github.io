@@ -419,4 +419,16 @@ switch (process.argv[2]) // assumes node <script> <arg>
 //   time, as the individual changes are still picked up and just bundled
 //   together.
 //      - Can only be fixed by getting rid of ribosome.
-
+//
+// - this error
+// (node:28088) UnhandledPromiseRejectionWarning: Error: EPERM: operation not permitted, open '../unix-daemons/index.html'
+//     at Object.openSync (fs.js:440:3)
+//     at Object.writeFileSync (fs.js:1281:35)
+//     at Object.appendFileSync (fs.js:1327:6)
+//     at C:\Dropbox\code\web\.factory\generate.js.rna:124:24
+//     at Array.forEach (<anonymous>)
+//     at Block.write (C:\Dropbox\code\web\.factory\generate.js.rna:116:23)
+//     at C:\Dropbox\code\web\.factory\generate.js.rna:196:15
+//     at Array.forEach (<anonymous>)
+//     at close (C:\Dropbox\code\web\.factory\generate.js.rna:195:22)
+//     at Ribosome.stdout (C:\Dropbox\code\web\.factory\generate.js.rna:176:9)

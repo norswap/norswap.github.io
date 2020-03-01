@@ -6,6 +6,424 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Easy Unix Daemons (on macOS too)</title>
+      <description>
+&lt;p&gt;I&amp;#39;ve been setting up my new work machine recently, and while doing so I
+encountered an interesting challenge.&lt;/p&gt;
+&lt;p&gt;I wanted to setup a proxy to the company&amp;#39;s VPN as a daemon. Here was my feature
+wishlist:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Runs in the background.&lt;/li&gt;
+&lt;li&gt;Starts at startup or login.&lt;/li&gt;
+&lt;li&gt;Can be manually killed / relaunched.&lt;/li&gt;
+&lt;li&gt;Visibility into the process (e.g. via log files).&lt;/li&gt;
+&lt;li&gt;Restarts automatically if it stops for some reason.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now, there are daemons systems build into most OSes. For macOS this is &lt;code&gt;launchctl&lt;/code&gt;
+(for &amp;quot;launch daemon&amp;quot;). On Linux it&amp;#39;s most likely than not &lt;code&gt;systemd&lt;/code&gt;, though are
+other systems form the venerable &lt;code&gt;sysvinit&lt;/code&gt; and &lt;code&gt;OpenRC&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Even before starting however, I knew (from reputation and past personal
+experiences) that those sucked mightily. The less I had to deal / rely on them,
+the better.&lt;/p&gt;
+&lt;p&gt;In the end I did actually use &lt;code&gt;launchctl&lt;/code&gt; to launch at startup. I&amp;#39;m not provided
+details for linux, but [look here for pointers about systemd][systemd-tips] (and
+by the same occasion note that I&amp;#39;m right: this is a mess).&lt;/p&gt;
+&lt;h2 id=&quot;running-in-the-background&quot;&gt;Running in the Background&lt;/h2&gt;
+&lt;p&gt;Your daemon system will run jobs in the background for you. Nevertheless it&amp;#39;s
+quite interesting to take a small detour to see how one can run a job in the
+background from the user shell. In fact this is how I stumbled upon the
+backbone of my solution.&lt;/p&gt;
+&lt;p&gt;The obvious way is to append &lt;code&gt;&amp;amp;&lt;/code&gt; at the end of your command. This runs in the
+background, but the command is now a child of the current shell, and will be
+terminated along with the shell.&lt;/p&gt;
+&lt;p&gt;The traditional approach in this case is to do something like &lt;code&gt;nohup &amp;lt;command&amp;gt; &amp;amp;
+disown&lt;/code&gt;. &lt;a href=&quot;https://unix.stackexchange.com/a/148698&quot;&gt;Here is a very thorough explanation of that command.&lt;/a&gt;
+But basically: &lt;code&gt;disown&lt;/code&gt; just removes the command from the list of the shell&amp;#39;s
+job while &lt;code&gt;nohup&lt;/code&gt; redirects the terminal output to a file called &lt;code&gt;nohup.out&lt;/code&gt; in
+the current directory (or you can just redirect it yourself), as well as closes
+terminal input. Using either &lt;code&gt;disown&lt;/code&gt; or &lt;code&gt;nohup&lt;/code&gt; (or both) will prevent the
+command from being killed when the shell is killed (it prevents the sending of
+the &lt;code&gt;SIGHUP&lt;/code&gt; signal (&amp;quot;signal hang up&amp;quot;), which is &amp;quot;a signal sent to a process
+when its controlling terminal is closed&amp;quot;.&lt;/p&gt;
+&lt;p&gt;So this works rather nicely.&lt;/p&gt;
+&lt;p&gt;But I have an even better solution: use &lt;code&gt;screen&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;In short, &lt;code&gt;screen&lt;/code&gt; lets you start a virtual shell that you can &amp;quot;attach&amp;quot; to a
+real shell, or &amp;quot;detach&amp;quot; from. So you can use it to run a command in its own
+shell, which you can recall at will, in any user shell.&lt;/p&gt;
+&lt;p&gt;The advantages of &lt;code&gt;screen&lt;/code&gt; is that you can use it for job control. We couldn&amp;#39;t
+have used normal shell job control (using the command &lt;code&gt;jobs&lt;/code&gt;) because it is
+shell-specific (not shared between different shell instances). So you can&amp;#39;t use
+it as soon as you close the original shell used to run the command. And if you
+want to kill the command at that point, you need to find out its PID and use
+&lt;code&gt;pkill&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But with &lt;code&gt;screen&lt;/code&gt;, you can do this, from any shell:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ screen -dm &amp;lt;command&amp;gt;           # start command in background
+$ screen -dm -S &amp;lt;name&amp;gt; &amp;lt;command&amp;gt; # alternatively, give it a specific name
+$ screen -ls                     # list all running screens
+$ screen -r &amp;lt;name&amp;gt;               # (re)attach to the given screen
+$ screen -S &amp;lt;name&amp;gt; -X quit       # kill the given screen&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Since some of those are not super intuitive, I propose the use of the following
+aliases and functions:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;alias sjobls=&amp;#39;screen -ls&amp;#39;
+alias sjoba=&amp;#39;screen -r&amp;#39;
+alias sjobmk=&amp;#39;screen -dm -S&amp;#39;
+
+sjobk() {
+    screen -S $1 -X quit
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Final tip: when you attach to the screen, it&amp;#39;s &lt;code&gt;ctrl+a d&lt;/code&gt; (or &lt;code&gt;cmd+a d&lt;/code&gt; on mac)
+to detach.&lt;/p&gt;
+&lt;h2 id=&quot;repeating-the-command&quot;&gt;Repeating the Command&lt;/h2&gt;
+&lt;p&gt;To repeat a command in &lt;code&gt;bash&lt;/code&gt;, with 3 seconds of dealy between each execution, you&amp;#39;d normaly do:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;while true; do &amp;lt;command&amp;gt;; sleep 3; done&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Which you can turn into the following function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
+    while true; do $1; sleep 3; done
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;IMPORTANT POINT:&lt;/strong&gt; Making a function was a mistake. This is also valid for
+other functions that will be presented later. It should be a script to be put
+somewhere on the path instead. Why?&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;By making it a script, you can specify the shell (&lt;code&gt;bash&lt;/code&gt;, &lt;code&gt;zsh&lt;/code&gt;, ...) used to
+run it, making it usable whatever shell you decide to run as a user.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Functions are normally not inherited by sub-shells. In bash, it&amp;#39;s actually
+possible to export them anyway by using &lt;code&gt;export -f &amp;lt;function&amp;gt;&lt;/code&gt;. And as we&amp;#39;ll
+see later, we really want to use subshells.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This remark, aside, there is a couple improvements we might want to make to our
+function.&lt;/p&gt;
+&lt;p&gt;First, we&amp;#39;d like to be able to pass an optional argument specifying the duration of
+  the delay between two command runs.&lt;/p&gt;
+&lt;p&gt;Second, we&amp;#39;d like the command to be not only a simple command, but also a whole
+pipeline (including pipes &lt;code&gt;|&lt;/code&gt; and redirects &lt;code&gt;&amp;gt;&lt;/code&gt;). But if we try the naive way,
+we&amp;#39;ll rune into a parser issue.&lt;/p&gt;
+&lt;p&gt;Consider the command &lt;code&gt;echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This prints &lt;code&gt;\ \ \ \ 1 x&lt;/code&gt; to standard
+output (&lt;code&gt;-n&lt;/code&gt; is the option for line numbering). Then try running &lt;code&gt;repeat echo
+&amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This &lt;em&gt;should&lt;/em&gt; output &lt;code&gt;1 x&lt;/code&gt; multiple times. Instead it prints
+&lt;code&gt;1 x&lt;/code&gt;, then &lt;code&gt;2 x&lt;/code&gt;, then &lt;code&gt;3 x&lt;/code&gt;, etc. This is because the command is interpreted
+as &lt;code&gt;(repeat echo &amp;quot;a&amp;quot;) | cat&lt;/code&gt; and not &lt;code&gt;repeat (echo &amp;quot;a&amp;quot; | cat)&lt;/code&gt; (note the use of
+parentheses here is not valid bash syntax).&lt;/p&gt;
+&lt;p&gt;How to pass a pipe then? We have to quote it, then pass it as a parameter to
+&lt;code&gt;bash -c&lt;/code&gt;. e.g. &lt;code&gt;repeat &amp;#39;echo &amp;quot;a&amp;quot; | cat -n&amp;#39;&lt;/code&gt; This is by no means perfect (it
+gets annoying when dealing with commands that already have multiple level of
+quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted &lt;code&gt;&amp;#39;echo &amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;,
+but it&amp;#39;s still a good step forward.&lt;/p&gt;
+&lt;p&gt;With all the considerations factored in, we get the following function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
+    local OPT OPTIND OPTARG T=3
+    while getopts &amp;quot;:t:&amp;quot; OPT; do
+        case $OPT in
+            t)  T=$OPTARG;;
+            \?) echo &amp;quot;Usage: repeat [-t &amp;lt;Time interval in seconds&amp;gt;] &amp;lt;command&amp;gt;&amp;quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    while true; do bash -c &amp;quot;$*&amp;quot;; sleep $T; done
+}
+export -f repeat&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For a brief description of argument handling: the option string &lt;code&gt;:t:&lt;/code&gt; says that
+to disable getopt&amp;#39;s normal error output (first colon &lt;code&gt;:&lt;/code&gt;): we&amp;#39;ll do it ourselves
+with the &lt;code&gt;\?&lt;/code&gt; option. The &lt;code&gt;t:&lt;/code&gt; part says we expect an optional argument &lt;code&gt;t&lt;/code&gt; that
+takes a value (the second colon &lt;code&gt;:&lt;/code&gt;). The variable &lt;code&gt;OPT&lt;/code&gt; receives the option
+letter in the loop, while &lt;code&gt;OPTARG&lt;/code&gt; received the option value (if any). &lt;code&gt;OPTIND&lt;/code&gt;
+is set the index of the next (unprocessed) argument. The loop stop when all
+options (starting with &lt;code&gt;-&lt;/code&gt;) have been processed. The &lt;code&gt;shift $((OPTIND - 1))&lt;/code&gt;
+removes all processed options from the list of arguments (accessible via &lt;code&gt;$*&lt;/code&gt;,
+&lt;code&gt;$@&lt;/code&gt; and &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, ...). Check &lt;a href=&quot;https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/&quot;&gt;this tutorial&lt;/a&gt; for more
+information.&lt;/p&gt;
+&lt;p&gt;An important note on &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt;: &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; will expand to all remaining
+arguments, &lt;em&gt;quoted as a single parameter&lt;/em&gt;. In this way, &lt;code&gt;repeat&lt;/code&gt; can be used
+with or without quoting whenever supported: &lt;code&gt;repeat echo &amp;quot;x&amp;quot;&lt;/code&gt; or &lt;code&gt;repeat &amp;#39;echo
+&amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; (using pipes while not quoting still doesn&amp;#39;t work).&lt;/p&gt;
+&lt;p&gt;The alternative to &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; is &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; which expands to the same arguments, but
+quoted individually. Since &lt;code&gt;bash -c&lt;/code&gt; expects a single argument, this wouldn&amp;#39;t
+work when used without quotes. We&amp;#39;ll however use &lt;code&gt;$@&lt;/code&gt; later!&lt;/p&gt;
+&lt;h2 id=&quot;getting-the-process-output&quot;&gt;Getting The Process&amp;#39; Output&lt;/h2&gt;
+&lt;p&gt;A simple way to get the process&amp;#39; output even though it runs in the background is
+simply to redirect it. Because of how we built it, this is even compatible with
+our &lt;code&gt;repeat&lt;/code&gt; function.&lt;/p&gt;
+&lt;p&gt;But if we&amp;#39;re going to use &lt;code&gt;screen&lt;/code&gt;, we can simply attach to the screen and see
+what&amp;#39;s going on.&lt;/p&gt;
+&lt;p&gt;This has, however, two slight issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The logs are lost in case the machine shuts down. Here, simply using the &lt;code&gt;tee&lt;/code&gt;
+command (&lt;a href=&quot;http://man7.org/linux/man-pages/man1/tee.1.html&quot;&gt;manpage&lt;/a&gt;) works: &lt;code&gt;&amp;lt;command&amp;gt; | tee logfile&lt;/code&gt; and enables us to
+benefit from both logs and screen output.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;If the command terminates, then the screen shuts down and the output is lost.
+Not necessarily a problem if you log, but it is if you don&amp;#39;t.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(At this point, I&amp;#39;ll note that for my proxy I don&amp;#39;t really care about long-time
+logs, I just want to be able to know what&amp;#39;s happening &lt;em&gt;right now&lt;/em&gt;, sometimes.)&lt;/p&gt;
+&lt;p&gt;To solve that second issue, I introduced a function called &lt;code&gt;remain&lt;/code&gt;, which would
+take a command as parameter (much like &lt;code&gt;repeat&lt;/code&gt;) and run a shell once that
+command exited.&lt;/p&gt;
+&lt;p&gt;You can actually achieve that quite easily with just &lt;code&gt;&amp;lt;command&amp;gt;; bash&lt;/code&gt;, as long
+as the command exits by itself. By hitting &lt;code&gt;ctrl+c&lt;/code&gt; in the screen (and thus
+sending &lt;code&gt;SIGINT&lt;/code&gt;), you&amp;#39;ll shut down the whole chain, just like in a regular
+shell. &lt;/p&gt;
+&lt;p&gt;But imagine you want to kill the command, while still being able to peruse the
+output in the shell? (Again, quite relavant to my use case: stop trying to
+connect to the proxy, but let me see what&amp;#39;s going on.) Well that&amp;#39;s possible too:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;remain() {
+    trap &amp;quot;echo Interrupted by user&amp;quot; SIGINT
+    bash -c &amp;quot;$*&amp;quot;
+    exec bash
+}
+export -f remain&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This traps &lt;code&gt;SIGINT&lt;/code&gt;, making it echo a message rather than letting it kill the
+screen. We run our command using &lt;code&gt;bash -c&lt;/code&gt; (again, to enable passing whole
+pipelines to the function). We end by &lt;code&gt;exec bash&lt;/code&gt; which makes the process
+becomes bash. We could just have written &lt;code&gt;bash&lt;/code&gt; there instead, this is just a
+tiny bit more economical.&lt;/p&gt;
+&lt;h2 id=&quot;quoting-woes&quot;&gt;Quoting Woes&lt;/h2&gt;
+&lt;p&gt;It&amp;#39;s time for a little confession: &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; are not entirely robust
+as-is.&lt;/p&gt;
+&lt;p&gt;Consider that we want to use &lt;code&gt;remain&lt;/code&gt; with &lt;code&gt;repeat&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;What happens is that the &lt;code&gt;bash -c&lt;/code&gt; line expands to &lt;code&gt;bash -c &amp;#39;repeat echo &amp;quot;x&amp;quot; |
+cat -n&amp;#39;&lt;/code&gt; — the outer quotes have been stripped! This will misbeheave in repeat,
+producing the wrong &lt;code&gt;1 x&lt;/code&gt;, &lt;code&gt;2 x&lt;/code&gt; (etc) output rather than straight &lt;code&gt;1 x&lt;/code&gt; each
+time.&lt;/p&gt;
+&lt;p&gt;We cannot &amp;quot;just&amp;quot; use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; instead of &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; either: &lt;code&gt;bash -c &amp;quot;$@&amp;quot;&lt;/code&gt; would
+expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — but &lt;code&gt;bash -c&lt;/code&gt; expects a
+single argument!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;IMPORTANT NOTE:&lt;/strong&gt; I&amp;#39;m slighlty simplifying here. In particular here, &lt;code&gt;bash -c
+&amp;quot;$@&amp;quot;&lt;/code&gt; would not &lt;em&gt;literally&lt;/em&gt; expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;.
+Instead the shell would perform expansion and the result would be an
+interpretation like &amp;quot;invoke &lt;code&gt;bash&lt;/code&gt; with three parameters of value &lt;code&gt;-c&lt;/code&gt;, &lt;code&gt;repeat&lt;/code&gt;
+and &lt;code&gt;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt; on which no further expansion must be
+performed&amp;quot;. Otherwise, &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; wouldn&amp;#39;t work with parameters containing single
+quotes!&lt;/p&gt;
+&lt;p&gt;The solution is to re-insert the quotes manually. for this we introduce a
+function called &lt;code&gt;quote_args&lt;/code&gt;, which takes a series of arguments and sets &lt;code&gt;ARGS&lt;/code&gt;
+to the concatenation of all those arguments with quotes inserted around each of
+them.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;quote_args() {
+    ARGS=&amp;#39;&amp;#39;
+    for ARG in &amp;quot;$@&amp;quot;; do
+        ARGS+=\&amp;#39;$ARG\&amp;#39;\ 
+    done
+}
+export -f quote_args&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then we can patch &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; with it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
+    local OPT OPTIND OPTARG T=3
+    while getopts &amp;quot;:t:&amp;quot; OPT; do
+        case $OPT in
+            t)  T=$OPTARG;;
+            \?) echo &amp;quot;Usage: repeat [-t &amp;lt;Time interval in seconds&amp;gt;] &amp;lt;command&amp;gt;&amp;quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    quote_args &amp;quot;$@&amp;quot;
+    while true; do bash -c &amp;quot;$ARGS&amp;quot;; sleep $T; done
+}
+export -f repeat
+
+remain() {
+    trap &amp;quot;echo Interrupted by user&amp;quot; SIGINT
+    quote_args &amp;quot;$@&amp;quot;
+    bash -c &amp;quot;$ARGS&amp;quot;
+    exec bash
+}
+export -f remain&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So in our example, we end up with &lt;code&gt;ARGS&lt;/code&gt; containing &lt;code&gt;&amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat
+-n&amp;#39;&lt;/code&gt;. Using &lt;code&gt;&amp;quot;$ARGS&amp;quot;&lt;/code&gt; then produces a single argument where the individual
+arguments are properly quoted: &lt;code&gt;&amp;quot;&amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&amp;quot;&lt;/code&gt;. Note that in
+this case we are literally expanding to that, and that &lt;code&gt;quote_args&lt;/code&gt; is not meant
+to be used with arguments that contain literal single quotes!&lt;/p&gt;
+&lt;h2 id=&quot;putting-the-pieces-together&quot;&gt;Putting the Pieces Together&lt;/h2&gt;
+&lt;p&gt;Okay, now that we have a repeating mechanism and one to be able to preserve the
+output, we still to combine those things together, and then to combine them with
+&lt;code&gt;screen&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s consider a simpler but useful case first. If we want to use screen for job
+control, it&amp;#39;d make sense to have a command that:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Calls &lt;code&gt;remain&lt;/code&gt; so that we can check on the output after the job is &amp;quot;done&amp;quot;.&lt;/li&gt;
+&lt;li&gt;Can take pipes (just like we did in &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; and not just a
+single command. Additionally, &lt;code&gt;screen&lt;/code&gt; can&amp;#39;t normally take bash function
+calls as parameter (that&amp;#39;s because it passes them to &lt;code&gt;exec&lt;/code&gt;, not &lt;code&gt;bash&lt;/code&gt;). Our
+fix will allow that.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;For this simple(r) case, I&amp;#39;m making a function called &lt;code&gt;sjob&lt;/code&gt; (for &amp;quot;screen job&amp;quot;)
+that takes an optional &lt;code&gt;-n&lt;/code&gt; option to set the job name (equivalent to &lt;code&gt;screen&lt;/code&gt;
+own &lt;code&gt;-S&lt;/code&gt; parameter) and (a) parameter(s) to specify the command, similar to
+remain and repeat.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sjob() {
+    local OPT OPTIND OPTARG N=sjob
+    while getopts &amp;quot;:n:&amp;quot; OPT; do
+        case $OPT in
+            n)  N=$OPTARG;;
+            \?) echo &amp;quot;Usage: sjob [-n &amp;lt;Name&amp;gt;] &amp;lt;command&amp;gt;&amp;quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    quote_args &amp;quot;$@&amp;quot;
+    screen -dm -S $N bash -c &amp;quot;remain $ARGS&amp;quot;
+}
+export -f sjob&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can see all our previous tricks: option handling, &lt;code&gt;quote_args&lt;/code&gt; and a direct
+call to &lt;code&gt;remain&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now for the full shebub, we also want to throw &lt;code&gt;repeat&lt;/code&gt; in the mix. Since this
+is going to be run by some kind of init system (&lt;code&gt;launchctl&lt;/code&gt;, &lt;code&gt;systemd&lt;/code&gt;, ...), we
+also want to make sure that the command is only run once even if the function is
+called multiple times. We&amp;#39;ll use a unique name + &lt;code&gt;screen -ls&lt;/code&gt; to ensure that.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;daemon() {
+    local OPT OPTIND OPTARG T=3 N=daemon
+    while getopts &amp;quot;:n:t:&amp;quot; OPT; do
+        case $OPT in
+            t)  T=$OPTARG;;
+            n)  N=$OPTARG;;
+            \?) echo &amp;quot;Usage: daemon [-n &amp;lt;Name&amp;gt;] [-t &amp;lt;Time interval in seconds&amp;gt;] &amp;lt;command&amp;gt;&amp;quot;;
+                return;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    # Only run if the daemon by this name is not already running.
+    (screen -ls | grep -q $N) &amp;amp;&amp;amp; return
+    sjob -n $N repeat -t $T &amp;quot;$@&amp;quot;
+}
+export -f daemon&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that this doesn&amp;#39;t use &lt;code&gt;quote_args&lt;/code&gt;: &lt;code&gt;sjob&lt;/code&gt; can handle that, and we use
+&lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; meaning the arguments we receive (minus the processed options) will be
+passed as &amp;quot;as-is&amp;quot; and not unduly split because of stripped quotes.&lt;/p&gt;
+&lt;h2 id=&quot;calling-at-startup-mac-only&quot;&gt;Calling at Startup (mac-only)&lt;/h2&gt;
+&lt;p&gt;Only one step remains: actually running our &lt;code&gt;daemon&lt;/code&gt; function with the command
+as parameter on startup.&lt;/p&gt;
+&lt;p&gt;In a better world, we&amp;#39;d just need to plop down a script in a folder, and be done
+with it. That&amp;#39;s what most Linux distribution &lt;em&gt;attempt&lt;/em&gt; to do (typically the
+directory is &lt;code&gt;/etc/init.d&lt;/code&gt;). However, here is &lt;a href=&quot;https://gist.github.com/mrowe/8b617a8b12a6248d48b8&quot;&gt;the skeleton&lt;/a&gt; for what you&amp;#39;re
+supposed to do in Debian and &amp;quot;I can&amp;#39;t even&amp;quot; — there is just too much ceremony to
+be handled upfront.&lt;/p&gt;
+&lt;p&gt;Ideally, you should be able to just run every script in the directory, period.
+Need to log? Add that in your script. Need to relaunch the command if it dies?
+Add that in your script (e.g. &lt;code&gt;repeat&lt;/code&gt;). This skeleton strikes me as very
+un-unixy.&lt;/p&gt;
+&lt;p&gt;For sure this is probably very robust, and you might want system daemons to use
+such a system. For 99% of the things &lt;em&gt;I&lt;/em&gt; want to run at startup, this is
+massively overkill.&lt;/p&gt;
+&lt;p&gt;But this is mac we&amp;#39;re talking about, so we&amp;#39;re not even there. Instead you have
+to configure a &lt;em&gt;stupid xml file&lt;/em&gt;.&lt;/p&gt;
+&lt;div class=nsep&gt;&lt;/div&gt;
+
+&lt;p&gt;So here is my plan: if I&amp;#39;m going to go through these pains once, I might as well
+make so that the script being run runs all scripts in a given directory (in my
+case I chose &lt;code&gt;~/startup&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;I followed &lt;a href=&quot;https://medium.com/@fahimhossain_16989/adding-startup-scripts-to-launch-daemon-on-mac-os-x-sierra-10-12-6-7e0318c74de1&quot;&gt;this guide&lt;/a&gt; (warning: not 100% good ideas, for
+instance it has you setup a system-level daemon instead of user-level, which is
+a bad idea), and you can refer to &lt;a href=&quot;https://www.launchd.info/&quot;&gt;this very handy reference&lt;/a&gt;. But
+for those who want the short of it (at least at the time of writing), keep
+reading.&lt;/p&gt;
+&lt;p&gt;What you&amp;#39;ll to do is create a &lt;code&gt;.plist&lt;/code&gt; file. I called mine &lt;code&gt;com.startup.plist&lt;/code&gt;
+after the previous tutorial.&lt;/p&gt;
+&lt;p&gt;At this point you get a choice: make it a &amp;quot;LaunchDaemon&amp;quot; (system-level, run on
+bott) or a &amp;quot;LaunchAgent&amp;quot; (user-level, run on logon). If you going to run bash,
+you most certainly want a LaunchAgent (otherwise your commands will end up being
+run as root, in a root shell, which for one does not inherit your bash profile).
+LaunchDaemons also have a bunch of restriction on file permissions, path of
+programs/scripts being run (can&amp;#39;t be in home directories), ...&lt;/p&gt;
+&lt;p&gt;LaunchAgents must be created in &lt;code&gt;~/Library/LaunchAgents&lt;/code&gt; (run only for the
+current user) or &lt;code&gt;/Library/LaunchAgents&lt;/code&gt; (run for all users). For LaunchDaemons,
+it&amp;#39;s &lt;code&gt;/Library/LaunchDaemons&lt;/code&gt; (there are also other dirs for the system&amp;#39;s own
+agents and daemons, see &lt;a href=&quot;https://www.launchd.info/&quot;&gt;the ref&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Personally, I&amp;#39;ve set this up as a symlink, and it works.&lt;/p&gt;
+&lt;p&gt;The file will need to have read permissions, so &lt;code&gt;chmod 644 com.startup.plist&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here is what the content of the file should be:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple//DTD PLIST 1.0//EN&amp;quot; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;
+&amp;lt;plist version=&amp;quot;1.0&amp;quot;&amp;gt;
+  &amp;lt;dict&amp;gt;
+    &amp;lt;key&amp;gt;EnvironmentVariables&amp;lt;/key&amp;gt;
+    &amp;lt;dict&amp;gt;
+      &amp;lt;key&amp;gt;PATH&amp;lt;/key&amp;gt;
+      &amp;lt;string&amp;gt;/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:&amp;lt;/string&amp;gt;
+    &amp;lt;/dict&amp;gt;
+    &amp;lt;key&amp;gt;Label&amp;lt;/key&amp;gt;
+    &amp;lt;string&amp;gt;com.startup&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;Program&amp;lt;/key&amp;gt;
+    &amp;lt;string&amp;gt;/Users/norswap/bin/startup&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;RunAtLoad&amp;lt;/key&amp;gt;
+    &amp;lt;true/&amp;gt;
+    &amp;lt;key&amp;gt;KeepAlive&amp;lt;/key&amp;gt;
+    &amp;lt;false/&amp;gt;
+    &amp;lt;key&amp;gt;LaunchOnlyOnce&amp;lt;/key&amp;gt;
+    &amp;lt;true/&amp;gt;
+    &amp;lt;key&amp;gt;StandardOutPath&amp;lt;/key&amp;gt;
+    &amp;lt;string&amp;gt;/tmp/startup.stdout&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;StandardErrorPath&amp;lt;/key&amp;gt;
+    &amp;lt;string&amp;gt;/tmp/startup.stderr&amp;lt;/string&amp;gt;
+  &amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is verbose but actually pretty straightforward. Notice the log files. The
+program being run is my &lt;code&gt;startup&lt;/code&gt; script:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+P=/Users/norswap/startup
+for file in $P/*
+do
+    $file
+done&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The shebang (&lt;code&gt;#!/bin/bash&lt;/code&gt;) is actually important and &lt;code&gt;launchctl&lt;/code&gt; will complain
+if it&amp;#39;s not present.&lt;/p&gt;
+&lt;p&gt;And here is an example of file in &lt;code&gt;~/startup&lt;/code&gt;, namely the one I use to run my
+VPN (with confidential details redacted).&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash -l
+daemon -n proxyvpn &amp;#39;echo &amp;lt;password&amp;gt; | openconnect --script-tun \
+    --script &amp;quot;ocproxy -D 9999&amp;quot; -u &amp;lt;username&amp;gt; -passwd-on-stdin &amp;lt;vpn address&amp;gt;&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Two notes. First off, don&amp;#39;t write your password in a readable bash script unless you want
+your local sysadmin to berate and/or murder you.&lt;/p&gt;
+&lt;p&gt;Second, note how the script specifies &lt;code&gt;bash -l&lt;/code&gt; after the shebang to get a
+&amp;quot;login shell&amp;quot; — login shell source &lt;code&gt;.bash_profile&lt;/code&gt; while other don&amp;#39;t, and that&amp;#39;s
+where we defined our &lt;code&gt;daemon&lt;/code&gt; function!&lt;/p&gt;
+&lt;p&gt;If you want to know more about the different types of shell (login, interactive)
+and how bash decides which config file to source, read this &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;life-saving guide
+on shell initialization&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=nsep&gt;&lt;/div&gt;
+
+&lt;p&gt;You&amp;#39;ll probably want to test all of this. To do so you can run:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;launchctl load -w ~/Library/LaunchAgents/com.startup.plist&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;-w&lt;/code&gt; option ignores some file where the agent can be disabled for some
+nefarious reasons. I didn&amp;#39;t need it, but it doesnt hurt either.&lt;/p&gt;
+&lt;p&gt;You might see stuff about a &lt;code&gt;start&lt;/code&gt; command that can in the place of &lt;code&gt;load&lt;/code&gt;.
+That didn&amp;#39;t work for me (but it might be because my plist file is too
+primitive).&lt;/p&gt;
+&lt;p&gt;Similarly, you might read about the &lt;code&gt;unload&lt;/code&gt; command, but for me it always said
+that the agent wasn&amp;#39;t loaded. I guess that whenever if you use an agent to run a
+script that returns, the agent is not considered to be &amp;quot;loaded&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Now, if you do need to debug issues with &lt;code&gt;launchctl&lt;/code&gt;, you can first check the
+&lt;code&gt;/tmp/startup.stdout&lt;/code&gt; and &lt;code&gt;/tmp/startup.stderr&lt;/code&gt; specified in the plist file.&lt;/p&gt;
+&lt;p&gt;You can also run &lt;code&gt;tail -f /var/log/system.log&lt;/code&gt; before y ou can the &lt;code&gt;load&lt;/code&gt;
+command in another shell. This will give you messages such as the following if
+things go wrong.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Service could not initialize: 19D76: xpcproxy + 15636
+com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;parting-thoughts&quot;&gt;Parting Thoughts&lt;/h2&gt;
+&lt;p&gt;When I started my &amp;quot;quest&amp;quot; for a quick daemon setup, I didn&amp;#39;t think it would end
+taking as much time, nor require me to go so deep (but then, getting lost in the
+depths seems like a recurring theme on this blog and in my life).&lt;/p&gt;
+&lt;p&gt;Truth be told, this was a lot of fun. The issues I encountered were just right
+for my skill level to solve.&lt;/p&gt;
+&lt;p&gt;That being said, this still shows how arcane shell logic, and especially the
+bash language can be. I&amp;#39;ve said to whomever could hear that I prefer to use some
+scripting language (Ruby, Python, Javascript) rather than bash.&lt;/p&gt;
+&lt;p&gt;I didn&amp;#39;t take my own advice because I thought this would be as simple as
+cobbling a couple of commands together. Ha ha.&lt;/p&gt;
+&lt;p&gt;Would it have been easier with a proper language though? Well, it would have
+alleviated the quoting issues. While the issue is not super difficult and the
+fix is simple, understanding and debugging it took quite some time. Option
+handling would also probably haven been slightly easier. A lot of the other
+difficulties were shell-specific though, so I&amp;#39;m sure it would have bought so
+much in this case.&lt;/p&gt;
+&lt;p&gt;Finally, if you absolutely have to work in Bash, you could do worse than check
+the &lt;a href=&quot;https://github.com/dylanaraps/pure-bash-bible&quot;&gt;Pure Bash Bible&lt;/a&gt; to see if it includes a recipe for whatever you&amp;#39;re trying
+to achieve. I&amp;#39;m also re-plugging the &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;shell initializatio guide&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2020-02-28T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/unix-daemons</link>
+      <guid isPermaLink="true">http://norswap.com/unix-daemons</guid>
+    </item>
+    <item>
       <title>Chosen Tidbits 2</title>
       <description>
 &lt;p&gt;Previously: &lt;a href=&quot;https://norswap.com/chosen-tidbits-1/&quot;&gt;June 2019&lt;/a&gt;&lt;/p&gt;
@@ -1444,452 +1862,6 @@ ergodic, while the ensemble of black people is not at all ergodic.&lt;/p&gt;
       <pubDate>2019-09-14T22:00:00.000Z</pubDate>
       <link>http://norswap.com/chosen-tidbits-1</link>
       <guid isPermaLink="true">http://norswap.com/chosen-tidbits-1</guid>
-    </item>
-    <item>
-      <title>Weight Training: Cut Edition</title>
-      <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/weight-training&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/weight-training-2&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/weight-training-3&quot;&gt;Three&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;In &lt;a href=&quot;/weight-training-3&quot;&gt;my last post on the topic&lt;/a&gt;, I said I was going to go on a cut. Well,
-now the cut is done, let&amp;#39;s discuss a bit!&lt;/p&gt;
-&lt;p&gt;Was it a success? Well my stated goal was to acquire a six-pack, so in that
-sense, no. But I learned a ton, and I did visibly lose a considerable amount of
-fat and slimmed down from 90 kg to 83 kg over 15 weeks.&lt;/p&gt;
-&lt;p&gt;I scrupulously transcribed my daily caloric expenditure and intake in a
-&lt;a href=&quot;https://docs.google.com/spreadsheets/d/1kwGo8YRcEdPJotxaWLlc72pz6YvdU2ymKw_gFa_dKkY/edit?usp=sharing&quot;&gt;spreadsheet&lt;/a&gt;. All the numbers and metrics I discuss in this article are
-recorded there!&lt;/p&gt;
-&lt;h2 id=&quot;beginnings&quot;&gt;Beginnings&lt;/h2&gt;
-&lt;p&gt;Initially, I went for a 700 kcal daily deficit. This would add up to a 4900 kcal
-deficit per week, which represents about 630 grams of fat. As it turns out, this
-is exactly 0.7% of my starting bodyweight of 90 kg, which is the recommended
-weekly loss.&lt;/p&gt;
-&lt;p&gt;I did struggle with the strict regimen initially. This was not an issue of will,
-but rather an issue of organization. Too often I accidentally overshot my goal —
-in fact my average daily deficit in the first four weeks was a measly 385. Oops.&lt;/p&gt;
-&lt;p&gt;A remark on my method here: while I&amp;#39;m a fan of using a Fitbit smartwatch to
-track caloric expenditure, it does add a bit of logistical uncertainty, as you
-must estimate what the expenditure will be by the end of the day. Mostly, I
-adapted to cope with this by having very light dinner meals, and potentially a
-snack before going to bed. I&amp;#39;ll have more to say about the Fitbit towards the
-end of the article.&lt;/p&gt;
-&lt;p&gt;After four weeks, I ran a &lt;em&gt;refeed&lt;/em&gt; week, where I ate at maintenance. This is
-done to prevent &lt;em&gt;metabolic adaptation&lt;/em&gt; in which your body gets used to get less
-calories and adapts to burn less of them. That week was also a deload week where
-I decreased my weights at the gym (otherwise I kept training using the
-&lt;a href=&quot;/weight-training-3&quot;&gt;previously outlined program&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;In the second four-week period, I was able to average between 600 and 700
-kcal of deficit daily - yay!&lt;/p&gt;
-&lt;h2 id=&quot;is-it-working&quot;&gt;Is It Working?&lt;/h2&gt;
-&lt;p&gt;So we have our caloric deficit down. But is it actually working as expected?&lt;/p&gt;
-&lt;p&gt;To do this I compared my recorded weight to two measures of the estimated weight
-given the recorded caloric deficit. The first estimated weight is global: it&amp;#39;s
-my starting weight minus the fat weight loss predicted from the cumulated
-caloric deficit. The second estimated weight is local: it&amp;#39;s computed in the same
-way but only for one week, starting from the starting weight just before that
-week.&lt;/p&gt;
-&lt;p&gt;In order to predict the fat loss from a caloric deficit, you simply need to know
-that a kilogram of fat is equivalent to about 7700 kcal (or 3500 kcal to a
-pound).&lt;/p&gt;
-&lt;p&gt;To ascertain whether I was on track, I further computed two weekly metrics: the
-&lt;em&gt;average local error&lt;/em&gt; is the difference between the average locally predicted
-weight and my average weight for that week ; the &lt;em&gt;average global error&lt;/em&gt; is the
-same, but using the average globally predicted weight instead.&lt;/p&gt;
-&lt;p&gt;Taking these averages allows smoothing over the noise inherent to weight
-measurements: there can be big variations in water weight from one day to the
-other (even though I always weighed myself in the morning after going to the
-bathroom and before drinking anything).&lt;/p&gt;
-&lt;p&gt;Another thing I did to be able to track my progress was compute a &lt;em&gt;smoothed&lt;/em&gt;
-weight measurement: the daily smoothed weight is the average of the the weight
-in a 5 day window surrounding the day under consideration. This was also the
-basis I used to compute the local weight estimation.&lt;/p&gt;
-&lt;p&gt;After the initial 5 week period (4 weeks + refeed week), I had lost 1.3 kg.
-That is slighty (about 200 g) more than the model predicted. In general, the
-average local and global errors were small (&amp;lt;= 100 g, either above or under)
-during this period.&lt;/p&gt;
-&lt;p&gt;After the second 5 week period, I had lost 3.6 kg in total, a whole kilogram
-more than the global prediction! The data was much more noisy here, mostly the
-global error increases in the negatives (underestimation) but it shot back
-towards zero because of a weight measurement bump that normalized quickly. The
-local error varied between 0 and -500g (underestimation).&lt;/p&gt;
-&lt;p&gt;There is only one remaining uncertainty: was this weight loss fat loss... or
-muscle loss?&lt;/p&gt;
-&lt;p&gt;This is quite tricky to measure. The impedance scale I bought isn&amp;#39;t worth shit.
-Methods requiring a &lt;a href=&quot;https://www.amazon.fr/CZ-Store-Adipom%C3%A8tre-%E2%9C%AE%E2%9C%AE100-GARANTIE-ANS%E2%9C%AE%E2%9C%AE-Pince-grasse-%E2%9C%AEOFFERT/dp/B072MBCSXD/ref=sr_1_3?__mk_fr_FR=%EF%BF%BDM%EF%BF%BD%25u017D%EF%BF%BD%EF%BF%BD&amp;amp;keywords=fat+caliper&amp;amp;qid=1568237305&amp;amp;s=gateway&amp;amp;sr=8-3&quot;&gt;fat caliper&lt;/a&gt; are janky... They require multiple measurements,
-sometimes in location you can&amp;#39;t access on your own (back of the arm, shoulder
-blade). I bought a cheap one and it&amp;#39;s also not quite clear how much you need to
-press.&lt;/p&gt;
-&lt;p&gt;The impedance scale at my gym (Basic Fit) seems a bit more accurate though,
-reporting 17% body fat somewhere within the second four-week period, and 14% at
-the end of the cut.&lt;/p&gt;
-&lt;p&gt;In my spreadsheet, I estimated my starting percentage at 18% (based on visual
-comparison to some online reference), which — assuming 100% of weight loss is
-fat loss — would put me at 16.7% at the end of the four weeks period and 11.2%
-at the end of the cut.&lt;/p&gt;
-&lt;p&gt;There is another method, which consists of taking measurements of your waist and
-your neck (using a regular meter), and which is &lt;em&gt;reportedly&lt;/em&gt; relatively accurate —
-you can find a calculator &lt;a href=&quot;http://fitness.bizcalcs.com/Calculator.asp?Calc=Body-Fat-Navy&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;All the research points to the fact that, given a moderate deficit (the figure
-of 0.7% of your starting bodyweight is often given), the overwhelming majority
-of the weight loss should be fat — if you keep doing resistance (weight)
-training and intaking enough proteins, which I did.&lt;/p&gt;
-&lt;p&gt;There is a theory that you can only mobilize so much calories from fat mass
-daily. Let&amp;#39;s look into it.&lt;/p&gt;
-&lt;h2 id=&quot;a-detour-how-fast-can-you-actually-lose-fat&quot;&gt;A Detour: How Fast Can You Actually Lose Fat?&lt;/h2&gt;
-&lt;p&gt;There is a theory saying that there is a limit on the calories that can be made
-available from fat over a given time period. However, it&amp;#39;s not quite clear what
-that limit is.&lt;/p&gt;
-&lt;p&gt;A &lt;a href=&quot;https://www.sciencedirect.com/science/article/pii/S0022519304004175&quot;&gt;2005 study&lt;/a&gt; in theoretical biology found it to be 31 kcal per pound of body
-fat daily (about 68 kcal per kilo). However, the author &lt;a href=&quot;https://reddit.com/r/loseit/comments/fo07j/if_youre_trying_to_lose_weight_keep_in_mind_that/c1hd7q1/&quot;&gt;reportedly&lt;/a&gt; later
-developped a better model that brought the number down to about 22 kcal per
-pound (48.5 kcal per kilo).&lt;/p&gt;
-&lt;p&gt;There are a couple of caveats here. First, this is only one study. Second, this
-is theoretical biology: it&amp;#39;s not possible to measure the calories fat gives out
-directly, so this was established using indirect measurements and a theoretical
-model.&lt;/p&gt;
-&lt;p&gt;Third, the data for this study was taken from a 1950 study that starved 36
-military men over a period of six months. I wasn&amp;#39;t able to get a copy of &lt;a href=&quot;https://psycnet.apa.org/record/1951-02195-000&quot;&gt;the
-original&lt;/a&gt;, but found &lt;a href=&quot;https://archive.wphna.org/wp-content/uploads/2016/01/2005-Mad-Science-Museum-Ancel-Keys-Starvation.pdf&quot;&gt;an informal report&lt;/a&gt; from a now-dead website called &lt;em&gt;Mad
-Science Museum&lt;/em&gt; (yup, my hobbies lead me down weird rabbit holes). The report is
-quite a &amp;quot;fun&amp;quot; read (the experiment would never by approved by any modern ethics
-board):&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The stress proved too much for one of the men, twenty-four-year-old Franklin
-Watkins. He began having vivid, disturbing dreams of cannibalism in which he
-was eating the flesh of an old man. On trips into town (before the buddy
-system had been implemented),he cheated extravagantly, downing milk shakes and
-sundaes. Finally Keys confronted him, and Watkins broke down sobbing. Then he
-grew angry and threatened to kill Keys and take his own life.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;But the take-away for our purposes was that:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;He designed the meals to be carbohydrate rich and protein poor, simulating
-what people in Europe might be eating, with an emphasis on potatoes, cabbage,
-macaroni, and whole wheat bread (all in meager amounts). Despite the reduction
-in food, Keys insisted the men maintain their active lifestyle, including the
-22-miles of walking each week.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;From what I know this is the abolute worse you can do to preserve muscle mass.
-An effective muscle-preserving mass diet should include plenty of proteins, as
-well as resistance training (to actually use the muscles — walking is no
-substitute).&lt;/p&gt;
-&lt;p&gt;This is not mentionned in the paper. On the whole, I&amp;#39;m not impressed with this
-paper at all, and it&amp;#39;s kinda sad when a neophyte like myself can poke huge holes
-in a paper that seems to hold such sway — even the Stronger by Science guys
-&lt;a href=&quot;https://www.strongerbyscience.com/realistic-training-goals/&quot;&gt;quote it&lt;/a&gt;. I must say, though, that for a result that seems this important, it
-has preciously little citations (only 21 according to Google Scholar).&lt;/p&gt;
-&lt;p&gt;The starvation experiment also had an extremely long duration (6 months). I
-didn&amp;#39;t dig in the math of the 2005 paper, but I wouldn&amp;#39;t be surprised that this
-ends up screwing up the results as well, as the body will necessarily go into
-some kind of profundly weird dysfunction given such extreme conditions.&lt;/p&gt;
-&lt;p&gt;This study was popularized in the fitness community by one &lt;a href=&quot;https://bodyrecomposition.com/&quot;&gt;Lyle McDonald&lt;/a&gt;, to
-the point that the 31 kcal/lb figure is often quoted as &amp;quot;Lyle McDonald&amp;#39;s rule of
-31&amp;quot;. However, Lyle McDonald himself now &lt;a href=&quot;https://web.archive.org/web/20130728210211/forums.lylemcdonald.com/showthread.php?t=12760&quot;&gt;says&lt;/a&gt; that dieters can blow right past
-the 31 figure if they eat enough protein and perform resistance training. He
-also advocates the effectiveness of a short-duration (two weeks or less) rapid
-fat loss diet where the caloric intake is sometimes less than 1000 kcal per day.&lt;/p&gt;
-&lt;p&gt;In general, the reasonable consensus seems that the 22 kcal/lb figure can be
-taken as a safe lower bound for fat loss and that it is likely possible to
-exceed it without eating into muscles much for trained individuals.&lt;/p&gt;
-&lt;p&gt;In my case, given my starting weight of 90 kg and assuming 18% body fat, the
-safe 22 kcal/lb figure would have come down to a 785 kcal daily deficit, which
-is close to the 700 kcal deficit I got from the 0.7% body weight heuristic.&lt;/p&gt;
-&lt;p&gt;The idea that you can only mobilize so much calories from fat mass has one
-important consequence. Assuming you want to lose fat at the maximum &amp;quot;safe&amp;quot; rate,
-you will have to reduce your caloric deficit as your fat mass decreases!&lt;/p&gt;
-&lt;p&gt;But, on the other hand, there is the phenomenon of &lt;em&gt;metabolic adaptation&lt;/em&gt;
-wherein your body becomes more efficient and is able to squeeze more calories
-from nutrients. So keeping a fixed deficit might not be a bad idea. As we&amp;#39;ll see
-later, some step can be taken to combat metabolic adaptation.&lt;/p&gt;
-&lt;h2 id=&quot;getting-serious--the-diet&quot;&gt;Getting Serious &amp;amp; The Diet&lt;/h2&gt;
-&lt;p&gt;But back to my cut. When we left off, I had completed 10 weeks of cut, including
-two refeed weeks, and lost 3.6 kg.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s funny how memory goes: I thought I recalled hardship from that period,
-which is why I decided to increase my deficit to 1000 kcal per day. But this
-is actually not borne out in the numbers: in fact, I lost one kilogram more than
-estimated!&lt;/p&gt;
-&lt;p&gt;It is true however that I wasn&amp;#39;t going as fast as I could have: I was generally
-undershooting the 700 kcal deficit goal by about 50 kcal, and the first
-four weeks I had vastly undershot the goal. I was hoping that the cut would not
-take much more than 3 months, and 9 weeks in, this meant only one month left!&lt;/p&gt;
-&lt;p&gt;Hence, the next two weeks I ran a 1000 kcal deficit... and nothing bad happened.&lt;/p&gt;
-&lt;p&gt;However, the increased deficit made my diet start being difficult. My daily
-energy expenditure (as reported by the Fitbit smartwatch) will vary between 2400
-and 3800 kcal daily. If I sit in a chair all day with no activity at all, it
-will tend towards 2400. A lot of walking around or other activity assorted with
-an intense 2 hours training session will push sometimes push it in the 3600-4000
-range (interestingly, there is a lot more variation at the top than at the
-bottom).&lt;/p&gt;
-&lt;p&gt;With a 1000 kcal deficit, it means that in a low-activity day, I could end up
-with a 1400 kcal budget at worst. This was problematic because I didn&amp;#39;t
-alter my diet all that much: I kept eating the same kind of food I did before,
-making sure to get about 2g of proteins per kg of lean mass. So when you eat a 1200
-kcal burrito for lunch, that doesn&amp;#39;t leave a whole lot more calories for the
-rest of the day. &lt;/p&gt;
-&lt;p&gt;Regarding that 2g of proteins per kg of lean mass? I frequently undershot that
-goal, but I think I got at least 140g per day, which is already plenty and is
-&lt;em&gt;said&lt;/em&gt; to be enough to prevent muscle loss. That being said, with the 1000 kcal
-deficit, it was clearly becoming difficult to even hit that diminished protein
-goal.&lt;/p&gt;
-&lt;p&gt;My answer to that challenge was to do something I hadn&amp;#39;t done yet: add cardio to
-my training regimen on non-workout days. This ensured that every day saw a
-minimum of physical activity, making it easier to hit my protein goals.&lt;/p&gt;
-&lt;p&gt;After these two weeks, my weight loss was now 5.32kg. I also decided to have
-another refeed week. Again, I&amp;#39;m kind of puzzled as to why I did this. Sure, a
-1000 kcal deficit is not nothing, but going by the numbers, everything was going
-according to plan.&lt;/p&gt;
-&lt;p&gt;I followed this last refeed week by two final dieting week, one at a target 700
-deficit (effectively: 635 average) and one at a target 1000 deficit
-(effectively: 715). But for that last one I had the good excuse that it was the
-final week before my thesis&amp;#39; deadline...&lt;/p&gt;
-&lt;p&gt;Final tally: 7.02 kg lost in 14 weeks, including 3 refeed weeks.&lt;/p&gt;
-&lt;h2 id=&quot;metabolic-adaptation--supplements&quot;&gt;Metabolic Adaptation &amp;amp; Supplements&lt;/h2&gt;
-&lt;p&gt;As promised, a short discussion of metabolic adaptation. Metabolic adaptation is
-&lt;a href=&quot;https://www.strongerbyscience.com/metabolic-adaptation/&quot;&gt;difficult&lt;/a&gt; because it does not have any single cause. When in significant
-caloric deficit, your body will silmultaneously become more conservative in its
-energy use, lowering your base metabolic rate (BMR) but it will also become more
-efficient and effectively squeeze out more calories out of the food you consume
-(you could say it &amp;quot;waste less&amp;quot; calories instead).&lt;/p&gt;
-&lt;p&gt;What can you do about it? There are many things you can do to mitigate the
-potential for metabolic adaptation that are basically good recommendations at
-any time t: eat enough proteins, get enough sleep, don&amp;#39;t be too stressed. But
-there are two more active interventions.&lt;/p&gt;
-&lt;p&gt;The first is to break your diet and run a &amp;quot;refeed&amp;quot;.&lt;/p&gt;
-&lt;p&gt;The idea is akin to that of a &amp;quot;cheat day&amp;quot; or &amp;quot;cheat meal&amp;quot;, but ran over a longer
-period of time. The term can apparently reference different things, but in the
-kind of refeed I have in mind here, you eat at maintenance — so very different
-from a cheat meal where you&amp;#39;re allowed to gorge on whatever food you like.&lt;/p&gt;
-&lt;p&gt;Cheat days apparently not enough to offset metabolic adaptation, hence the
-recommendation of running a whole refeed week.&lt;/p&gt;
-&lt;p&gt;Another important benefit of refeed weeks is that they offer a psychological
-reprieve in a months-long dieting process.&lt;/p&gt;
-&lt;p&gt;I should add that — having implemented ample refeeds — I saw no metabolic
-adaptation effects. Would there have been some if I hadn&amp;#39;t done the refeed? Hard
-to say. These problems are known to be much more prevalent when you get to lower
-body fat levels (towards or beyond the 10% boundary for men).&lt;/p&gt;
-&lt;p&gt;If you want know much, much more about metabolic adaptation, check out &lt;a href=&quot;https://www.strongerbyscience.com/metabolic-adaptation/&quot;&gt;The
-Metabolic Adaptation Manual&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The second intervention you can run is through use of supplements. There aren&amp;#39;t
-really any magical fat loss supplements, with maybe the exception of caffeine. I
-managed to get my hand on the &lt;a href=&quot;https://examine.com/supplements/fat-loss/&quot;&gt;Examine&amp;#39;s fat loss supplement
-guide&lt;/a&gt; and implemented what they recommended: caffeine,
-synephedrine, white willow extract and yohimbine.&lt;/p&gt;
-&lt;p&gt;I wasn&amp;#39;t always consistent with it — I ran out of white willow extract at some
-point and had to reorder. Same with Yohimbine for the end of the cut.&lt;/p&gt;
-&lt;p&gt;Honestly, I&amp;#39;m not sure these did much, and my inconsistencies certainly didn&amp;#39;t
-impact the data. The only thing that did seem to have an effect was increasing
-my caffeine consumption (through coffee). Caffeine has also other benefits for
-weight training that are well supported (&lt;a href=&quot;https://www.strongerbyscience.com/caffeine/&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;https://examine.com/supplements/caffeine/&quot;&gt;two&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Caveats: given that I&amp;#39;m a relatively tall man, I might have needed to increase
-the recommended doses (which are given irrespective of gender, size or weight).
-I also &lt;a href=&quot;https://examine.com/supplements/yohimbine/&quot;&gt;read later&lt;/a&gt; that Yohimbine works better fasted and before workout —
-which is not at all how I used it.&lt;/p&gt;
-&lt;h2 id=&quot;results--intepretation&quot;&gt;Results &amp;amp; Intepretation&lt;/h2&gt;
-&lt;p&gt;Okay, so I already gave the results, and much of the interpretation above. But
-there are still things to highlight.&lt;/p&gt;
-&lt;p&gt;So I lost 7 kilos. The final average global error was a mere -161 g — meaning
-that I lost 161 g more than predicted based on the recorded caloric deficit.
-During the process, the average global error went as high as -1000 g. Such
-variance is not necessarily unexpected.&lt;/p&gt;
-&lt;p&gt;The big question: was it all fat? Quite clearly (and visibly) fat was a big part
-of it. As for whether muscle was part of the equation, that&amp;#39;s hard to tell as I
-didn&amp;#39;t measure body fat during the process, except twice at they gym (once
-during on May 3rd (second week) at 17.2% and once on August 17th (two weeks
-after the end of the cut) at 14%.&lt;/p&gt;
-&lt;p&gt;We can also use the spreadsheet data to compute the bodyfat reached when
-assuming that 100% of the weight loss was fat. Supposing a 18% starting bodyfat
-percentage, the end result is 11.15%. This seems too low (mostly visually), but
-an alternative explanation to muscle loss is that part of this is water weight
-due to diminished carbs intake. I don&amp;#39;t buy that explanation though — I weighted
-82.7 on 17th August, about the same than at the end of the cut, and by then any
-carbs restriction effect should have been gone.&lt;/p&gt;
-&lt;p&gt;Another explanation: I didn&amp;#39;t set my initial body fat percentage high enough.
-Setting the initial percentage at 20% brings the final percentage to 13.32% —
-closer to the 14% impedance scale measurement.&lt;/p&gt;
-&lt;p&gt;Another potential confounder here is muscle gain. When I started the cut, I was
-still making steady strength gains in the program I outlined &lt;a href=&quot;/weight-training-3&quot;&gt;last time&lt;/a&gt;
-— it&amp;#39;s not unconceivable to have made some small gains here even in a deficit.&lt;/p&gt;
-&lt;p&gt;More relevant, I started training my abs and glutes much more vigorously (I
-wasn&amp;#39;t targetting them at all before) during the last three weeks of the cut.
-There, I clearly made some muscle gains — at least a little bit of which I
-expect to have been made during those weeks.&lt;/p&gt;
-&lt;p&gt;Two more signs we can look at for muscle loss is fatigue and what happened after
-the cut. Regarding fatigue, I didn&amp;#39;t really progress my heavy pre-existing lifts
-(deadlift, bench press, squat, etc) during the cut — but that was expected. In
-reality, I had to deload the squat and the deadlift them fairly early in the
-cycle for technique reasons (a &lt;a href=&quot;#the-exercise-corner&quot;&gt;further section&lt;/a&gt; of this article will talk about
-that — it&amp;#39;s not connected to the cut). The bench and overhead press plateaued,
-while the rest of the program progressed rather nicely. I didn&amp;#39;t feel tired at
-all.&lt;/p&gt;
-&lt;p&gt;Regarding what happened after the cut, my weight did not shot back up. I
-actually only had one week of training after the cut, and then a full week of
-holiday with no weight training (but a lot of walking). But even after, my
-weight didn&amp;#39;t suddenly shot up even when I started running a caloric excess.
-This means there probably wasn&amp;#39;t some easily recoverable &amp;quot;muscle memory&amp;quot; — but
-also that the body didn&amp;#39;t overcompensate by storing lots of fat after the end of
-the diet.&lt;/p&gt;
-&lt;p&gt;So yeah... it worked rather well, but the jury is still split on whether it
-worked optimally (no muscle lost) or not.&lt;/p&gt;
-&lt;p&gt;Lazy Edit: So, if we ignore the issue of gained muscles AND if we assume that
-the caloric trackins is accurate, there might be a way to know, which is to
-solve the equations &lt;code&gt;WL = FL + ML&lt;/code&gt;, &lt;code&gt;CD = FL * 7700 + ML * 1540&lt;/code&gt;, where &lt;code&gt;WL&lt;/code&gt;,
-&lt;code&gt;FL&lt;/code&gt; and &lt;code&gt;ML&lt;/code&gt; are weight loss, fat loss and muscle loss, while &lt;code&gt;CD&lt;/code&gt; is the
-caloric deficit. 7700 is the number of kcal in a kg of fat, while 1540 is the
-number of kcal in a kg of muscle (thanks &lt;a href=&quot;http://www.coltondillion.com/&quot;&gt;Colton&lt;/a&gt; for finding &lt;a href=&quot;https://thestrongkitchen.com/blog/post/how-many-calories-does-it-take-to-build-a-pound-of-muscle&quot;&gt;that info&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;I might try to run this upon my data, but I&amp;#39;m not optimistic, given that the
-assumptions are pretty damn huge, and that the global error for the 100% fat
-model is pretty low.&lt;/p&gt;
-&lt;h2 id=&quot;lessons&quot;&gt;Lessons&lt;/h2&gt;
-&lt;p&gt;What would I do differently next time?&lt;/p&gt;
-&lt;p&gt;First off, be much more careful with my tracking and discipline (knowing full
-well the occasional slip-up will happen).&lt;/p&gt;
-&lt;p&gt;Next, I would try running a ~900 kcal deficit immediately. Mind you, I&amp;#39;m not
-100% convinced that this is the right idea, but I think it&amp;#39;s worth trying for a
-4 week duration. The benefit is obviously a shorter diet. The risk is that this
-is too much and muscle loss results.&lt;/p&gt;
-&lt;p&gt;Given my current body fat percentage and weight, a 900 kcal deficit is
-equivalent to requiring 77 kcal per kilo of muscle (35 kcal per pound) — which
-many people believe is safe. What is especially annoying here is that it will be
-hard to tell fat loss apart from muscle loss. I could use the neck-waist
-measurement method and the gym&amp;#39;s impedance scale to try and estalish trends
-here, however.&lt;/p&gt;
-&lt;p&gt;I would also keep the refeeds after each 4 week period.&lt;/p&gt;
-&lt;p&gt;I can imagine playing with the length of the cut too. Assuming my body fat
-percentage doesn&amp;#39;t increase (tall order), doing 4 weeks of cutting with a 900
-kcal deficit would bring me to 10.5% body fat (assuming 100% fat loss). Two
-weeks would bring me down to 12.3%.&lt;/p&gt;
-&lt;p&gt;I would maybe drop the supplements, except caffeine. I might want to try to use
-Yohimbine &amp;quot;properly&amp;quot;, i.e. in a mostly fasted state and before a workout.&lt;/p&gt;
-&lt;p&gt;Regarding caffeine, I would cycle off of it from for a few weeks before the cut,
-and then progressively ramp it up during the cut: drink something like one daily
-cup of robusta the first week, two the second, etc.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m excited to see if the second time is the charm for the six-pack :D&lt;/p&gt;
-&lt;h2 id=&quot;the-exercise-corner&quot;&gt;The Exercise Corner&lt;/h2&gt;
-&lt;p&gt;How&amp;#39;d I do on my program meanwhile? &lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s first tackle the big lifts. The deadlift progressed to 185 kg until June.
-The squat was deloaded almost immediately, and kept being deloaded for poor
-form. In both of these lifts, I&amp;#39;d come to realize I had progressively adopted
-terrible form. I was desegmenting the deadlift: shooting my ass up and then
-pulling instead of pushing through the ground. I was doing something similar on
-the squat: bending forward too much so that my ass could go up and finally
-contribute to the lift. Both of these put a lot of strain on my lower back who
-had dutifully adapted. Symptomatically, deloading these lifts did not made them
-seem much easier after a bit.&lt;/p&gt;
-&lt;p&gt;After a bit of diagnostic, the issues seemed to be that my glutes and my abs
-were too weak. So in went &lt;a href=&quot;https://www.youtube.com/watch?v=qk97w6ZmV90&quot;&gt;a new regimen of ab training&lt;/a&gt; as well as
-glute-specific exercises, most notably the &lt;a href=&quot;https://www.youtube.com/watch?v=xDmFkJxPzeM&quot;&gt;hip thrust&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;These have worked wonder to strengthen these muscles, but I haven&amp;#39;t had time to
-reload the lifts yet. And since I&amp;#39;m switching program for now, it might be a
-while before I see my old records (which I&amp;#39;m invalidating anyway, because of
-poor form).&lt;/p&gt;
-&lt;p&gt;The bench mostly stagnated, never really going much over that 100kg barrier, I
-managed 3x102 at times and then had to deload. The overhead press also stagnated
-and I also deloaded it. The problem there is arching the back too much, though
-I&amp;#39;m not entirely sure how to get rid of that — I&amp;#39;m hoping stronger abs will
-help.&lt;/p&gt;
-&lt;p&gt;The rest of the program mostly saw progress as some movements were still fairly
-new when I started the cut. Nothing went down, anyhow. Triceps, in particular,
-saw a lot of progress.&lt;/p&gt;
-&lt;h2 id=&quot;whats-next&quot;&gt;What&amp;#39;s Next?&lt;/h2&gt;
-&lt;p&gt;The wise man said: after each cut must come a bulk. And so it is.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m taking it somewhat more seriously than I did before. It feels like the
-careful attention to my calories during the cut as motivated me to be more
-serious now. I&amp;#39;m particularly attentive at ingesting more than enough proteins,
-and making an effort at timing them right too (something I started doing during
-the cut already).&lt;/p&gt;
-&lt;p&gt;Since I started reliably eating more than maintenance calories (aiming for
-100-300 more), I sometimes overshot my calories goal whenever my caloric
-expenditure is a bit lower or on rest days. I must be careful with that. I think
-I have taken too much fat at the start of the year before the start of my cut by
-overeating. At that time, quite puzzlingly, I aimed to eat a certain amount of
-calories per day instead of basing it on the fitbit data. No idea why I did it
-like that &lt;code&gt;¯\_(ツ)_/¯&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;I must also pay attention to my sleep more. I&amp;#39;ve tended to push my sleep time
-further and further away and only my determination to at least get up for lunch
-has saved me. But often, sleep time ends up suffering in the process. I&amp;#39;ve been
-&lt;strong&gt;damn busy&lt;/strong&gt; towards and since the end of the cut (you&amp;#39;d think handing in the
-thesis would mean work was over, but then you have to tackle everything that
-fell by the wayside on the way there).&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m also trying out the &lt;a href=&quot;https://my.builtwithscience.com/p/intermediate-build-program&quot;&gt;Intermediate Build&lt;/a&gt; program from Jeremy Ethier. Since I
-got quite a bit of value from his &lt;a href=&quot;https://builtwithscience.com/best-full-body-workout/&quot;&gt;free full-body program&lt;/a&gt; and his
-content in general, it seemed a safe value proposition. I&amp;#39;m currently tackling
-the first week and so far I&amp;#39;m enjoying it. We&amp;#39;ll see come result time!&lt;/p&gt;
-&lt;p&gt;Finally, if I find the time I&amp;#39;d like to analyse my cut data a bit more. In
-particular, I&amp;#39;d like to run a multivariable linear regression on my data in
-order to see if I can find a systematic bias in the caloric intake or
-expenditure estimations. I&amp;#39;m not too optimistic here either: a non-naive model
-would include things like the hours classified by Fitbit as workout every day as
-well as their caloric estimations, as well as a labelling of how certain I am of
-my caloric intake measurements (things that come in a box are easy to measure,
-restaurant food is a wild guess).&lt;/p&gt;
-&lt;h2 id=&quot;a-note-on-the-fitbit&quot;&gt;A Note on The Fitbit&lt;/h2&gt;
-&lt;p&gt;It is known that the Fitbit is not the most accurate means of measuring energy
-expenditure. If you look at the figures, this &lt;a href=&quot;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6107736/&quot;&gt;literature review&lt;/a&gt; paints a
-rather appalling picture, with many studies finding that the Fitbit under- or
-overestimates calories spent in activity by as much as 60% (and even more, in a
-few cases).&lt;/p&gt;
-&lt;p&gt;Of course, the fact that studies have such varied results is a big red flag.
-Either the Fitbit is totally random, or some studies are crap. Well, in my
-experience (and as can be seen in my data), the Fitbit is far from random. On
-the other hand, I have seen my share of crap studies.&lt;/p&gt;
-&lt;p&gt;If anything, the Fitbit was consistent — the same activity (in my case workouts
-and walking) tends to yield similar caloric estimations. If it does happen to be
-biased in certain cases, it looks like I was fortunate enough to have the biases
-cancel each other out.&lt;/p&gt;
-&lt;p&gt;Returning to the literature review, things look better when you look at the
-details:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Findings suggested that Fitbit was more likely to markedly overestimate energy
-expenditure when worn on the wrist and when walking at normal adult walking
-speeds on flat surfaces. On the contrary, Fitbit was more likely to
-underestimate energy expenditure when worn on the torso, with a tendency to
-markedly underestimate energy expenditure during inclined ambulation, during
-activities with constrained or variable body motion throughout the activity,
-and during simulated household or sporting activities that involve
-stop-and-start ambulation. Findings from 1 study for measures of energy
-expenditure in free-living settings suggested that Fitbit and doubly labelled
-water may provide similar measures of total energy expenditure over a 2-week
-period. However, findings from a few studies in free-living settings suggested
-that Fitbit devices may provide notable underestimations of daily energy
-expenditure compared with a SenseWear accelerometer.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Given my relatively high caloric expenditure numbers, I&amp;#39;m not too worried about
-underestimations.&lt;/p&gt;
-&lt;p&gt;Also apparently &lt;a href=&quot;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5360603/&quot;&gt;SenseWear overestimates energy expenditure&lt;/a&gt;?&lt;/p&gt;
-&lt;p&gt;I kept saying &amp;quot;the Fitbit&amp;quot;, but of course there is no such thing:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Most of the studies included in this review were published in the last 2
-years, with studies primarily examining measurement accuracy for models of
-Fitbit activity trackers introduced prior to 2015.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;I used the Charge 2 (2016) until June and the Charge 3 (2018) after. It&amp;#39;s
-possible things improved since 2015. I saw no difference in measurements between
-the Charge 2 and the Charge 3 however.&lt;/p&gt;
-&lt;p&gt;So what? Well, obviously take what the Fitbit says (and what everybody says
-about the Fitbit) with a pinch of salt. The best thing is to do like I did:
-collect your own data and come to your own conclusions.&lt;/p&gt;
-&lt;p&gt;Personally, I find the Fitbit super helpful to set a proper caloric intake.&lt;/p&gt;
-&lt;p&gt;What&amp;#39;s the alternative? Using a macro calculator &lt;a href=&quot;https://www.calculators.tech/macro-calculator&quot;&gt;like this one&lt;/a&gt;. The caloric
-recommendation really depends on what goal (I chose &amp;quot;muscle gain&amp;quot;) and &amp;quot;activity
-level&amp;quot; you set. With &amp;quot;lightly active&amp;quot; (true of me outside of workouts — and I
-did say I wanted to gain muscle, they don&amp;#39;t build themselves), I get a 3185 kcal
-recommendation. Using my working hypothesis that the Fitbit is accurate, the
-average daily expenditure &lt;em&gt;during my cut&lt;/em&gt; was 3190, and building muscle means I
-have to add 200-300 kcal on top of that. Oops.&lt;/p&gt;
-&lt;p&gt;On the other hand, choosing &amp;quot;very active&amp;quot; puts me at 4000 daily kcal. That&amp;#39;s
-likely too much — I only hit 3700 kcal expenditure on workout days, and then not
-each time. So you have to choose &amp;quot;moderately active&amp;quot; to get a more reasonable
-3591 kcal recommendation. How could I know this?&lt;/p&gt;
-&lt;p&gt;A promising avenue is the aformentioned Jeremy Ethier&amp;#39;s program, which includes
-a nutrition spreadsheet. The initial estimate is wildly off (saying I should eat
-3113 kcal for muscle gain) but it automatically uses your recorded weight and
-caloric intake to adjust the TDEE (total daily energy expenditure). I might try
-to use that and see if it gives good results.&lt;/p&gt;
-&lt;p&gt;And with these final comments, I&amp;#39;m done. This turned out much longer than I
-expected. Hopefully, someone will be able to get some useful information out of
-this!&lt;/p&gt;
-      </description>
-      <pubDate>2019-09-12T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/weight-training-4</link>
-      <guid isPermaLink="true">http://norswap.com/weight-training-4</guid>
     </item>
   </channel>
 </rss>

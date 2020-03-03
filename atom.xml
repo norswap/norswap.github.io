@@ -6,7 +6,7 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Easy Unix Daemons (on macOS too)</title>
+      <title>Shell Deep Dive: Easy Unix Daemons (on macOS too)</title>
       <description>
 &lt;p&gt;I&amp;#39;ve been setting up my new work machine recently, and while doing so I
 encountered an interesting challenge.&lt;/p&gt;
@@ -16,17 +16,17 @@ wishlist:&lt;/p&gt;
 &lt;li&gt;Runs in the background.&lt;/li&gt;
 &lt;li&gt;Starts at startup or login.&lt;/li&gt;
 &lt;li&gt;Can be manually killed / relaunched.&lt;/li&gt;
-&lt;li&gt;Visibility into the process (e.g. via log files).&lt;/li&gt;
+&lt;li&gt;Output visible (e.g. via log files).&lt;/li&gt;
 &lt;li&gt;Restarts automatically if it stops for some reason.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Now, there are daemons systems build into most OSes. For macOS this is &lt;code&gt;launchctl&lt;/code&gt;
+&lt;p&gt;Now, there are daemons systems build into most OSes. For macOS this is &lt;code&gt;launchd&lt;/code&gt;
 (for &amp;quot;launch daemon&amp;quot;). On Linux it&amp;#39;s most likely than not &lt;code&gt;systemd&lt;/code&gt;, though are
-other systems form the venerable &lt;code&gt;sysvinit&lt;/code&gt; and &lt;code&gt;OpenRC&lt;/code&gt;.&lt;/p&gt;
+other systems, like the venerable &lt;code&gt;sysvinit&lt;/code&gt; and &lt;code&gt;OpenRC&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Even before starting however, I knew (from reputation and past personal
-experiences) that those sucked mightily. The less I had to deal / rely on them,
-the better.&lt;/p&gt;
-&lt;p&gt;In the end I did actually use &lt;code&gt;launchctl&lt;/code&gt; to launch at startup. I&amp;#39;m not provided
-details for linux, but [look here for pointers about systemd][systemd-tips] (and
+experiences) that those systems sucked mightily. The less I had to deal / rely
+on them, the better. But I&amp;#39;ll expand on that &lt;a href=&quot;#startup&quot;&gt;later&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In the end I did actually use &lt;code&gt;launchd&lt;/code&gt; to launch at startup. I&amp;#39;m not providing
+details for linux, but &lt;a href=&quot;https://unix.stackexchange.com/questions/233468/how-does-systemd-use-etc-init-d-scripts&quot;&gt;look here for pointers about systemd&lt;/a&gt; (and
 by the same occasion note that I&amp;#39;m right: this is a mess).&lt;/p&gt;
 &lt;h2 id=&quot;running-in-the-background&quot;&gt;Running in the Background&lt;/h2&gt;
 &lt;p&gt;Your daemon system will run jobs in the background for you. Nevertheless it&amp;#39;s
@@ -44,12 +44,12 @@ the current directory (or you can just redirect it yourself), as well as closes
 terminal input. Using either &lt;code&gt;disown&lt;/code&gt; or &lt;code&gt;nohup&lt;/code&gt; (or both) will prevent the
 command from being killed when the shell is killed (it prevents the sending of
 the &lt;code&gt;SIGHUP&lt;/code&gt; signal (&amp;quot;signal hang up&amp;quot;), which is &amp;quot;a signal sent to a process
-when its controlling terminal is closed&amp;quot;.&lt;/p&gt;
+when its controlling terminal is closed&amp;quot;).&lt;/p&gt;
 &lt;p&gt;So this works rather nicely.&lt;/p&gt;
 &lt;p&gt;But I have an even better solution: use &lt;code&gt;screen&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;In short, &lt;code&gt;screen&lt;/code&gt; lets you start a virtual shell that you can &amp;quot;attach&amp;quot; to a
 real shell, or &amp;quot;detach&amp;quot; from. So you can use it to run a command in its own
-shell, which you can recall at will, in any user shell.&lt;/p&gt;
+shell, which you can recall at will, in any real shell.&lt;/p&gt;
 &lt;p&gt;The advantages of &lt;code&gt;screen&lt;/code&gt; is that you can use it for job control. We couldn&amp;#39;t
 have used normal shell job control (using the command &lt;code&gt;jobs&lt;/code&gt;) because it is
 shell-specific (not shared between different shell instances). So you can&amp;#39;t use
@@ -58,7 +58,7 @@ want to kill the command at that point, you need to find out its PID and use
 &lt;code&gt;pkill&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;But with &lt;code&gt;screen&lt;/code&gt;, you can do this, from any shell:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ screen -dm &amp;lt;command&amp;gt;           # start command in background
-$ screen -dm -S &amp;lt;name&amp;gt; &amp;lt;command&amp;gt; # alternatively, give it a specific name
+$ screen -dm -S &amp;lt;name&amp;gt; &amp;lt;command&amp;gt; # ... and give it a specific name
 $ screen -ls                     # list all running screens
 $ screen -r &amp;lt;name&amp;gt;               # (re)attach to the given screen
 $ screen -S &amp;lt;name&amp;gt; -X quit       # kill the given screen&lt;/code&gt;&lt;/pre&gt;
@@ -74,7 +74,8 @@ sjobk() {
 &lt;p&gt;Final tip: when you attach to the screen, it&amp;#39;s &lt;code&gt;ctrl+a d&lt;/code&gt; (or &lt;code&gt;cmd+a d&lt;/code&gt; on mac)
 to detach.&lt;/p&gt;
 &lt;h2 id=&quot;repeating-the-command&quot;&gt;Repeating the Command&lt;/h2&gt;
-&lt;p&gt;To repeat a command in &lt;code&gt;bash&lt;/code&gt;, with 3 seconds of dealy between each execution, you&amp;#39;d normaly do:&lt;/p&gt;
+&lt;p&gt;To repeat a command in &lt;code&gt;bash&lt;/code&gt;, with 3 seconds of delay between each execution,
+you&amp;#39;d normaly do:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;while true; do &amp;lt;command&amp;gt;; sleep 3; done&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Which you can turn into the following function:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
@@ -84,10 +85,11 @@ to detach.&lt;/p&gt;
 other functions that will be presented later. It should be a script to be put
 somewhere on the path instead. Why?&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;By making it a script, you can specify the shell (&lt;code&gt;bash&lt;/code&gt;, &lt;code&gt;zsh&lt;/code&gt;, ...) used to
-run it, making it usable whatever shell you decide to run as a user.&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;By making it a script, you can use a shebang (&lt;code&gt;#!&lt;/code&gt;) to specify the shell
+(&lt;code&gt;bash&lt;/code&gt;, &lt;code&gt;zsh&lt;/code&gt;, ...) used to run it, making it usable whatever shell you
+decide to run as a user.&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Functions are normally not inherited by sub-shells. In bash, it&amp;#39;s actually
+&lt;li&gt;&lt;p&gt;Functions are normally not inherited by sub-shells. In Bash, it&amp;#39;s actually
 possible to export them anyway by using &lt;code&gt;export -f &amp;lt;function&amp;gt;&lt;/code&gt;. And as we&amp;#39;ll
 see later, we really want to use subshells.&lt;/p&gt;
 &lt;/li&gt;
@@ -99,17 +101,17 @@ function.&lt;/p&gt;
 &lt;p&gt;Second, we&amp;#39;d like the command to be not only a simple command, but also a whole
 pipeline (including pipes &lt;code&gt;|&lt;/code&gt; and redirects &lt;code&gt;&amp;gt;&lt;/code&gt;). But if we try the naive way,
 we&amp;#39;ll rune into a parser issue.&lt;/p&gt;
-&lt;p&gt;Consider the command &lt;code&gt;echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This prints &lt;code&gt;\ \ \ \ 1 x&lt;/code&gt; to standard
-output (&lt;code&gt;-n&lt;/code&gt; is the option for line numbering). Then try running &lt;code&gt;repeat echo
-&amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This &lt;em&gt;should&lt;/em&gt; output &lt;code&gt;1 x&lt;/code&gt; multiple times. Instead it prints
-&lt;code&gt;1 x&lt;/code&gt;, then &lt;code&gt;2 x&lt;/code&gt;, then &lt;code&gt;3 x&lt;/code&gt;, etc. This is because the command is interpreted
-as &lt;code&gt;(repeat echo &amp;quot;a&amp;quot;) | cat&lt;/code&gt; and not &lt;code&gt;repeat (echo &amp;quot;a&amp;quot; | cat)&lt;/code&gt; (note the use of
-parentheses here is not valid bash syntax).&lt;/p&gt;
+&lt;p&gt;Consider the command &lt;code&gt;echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This prints &lt;code&gt;1 x&lt;/code&gt; to standard output
+(&lt;code&gt;-n&lt;/code&gt; is the option for line numbering). Then try running &lt;code&gt;repeat echo &amp;quot;x&amp;quot; | cat
+-n&lt;/code&gt;. This &lt;em&gt;should&lt;/em&gt; output &lt;code&gt;1 x&lt;/code&gt; multiple times. Instead it prints &lt;code&gt;1 x&lt;/code&gt;, then &lt;code&gt;2
+x&lt;/code&gt;, then &lt;code&gt;3 x&lt;/code&gt;, etc. This is because the command is interpreted as &lt;code&gt;(repeat echo
+&amp;quot;a&amp;quot;) | cat&lt;/code&gt; and not &lt;code&gt;repeat (echo &amp;quot;a&amp;quot; | cat)&lt;/code&gt; (note the use of parentheses here
+is not valid Bash syntax).&lt;/p&gt;
 &lt;p&gt;How to pass a pipe then? We have to quote it, then pass it as a parameter to
-&lt;code&gt;bash -c&lt;/code&gt;. e.g. &lt;code&gt;repeat &amp;#39;echo &amp;quot;a&amp;quot; | cat -n&amp;#39;&lt;/code&gt; This is by no means perfect (it
+&lt;code&gt;bash -c&lt;/code&gt;. e.g. &lt;code&gt;repeat &amp;#39;echo &amp;quot;a&amp;quot; | cat -n&amp;#39;&lt;/code&gt; This is by no means perfect — it
 gets annoying when dealing with commands that already have multiple level of
-quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted &lt;code&gt;&amp;#39;echo &amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;,
-but it&amp;#39;s still a good step forward.&lt;/p&gt;
+quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted &lt;code&gt;&amp;#39;echo &amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;.
+But it&amp;#39;s still a good step forward.&lt;/p&gt;
 &lt;p&gt;With all the considerations factored in, we get the following function:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
     local OPT OPTIND OPTARG T=3
@@ -130,17 +132,16 @@ with the &lt;code&gt;\?&lt;/code&gt; option. The &lt;code&gt;t:&lt;/code&gt; par
 takes a value (the second colon &lt;code&gt;:&lt;/code&gt;). The variable &lt;code&gt;OPT&lt;/code&gt; receives the option
 letter in the loop, while &lt;code&gt;OPTARG&lt;/code&gt; received the option value (if any). &lt;code&gt;OPTIND&lt;/code&gt;
 is set the index of the next (unprocessed) argument. The loop stop when all
-options (starting with &lt;code&gt;-&lt;/code&gt;) have been processed. The &lt;code&gt;shift $((OPTIND - 1))&lt;/code&gt;
-removes all processed options from the list of arguments (accessible via &lt;code&gt;$*&lt;/code&gt;,
-&lt;code&gt;$@&lt;/code&gt; and &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, ...). Check &lt;a href=&quot;https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/&quot;&gt;this tutorial&lt;/a&gt; for more
-information.&lt;/p&gt;
+options have been processed. The &lt;code&gt;shift $((OPTIND - 1))&lt;/code&gt; removes all processed
+options from the list of arguments (accessible via &lt;code&gt;$*&lt;/code&gt;, &lt;code&gt;$@&lt;/code&gt; and &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;,
+...). Check &lt;a href=&quot;https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/&quot;&gt;this tutorial&lt;/a&gt; for more information.&lt;/p&gt;
 &lt;p&gt;An important note on &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt;: &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; will expand to all remaining
 arguments, &lt;em&gt;quoted as a single parameter&lt;/em&gt;. In this way, &lt;code&gt;repeat&lt;/code&gt; can be used
 with or without quoting whenever supported: &lt;code&gt;repeat echo &amp;quot;x&amp;quot;&lt;/code&gt; or &lt;code&gt;repeat &amp;#39;echo
 &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; (using pipes while not quoting still doesn&amp;#39;t work).&lt;/p&gt;
 &lt;p&gt;The alternative to &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; is &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; which expands to the same arguments, but
 quoted individually. Since &lt;code&gt;bash -c&lt;/code&gt; expects a single argument, this wouldn&amp;#39;t
-work when used without quotes. We&amp;#39;ll however use &lt;code&gt;$@&lt;/code&gt; later!&lt;/p&gt;
+work when used without quotes. We&amp;#39;ll however use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; later!&lt;/p&gt;
 &lt;h2 id=&quot;getting-the-process-output&quot;&gt;Getting The Process&amp;#39; Output&lt;/h2&gt;
 &lt;p&gt;A simple way to get the process&amp;#39; output even though it runs in the background is
 simply to redirect it. Because of how we built it, this is even compatible with
@@ -150,7 +151,7 @@ what&amp;#39;s going on.&lt;/p&gt;
 &lt;p&gt;This has, however, two slight issues:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The logs are lost in case the machine shuts down. Here, simply using the &lt;code&gt;tee&lt;/code&gt;
-command (&lt;a href=&quot;http://man7.org/linux/man-pages/man1/tee.1.html&quot;&gt;manpage&lt;/a&gt;) works: &lt;code&gt;&amp;lt;command&amp;gt; | tee logfile&lt;/code&gt; and enables us to
+command (&lt;a href=&quot;http://man7.org/linux/man-pages/man1/tee.1.html&quot;&gt;manpage&lt;/a&gt;) works: &lt;code&gt;&amp;lt;command&amp;gt; | tee logfile&lt;/code&gt; enables us to
 benefit from both logs and screen output.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;ul&gt;
@@ -158,7 +159,9 @@ benefit from both logs and screen output.&lt;/li&gt;
 Not necessarily a problem if you log, but it is if you don&amp;#39;t.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;(At this point, I&amp;#39;ll note that for my proxy I don&amp;#39;t really care about long-time
-logs, I just want to be able to know what&amp;#39;s happening &lt;em&gt;right now&lt;/em&gt;, sometimes.)&lt;/p&gt;
+logs, I just want to be able to know what&amp;#39;s happening &lt;em&gt;right now&lt;/em&gt;, sometimes.
+Also proper log management requires some thought, as &amp;quot;just append forever&amp;quot; might
+work in practice, but it makes fussy me shudder.)&lt;/p&gt;
 &lt;p&gt;To solve that second issue, I introduced a function called &lt;code&gt;remain&lt;/code&gt;, which would
 take a command as parameter (much like &lt;code&gt;repeat&lt;/code&gt;) and run a shell once that
 command exited.&lt;/p&gt;
@@ -167,7 +170,7 @@ as the command exits by itself. By hitting &lt;code&gt;ctrl+c&lt;/code&gt; in th
 sending &lt;code&gt;SIGINT&lt;/code&gt;), you&amp;#39;ll shut down the whole chain, just like in a regular
 shell. &lt;/p&gt;
 &lt;p&gt;But imagine you want to kill the command, while still being able to peruse the
-output in the shell? (Again, quite relavant to my use case: stop trying to
+output in the shell? (Again, quite relevant to my use case: stop trying to
 connect to the proxy, but let me see what&amp;#39;s going on.) Well that&amp;#39;s possible too:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;remain() {
     trap &amp;quot;echo Interrupted by user&amp;quot; SIGINT
@@ -184,14 +187,14 @@ tiny bit more economical.&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s time for a little confession: &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; are not entirely robust
 as-is.&lt;/p&gt;
 &lt;p&gt;Consider that we want to use &lt;code&gt;remain&lt;/code&gt; with &lt;code&gt;repeat&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;What happens is that the &lt;code&gt;bash -c&lt;/code&gt; line expands to &lt;code&gt;bash -c &amp;#39;repeat echo &amp;quot;x&amp;quot; |
-cat -n&amp;#39;&lt;/code&gt; — the outer quotes have been stripped! This will misbeheave in repeat,
-producing the wrong &lt;code&gt;1 x&lt;/code&gt;, &lt;code&gt;2 x&lt;/code&gt; (etc) output rather than straight &lt;code&gt;1 x&lt;/code&gt; each
-time.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;What happens is that the &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt; line in &lt;code&gt;remain&lt;/code&gt; expands to something
+equivalent to &lt;code&gt;bash -c &amp;#39;repeat echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — the outer quotes have been
+stripped! This will misbeheave in repeat, producing the wrong &lt;code&gt;1 x&lt;/code&gt;, &lt;code&gt;2 x&lt;/code&gt; (etc)
+output rather than straight &lt;code&gt;1 x&lt;/code&gt; each time.&lt;/p&gt;
 &lt;p&gt;We cannot &amp;quot;just&amp;quot; use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; instead of &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; either: &lt;code&gt;bash -c &amp;quot;$@&amp;quot;&lt;/code&gt; would
 expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — but &lt;code&gt;bash -c&lt;/code&gt; expects a
 single argument!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;IMPORTANT NOTE:&lt;/strong&gt; I&amp;#39;m slighlty simplifying here. In particular here, &lt;code&gt;bash -c
+&lt;p&gt;&lt;strong&gt;Important note:&lt;/strong&gt; I&amp;#39;m slighlty simplifying here. In particular here, &lt;code&gt;bash -c
 &amp;quot;$@&amp;quot;&lt;/code&gt; would not &lt;em&gt;literally&lt;/em&gt; expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;.
 Instead the shell would perform expansion and the result would be an
 interpretation like &amp;quot;invoke &lt;code&gt;bash&lt;/code&gt; with three parameters of value &lt;code&gt;-c&lt;/code&gt;, &lt;code&gt;repeat&lt;/code&gt;
@@ -201,15 +204,50 @@ quotes!&lt;/p&gt;
 &lt;p&gt;The solution is to re-insert the quotes manually. for this we introduce a
 function called &lt;code&gt;quote_args&lt;/code&gt;, which takes a series of arguments and sets &lt;code&gt;ARGS&lt;/code&gt;
 to the concatenation of all those arguments with quotes inserted around each of
-them.&lt;/p&gt;
+them (excepted when there is a single argument).&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;quote_args() {
     ARGS=&amp;#39;&amp;#39;
+    # single argument: output directly
+    if [[ $# -eq 1 ]]; then
+        ARGS=&amp;quot;$1&amp;quot;
+        return
+    fi
+    # multiple arguments: quote each and output
     for ARG in &amp;quot;$@&amp;quot;; do
-        ARGS+=\&amp;#39;$ARG\&amp;#39;\ 
+        ARGS+=&amp;quot;&amp;#39;$ARG&amp;#39;&amp;quot;
     done
 }
 export -f quote_args&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Then we can patch &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; with it:&lt;/p&gt;
+&lt;p&gt;Why add exception for single arguments? Consider the following examples given
+that we always quote even on single args:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;always_quote_args echo hello
+
+bash -c &amp;quot;$ARGS&amp;quot;
+# 1.    &amp;quot;expansion&amp;quot;: bash -c &amp;quot;&amp;#39;echo&amp;#39; &amp;#39;hello&amp;#39;&amp;quot;
+#       output: &amp;quot;hello&amp;quot;
+
+bash -c $ARGS
+# 2.    &amp;quot;expansion&amp;quot;: bash -c &amp;#39;echo&amp;#39; &amp;#39;hello&amp;#39;
+#       output: &amp;quot;&amp;quot;
+
+always_quote_args &amp;#39;echo hello&amp;#39;
+
+bash -c &amp;quot;$ARGS&amp;quot;
+# 3.    &amp;quot;expansion&amp;quot;: bash -c &amp;quot;&amp;#39;echo hello&amp;#39;&amp;quot;
+#       output: bash: echo hello: command not found
+
+bash -c $ARGS
+# 4.    &amp;quot;expansion&amp;quot;: bash -c &amp;#39;echo hello&amp;#39;
+#       output: &amp;quot;hello&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(&lt;em&gt;Expansion&lt;/em&gt; is quoted because again, bash does not expand to a textual
+representation, but to an internal representation tracking &amp;quot;words&amp;quot;.)&lt;/p&gt;
+&lt;p&gt;We would like behaviour 1 and 4, meaning we need to know the number of arguments
+to know whether to quote &lt;code&gt;$ARGS&lt;/code&gt;. So we move this choice into &lt;code&gt;quote_args&lt;/code&gt;
+itself and now we should just always quote &lt;code&gt;$ARGS&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This is not always &amp;quot;correct&amp;quot; depending on what you need to do, but it&amp;#39;s good for
+commands like &lt;code&gt;bash -c&lt;/code&gt; that expect a command as a single argument. As always,
+the key is to understand what this is doing so you can reason about it.&lt;/p&gt;
+&lt;p&gt;Now that we have &lt;code&gt;quote_args&lt;/code&gt;, we can patch &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; with it:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
     local OPT OPTIND OPTARG T=3
     while getopts &amp;quot;:t:&amp;quot; OPT; do
@@ -232,28 +270,30 @@ remain() {
     exec bash
 }
 export -f remain&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;So in our example, we end up with &lt;code&gt;ARGS&lt;/code&gt; containing &lt;code&gt;&amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat
--n&amp;#39;&lt;/code&gt;. Using &lt;code&gt;&amp;quot;$ARGS&amp;quot;&lt;/code&gt; then produces a single argument where the individual
-arguments are properly quoted: &lt;code&gt;&amp;quot;&amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&amp;quot;&lt;/code&gt;. Note that in
-this case we are literally expanding to that, and that &lt;code&gt;quote_args&lt;/code&gt; is not meant
-to be used with arguments that contain literal single quotes!&lt;/p&gt;
+&lt;p&gt;So in our initial example (&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;), we end up with
+&lt;code&gt;ARGS&lt;/code&gt; containing &lt;code&gt;&amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;. Using &lt;code&gt;&amp;quot;$ARGS&amp;quot;&lt;/code&gt; within
+&lt;code&gt;remain&lt;/code&gt; then produces a single argument where the individual arguments are
+properly quoted: &lt;code&gt;&amp;quot;&amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&amp;quot;&lt;/code&gt;. (Note that in this case we
+are literally expanding to that, and that &lt;code&gt;quote_args&lt;/code&gt; is not meant to be used
+with arguments that contain literal single quotes!) Within &lt;code&gt;repeat&lt;/code&gt;, the single
+argument is note quoted again and passed to &lt;code&gt;bash -c&lt;/code&gt; directly. It works!&lt;/p&gt;
 &lt;h2 id=&quot;putting-the-pieces-together&quot;&gt;Putting the Pieces Together&lt;/h2&gt;
-&lt;p&gt;Okay, now that we have a repeating mechanism and one to be able to preserve the
-output, we still to combine those things together, and then to combine them with
-&lt;code&gt;screen&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s consider a simpler but useful case first. If we want to use screen for job
-control, it&amp;#39;d make sense to have a command that:&lt;/p&gt;
+&lt;p&gt;Now that we have a repeating mechanism and one to be able to preserve the
+output, we still need to combine those things together, and then to combine them
+with &lt;code&gt;screen&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s consider a simpler but useful case first. If we want to use &lt;code&gt;screen&lt;/code&gt; for
+job control, it&amp;#39;d make sense to have a command that:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Calls &lt;code&gt;remain&lt;/code&gt; so that we can check on the output after the job is &amp;quot;done&amp;quot;.&lt;/li&gt;
-&lt;li&gt;Can take pipes (just like we did in &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; and not just a
-single command. Additionally, &lt;code&gt;screen&lt;/code&gt; can&amp;#39;t normally take bash function
-calls as parameter (that&amp;#39;s because it passes them to &lt;code&gt;exec&lt;/code&gt;, not &lt;code&gt;bash&lt;/code&gt;). Our
-fix will allow that.&lt;/li&gt;
+&lt;li&gt;Can take pipes just like we did in &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt;, and not just a
+single command. Additionally, &lt;code&gt;screen&lt;/code&gt; can&amp;#39;t normally take Bash function
+calls as parameter (that&amp;#39;s because it passes its arguments to &lt;code&gt;exec&lt;/code&gt;, not
+&lt;code&gt;bash&lt;/code&gt;). Our fix will allow that.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;For this simple(r) case, I&amp;#39;m making a function called &lt;code&gt;sjob&lt;/code&gt; (for &amp;quot;screen job&amp;quot;)
-that takes an optional &lt;code&gt;-n&lt;/code&gt; option to set the job name (equivalent to &lt;code&gt;screen&lt;/code&gt;
+that takes an optional &lt;code&gt;-n&lt;/code&gt; option to set the job name (equivalent to &lt;code&gt;screen&lt;/code&gt;&amp;#39;s
 own &lt;code&gt;-S&lt;/code&gt; parameter) and (a) parameter(s) to specify the command, similar to
-remain and repeat.&lt;/p&gt;
+&lt;code&gt;remain&lt;/code&gt; and &lt;code&gt;repeat&lt;/code&gt;.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sjob() {
     local OPT OPTIND OPTARG N=sjob
     while getopts &amp;quot;:n:&amp;quot; OPT; do
@@ -271,7 +311,7 @@ export -f sjob&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You can see all our previous tricks: option handling, &lt;code&gt;quote_args&lt;/code&gt; and a direct
 call to &lt;code&gt;remain&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Now for the full shebub, we also want to throw &lt;code&gt;repeat&lt;/code&gt; in the mix. Since this
-is going to be run by some kind of init system (&lt;code&gt;launchctl&lt;/code&gt;, &lt;code&gt;systemd&lt;/code&gt;, ...), we
+is going to be run by some kind of init system (&lt;code&gt;launchd&lt;/code&gt;, &lt;code&gt;systemd&lt;/code&gt;, ...), we
 also want to make sure that the command is only run once even if the function is
 called multiple times. We&amp;#39;ll use a unique name + &lt;code&gt;screen -ls&lt;/code&gt; to ensure that.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;daemon() {
@@ -294,10 +334,12 @@ export -f daemon&lt;/code&gt;&lt;/pre&gt;
 &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; meaning the arguments we receive (minus the processed options) will be
 passed as &amp;quot;as-is&amp;quot; and not unduly split because of stripped quotes.&lt;/p&gt;
 &lt;h2 id=&quot;calling-at-startup-mac-only&quot;&gt;Calling at Startup (mac-only)&lt;/h2&gt;
+&lt;div id=startup /&gt;
+
 &lt;p&gt;Only one step remains: actually running our &lt;code&gt;daemon&lt;/code&gt; function with the command
 as parameter on startup.&lt;/p&gt;
-&lt;p&gt;In a better world, we&amp;#39;d just need to plop down a script in a folder, and be done
-with it. That&amp;#39;s what most Linux distribution &lt;em&gt;attempt&lt;/em&gt; to do (typically the
+&lt;p&gt;In a better world, we&amp;#39;d just need to plop down a script in a directory, and be
+done with it. That&amp;#39;s what most Linux distribution &lt;em&gt;attempt&lt;/em&gt; to do (typically the
 directory is &lt;code&gt;/etc/init.d&lt;/code&gt;). However, here is &lt;a href=&quot;https://gist.github.com/mrowe/8b617a8b12a6248d48b8&quot;&gt;the skeleton&lt;/a&gt; for what you&amp;#39;re
 supposed to do in Debian and &amp;quot;I can&amp;#39;t even&amp;quot; — there is just too much ceremony to
 be handled upfront.&lt;/p&gt;
@@ -315,25 +357,26 @@ to configure a &lt;em&gt;stupid xml file&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;So here is my plan: if I&amp;#39;m going to go through these pains once, I might as well
 make so that the script being run runs all scripts in a given directory (in my
 case I chose &lt;code&gt;~/startup&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;I followed &lt;a href=&quot;https://medium.com/@fahimhossain_16989/adding-startup-scripts-to-launch-daemon-on-mac-os-x-sierra-10-12-6-7e0318c74de1&quot;&gt;this guide&lt;/a&gt; (warning: not 100% good ideas, for
+&lt;p&gt;I followed &lt;a href=&quot;https://medium.com/@fahimhossain_16989/adding-startup-scripts-to-launch-daemon-on-mac-os-x-sierra-10-12-6-7e0318c74de1&quot;&gt;this guide&lt;/a&gt; (warning: not fully trustworthy, for
 instance it has you setup a system-level daemon instead of user-level, which is
 a bad idea), and you can refer to &lt;a href=&quot;https://www.launchd.info/&quot;&gt;this very handy reference&lt;/a&gt;. But
 for those who want the short of it (at least at the time of writing), keep
 reading.&lt;/p&gt;
-&lt;p&gt;What you&amp;#39;ll to do is create a &lt;code&gt;.plist&lt;/code&gt; file. I called mine &lt;code&gt;com.startup.plist&lt;/code&gt;
-after the previous tutorial.&lt;/p&gt;
-&lt;p&gt;At this point you get a choice: make it a &amp;quot;LaunchDaemon&amp;quot; (system-level, run on
-bott) or a &amp;quot;LaunchAgent&amp;quot; (user-level, run on logon). If you going to run bash,
-you most certainly want a LaunchAgent (otherwise your commands will end up being
-run as root, in a root shell, which for one does not inherit your bash profile).
-LaunchDaemons also have a bunch of restriction on file permissions, path of
-programs/scripts being run (can&amp;#39;t be in home directories), ...&lt;/p&gt;
+&lt;p&gt;What you&amp;#39;ll want to do is create a &lt;code&gt;.plist&lt;/code&gt; file. I called mine
+&lt;code&gt;com.startup.plist&lt;/code&gt;, after the previous tutorial.&lt;/p&gt;
+&lt;p&gt;At this point you get a choice: make it a &amp;quot;LaunchDaemon&amp;quot; (system-level, run at
+boot time) or a &amp;quot;LaunchAgent&amp;quot; (user-level, run on logon). If you going to run
+Bash, you most certainly want a LaunchAgent (otherwise your commands will end up
+being run as root, in a root shell, which for one does not inherit your Bash
+profile). LaunchDaemons also have a bunch of restriction on file permissions,
+path of programs/scripts being run (can&amp;#39;t be in home directories), ...&lt;/p&gt;
 &lt;p&gt;LaunchAgents must be created in &lt;code&gt;~/Library/LaunchAgents&lt;/code&gt; (run only for the
 current user) or &lt;code&gt;/Library/LaunchAgents&lt;/code&gt; (run for all users). For LaunchDaemons,
 it&amp;#39;s &lt;code&gt;/Library/LaunchDaemons&lt;/code&gt; (there are also other dirs for the system&amp;#39;s own
 agents and daemons, see &lt;a href=&quot;https://www.launchd.info/&quot;&gt;the ref&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Personally, I&amp;#39;ve set this up as a symlink, and it works.&lt;/p&gt;
-&lt;p&gt;The file will need to have read permissions, so &lt;code&gt;chmod 644 com.startup.plist&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Personally, I like to keep my config files together, so I&amp;#39;ve set this up as a
+symlink, and it works. The file itself will need to have read permissions, so
+&lt;code&gt;chmod 644 com.startup.plist&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Here is what the content of the file should be:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
 &amp;lt;!DOCTYPE plist PUBLIC &amp;quot;-//Apple//DTD PLIST 1.0//EN&amp;quot; &amp;quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&amp;quot;&amp;gt;
@@ -367,7 +410,7 @@ P=/Users/norswap/startup
 for file in $P/*
 do
     $file
-done&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The shebang (&lt;code&gt;#!/bin/bash&lt;/code&gt;) is actually important and &lt;code&gt;launchctl&lt;/code&gt; will complain
+done&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The shebang (&lt;code&gt;#!/bin/bash&lt;/code&gt;) is actually important and &lt;code&gt;launchd&lt;/code&gt; will complain
 if it&amp;#39;s not present.&lt;/p&gt;
 &lt;p&gt;And here is an example of file in &lt;code&gt;~/startup&lt;/code&gt;, namely the one I use to run my
 VPN (with confidential details redacted).&lt;/p&gt;
@@ -379,24 +422,24 @@ your local sysadmin to berate and/or murder you.&lt;/p&gt;
 &amp;quot;login shell&amp;quot; — login shell source &lt;code&gt;.bash_profile&lt;/code&gt; while other don&amp;#39;t, and that&amp;#39;s
 where we defined our &lt;code&gt;daemon&lt;/code&gt; function!&lt;/p&gt;
 &lt;p&gt;If you want to know more about the different types of shell (login, interactive)
-and how bash decides which config file to source, read this &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;life-saving guide
+and how Bash decides which config file to source, read this &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;life-saving guide
 on shell initialization&lt;/a&gt;.&lt;/p&gt;
 &lt;div class=nsep&gt;&lt;/div&gt;
 
 &lt;p&gt;You&amp;#39;ll probably want to test all of this. To do so you can run:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;launchctl load -w ~/Library/LaunchAgents/com.startup.plist&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;-w&lt;/code&gt; option ignores some file where the agent can be disabled for some
-nefarious reasons. I didn&amp;#39;t need it, but it doesnt hurt either.&lt;/p&gt;
+nefarious reasons. I didn&amp;#39;t need it, but it doesn&amp;#39;t hurt either.&lt;/p&gt;
 &lt;p&gt;You might see stuff about a &lt;code&gt;start&lt;/code&gt; command that can in the place of &lt;code&gt;load&lt;/code&gt;.
-That didn&amp;#39;t work for me (but it might be because my plist file is too
+That didn&amp;#39;t work for me (but it might be because my &lt;code&gt;plist&lt;/code&gt; file is too
 primitive).&lt;/p&gt;
 &lt;p&gt;Similarly, you might read about the &lt;code&gt;unload&lt;/code&gt; command, but for me it always said
 that the agent wasn&amp;#39;t loaded. I guess that whenever if you use an agent to run a
 script that returns, the agent is not considered to be &amp;quot;loaded&amp;quot;.&lt;/p&gt;
-&lt;p&gt;Now, if you do need to debug issues with &lt;code&gt;launchctl&lt;/code&gt;, you can first check the
+&lt;p&gt;Now, if you do need to debug issues with &lt;code&gt;launchd&lt;/code&gt;, you can first check the
 &lt;code&gt;/tmp/startup.stdout&lt;/code&gt; and &lt;code&gt;/tmp/startup.stderr&lt;/code&gt; specified in the plist file.&lt;/p&gt;
-&lt;p&gt;You can also run &lt;code&gt;tail -f /var/log/system.log&lt;/code&gt; before y ou can the &lt;code&gt;load&lt;/code&gt;
-command in another shell. This will give you messages such as the following if
-things go wrong.&lt;/p&gt;
+&lt;p&gt;You can also run &lt;code&gt;tail -f /var/log/system.log&lt;/code&gt; before you run the &lt;code&gt;load&lt;/code&gt; command
+in another shell. This will give you messages such as the following if things go
+wrong.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Service could not initialize: 19D76: xpcproxy + 15636
 com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;parting-thoughts&quot;&gt;Parting Thoughts&lt;/h2&gt;
 &lt;p&gt;When I started my &amp;quot;quest&amp;quot; for a quick daemon setup, I didn&amp;#39;t think it would end
@@ -405,19 +448,19 @@ depths seems like a recurring theme on this blog and in my life).&lt;/p&gt;
 &lt;p&gt;Truth be told, this was a lot of fun. The issues I encountered were just right
 for my skill level to solve.&lt;/p&gt;
 &lt;p&gt;That being said, this still shows how arcane shell logic, and especially the
-bash language can be. I&amp;#39;ve said to whomever could hear that I prefer to use some
-scripting language (Ruby, Python, Javascript) rather than bash.&lt;/p&gt;
+Bash language can be. I&amp;#39;ve said to whomever could hear that I prefer to use some
+scripting language (Ruby, Python, Javascript) rather than Bash.&lt;/p&gt;
 &lt;p&gt;I didn&amp;#39;t take my own advice because I thought this would be as simple as
 cobbling a couple of commands together. Ha ha.&lt;/p&gt;
 &lt;p&gt;Would it have been easier with a proper language though? Well, it would have
 alleviated the quoting issues. While the issue is not super difficult and the
 fix is simple, understanding and debugging it took quite some time. Option
 handling would also probably haven been slightly easier. A lot of the other
-difficulties were shell-specific though, so I&amp;#39;m sure it would have bought so
-much in this case.&lt;/p&gt;
+difficulties were shell-specific though, so I&amp;#39;m not so sure it would have bought
+&lt;em&gt;so much&lt;/em&gt; time in this case.&lt;/p&gt;
 &lt;p&gt;Finally, if you absolutely have to work in Bash, you could do worse than check
 the &lt;a href=&quot;https://github.com/dylanaraps/pure-bash-bible&quot;&gt;Pure Bash Bible&lt;/a&gt; to see if it includes a recipe for whatever you&amp;#39;re trying
-to achieve. I&amp;#39;m also re-plugging the &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;shell initializatio guide&lt;/a&gt;.&lt;/p&gt;
+to achieve. I&amp;#39;m also re-plugging the &lt;a href=&quot;https://github.com/rbenv/rbenv/wiki/Unix-shell-initialization&quot;&gt;shell initialization guide&lt;/a&gt;.&lt;/p&gt;
       </description>
       <pubDate>2020-02-28T23:00:00.000Z</pubDate>
       <link>http://norswap.com/unix-daemons</link>

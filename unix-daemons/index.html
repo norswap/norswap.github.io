@@ -228,10 +228,10 @@ tiny bit more economical.</p>
 <p>It&#39;s time for a little confession: <code>repeat</code> and <code>remain</code> are not entirely robust
 as-is.</p>
 <p>Consider that we want to use <code>remain</code> with <code>repeat</code>:</p>
-<pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code></pre><p>What happens is that the <code>bash -c</code> line expands to <code>bash -c &#39;repeat echo &quot;x&quot; |
-cat -n&#39;</code> — the outer quotes have been stripped! This will misbeheave in repeat,
-producing the wrong <code>1 x</code>, <code>2 x</code> (etc) output rather than straight <code>1 x</code> each
-time.</p>
+<pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code></pre><p>What happens is that the <code>bash -c &quot;$*&quot;</code> line in <code>remain</code> expands to something
+equivalent to <code>bash -c &#39;repeat echo &quot;x&quot; | cat -n&#39;</code> — the outer quotes have been
+stripped! This will misbeheave in repeat, producing the wrong <code>1 x</code>, <code>2 x</code> (etc)
+output rather than straight <code>1 x</code> each time.</p>
 <p>We cannot &quot;just&quot; use <code>&quot;$@&quot;</code> instead of <code>&quot;$*&quot;</code> either: <code>bash -c &quot;$@&quot;</code> would
 expand to <code>bash -c &#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code> — but <code>bash -c</code> expects a
 single argument!</p>
@@ -245,15 +245,50 @@ quotes!</p>
 <p>The solution is to re-insert the quotes manually. for this we introduce a
 function called <code>quote_args</code>, which takes a series of arguments and sets <code>ARGS</code>
 to the concatenation of all those arguments with quotes inserted around each of
-them.</p>
+them (excepted when there is a single argument).</p>
 <pre><code class="language-bash">quote_args() {
     ARGS=&#39;&#39;
+    # single argument: output directly
+    if [[ $# -eq 1 ]]; then
+        ARGS=&quot;$1&quot;
+        return
+    fi
+    # multiple arguments: quote each and output
     for ARG in &quot;$@&quot;; do
-        ARGS+=\&#39;$ARG\&#39;\ 
+        ARGS+=&quot;&#39;$ARG&#39;&quot;
     done
 }
 export -f quote_args</code></pre>
-<p>Then we can patch <code>repeat</code> and <code>remain</code> with it:</p>
+<p>Why add exception for single arguments? Consider the following examples given
+that we always quote even on single args:</p>
+<pre><code class="language-bash">always_quote_args echo hello
+
+bash -c &quot;$ARGS&quot;
+# 1.    &quot;expansion&quot;: bash -c &quot;&#39;echo&#39; &#39;hello&#39;&quot;
+#       output: &quot;hello&quot;
+
+bash -c $ARGS
+# 2.    &quot;expansion&quot;: bash -c &#39;echo&#39; &#39;hello&#39;
+#       output: &quot;&quot;
+
+always_quote_args &#39;echo hello&#39;
+
+bash -c &quot;$ARGS&quot;
+# 3.    &quot;expansion&quot;: bash -c &quot;&#39;echo hello&#39;&quot;
+#       output: bash: echo hello: command not found
+
+bash -c $ARGS
+# 4.    &quot;expansion&quot;: bash -c &#39;echo hello&#39;
+#       output: &quot;hello&quot;</code></pre>
+<p>(<em>Expansion</em> is quoted because again, bash does not expand to a textual
+representation, but to an internal representation tracking &quot;words&quot;.)</p>
+<p>We would like behaviour 1 and 4, meaning we need to know the number of arguments
+to know whether to quote <code>$ARGS</code>. So we move this choice into <code>quote_args</code>
+itself and now we should just always quote <code>$ARGS</code>.</p>
+<p>This is not always &quot;correct&quot; depending on what you need to do, but it&#39;s good for
+commands like <code>bash -c</code> that expect a command as a single argument. As always,
+the key is to understand what this is doing so you can reason about it.</p>
+<p>Now that we have <code>quote_args</code>, we can patch <code>repeat</code> and <code>remain</code> with it:</p>
 <pre><code class="language-bash">repeat() {
     local OPT OPTIND OPTARG T=3
     while getopts &quot;:t:&quot; OPT; do
@@ -276,11 +311,13 @@ remain() {
     exec bash
 }
 export -f remain</code></pre>
-<p>So in our example, we end up with <code>ARGS</code> containing <code>&#39;repeat&#39; &#39;echo &quot;x&quot; | cat
--n&#39;</code>. Using <code>&quot;$ARGS&quot;</code> then produces a single argument where the individual
-arguments are properly quoted: <code>&quot;&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;&quot;</code>. Note that in
-this case we are literally expanding to that, and that <code>quote_args</code> is not meant
-to be used with arguments that contain literal single quotes!</p>
+<p>So in our initial example (<code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code>), we end up with
+<code>ARGS</code> containing <code>&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code>. Using <code>&quot;$ARGS&quot;</code> within
+<code>remain</code> then produces a single argument where the individual arguments are
+properly quoted: <code>&quot;&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;&quot;</code>. (Note that in this case we
+are literally expanding to that, and that <code>quote_args</code> is not meant to be used
+with arguments that contain literal single quotes!) Within <code>repeat</code>, the single
+argument is note quoted again and passed to <code>bash -c</code> directly. It works!</p>
 <h2 id="putting-the-pieces-together">Putting the Pieces Together</h2>
 <p>Now that we have a repeating mechanism and one to be able to preserve the
 output, we still need to combine those things together, and then to combine them

@@ -249,10 +249,10 @@ Consider that we want to use `remain` with `repeat`:
 remain repeat 'echo "x" | cat -n'
 ```
 
-What happens is that the `bash -c` line expands to `bash -c 'repeat echo "x" |
-cat -n'` — the outer quotes have been stripped! This will misbeheave in repeat,
-producing the wrong `1 x`, `2 x` (etc) output rather than straight `1 x` each
-time.
+What happens is that the `bash -c "$*"` line in `remain` expands to something
+equivalent to `bash -c 'repeat echo "x" | cat -n'` — the outer quotes have been
+stripped! This will misbeheave in repeat, producing the wrong `1 x`, `2 x` (etc)
+output rather than straight `1 x` each time.
 
 We cannot "just" use `"$@"` instead of `"$*"` either: `bash -c "$@"` would
 expand to `bash -c 'repeat' 'echo "x" | cat -n'` — but `bash -c` expects a
@@ -269,19 +269,61 @@ quotes!
 The solution is to re-insert the quotes manually. for this we introduce a
 function called `quote_args`, which takes a series of arguments and sets `ARGS`
 to the concatenation of all those arguments with quotes inserted around each of
-them.
+them (excepted when there is a single argument).
 
 ```bash
 quote_args() {
     ARGS=''
+    # single argument: output directly
+    if [[ $# -eq 1 ]]; then
+        ARGS="$1"
+        return
+    fi
+    # multiple arguments: quote each and output
     for ARG in "$@"; do
-        ARGS+=\'$ARG\'\ 
+        ARGS+="'$ARG'"
     done
 }
 export -f quote_args
 ```
 
-Then we can patch `repeat` and `remain` with it:
+Why add exception for single arguments? Consider the following examples given
+that we always quote even on single args:
+
+```bash
+always_quote_args echo hello
+
+bash -c "$ARGS"
+# 1.    "expansion": bash -c "'echo' 'hello'"
+#       output: "hello"
+
+bash -c $ARGS
+# 2.    "expansion": bash -c 'echo' 'hello'
+#       output: ""
+
+always_quote_args 'echo hello'
+
+bash -c "$ARGS"
+# 3.    "expansion": bash -c "'echo hello'"
+#       output: bash: echo hello: command not found
+
+bash -c $ARGS
+# 4.    "expansion": bash -c 'echo hello'
+#       output: "hello"
+```
+
+(*Expansion* is quoted because again, bash does not expand to a textual
+representation, but to an internal representation tracking "words".)
+
+We would like behaviour 1 and 4, meaning we need to know the number of arguments
+to know whether to quote `$ARGS`. So we move this choice into `quote_args`
+itself and now we should just always quote `$ARGS`.
+
+This is not always "correct" depending on what you need to do, but it's good for
+commands like `bash -c` that expect a command as a single argument. As always,
+the key is to understand what this is doing so you can reason about it.
+
+Now that we have `quote_args`, we can patch `repeat` and `remain` with it:
 
 ```bash
 repeat() {
@@ -308,11 +350,13 @@ remain() {
 export -f remain
 ```
 
-So in our example, we end up with `ARGS` containing `'repeat' 'echo "x" | cat
--n'`. Using `"$ARGS"` then produces a single argument where the individual
-arguments are properly quoted: `"'repeat' 'echo "x" | cat -n'"`. Note that in
-this case we are literally expanding to that, and that `quote_args` is not meant
-to be used with arguments that contain literal single quotes!
+So in our initial example (`remain repeat 'echo "x" | cat -n'`), we end up with
+`ARGS` containing `'repeat' 'echo "x" | cat -n'`. Using `"$ARGS"` within
+`remain` then produces a single argument where the individual arguments are
+properly quoted: `"'repeat' 'echo "x" | cat -n'"`. (Note that in this case we
+are literally expanding to that, and that `quote_args` is not meant to be used
+with arguments that contain literal single quotes!) Within `repeat`, the single
+argument is note quoted again and passed to `bash -c` directly. It works!
 
 ## Putting the Pieces Together
 

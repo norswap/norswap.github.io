@@ -486,7 +486,7 @@ warmups (current: 4x25x27.3).&lt;/li&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Lying Face Pulls&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;[single-rope elbow-first style][style 1]&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://youtu.be/2Vprklw8cu8?t=430&quot;&gt;single-rope elbow-first style&lt;/a&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;start:&lt;/strong&gt; 3x12x59&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;peak:&lt;/strong&gt; 3x12x77&lt;/li&gt;
 &lt;/ul&gt;
@@ -1710,7 +1710,7 @@ Basically, you should be fine for all the nutrients not covered, especially if
 you drink milk regularly. If not, maybe just check your iodine intake.&lt;/p&gt;
 &lt;p&gt;If you want to make your own spreadsheet, it&amp;#39;s also possible! Fork this
 &lt;a href=&quot;https://observablehq.com/@norswap/nutrition-spreadsheet&quot;&gt;Observable notebook&lt;/a&gt; and follow the instructions under the
-&amp;quot;Setup&amp;quot; heading to create your own.&lt;/p&gt;
+&amp;quot;Setup&amp;quot; heading to create your own (for posterity, the code is also &lt;a href=&quot;nutrients-spreadsheet.tgz&quot;&gt;archived here&lt;/a&gt;).&lt;/p&gt;
 &lt;h2 id=&quot;misc-remarks-nutrients--bio-availability&quot;&gt;Misc Remarks: Nutrients &amp;amp; Bio-Availability&lt;/h2&gt;
 &lt;p&gt;An obvious question about this kind of analyzis is: are nutrients the only thing
 that matters? To which I&amp;#39;d tend to answer &amp;quot;mostly, but&amp;quot;.&lt;/p&gt;

@@ -78,12 +78,13 @@ you drink milk regularly. If not, maybe just check your iodine intake.
 
 If you want to make your own spreadsheet, it's also possible! Fork this
 [Observable notebook][public-notebook] and follow the instructions under the
-"Setup" heading to create your own.
+"Setup" heading to create your own (for posterity, the code is also [archived here]).
 
 [spreadsheet]: https://docs.google.com/spreadsheets/d/1f9kR2aJmVRCyRsmB-CXURuy2Y4zkysuoNfl9uOM7NLw/edit?usp=sharing
 [fitbit-sheet]: https://norswap.com/fitbit-google-sheets/
 [Food Data Central]: https://fdc.nal.usda.gov/index.html
 [public-notebook]: https://observablehq.com/@norswap/nutrition-spreadsheet
+[archived here]: nutrients-spreadsheet.tgz
 
 ## Misc Remarks: Nutrients & Bio-Availability
 

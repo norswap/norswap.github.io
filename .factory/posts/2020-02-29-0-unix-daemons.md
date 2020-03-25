@@ -122,13 +122,13 @@ somewhere on the path instead. Why?
 2. Functions are normally not inherited by sub-shells. In Bash, it's actually
    possible to export them anyway by using `export -f <function>`. And as we'll
    see later, we really want to use subshells.
-   
+
 This remark, aside, there is a couple improvements we might want to make to our
 function.
 
 First, we'd like to be able to pass an optional argument specifying the duration of
   the delay between two command runs.
-  
+
 Second, we'd like the command to be not only a simple command, but also a whole
 pipeline (including pipes `|` and redirects `>`). But if we try the naive way,
 we'll rune into a parser issue.
@@ -143,8 +143,8 @@ is not valid Bash syntax).
 How to pass a pipe then? We have to quote it, then pass it as a parameter to
 `bash -c`. e.g. `repeat 'echo "a" | cat -n'` This is by no means perfect — it
 gets annoying when dealing with commands that already have multiple level of
-quotations: for instance `echo "'a'"` should have been quoted `'echo "\'a\'"'`.
-But it's still a good step forward.
+quotations: for instance `echo "'a'"` should have been quoted as `'echo
+"\'a\'"'`. But it's still a good step forward.
 
 With all the considerations factored in, we get the following function:
 
@@ -184,7 +184,7 @@ with or without quoting whenever supported: `repeat echo "x"` or `repeat 'echo
 The alternative to `"$*"` is `"$@"` which expands to the same arguments, but
 quoted individually. Since `bash -c` expects a single argument, this wouldn't
 work when used without quotes. We'll however use `"$@"` later!
-      
+
 ## Getting The Process' Output
 
 A simple way to get the process' output even though it runs in the background is
@@ -199,17 +199,17 @@ This has, however, two slight issues:
 - The logs are lost in case the machine shuts down. Here, simply using the `tee`
   command ([manpage][mantee]) works: `<command> | tee logfile` enables us to
   benefit from both logs and screen output.
-  
+
 [mantee]: http://man7.org/linux/man-pages/man1/tee.1.html
 
 - If the command terminates, then the screen shuts down and the output is lost.
   Not necessarily a problem if you log, but it is if you don't.
-  
+
 (At this point, I'll note that for my proxy I don't really care about long-time
 logs, I just want to be able to know what's happening *right now*, sometimes.
 Also proper log management requires some thought, as "just append forever" might
 work in practice, but it makes fussy me shudder.)
-  
+
 To solve that second issue, I introduced a function called `remain`, which would
 take a command as parameter (much like `repeat`) and run a shell once that
 command exited.
@@ -217,7 +217,7 @@ command exited.
 You can actually achieve that quite easily with just `<command>; bash`, as long
 as the command exits by itself. By hitting `ctrl+c` in the screen (and thus
 sending `SIGINT`), you'll shut down the whole chain, just like in a regular
-shell. 
+shell.
 
 But imagine you want to kill the command, while still being able to peruse the
 output in the shell? (Again, quite relevant to my use case: stop trying to
@@ -251,8 +251,8 @@ remain repeat 'echo "x" | cat -n'
 
 What happens is that the `bash -c "$*"` line in `remain` expands to something
 equivalent to `bash -c 'repeat echo "x" | cat -n'` — the outer quotes have been
-stripped! This will misbeheave in repeat, producing the wrong `1 x`, `2 x` (etc)
-output rather than straight `1 x` each time.
+stripped! This will misbeheave in `repeat`, producing the wrong `1 x`, `2 x`
+(etc) output rather than straight `1 x` each time.
 
 We cannot "just" use `"$@"` instead of `"$*"` either: `bash -c "$@"` would
 expand to `bash -c 'repeat' 'echo "x" | cat -n'` — but `bash -c` expects a

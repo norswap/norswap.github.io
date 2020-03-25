@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; A ps / pkill / pgrep Alternative
+  </title>
+  <link rel="stylesheet" href="/assets/poole.css">
+  <link rel="stylesheet" href="/assets/syntax.css">
+  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">A ps / pkill / pgrep Alternative</h1>
+      <span class="post-date">25 Mar 2020</span>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
+
+<p>As I was prepping my new computer, and <a href="/unix-daemons/">toying with unix daemons</a>, I found
+myself checking on running processes regularly, and occasionally killing them. I
+also found myself being quite frustrated with the tools provided by the system
+for this purpose.</p>
+<h2 id="checking-processes">Checking Processes</h2>
+<p>To check what a process is up to (or if it is running at all), you&#39;d run a
+command like this (here, assuming I&#39;m interested in the status of the <code>sleep</code>
+process):</p>
+<pre><code class="language-bash">$ ps aux | grep sleep
+# norswap    58694   0.0  0.0  4399328    728 s006  S+    2:26PM   0:00.00 grep sleep
+# norswap    58686   0.0  0.0  4268240    576 s003  S+    2:26PM   0:00.00 sleep 300</code></pre>
+<p>This is an incantation I&#39;ve personally memorized a long time ago. I didn&#39;t even
+remember what those <code>aux</code> flags meant.</p>
+<p>(As it turns out, omitting the dash (<code>-</code>) toggles legacy mode, in which <code>u</code>
+displays more info. <code>a</code> and <code>x</code> work like they do with a dash, respectively
+displaying processes from all users and showing processes that are not attached
+to a controlling terminal.)</p>
+<p>This is less than ideal. For one, the output includes a line that matches the
+<code>grep</code> command itself!</p>
+<p>Here is the remedy, where <code>grep -v</code> excludes matching lines (and no, there is no
+easy way to merge the two <code>grep</code> commands):</p>
+<pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep foobar</code></pre>
+<p>Frankly, not something you&#39;d want to type each time.</p>
+<p>Another thing that bothers me is: what are all these numbers and letters? Do I
+care?</p>
+<p>Let&#39;s start by omitting our legacy <code>u</code> option. Then, by default (at leasts on
+stock macOS Catalina!), you&#39;ll get the following fields:</p>
+<pre><code class="language-bash">$ ps ax | head -1
+#  PID   TT  STAT      TIME COMMAND</code></pre>
+<p>You should know what the <code>PID</code> is (the process ID), <code>TT</code> is an identifier for
+the controlling terminal (e.g. <code>s006</code>) or <code>??</code> if there are no controlling
+terminal.</p>
+<p>The <code>STAT</code> column lists flags that gives information on the status of the
+process. Info about which can be found under the &quot;state&quot; heading when running
+<code>man ps</code> on my mac:</p>
+<pre><code class="language-none">state     The state is given by a sequence of characters, for example, ``RWNA&#39;&#39;.
+          The first character indicates the run state of the process:
+
+  I       Marks a process that is idle (sleeping for longer than about 20 seconds).
+  R       Marks a runnable process.
+  S       Marks a process that is sleeping for less than about 20 seconds.
+  T       Marks a stopped process.
+  U       Marks a process in uninterruptible wait.
+  Z       Marks a dead process (a ``zombie&#39;&#39;).
+
+  Additional characters after these, if any, indicate additional state information:
+
+  +       The process is in the foreground process group of its control terminal.
+  &lt;       The process has raised CPU scheduling priority.
+  &gt;       The process has specified a soft limit on memory requirements and is currently
+          exceeding that limit; such a process is (necessarily) not swapped.
+  A       the process has asked for random page replacement (VA_ANOM, from vadvise(2), for
+          example, lisp(1) in a garbage collect).
+  E       The process is trying to exit.
+  L       The process has pages locked in core (for example, for raw I/O).
+  N       The process has reduced CPU scheduling priority (see setpriority(2)).
+  S       The process has asked for FIFO page replacement (VA_SEQL, from vadvise(2), for
+          example, a large image processing program using virtual memory to sequentially
+          address voluminous data).
+  s       The process is a session leader.
+  V       The process is suspended during a vfork(2).
+  W       The process is swapped out.
+  X       The process is being traced or debugged.</code></pre>
+<p>There is a different output (probably Linux) <a href="https://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean#360253">listed in this StackOverflow
+answer</a> that you might find handy.</p>
+<p>The <code>TIME</code> column: the CPU time the process has consumed since it started, in
+<code>&lt;hours&gt;:&lt;minutes&gt;.&lt;second&gt;</code> format.</p>
+<p>And finally the <code>COMMAND</code> itself.</p>
+<h2 id="the-system-has-you-covered-maybe">The System Has You Covered... Maybe?</h2>
+<p>So of course, the double <code>grep</code> thing is insane. I think some people might have
+some point have recognized this. What did these good souls do? Come up with
+<code>pgrep</code>, of course!</p>
+<pre><code class="language-bash">$ pgrep sleep
+# 58686</code></pre>
+<p>The number printed out is the PID of matched processes. That <code>pgrep sleep</code>
+command is approximately equivalent to the following full pipe:</p>
+<pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep sleep | awk &#39;{ print $1 }&#39;
+# 58686</code></pre>
+<p>But not exactly. On the plus side, it&#39;s slightly more robust, for instance it
+wouldn&#39;t ignore entries in the very unlikely scneario where entries of interest
+contain the &quot; grep &quot; string. <code>pgrep</code> just ignores its own process and that&#39;s it.</p>
+<p>Also, by default <code>pgrep</code> only matches on the program name and not on the
+arguments.</p>
+<p>On the other hand, you&#39;ve now lost all ability to get any other information
+about the process, which sucks.</p>
+<p>Pointedly, it even sucks if all you want to do is find the PID of a process in
+order to kill it! You might have caught the wrong process, but since its name is
+not displayed, you&#39;ll never find out. And if your query matches more than one
+process, you don&#39;t have any visual feedback on how to refine the search.</p>
+<p>Ok, so <code>pgrep</code> does have a <code>-l</code> flag that will print out the name of the process
+(and the arguments if <code>-f</code>, which makes it match on the arguments as well, is
+given). But there are no flags to retrieve any other piece of information.</p>
+<h2 id="killing-processes">Killing Processes</h2>
+<p>Once you have the PID, it&#39;s quite easy. Just <code>kill -9 &lt;PID&gt;</code>.</p>
+<p>One way to do it is to run a <code>grep</code> (or <code>pgrep</code>) command and copy the PID by
+hand.</p>
+<p>Another way is use some piping:</p>
+<pre><code class="language-bash">$ ps -ax | grep sleep # identify process
+$ ps -ax | grep sleep | grep -v &quot; grep &quot; | awk &#39;{ print $1 }&#39; | xargs kill -9 # kill it</code></pre>
+<p>Adding <code>awk &#39;{ print $1 }&#39;</code> outputs the first column (the PIDs), while <code>xargs</code>
+transmits them to <code>kill -9</code> as arguments.</p>
+<p>Or using <code>pgrep</code>:</p>
+<pre><code class="language-bash">$ pgrep -l sleep # identify process
+$ pkill !* # kill it</code></pre>
+<p>Here the trick is <code>!*</code> which passes the same arguments as the previous command
+ (<code>pgrep</code>) to <code>pkill</code>. <code>pkill</code> is <code>pgrep</code>&#39;s cousin, which instead of printing
+ the matched PIDs, kills them.</p>
+<p>Of course, we could also have used <code>xargs kill -9</code> here.</p>
+<h2 id="an-api-and-a-tool">An API, and a Tool</h2>
+<p><code>pgrep</code> and <code>pkill</code> kinda work, but they lose something nice about the original
+<code>ps</code>: it can be used to get a lot of information about a process, not just its
+PID and name.</p>
+<p>Essentially, what we would like is a command that is able to:</p>
+<ol>
+<li>Match processes using any of its properties (or &quot;fields&quot; as I called them
+before. <code>pgrep</code> and <code>pkill</code> can do this (via various flags).</li>
+<li>Display properties of interest. <code>ps</code> can do this (via its <code>-o</code> flag).</li>
+</ol>
+<p>Moreover I&#39;d like a tool I can use at the command line easily. It should have
+good defaults and enable frequent workflows easily, while supporting
+customization.</p>
+<p>But I&#39;d also like it to be a building block, either as a way to query processes
+which I can use in elaborate scripts, or as a reusable component for other
+interactive commands. As we&#39;ll see, there are a few niceties we can add to that
+effect (match coloring, output truncation, ...).</p>
+<p>I made this tool, and named it <code>nps</code> (of course).</p>
+<h2 id="nps-basic-features"><code>nps</code>: Basic Features</h2>
+<p>(Wanna see the code? <a href="https://gist.github.com/norswap/3506d2b46102c2f32f18acced0ecd798">It&#39;s here.</a>)</p>
+<p>I want the command to match only my processes by default, but always also the
+processes that don&#39;t have controlling terminals. The same switch as regular <code>ps</code>
+(<code>-a</code>) can be added to get the processes from all users.</p>
+<p>By default I only want the PID and the command name, because that&#39;s what I care
+about 99% of the time. But I want the ability to request other informations,
+this is done through the <code>-o</code> flag followed by a comma-separated set of field
+specifiers described in <code>man ps</code>, the whole list of which can be obtained by
+running <code>ps -L</code> or <code>nps -l</code>. So if you just need the PID, you&#39;d use <code>-o pid</code>. If
+you just need to lookup some frequently used info, I included the verbose <code>-v</code>
+flag, which acts like the <code>ps -j</code> flag, though implemented in terms of <code>-o
+&#39;user, pid, ppid, pgid, sess, jobc, state, tt, time, command&#39;</code>, which are the
+displayed fields.</p>
+<p>In terms of matching, the command defaults to case-insensitive matching for
+faster typing, but case-sensitivity can be obtained with the <code>-s</code> flag. <code>nps</code>
+matches on the command name and PID, but it&#39;s possible to specify the matching
+criteria using the <code>-m</code> flag (whose argument is similar to that of the <code>-o</code>
+flag). As a special case, if you specify <code>-m pid</code>, <code>nps</code> only matches on entire
+PIDs, as it&#39;s pretty much useless to match only part of the PID.</p>
+<h2 id="improving-output">Improving Output</h2>
+<p>Further improvements are concerned with output. <code>nps</code> detects whether its output
+is directed towards a terminal, and if that&#39;s the case enable <code>grep</code> output
+colorization so that you can quickly identify what was matched. You can also
+specify the <code>--color</code> flag which forces colorizaton even when <code>nps</code> is piped to
+a file or other process (this will leave terminal color codes in the output).</p>
+<p>Similarly, <code>nps</code> follows after <code>ps</code> and clips command names if the output is a
+terminal. However, this too can be controlled: use <code>--full</code> to always output
+full command names, and <code>--clip</code> to always clip them. Note that the clip length
+depends on the size of the terminal <code>nps</code> is running in!</p>
+<p>Another related concern use is the inclusion of a header. By default, <code>ps</code> will
+include a line with the name of all fields (columns) on display. This can be
+useful on the terminal when displaying a lot of fields (e.g. <code>nps -v</code>) but not
+otherwise, and while used in scripts it&#39;s a nuisance to be parsed away. <code>nps</code>
+hides the header by default, but it can be included back with the <code>--header</code>
+option.</p>
+<h2 id="killing-processes-with-nps">Killing Processes with <code>nps</code></h2>
+<p>Killing processes? Easy peezy, lemon squeezy, just add the <code>-k</code> flag:</p>
+<pre><code class="language-bash">$ nps -k sleep
+# 60772 sleep 300</code></pre>
+<p><code>nps</code> still prints the matched processes, which it also kills. Note it may fail
+to kill the matched processes! If the exit code is 0 when using <code>-k</code>, it means
+that all matched processes were killed (or that no process was matched).</p>
+<p>As an aside, it&#39;s rather difficult to make the decision of what to return when
+no process is matched. On the one hand, all <em>matched</em> processes (i.e. none) were
+successfully killed. On the other hand, if you emit the command, you might
+expect it to kill something. I opted for to return 0 when no process is matched
+with <code>-k</code> (while usually it would be 1), because it makes the command
+<a href="https://en.wikipedia.org/wiki/Idempotence">idempotent</a>, a very useful property when writing scripts.</p>
+<p>It might be slightly better if <code>nps</code> reported on exactly which process were
+killed and which lived on, though re-running <code>nps</code> (without <code>-k</code>) can easily
+help determine which process are still alive, so all in all not a crucial
+feature.</p>
+<h2 id="argument-processing">Argument Processing</h2>
+<p>It&#39;s interesting to look at how <code>nps</code> processes it&#39;s arguments. Unlike most
+commands, options can be freely mixed with regular arguments (which are passed
+to <code>grep</code> for matching purposes). One advantage is that if you want to kill a
+process, you can first verify your query, then kill the process by appening the
+<code>-k</code> flag:</p>
+<pre><code class="language-bash">$ nps foobar
+# 59325 sleep 300
+# # (press up, type &#39; -k&#39;)
+$ nps foobar -k
+# 59325 sleep 300</code></pre>
+<p>If you use an unknown flag (e.g. <code>-z</code> or <code>--foobar</code>), <code>nps</code> will display its
+help and exit with code 1. But what if you want to match flags — a totally
+reasonable thing to do? Then you need to put those flags at the end, <em>after</em> the
+special <code>--</code> separator:</p>
+<pre><code class="language-bash">$ nps -- -li
+# 2043 bash -li
+#  519 bash -li</code></pre>
+<p>I think it would be <em>slightly</em> better if one could still have regular options
+after. We could imagine to bracket sensitive options with <code>--</code>: <code>nps -- -li --
+-k</code>, but then we also need a way to specify we want to match <code>--</code> itself,
+probably as a special flag (e.g. <code>--sep</code>). This is a pretty big change to the
+script for little benefits, so I&#39;m holding out for now.</p>
+<p>All the &quot;search&quot; arguments are collected in order and merged (separated by a
+whitespace). So in reality, it doesn&#39;t really make sense to have more than one,
+though it can be convenient to type <code>nps sleep 300</code> rather than <code>nps &#39;sleep
+300&#39;</code>.</p>
+<h2 id="regular-expressions-and-return-code">Regular Expressions, and Return Code</h2>
+<p>The final search parameter (obtained through argument processing as described in
+the last section) will be used as a <a href="https://www.regular-expressions.info/posix.html">Posix extended regular expression
+(ERE)</a>.</p>
+<p>This is something to keep in mind when you special characters which might need
+to be quoted. For instance, to search for an interrogation mark: <code>nps &#39;\?&#39;</code>.</p>
+<p>For instance, the following command will match and highlight all string literals
+in running commands arguments:</p>
+<pre><code class="language-bash">$ nps &#39;&quot;.*&quot;&#39;</code></pre>
+<p>As for the return code, <code>nps</code> returns 0 if it matched processes, 1 otherwise.
+This is different when using the <code>-k</code> flag, as discussed above.</p>
+<h2 id="potential-pitfalls">Potential Pitfalls</h2>
+<p><code>nps</code> was only tested on macOS Catalina, and given how finicky these things are,
+it&#39;s almost sure not to work out of the box on Linux.</p>
+<p>In particular, the <code>script</code> command appears different in <a href="http://man7.org/linux/man-pages/man1/script.1.html">Linux</a>
+than in <a href="https://www.unix.com/man-page/mojave/1/script/">macOS</a>.</p>
+<h2 id="getting-nps">Getting <code>nps</code></h2>
+<p><a href="https://gist.github.com/norswap/3506d2b46102c2f32f18acced0ecd798"><code>nps</code> can be found in this Gist</a>. Because it&#39;s short, I&#39;m also
+joining a copy below:</p>
+<pre><code class="language-bash">#!/bin/bash
+
+### --- Constants ---
+
+SCRIPT_CMD=&#39;script -q /dev/null&#39;
+TAIL_CMD=&#39;tail -n +2&#39;
+
+### --- Parameters ---
+
+ALL=&#39;&#39;     # flag to match all users process
+CASE=&#39;-i&#39;  # flag for case-insensitive matches
+KILL=0     # if 1, kill matched processes
+
+# ps fields to match on
+MATCH_FIELDS=&#39;-o pid,command&#39;
+
+# ps fields to output
+OUTPUT_FIELDS=&#39;-o pid,command&#39;
+
+# command used to strip the header (or not)
+STRIP_HEADER=&quot;$TAIL_CMD&quot;
+
+if [[ -t 1 ]]; then
+    COLOR=&#39;--color=always&#39;  # whether to colorize output
+    CLIP=&quot;$SCRIPT_CMD&quot;      # command to clip command names (or not)
+else
+    COLOR=&#39;--color=none&#39;
+    CLIP=&#39;&#39;
+fi
+
+### --- Help ---
+
+help() {
+    echo -e &quot;Usage: nps &lt;opts or search terms&gt; [-- &lt;search terms&gt;]\n&quot; \
+    &quot;  Print processes.\n&quot; \
+    &quot;    -a: include processes from [a]ll users\n&quot; \
+    &quot;    -s: case-sensitive match\n&quot; \
+    &quot;    -k: [k]ill the mached processes\n&quot; \
+    &quot;    -h: print this [h]elp and exit\n&quot; \
+    &quot;    -l: print the [l]ist of selectable fields and exit\n&quot; \
+    &quot;    -m &lt;fields&gt;: specify comma-separated list of field to [m]atch on\n&quot; \
+    &quot;       If specifying only &#39;-m pid&#39;, only matches entired PIDs. \n&quot; \
+    &quot;    -o &lt;fields&gt;: specify comma-separated list of fields to [o]utput\n&quot; \
+    &quot;    -v: [v]erbose output, equivalent to\n&quot; \
+    &quot;        -o &#39;user, pid, ppid, pgid, sess ,jobc, state, tt, time, command&#39; \n&quot; \
+    &quot;    --color: [c]olorize output even when piping to programs\n&quot; \
+    &quot;    --header: include fields (columns) header in output\n&quot; \
+    &quot;    --full: output full command name even if stdout is a terminal\n&quot; \
+    &quot;    --clip: output clipped command name even if stdout is not a terminal\n&quot; \
+    &quot;    --version: print version and exit\n&quot;;
+}
+
+### --- Arg Parsing ---
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do case &quot;$1&quot; in
+    -a)  ALL=&#39;-a&#39;;;
+    -s)  CASE=&#39;&#39;;;
+    -v)  OUTPUT_FIELDS=&quot;-o user, pid, ppid, pgid, sess, jobc, state, tt, time, command&#39;&quot;;;
+    -o)  OUTPUT_FIELDS=&quot;-o $2&quot;; shift;;
+    -m)   MATCH_FIELDS=&quot;-o $2&quot;; shift;;
+    -k)  KILL=1;;
+    -l)         ps -L; exit;;
+    -h|--help)  help; exit;;
+    --)         shift; break;;
+
+    --color)    COLOR=&#39;--color=always&#39;;;
+    --header)   STRIP_HEADER=&#39;cat&#39;;;
+    --full)     CLIP=&#39;&#39;;;
+    --clip)     CLIP=&quot;$SCRIPT_CMD&quot;;;
+    --version)  echo 2020.03.22; exit;;
+    -*)         help; exit 1;;
+
+     *)  POSITIONAL+=(&quot;$1&quot;);;
+    esac
+    shift
+done
+set -- &quot;${POSITIONAL[@]}&quot; &quot;$@&quot; # restore positional parameters
+
+### --- Match PIDs ---
+
+filter_header_and_grep() {
+    $TAIL_CMD | grep -v &quot;$(which nps)&quot; | grep -v &quot; grep &quot;
+}
+select_pids() {
+    grep $CASE -E -- &quot;$*&quot; | awk &#39;{ print $1 }&#39;
+}
+
+# if matching on PID only, only match whole PIDs
+[[ &quot;$MATCH_FIELDS&quot; == &quot;-o pid&quot; ]] &amp;&amp; MATCH_FIELDS=-&quot;p $*&quot;
+
+# find matching PIDs
+PIDS=&quot;$(ps -x $ALL &quot;$MATCH_FIELDS&quot; | filter_header_and_grep | select_pids &quot;$*&quot;)&quot;
+
+# when no process is found: exit with 1, or with 0 when the -k flag is set
+[[ &quot;$PIDS&quot; == &#39;&#39; ]] &amp;&amp; { [[ $KILL == 1 ]]; exit $?; }
+
+### --- Output ---
+
+highlight_matches() {
+    if [[ &quot;$*&quot; == &#39;&#39; ]]; then cat; else grep $COLOR $CASE -E &quot;($*)|$&quot;; fi
+}
+
+# print with requested fields + highlighting
+# the tr command cleans up the script command output
+$CLIP ps -x &quot;$OUTPUT_FIELDS&quot; -p $PIDS | tr -d &#39;\r&#39; | $STRIP_HEADER | highlight_matches &quot;$*&quot;
+EXIT=$?
+
+### --- Kill ---
+
+# kill matched processes if requested
+if [[ $KILL == 1 ]]; then
+    kill -9 $PIDS
+    EXIT=$?
+fi
+
+exit $EXIT</code></pre>
+<script
+src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>
+<script
+src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/prism-autoloader.min.js'></script>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/nps-pkill-pgrep";
+        this.page.identifier = "nps-pkill-pgrep";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

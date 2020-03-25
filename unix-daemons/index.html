@@ -151,8 +151,8 @@ is not valid Bash syntax).</p>
 <p>How to pass a pipe then? We have to quote it, then pass it as a parameter to
 <code>bash -c</code>. e.g. <code>repeat &#39;echo &quot;a&quot; | cat -n&#39;</code> This is by no means perfect — it
 gets annoying when dealing with commands that already have multiple level of
-quotations: for instance <code>echo &quot;&#39;a&#39;&quot;</code> should have been quoted <code>&#39;echo &quot;\&#39;a\&#39;&quot;&#39;</code>.
-But it&#39;s still a good step forward.</p>
+quotations: for instance <code>echo &quot;&#39;a&#39;&quot;</code> should have been quoted as <code>&#39;echo
+&quot;\&#39;a\&#39;&quot;&#39;</code>. But it&#39;s still a good step forward.</p>
 <p>With all the considerations factored in, we get the following function:</p>
 <pre><code class="language-bash">repeat() {
     local OPT OPTIND OPTARG T=3
@@ -209,7 +209,7 @@ command exited.</p>
 <p>You can actually achieve that quite easily with just <code>&lt;command&gt;; bash</code>, as long
 as the command exits by itself. By hitting <code>ctrl+c</code> in the screen (and thus
 sending <code>SIGINT</code>), you&#39;ll shut down the whole chain, just like in a regular
-shell. </p>
+shell.</p>
 <p>But imagine you want to kill the command, while still being able to peruse the
 output in the shell? (Again, quite relevant to my use case: stop trying to
 connect to the proxy, but let me see what&#39;s going on.) Well that&#39;s possible too:</p>
@@ -230,8 +230,8 @@ as-is.</p>
 <p>Consider that we want to use <code>remain</code> with <code>repeat</code>:</p>
 <pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code></pre><p>What happens is that the <code>bash -c &quot;$*&quot;</code> line in <code>remain</code> expands to something
 equivalent to <code>bash -c &#39;repeat echo &quot;x&quot; | cat -n&#39;</code> — the outer quotes have been
-stripped! This will misbeheave in repeat, producing the wrong <code>1 x</code>, <code>2 x</code> (etc)
-output rather than straight <code>1 x</code> each time.</p>
+stripped! This will misbeheave in <code>repeat</code>, producing the wrong <code>1 x</code>, <code>2 x</code>
+(etc) output rather than straight <code>1 x</code> each time.</p>
 <p>We cannot &quot;just&quot; use <code>&quot;$@&quot;</code> instead of <code>&quot;$*&quot;</code> either: <code>bash -c &quot;$@&quot;</code> would
 expand to <code>bash -c &#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code> — but <code>bash -c</code> expects a
 single argument!</p>

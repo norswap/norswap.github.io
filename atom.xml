@@ -6,6 +6,362 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>A ps / pkill / pgrep Alternative</title>
+      <description>
+&lt;link href=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css&#39; rel=&#39;stylesheet&#39; /&gt;
+
+&lt;p&gt;As I was prepping my new computer, and &lt;a href=&quot;/unix-daemons/&quot;&gt;toying with unix daemons&lt;/a&gt;, I found
+myself checking on running processes regularly, and occasionally killing them. I
+also found myself being quite frustrated with the tools provided by the system
+for this purpose.&lt;/p&gt;
+&lt;h2 id=&quot;checking-processes&quot;&gt;Checking Processes&lt;/h2&gt;
+&lt;p&gt;To check what a process is up to (or if it is running at all), you&amp;#39;d run a
+command like this (here, assuming I&amp;#39;m interested in the status of the &lt;code&gt;sleep&lt;/code&gt;
+process):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ ps aux | grep sleep
+# norswap    58694   0.0  0.0  4399328    728 s006  S+    2:26PM   0:00.00 grep sleep
+# norswap    58686   0.0  0.0  4268240    576 s003  S+    2:26PM   0:00.00 sleep 300&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is an incantation I&amp;#39;ve personally memorized a long time ago. I didn&amp;#39;t even
+remember what those &lt;code&gt;aux&lt;/code&gt; flags meant.&lt;/p&gt;
+&lt;p&gt;(As it turns out, omitting the dash (&lt;code&gt;-&lt;/code&gt;) toggles legacy mode, in which &lt;code&gt;u&lt;/code&gt;
+displays more info. &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;x&lt;/code&gt; work like they do with a dash, respectively
+displaying processes from all users and showing processes that are not attached
+to a controlling terminal.)&lt;/p&gt;
+&lt;p&gt;This is less than ideal. For one, the output includes a line that matches the
+&lt;code&gt;grep&lt;/code&gt; command itself!&lt;/p&gt;
+&lt;p&gt;Here is the remedy, where &lt;code&gt;grep -v&lt;/code&gt; excludes matching lines (and no, there is no
+easy way to merge the two &lt;code&gt;grep&lt;/code&gt; commands):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ ps -ax | grep -v &amp;quot; grep &amp;quot; | grep foobar&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Frankly, not something you&amp;#39;d want to type each time.&lt;/p&gt;
+&lt;p&gt;Another thing that bothers me is: what are all these numbers and letters? Do I
+care?&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s start by omitting our legacy &lt;code&gt;u&lt;/code&gt; option. Then, by default (at leasts on
+stock macOS Catalina!), you&amp;#39;ll get the following fields:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ ps ax | head -1
+#  PID   TT  STAT      TIME COMMAND&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You should know what the &lt;code&gt;PID&lt;/code&gt; is (the process ID), &lt;code&gt;TT&lt;/code&gt; is an identifier for
+the controlling terminal (e.g. &lt;code&gt;s006&lt;/code&gt;) or &lt;code&gt;??&lt;/code&gt; if there are no controlling
+terminal.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;STAT&lt;/code&gt; column lists flags that gives information on the status of the
+process. Info about which can be found under the &amp;quot;state&amp;quot; heading when running
+&lt;code&gt;man ps&lt;/code&gt; on my mac:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-none&quot;&gt;state     The state is given by a sequence of characters, for example, ``RWNA&amp;#39;&amp;#39;.
+          The first character indicates the run state of the process:
+
+  I       Marks a process that is idle (sleeping for longer than about 20 seconds).
+  R       Marks a runnable process.
+  S       Marks a process that is sleeping for less than about 20 seconds.
+  T       Marks a stopped process.
+  U       Marks a process in uninterruptible wait.
+  Z       Marks a dead process (a ``zombie&amp;#39;&amp;#39;).
+
+  Additional characters after these, if any, indicate additional state information:
+
+  +       The process is in the foreground process group of its control terminal.
+  &amp;lt;       The process has raised CPU scheduling priority.
+  &amp;gt;       The process has specified a soft limit on memory requirements and is currently
+          exceeding that limit; such a process is (necessarily) not swapped.
+  A       the process has asked for random page replacement (VA_ANOM, from vadvise(2), for
+          example, lisp(1) in a garbage collect).
+  E       The process is trying to exit.
+  L       The process has pages locked in core (for example, for raw I/O).
+  N       The process has reduced CPU scheduling priority (see setpriority(2)).
+  S       The process has asked for FIFO page replacement (VA_SEQL, from vadvise(2), for
+          example, a large image processing program using virtual memory to sequentially
+          address voluminous data).
+  s       The process is a session leader.
+  V       The process is suspended during a vfork(2).
+  W       The process is swapped out.
+  X       The process is being traced or debugged.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There is a different output (probably Linux) &lt;a href=&quot;https://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean#360253&quot;&gt;listed in this StackOverflow
+answer&lt;/a&gt; that you might find handy.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;TIME&lt;/code&gt; column: the CPU time the process has consumed since it started, in
+&lt;code&gt;&amp;lt;hours&amp;gt;:&amp;lt;minutes&amp;gt;.&amp;lt;second&amp;gt;&lt;/code&gt; format.&lt;/p&gt;
+&lt;p&gt;And finally the &lt;code&gt;COMMAND&lt;/code&gt; itself.&lt;/p&gt;
+&lt;h2 id=&quot;the-system-has-you-covered-maybe&quot;&gt;The System Has You Covered... Maybe?&lt;/h2&gt;
+&lt;p&gt;So of course, the double &lt;code&gt;grep&lt;/code&gt; thing is insane. I think some people might have
+some point have recognized this. What did these good souls do? Come up with
+&lt;code&gt;pgrep&lt;/code&gt;, of course!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ pgrep sleep
+# 58686&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The number printed out is the PID of matched processes. That &lt;code&gt;pgrep sleep&lt;/code&gt;
+command is approximately equivalent to the following full pipe:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ ps -ax | grep -v &amp;quot; grep &amp;quot; | grep sleep | awk &amp;#39;{ print $1 }&amp;#39;
+# 58686&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But not exactly. On the plus side, it&amp;#39;s slightly more robust, for instance it
+wouldn&amp;#39;t ignore entries in the very unlikely scneario where entries of interest
+contain the &amp;quot; grep &amp;quot; string. &lt;code&gt;pgrep&lt;/code&gt; just ignores its own process and that&amp;#39;s it.&lt;/p&gt;
+&lt;p&gt;Also, by default &lt;code&gt;pgrep&lt;/code&gt; only matches on the program name and not on the
+arguments.&lt;/p&gt;
+&lt;p&gt;On the other hand, you&amp;#39;ve now lost all ability to get any other information
+about the process, which sucks.&lt;/p&gt;
+&lt;p&gt;Pointedly, it even sucks if all you want to do is find the PID of a process in
+order to kill it! You might have caught the wrong process, but since its name is
+not displayed, you&amp;#39;ll never find out. And if your query matches more than one
+process, you don&amp;#39;t have any visual feedback on how to refine the search.&lt;/p&gt;
+&lt;p&gt;Ok, so &lt;code&gt;pgrep&lt;/code&gt; does have a &lt;code&gt;-l&lt;/code&gt; flag that will print out the name of the process
+(and the arguments if &lt;code&gt;-f&lt;/code&gt;, which makes it match on the arguments as well, is
+given). But there are no flags to retrieve any other piece of information.&lt;/p&gt;
+&lt;h2 id=&quot;killing-processes&quot;&gt;Killing Processes&lt;/h2&gt;
+&lt;p&gt;Once you have the PID, it&amp;#39;s quite easy. Just &lt;code&gt;kill -9 &amp;lt;PID&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;One way to do it is to run a &lt;code&gt;grep&lt;/code&gt; (or &lt;code&gt;pgrep&lt;/code&gt;) command and copy the PID by
+hand.&lt;/p&gt;
+&lt;p&gt;Another way is use some piping:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ ps -ax | grep sleep # identify process
+$ ps -ax | grep sleep | grep -v &amp;quot; grep &amp;quot; | awk &amp;#39;{ print $1 }&amp;#39; | xargs kill -9 # kill it&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Adding &lt;code&gt;awk &amp;#39;{ print $1 }&amp;#39;&lt;/code&gt; outputs the first column (the PIDs), while &lt;code&gt;xargs&lt;/code&gt;
+transmits them to &lt;code&gt;kill -9&lt;/code&gt; as arguments.&lt;/p&gt;
+&lt;p&gt;Or using &lt;code&gt;pgrep&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ pgrep -l sleep # identify process
+$ pkill !* # kill it&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here the trick is &lt;code&gt;!*&lt;/code&gt; which passes the same arguments as the previous command
+ (&lt;code&gt;pgrep&lt;/code&gt;) to &lt;code&gt;pkill&lt;/code&gt;. &lt;code&gt;pkill&lt;/code&gt; is &lt;code&gt;pgrep&lt;/code&gt;&amp;#39;s cousin, which instead of printing
+ the matched PIDs, kills them.&lt;/p&gt;
+&lt;p&gt;Of course, we could also have used &lt;code&gt;xargs kill -9&lt;/code&gt; here.&lt;/p&gt;
+&lt;h2 id=&quot;an-api-and-a-tool&quot;&gt;An API, and a Tool&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;pgrep&lt;/code&gt; and &lt;code&gt;pkill&lt;/code&gt; kinda work, but they lose something nice about the original
+&lt;code&gt;ps&lt;/code&gt;: it can be used to get a lot of information about a process, not just its
+PID and name.&lt;/p&gt;
+&lt;p&gt;Essentially, what we would like is a command that is able to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Match processes using any of its properties (or &amp;quot;fields&amp;quot; as I called them
+before. &lt;code&gt;pgrep&lt;/code&gt; and &lt;code&gt;pkill&lt;/code&gt; can do this (via various flags).&lt;/li&gt;
+&lt;li&gt;Display properties of interest. &lt;code&gt;ps&lt;/code&gt; can do this (via its &lt;code&gt;-o&lt;/code&gt; flag).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Moreover I&amp;#39;d like a tool I can use at the command line easily. It should have
+good defaults and enable frequent workflows easily, while supporting
+customization.&lt;/p&gt;
+&lt;p&gt;But I&amp;#39;d also like it to be a building block, either as a way to query processes
+which I can use in elaborate scripts, or as a reusable component for other
+interactive commands. As we&amp;#39;ll see, there are a few niceties we can add to that
+effect (match coloring, output truncation, ...).&lt;/p&gt;
+&lt;p&gt;I made this tool, and named it &lt;code&gt;nps&lt;/code&gt; (of course).&lt;/p&gt;
+&lt;h2 id=&quot;nps-basic-features&quot;&gt;&lt;code&gt;nps&lt;/code&gt;: Basic Features&lt;/h2&gt;
+&lt;p&gt;(Wanna see the code? &lt;a href=&quot;https://gist.github.com/norswap/3506d2b46102c2f32f18acced0ecd798&quot;&gt;It&amp;#39;s here.&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;I want the command to match only my processes by default, but always also the
+processes that don&amp;#39;t have controlling terminals. The same switch as regular &lt;code&gt;ps&lt;/code&gt;
+(&lt;code&gt;-a&lt;/code&gt;) can be added to get the processes from all users.&lt;/p&gt;
+&lt;p&gt;By default I only want the PID and the command name, because that&amp;#39;s what I care
+about 99% of the time. But I want the ability to request other informations,
+this is done through the &lt;code&gt;-o&lt;/code&gt; flag followed by a comma-separated set of field
+specifiers described in &lt;code&gt;man ps&lt;/code&gt;, the whole list of which can be obtained by
+running &lt;code&gt;ps -L&lt;/code&gt; or &lt;code&gt;nps -l&lt;/code&gt;. So if you just need the PID, you&amp;#39;d use &lt;code&gt;-o pid&lt;/code&gt;. If
+you just need to lookup some frequently used info, I included the verbose &lt;code&gt;-v&lt;/code&gt;
+flag, which acts like the &lt;code&gt;ps -j&lt;/code&gt; flag, though implemented in terms of &lt;code&gt;-o
+&amp;#39;user, pid, ppid, pgid, sess, jobc, state, tt, time, command&amp;#39;&lt;/code&gt;, which are the
+displayed fields.&lt;/p&gt;
+&lt;p&gt;In terms of matching, the command defaults to case-insensitive matching for
+faster typing, but case-sensitivity can be obtained with the &lt;code&gt;-s&lt;/code&gt; flag. &lt;code&gt;nps&lt;/code&gt;
+matches on the command name and PID, but it&amp;#39;s possible to specify the matching
+criteria using the &lt;code&gt;-m&lt;/code&gt; flag (whose argument is similar to that of the &lt;code&gt;-o&lt;/code&gt;
+flag). As a special case, if you specify &lt;code&gt;-m pid&lt;/code&gt;, &lt;code&gt;nps&lt;/code&gt; only matches on entire
+PIDs, as it&amp;#39;s pretty much useless to match only part of the PID.&lt;/p&gt;
+&lt;h2 id=&quot;improving-output&quot;&gt;Improving Output&lt;/h2&gt;
+&lt;p&gt;Further improvements are concerned with output. &lt;code&gt;nps&lt;/code&gt; detects whether its output
+is directed towards a terminal, and if that&amp;#39;s the case enable &lt;code&gt;grep&lt;/code&gt; output
+colorization so that you can quickly identify what was matched. You can also
+specify the &lt;code&gt;--color&lt;/code&gt; flag which forces colorizaton even when &lt;code&gt;nps&lt;/code&gt; is piped to
+a file or other process (this will leave terminal color codes in the output).&lt;/p&gt;
+&lt;p&gt;Similarly, &lt;code&gt;nps&lt;/code&gt; follows after &lt;code&gt;ps&lt;/code&gt; and clips command names if the output is a
+terminal. However, this too can be controlled: use &lt;code&gt;--full&lt;/code&gt; to always output
+full command names, and &lt;code&gt;--clip&lt;/code&gt; to always clip them. Note that the clip length
+depends on the size of the terminal &lt;code&gt;nps&lt;/code&gt; is running in!&lt;/p&gt;
+&lt;p&gt;Another related concern use is the inclusion of a header. By default, &lt;code&gt;ps&lt;/code&gt; will
+include a line with the name of all fields (columns) on display. This can be
+useful on the terminal when displaying a lot of fields (e.g. &lt;code&gt;nps -v&lt;/code&gt;) but not
+otherwise, and while used in scripts it&amp;#39;s a nuisance to be parsed away. &lt;code&gt;nps&lt;/code&gt;
+hides the header by default, but it can be included back with the &lt;code&gt;--header&lt;/code&gt;
+option.&lt;/p&gt;
+&lt;h2 id=&quot;killing-processes-with-nps&quot;&gt;Killing Processes with &lt;code&gt;nps&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;Killing processes? Easy peezy, lemon squeezy, just add the &lt;code&gt;-k&lt;/code&gt; flag:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ nps -k sleep
+# 60772 sleep 300&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;nps&lt;/code&gt; still prints the matched processes, which it also kills. Note it may fail
+to kill the matched processes! If the exit code is 0 when using &lt;code&gt;-k&lt;/code&gt;, it means
+that all matched processes were killed (or that no process was matched).&lt;/p&gt;
+&lt;p&gt;As an aside, it&amp;#39;s rather difficult to make the decision of what to return when
+no process is matched. On the one hand, all &lt;em&gt;matched&lt;/em&gt; processes (i.e. none) were
+successfully killed. On the other hand, if you emit the command, you might
+expect it to kill something. I opted for to return 0 when no process is matched
+with &lt;code&gt;-k&lt;/code&gt; (while usually it would be 1), because it makes the command
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Idempotence&quot;&gt;idempotent&lt;/a&gt;, a very useful property when writing scripts.&lt;/p&gt;
+&lt;p&gt;It might be slightly better if &lt;code&gt;nps&lt;/code&gt; reported on exactly which process were
+killed and which lived on, though re-running &lt;code&gt;nps&lt;/code&gt; (without &lt;code&gt;-k&lt;/code&gt;) can easily
+help determine which process are still alive, so all in all not a crucial
+feature.&lt;/p&gt;
+&lt;h2 id=&quot;argument-processing&quot;&gt;Argument Processing&lt;/h2&gt;
+&lt;p&gt;It&amp;#39;s interesting to look at how &lt;code&gt;nps&lt;/code&gt; processes it&amp;#39;s arguments. Unlike most
+commands, options can be freely mixed with regular arguments (which are passed
+to &lt;code&gt;grep&lt;/code&gt; for matching purposes). One advantage is that if you want to kill a
+process, you can first verify your query, then kill the process by appening the
+&lt;code&gt;-k&lt;/code&gt; flag:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ nps foobar
+# 59325 sleep 300
+# # (press up, type &amp;#39; -k&amp;#39;)
+$ nps foobar -k
+# 59325 sleep 300&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you use an unknown flag (e.g. &lt;code&gt;-z&lt;/code&gt; or &lt;code&gt;--foobar&lt;/code&gt;), &lt;code&gt;nps&lt;/code&gt; will display its
+help and exit with code 1. But what if you want to match flags — a totally
+reasonable thing to do? Then you need to put those flags at the end, &lt;em&gt;after&lt;/em&gt; the
+special &lt;code&gt;--&lt;/code&gt; separator:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ nps -- -li
+# 2043 bash -li
+#  519 bash -li&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I think it would be &lt;em&gt;slightly&lt;/em&gt; better if one could still have regular options
+after. We could imagine to bracket sensitive options with &lt;code&gt;--&lt;/code&gt;: &lt;code&gt;nps -- -li --
+-k&lt;/code&gt;, but then we also need a way to specify we want to match &lt;code&gt;--&lt;/code&gt; itself,
+probably as a special flag (e.g. &lt;code&gt;--sep&lt;/code&gt;). This is a pretty big change to the
+script for little benefits, so I&amp;#39;m holding out for now.&lt;/p&gt;
+&lt;p&gt;All the &amp;quot;search&amp;quot; arguments are collected in order and merged (separated by a
+whitespace). So in reality, it doesn&amp;#39;t really make sense to have more than one,
+though it can be convenient to type &lt;code&gt;nps sleep 300&lt;/code&gt; rather than &lt;code&gt;nps &amp;#39;sleep
+300&amp;#39;&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;regular-expressions-and-return-code&quot;&gt;Regular Expressions, and Return Code&lt;/h2&gt;
+&lt;p&gt;The final search parameter (obtained through argument processing as described in
+the last section) will be used as a &lt;a href=&quot;https://www.regular-expressions.info/posix.html&quot;&gt;Posix extended regular expression
+(ERE)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is something to keep in mind when you special characters which might need
+to be quoted. For instance, to search for an interrogation mark: &lt;code&gt;nps &amp;#39;\?&amp;#39;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;For instance, the following command will match and highlight all string literals
+in running commands arguments:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ nps &amp;#39;&amp;quot;.*&amp;quot;&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As for the return code, &lt;code&gt;nps&lt;/code&gt; returns 0 if it matched processes, 1 otherwise.
+This is different when using the &lt;code&gt;-k&lt;/code&gt; flag, as discussed above.&lt;/p&gt;
+&lt;h2 id=&quot;potential-pitfalls&quot;&gt;Potential Pitfalls&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;nps&lt;/code&gt; was only tested on macOS Catalina, and given how finicky these things are,
+it&amp;#39;s almost sure not to work out of the box on Linux.&lt;/p&gt;
+&lt;p&gt;In particular, the &lt;code&gt;script&lt;/code&gt; command appears different in &lt;a href=&quot;http://man7.org/linux/man-pages/man1/script.1.html&quot;&gt;Linux&lt;/a&gt;
+than in &lt;a href=&quot;https://www.unix.com/man-page/mojave/1/script/&quot;&gt;macOS&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;getting-nps&quot;&gt;Getting &lt;code&gt;nps&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/norswap/3506d2b46102c2f32f18acced0ecd798&quot;&gt;&lt;code&gt;nps&lt;/code&gt; can be found in this Gist&lt;/a&gt;. Because it&amp;#39;s short, I&amp;#39;m also
+joining a copy below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;#!/bin/bash
+
+### --- Constants ---
+
+SCRIPT_CMD=&amp;#39;script -q /dev/null&amp;#39;
+TAIL_CMD=&amp;#39;tail -n +2&amp;#39;
+
+### --- Parameters ---
+
+ALL=&amp;#39;&amp;#39;     # flag to match all users process
+CASE=&amp;#39;-i&amp;#39;  # flag for case-insensitive matches
+KILL=0     # if 1, kill matched processes
+
+# ps fields to match on
+MATCH_FIELDS=&amp;#39;-o pid,command&amp;#39;
+
+# ps fields to output
+OUTPUT_FIELDS=&amp;#39;-o pid,command&amp;#39;
+
+# command used to strip the header (or not)
+STRIP_HEADER=&amp;quot;$TAIL_CMD&amp;quot;
+
+if [[ -t 1 ]]; then
+    COLOR=&amp;#39;--color=always&amp;#39;  # whether to colorize output
+    CLIP=&amp;quot;$SCRIPT_CMD&amp;quot;      # command to clip command names (or not)
+else
+    COLOR=&amp;#39;--color=none&amp;#39;
+    CLIP=&amp;#39;&amp;#39;
+fi
+
+### --- Help ---
+
+help() {
+    echo -e &amp;quot;Usage: nps &amp;lt;opts or search terms&amp;gt; [-- &amp;lt;search terms&amp;gt;]\n&amp;quot; \
+    &amp;quot;  Print processes.\n&amp;quot; \
+    &amp;quot;    -a: include processes from [a]ll users\n&amp;quot; \
+    &amp;quot;    -s: case-sensitive match\n&amp;quot; \
+    &amp;quot;    -k: [k]ill the mached processes\n&amp;quot; \
+    &amp;quot;    -h: print this [h]elp and exit\n&amp;quot; \
+    &amp;quot;    -l: print the [l]ist of selectable fields and exit\n&amp;quot; \
+    &amp;quot;    -m &amp;lt;fields&amp;gt;: specify comma-separated list of field to [m]atch on\n&amp;quot; \
+    &amp;quot;       If specifying only &amp;#39;-m pid&amp;#39;, only matches entired PIDs. \n&amp;quot; \
+    &amp;quot;    -o &amp;lt;fields&amp;gt;: specify comma-separated list of fields to [o]utput\n&amp;quot; \
+    &amp;quot;    -v: [v]erbose output, equivalent to\n&amp;quot; \
+    &amp;quot;        -o &amp;#39;user, pid, ppid, pgid, sess ,jobc, state, tt, time, command&amp;#39; \n&amp;quot; \
+    &amp;quot;    --color: [c]olorize output even when piping to programs\n&amp;quot; \
+    &amp;quot;    --header: include fields (columns) header in output\n&amp;quot; \
+    &amp;quot;    --full: output full command name even if stdout is a terminal\n&amp;quot; \
+    &amp;quot;    --clip: output clipped command name even if stdout is not a terminal\n&amp;quot; \
+    &amp;quot;    --version: print version and exit\n&amp;quot;;
+}
+
+### --- Arg Parsing ---
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do case &amp;quot;$1&amp;quot; in
+    -a)  ALL=&amp;#39;-a&amp;#39;;;
+    -s)  CASE=&amp;#39;&amp;#39;;;
+    -v)  OUTPUT_FIELDS=&amp;quot;-o user, pid, ppid, pgid, sess, jobc, state, tt, time, command&amp;#39;&amp;quot;;;
+    -o)  OUTPUT_FIELDS=&amp;quot;-o $2&amp;quot;; shift;;
+    -m)   MATCH_FIELDS=&amp;quot;-o $2&amp;quot;; shift;;
+    -k)  KILL=1;;
+    -l)         ps -L; exit;;
+    -h|--help)  help; exit;;
+    --)         shift; break;;
+
+    --color)    COLOR=&amp;#39;--color=always&amp;#39;;;
+    --header)   STRIP_HEADER=&amp;#39;cat&amp;#39;;;
+    --full)     CLIP=&amp;#39;&amp;#39;;;
+    --clip)     CLIP=&amp;quot;$SCRIPT_CMD&amp;quot;;;
+    --version)  echo 2020.03.22; exit;;
+    -*)         help; exit 1;;
+
+     *)  POSITIONAL+=(&amp;quot;$1&amp;quot;);;
+    esac
+    shift
+done
+set -- &amp;quot;${POSITIONAL[@]}&amp;quot; &amp;quot;$@&amp;quot; # restore positional parameters
+
+### --- Match PIDs ---
+
+filter_header_and_grep() {
+    $TAIL_CMD | grep -v &amp;quot;$(which nps)&amp;quot; | grep -v &amp;quot; grep &amp;quot;
+}
+select_pids() {
+    grep $CASE -E -- &amp;quot;$*&amp;quot; | awk &amp;#39;{ print $1 }&amp;#39;
+}
+
+# if matching on PID only, only match whole PIDs
+[[ &amp;quot;$MATCH_FIELDS&amp;quot; == &amp;quot;-o pid&amp;quot; ]] &amp;amp;&amp;amp; MATCH_FIELDS=-&amp;quot;p $*&amp;quot;
+
+# find matching PIDs
+PIDS=&amp;quot;$(ps -x $ALL &amp;quot;$MATCH_FIELDS&amp;quot; | filter_header_and_grep | select_pids &amp;quot;$*&amp;quot;)&amp;quot;
+
+# when no process is found: exit with 1, or with 0 when the -k flag is set
+[[ &amp;quot;$PIDS&amp;quot; == &amp;#39;&amp;#39; ]] &amp;amp;&amp;amp; { [[ $KILL == 1 ]]; exit $?; }
+
+### --- Output ---
+
+highlight_matches() {
+    if [[ &amp;quot;$*&amp;quot; == &amp;#39;&amp;#39; ]]; then cat; else grep $COLOR $CASE -E &amp;quot;($*)|$&amp;quot;; fi
+}
+
+# print with requested fields + highlighting
+# the tr command cleans up the script command output
+$CLIP ps -x &amp;quot;$OUTPUT_FIELDS&amp;quot; -p $PIDS | tr -d &amp;#39;\r&amp;#39; | $STRIP_HEADER | highlight_matches &amp;quot;$*&amp;quot;
+EXIT=$?
+
+### --- Kill ---
+
+# kill matched processes if requested
+if [[ $KILL == 1 ]]; then
+    kill -9 $PIDS
+    EXIT=$?
+fi
+
+exit $EXIT&lt;/code&gt;&lt;/pre&gt;
+&lt;script
+src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js&#39;&gt;&lt;/script&gt;
+&lt;script
+src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/prism-autoloader.min.js&#39;&gt;&lt;/script&gt;
+      </description>
+      <pubDate>2020-03-24T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/nps-pkill-pgrep</link>
+      <guid isPermaLink="true">http://norswap.com/nps-pkill-pgrep</guid>
+    </item>
+    <item>
       <title>Weight Training Log, Episode 5: Intermediate Build and Looking into RTS</title>
       <description>
 &lt;p&gt;Previously: &lt;a href=&quot;/weight-training&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/weight-training-2&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/weight-training-3&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/weight-training-4&quot;&gt;Four&lt;/a&gt;&lt;/p&gt;
@@ -817,8 +1173,8 @@ is not valid Bash syntax).&lt;/p&gt;
 &lt;p&gt;How to pass a pipe then? We have to quote it, then pass it as a parameter to
 &lt;code&gt;bash -c&lt;/code&gt;. e.g. &lt;code&gt;repeat &amp;#39;echo &amp;quot;a&amp;quot; | cat -n&amp;#39;&lt;/code&gt; This is by no means perfect — it
 gets annoying when dealing with commands that already have multiple level of
-quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted &lt;code&gt;&amp;#39;echo &amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;.
-But it&amp;#39;s still a good step forward.&lt;/p&gt;
+quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted as &lt;code&gt;&amp;#39;echo
+&amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;. But it&amp;#39;s still a good step forward.&lt;/p&gt;
 &lt;p&gt;With all the considerations factored in, we get the following function:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
     local OPT OPTIND OPTARG T=3
@@ -875,7 +1231,7 @@ command exited.&lt;/p&gt;
 &lt;p&gt;You can actually achieve that quite easily with just &lt;code&gt;&amp;lt;command&amp;gt;; bash&lt;/code&gt;, as long
 as the command exits by itself. By hitting &lt;code&gt;ctrl+c&lt;/code&gt; in the screen (and thus
 sending &lt;code&gt;SIGINT&lt;/code&gt;), you&amp;#39;ll shut down the whole chain, just like in a regular
-shell. &lt;/p&gt;
+shell.&lt;/p&gt;
 &lt;p&gt;But imagine you want to kill the command, while still being able to peruse the
 output in the shell? (Again, quite relevant to my use case: stop trying to
 connect to the proxy, but let me see what&amp;#39;s going on.) Well that&amp;#39;s possible too:&lt;/p&gt;
@@ -896,8 +1252,8 @@ as-is.&lt;/p&gt;
 &lt;p&gt;Consider that we want to use &lt;code&gt;remain&lt;/code&gt; with &lt;code&gt;repeat&lt;/code&gt;:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;What happens is that the &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt; line in &lt;code&gt;remain&lt;/code&gt; expands to something
 equivalent to &lt;code&gt;bash -c &amp;#39;repeat echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — the outer quotes have been
-stripped! This will misbeheave in repeat, producing the wrong &lt;code&gt;1 x&lt;/code&gt;, &lt;code&gt;2 x&lt;/code&gt; (etc)
-output rather than straight &lt;code&gt;1 x&lt;/code&gt; each time.&lt;/p&gt;
+stripped! This will misbeheave in &lt;code&gt;repeat&lt;/code&gt;, producing the wrong &lt;code&gt;1 x&lt;/code&gt;, &lt;code&gt;2 x&lt;/code&gt;
+(etc) output rather than straight &lt;code&gt;1 x&lt;/code&gt; each time.&lt;/p&gt;
 &lt;p&gt;We cannot &amp;quot;just&amp;quot; use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; instead of &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; either: &lt;code&gt;bash -c &amp;quot;$@&amp;quot;&lt;/code&gt; would
 expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — but &lt;code&gt;bash -c&lt;/code&gt; expects a
 single argument!&lt;/p&gt;
@@ -2411,17 +2767,6 @@ probably other things too.&lt;/p&gt;
       <pubDate>2019-11-06T23:00:00.000Z</pubDate>
       <link>http://norswap.com/reviews-4</link>
       <guid isPermaLink="true">http://norswap.com/reviews-4</guid>
-    </item>
-    <item>
-      <title>Thesis Done!</title>
-      <description>
-&lt;p&gt;I successfully defended my thesis &amp;quot;&lt;em&gt;Principled Procedural Parsing&lt;/em&gt;&amp;quot; on the 17th
-of October!&lt;/p&gt;
-&lt;p&gt;You can &lt;a href=&quot;/pubs/thesis.pdf&quot;&gt;download it here&lt;/a&gt;.&lt;/p&gt;
-      </description>
-      <pubDate>2019-11-06T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/thesis</link>
-      <guid isPermaLink="true">http://norswap.com/thesis</guid>
     </item>
   </channel>
 </rss>

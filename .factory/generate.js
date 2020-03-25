@@ -432,3 +432,6 @@ switch (process.argv[2]) // assumes node <script> <arg>
 //     at Array.forEach (<anonymous>)
 //     at close (C:\Dropbox\code\web\.factory\generate.js.rna:195:22)
 //     at Ribosome.stdout (C:\Dropbox\code\web\.factory\generate.js.rna:176:9)
+//
+// - old comment
+//   "The move logic is incorrect, when you change the date of a post by renaming it."

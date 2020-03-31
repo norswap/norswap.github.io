@@ -11,7 +11,7 @@ This is post 4/4 in [a series about Charlie Munger's wisdom](/munger).
 
 Everyone claims to understand it, yet it is still under-evaluated.
 
-> If you would persuade, appeal to interest and not to reason.  
+> If you would persuade, appeal to interest and not to reason.
 > — Benjamin Franklin
 
 Never, ever, think about something else when you should be thinking about the
@@ -50,7 +50,7 @@ The Liking/Loving Tendency acts as a conditioning device that makes the liker or
 lover tend to:
 
 - ignore faults of and comply with wishes of, the object of his affection;
-- favor people, products, and actions merely associated  
+- favor people, products, and actions merely associated
   with the object of his affection;
 - distort other facts to facilitate love.
 
@@ -72,7 +72,7 @@ We tend to disfavor people we already dislike and hate to level of
 irrationality. This results in:
 
 - ignoring virtues of people we dislike;
-- disliking people, products, and actions merely associated  
+- disliking people, products, and actions merely associated
   with the object of our dislike;
 - distorting facts in order to facilitate the hatred.
 
@@ -104,7 +104,7 @@ Doubt-Avoidance Tendency is some combination of (1) puzzlement and (2) stress.
 
 ## 05. Inconsistency-Avoidance Tendency
 
-> An ounce of prevention is worth a pound of cure.  
+> An ounce of prevention is worth a pound of cure.
 > — Benjamin Franklin
 
 Inconsistency-Avoidance Tendency makes it much easier to prevent a habit than to
@@ -150,7 +150,7 @@ Simply put: curiosity helps.
 
 ## 07. Kantian Fairness Tendency
 
-Also known as [*the golden rule*]:  
+Also known as [*the golden rule*]:
 *do unto others as you would have them do unto you*.
 
 [*the golden rule*]: https://en.wikipedia.org/wiki/Golden_Rule
@@ -220,7 +220,7 @@ underweigh face-to-face impressions and overweigh the applicant's past record.
 
 ## 13. Overoptimism Tendency
 
-> What a man wishes, that also will he believe.  
+> What a man wishes, that also will he believe.
 > — Demosthenes
 
 ---
@@ -266,7 +266,7 @@ Social proof tendency is most easily triggered in the presence of puzzlement or
 stress (see [*04. Doubt-Avoidance Tendency*][four] and
 [*17. Stress-Influence Tendency*][seventeen]), or in particular both.
 
-Because both bad and good behavior are made contagious by social proof, it 
+Because both bad and good behavior are made contagious by social proof, it
 is important to (1) stop bad behaviour before it spreads and (2) foster and
 display all good behaviour.
 
@@ -297,7 +297,7 @@ Also known as [*anchoring*] and related to
 Cognition, misled by tiny changes involving low contrast, will often miss a
 trend that is destiny.
 
-> A small leak will sink a great ship.  
+> A small leak will sink a great ship.
 > — Benjamin Franklin
 
 [anchoring]: https://en.wikipedia.org/wiki/Anchoring
@@ -381,7 +381,7 @@ inevitable.
 ## 22. Authority-Misinfluence Tendency
 
 We also trust leaders in areas where they are not experts. This is known as the
-[*halo effect*].
+*[halo effect]*.
 
 [halo effect]: https://en.wikipedia.org/wiki/Halo_effect
 

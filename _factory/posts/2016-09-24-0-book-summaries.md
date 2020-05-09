@@ -12,12 +12,14 @@ a large range of books in the topics that interest me.
 
 Here's a copy of the list for posterity:
 
-- [Deconstructing Excellence](http://www.deconstructingexcellence.com/)
+- [BookSummaryClub](https://booksummaryclub.com/business-book-summaries/)
 - [Derek Sivers' Books Read](https://sivers.org/book)
 - [Farnam Street](https://www.farnamstreetblog.com/)
 - [4 Minute Books](http://fourminutebooks.com/all-summaries/)
 - [Actionable Books](http://www.actionablebooks.com/en-ca/summaries/)
 - [Blinkist (paid)](https://app.blinkist.com/en/library/)
+- [Deconstructing Excellence (Wayback
+  Machine)](https://web.archive.org/web/20170606022752/http://www.deconstructingexcellence.com/bookdatabase/)
 
 The first four websites are great, but the selection is limited.
 
@@ -27,6 +29,5 @@ seen.
 
 Blinkist seemed like the most well-rounded option. I made a trial account and
 was quite satisfied with the two summaries I read.
-
 
 [summaries]: https://www.quora.com/What-are-the-best-book-summary-websites

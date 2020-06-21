@@ -6,8 +6,10 @@ build: generate.js.rna
 preview:
 	cd .. && _factory/node_modules/live-server/live-server.js
 
-rebuild: generate.js.rna
-	rm -rf ../../web/*
+nukecontent:
+	rm -rf $$(find ../../web -maxdepth 1 -name "*" ! -name "web" ! -name ".git*" ! -name "*_factory")
+
+rebuild: generate.js.rna nukecontent
 	echo '[]' > posts.json
 	node $< rebuild
 	cp -r top/* ../../web/
@@ -56,6 +58,7 @@ endif
   make \
   preview \
   build \
-  rebuild
+  rebuild \
+  nukecontent
 
 #.SILENT:

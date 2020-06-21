@@ -595,7 +595,7 @@ a.sidebar-nav-item:focus {
  * |_| |_|\___/|_|  |___/ \_/\_/ \__,_| .__/
  *                                    | |
  *                                    |_|
- * own rules
+ * norswap's own rules
  */
 
 .nsep {
@@ -603,4 +603,13 @@ a.sidebar-nav-item:focus {
     width: 500px;
     border-bottom: solid 1px #EEE;
     margin: 30px auto;
+}
+
+pre[class*="language-"] {
+    font-size: 0.75em !important;
+    margin: 0 0 1rem !important;
+}
+
+img.centered {
+    margin: 0 auto 1rem;
 }

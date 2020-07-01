@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Truffle Tutorial: Adding 1 and 1 Together
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/publications">Publications</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+<h1 id="truffle-tutorial-adding-1-and-1-together">Truffle Tutorial: Adding 1 And 1 Together</h1>
+<p>I&#39;ve now been working on <a href="https://github.com/oracle/truffleruby">TruffleRuby</a> for about 6 months. TruffleRuby is a Ruby
+implementation built on top of <a href="https://www.graalvm.org/docs/">GraalVM</a> and its <a href="https://www.graalvm.org/docs/Truffle-Framework/user/README">Truffle API</a>. Truffle allows
+languages to be implemented on top of Graal as <a href="https://en.wikipedia.org/wiki/Interpreter_(computing)#Abstract_syntax_tree_interpreters">AST interpreters</a>.</p>
+<p>I wanted to share a little bit of what I learned of Graal and Truffle, so I
+decided to write this tutorial, which demonstrates the basics of Truffle through
+simplistic examples.</p>
+<p>We are setting our ambition very low for this post. We are going to implement
+the almost-simplest possible language. It will only be able to add numbers and
+strings together. Doing this will teach us about some core principles of
+Truffle. Then, we will use the <a href="https://docs.oracle.com/en/graalvm/enterprise/20/guide/reference/ideal-graph-visualizer.html">Ideal Graph Visualizer (IGV)</a> tool to
+inspect the result of compilation.</p>
+<h2 id="what-graal-and-truffle-do">What Graal and Truffle Do</h2>
+<p>Before entering into the minute details, I want to give you an overview of what
+Graal and Truffle actually do, and why it&#39;s interesting to use them at all.</p>
+<p>Why build your language on Graal/Truffle? The one line answer is that you can
+make it go fast, easily. The more dynamic / abstract your language, the more it
+will benefit from the optimizations offered by Truffle: writing your own
+advanced JIT compiler is not a light undertaking.</p>
+<p>You will also get other goodness, such as debugging support for free. There are
+two good articles that should sell you on the technology: <a href="https://blog.plan99.net/graal-truffle-134d8f28fb69">&quot;Graal &amp; Truffle&quot; by
+Mike Hearn</a> (hype check: not every promise is entirely realized, but it&#39;s
+in the works) and <a href="https://medium.com/graalvm/graalvm-ten-things-12d9111f307d">&quot;Top 10 Things To Do With GraalVM&quot; by Chris Seaton</a>
+(hype check: this is all real).</p>
+<p>As for how the technology actually works, the best explanation for Graal is
+probably Chris Seaton&#39;s talk <a href="https://chrisseaton.com/truffleruby/jokerconf17/">Understanding How GraalVM Works</a> (a
+full transcript with inline slides is available!). This is deep technical
+content, clearly explained. It doesn&#39;t cover Truffle, however.</p>
+<p>Here is my own broad overview of how Graal/Truffle makes your code fast:</p>
+<p>When using the Truffle API, Graal (which includes a <a href="https://en.wikipedia.org/wiki/Just-in-time_compilation">just in time (JIT)
+compiler</a>) will compile <a href="https://en.wikipedia.org/wiki/Hot_spot_(computer_programming)">hot parts of the AST</a> to efficient
+machine code. In particular, the hot parts of the AST will be <a href="https://en.wikipedia.org/wiki/Partial_evaluation">partially
+evaluated</a>. While this has multiple performance implications, it will most
+notably avoid a lot of the <a href="https://dzone.com/articles/too-fast-too-megamorphic-what">megamorphic call overhead</a> that an AST
+interpreter would normally suffer from.</p>
+<p>The Truffle API also offers other ways to improve performance. Most notably is
+its reliance on <a href="https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching">(polymorphic) inline caching</a>. In a program, there are
+regularities that are hard or impossible to detect statically. Truffle lets you
+specify <em>specializations</em> which handle a subset of all cases that are allowed to
+occur. Then, at runtime, Truffle will generate optimized code only for the
+specializations that were actually encountered in practice, and insert a check
+to verify that we do not encounter other cases (in which case we need to throw
+away the compiled code and start the process again). This is called <em>inline
+caching</em> because we cache the encountered specializations in the AST. We&#39;ll
+cover the specialization mechanism in detail in this article.</p>
+<p>The typical use case for inline caching is method lookup: virtual method calls
+have a tendency to always be done on an instance of the same class. Using inline
+caching, we can store this class, and specialize the code for it, which avoids
+repeating the costly method lookup. However, Truffle&#39;s caches are very flexible,
+and it&#39;s possible to specialize on arbitrary conditions — depending on what the
+language implementer specifies. See <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html">here</a> and <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Cached.html">there</a>
+for more details.</p>
+<p>The API has a lot of other tools and possibilities too, such as <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.CompilationFinal.html">compilation
+final values</a> and <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/Assumption.html">assumptions</a>.</p>
+<h2 id="objective--documentation">Objective &amp; Documentation</h2>
+<p>As I said, we&#39;ll keep it real simple in this article. Our language is only going
+to be able to add numbers together and to concatenate strings.</p>
+<p>As it turns out, this is enough to illustrate some fundamental Truffle
+principles, as well as explore some aspects of Truffle code generation.</p>
+<p>In terms of documentation for Truffle, there are three main ressources:</p>
+<ul>
+<li><p><a href="https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters">Christian Hummer&#39;s master thesis</a> document the Truffle DSL,
+i.e. how to actually use Truffle. It&#39;s very clearly written and if you&#39;re
+going to jump on the Truffle bandwagon, you really ought to read chapters 2
+and 3. This will give you a good understanding of the principles behind the
+Truffle DSL.</p>
+</li>
+<li><p><a href="https://www.graalvm.org/truffle/javadoc/">The Truffle Javadoc</a> is very decent, but it will rarely tell you the <em>why</em> of
+things.</p>
+</li>
+<li><p>The <a href="https://github.com/graalvm/simplelanguage">SimpleLanguage example</a> is a full language implemented with a lot of
+comments as an example of how things should generally be done in Truffle. It&#39;s
+the main ressource on how to actually do the advanced stuff.</p>
+</li>
+</ul>
+<p>You can read this blog post without touching any of these resources, but you
+will need them to go further.</p>
+<p>Most of what I will say is covered in the thesis, but this post will have a more
+hands-on approach.</p>
+<h2 id="setup">Setup</h2>
+<p>To follow along with the examples, you&#39;ll need to install GraalVM. In
+particular, I used the 20.1.0 version with OpenJDK 11. You can <a href="https://www.graalvm.org/downloads/">download it
+here</a>. Then follow the <a href="https://www.graalvm.org/getting-started/">installation instructions</a>. You can also add
+it as a SDK to your IDE, usually you&#39;ll need to point it to the Java home
+directory (the thing you&#39;re told to put in <code>JAVA_HOME</code> in the installation
+instructions).</p>
+<p>Note that if you&#39;re on macOS and you&#39;re hit with an error that reads
+<code>“graalvm-ce-java11-20.1.0” cannot be opened because the developer cannot be verified.</code> or <code>macOS cannot verify that this app is free from malware.</code> when
+trying one of GraalVM&#39;s binaries (<code>java</code>, <code>javac</code>, ...), you can fix the
+situation by running:</p>
+<pre><code class="language-bash">sudo xattr -dr com.apple.quarantine graalvm-ce-java11-20.1.0</code></pre>
+<p>(Replace <code>graalvm-ce-java11-20.1.0</code> by the path to the root directory of your
+GraalVM installation.)</p>
+<p>You&#39;ll also need the Ideal Graph Visualizer (IGV), (again, I used version 20.1.0
+for Java 11). IGV is normally part of the (paid/licensed) Entreprise Edition of
+GraalVM, but you can evaluate it for free. Be aware that, in principle, the code
+you evaluate IGV on cannot be used commercially (<a href="https://en.wikipedia.org/wiki/IANAL">IANAL etc</a>). You can <a href="https://www.oracle.com/downloads/graalvm-downloads.html">download
+it here</a>.</p>
+<p>Same as before, if you get an error on macOS, you might need to run the
+following (where <code>idealgraphvisualizer</code> is the directory where you extracted
+IGV):</p>
+<pre><code class="language-bash">sudo xattr -dr com.apple.quarantine idealgraphvisualizer</code></pre>
+<p>I&#39;m going to walk through my whole language example, showing you the code as I
+go. However, the entire source is avaiable <a href="https://github.com/norswap/truffle-tutorial">on this Github repository</a>.</p>
+<p>Let&#39;s get started. We&#39;ll use Maven to build the project and pull in the
+dependencies. To install it, just use your package manager of choice, or follow
+the <a href="http://maven.apache.org/install.html">install instruction</a>.</p>
+<p>Here is the Maven config file for the project (<a href="https://github.com/norswap/truffle-tutorial/blob/master/pom.xml"><code>pom.xml</code> 🔗</a>):</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.norswap&lt;/groupId&gt;
+    &lt;artifactId&gt;exni&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+    &lt;build&gt;
+        &lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+                &lt;version&gt;3.8.1&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;source&gt;11&lt;/source&gt;
+                    &lt;target&gt;11&lt;/target&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+    &lt;properties&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+        &lt;graalvm.version&gt;20.1.0&lt;/graalvm.version&gt;
+    &lt;/properties&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.graalvm.truffle&lt;/groupId&gt;
+            &lt;artifactId&gt;truffle-api&lt;/artifactId&gt;
+            &lt;version&gt;${graalvm.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.graalvm.truffle&lt;/groupId&gt;
+            &lt;artifactId&gt;truffle-dsl-processor&lt;/artifactId&gt;
+            &lt;version&gt;${graalvm.version}&lt;/version&gt;
+            &lt;scope&gt;provided&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/project&gt;</code></pre>
+<p>There&#39;s nothing incredibly tricky going on here. Sources go to <code>src</code>
+(<a href="https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html"><code>src/main/java</code></a> can burn in hell), we&#39;re using Java version 11, and pulling down
+the Truffle API and Truffle annotation processor version 20.0.0.</p>
+<p>I&#39;m calling this project <code>exni</code> for &quot;ex nihilo&quot;. I&#39;m cute like that.</p>
+<h2 id="building-the-ast">Building the AST</h2>
+<p>The first we need to do is to build a simple AST to be evaluated.</p>
+<p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/ExniNode.java"><code>ExniNode.java</code> 🔗</a></p>
+<pre><code class="language-java">package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.Node;
+
+public abstract class ExniNode extends Node
+{
+    /** main execute method */
+    public abstract Object execute (VirtualFrame frame);
+}</code></pre>
+<p>We&#39;ll use this as the parent class for all our AST nodes. The <code>execute</code> method
+evaluates the node and returns a result of type <code>Object</code>. It takes a
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a>, which represents a <a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a>: that of the &quot;function&quot; (or
+equivalent concept) to which the node belongs.</p>
+<p>The name <code>execute</code> is special in Truffle. Truffle is aware of node methods whose
+name start with <code>execute</code> and will call the appropriate one when it needs to
+evaluate the children of another AST node. Which <code>execute</code> method is appropriate
+depends on the requested value type (<code>Object</code> being the most general, and
+therefore always applicable) as well as available parameters.</p>
+<p>When using the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html">specialization system</a> (which we&#39;ll discuss
+shortly), Truffle will also automatically implement every abstract <code>execute</code>
+method for us.</p>
+<p>Let&#39;s move to the simplest node implementation possible:</p>
+<p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/IntLiteralNode.java"><code>IntLiteralNode.java</code> 🔗</a></p>
+<pre><code class="language-java">package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+
+public final class IntLiteralNode extends ExniNode
+{
+    public final long value;
+
+    public IntLiteralNode (long value) {
+        this.value = value;
+    }
+
+    @Override public Object execute (VirtualFrame frame) {
+        return value;
+    }
+}</code></pre>
+<p>This node represents an integer literal that appears in source code. We
+implement the <code>execute</code> method to simply return that number.</p>
+<p>Now, a node for the <code>+</code> operator:</p>
+<p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/AddNode.java"><code>AddNode.java</code> 🔗</a></p>
+<pre><code class="language-java">package exni.nodes;
+
+import com.oracle.truffle.api.dsl.Fallback;
+import com.oracle.truffle.api.dsl.NodeChild;
+import com.oracle.truffle.api.dsl.Specialization;
+import exni.ExniException;
+
+@NodeChild(&quot;left&quot;)
+@NodeChild(&quot;right&quot;)
+public abstract class AddNode extends ExniNode
+{
+    public static AddNode create (ExniNode left, ExniNode right) {
+        return AddNodeGen.create(left, right);
+    }
+
+    @Specialization protected long addLongs (long left, long right) {
+        return left + right;
+    }
+
+    @Specialization String addStrings (String left, String right) {
+        return left + right;
+    }
+
+    @Fallback protected void typeError (Object left, Object right) {
+        throw new ExniException(&quot;type error: args must be two longs, or two strings&quot;, this);
+    }
+}</code></pre>
+<p>The two <code>NodeChild</code> annotations define children nodes of this AST. By default,
+these have the type of the superclass (<code>ExniNode</code> in this case), but it&#39;s also
+possible to specify the type explicitly with the <code>type</code> annotation element.</p>
+<p>This class is abstract, but Truffle will generate a concrete implementation for
+us, named <code>AddNodeGen</code>. If you load <a href="exni-github">the project</a> in your IDE, you
+can navigate there easily (import the Maven project and build first). We will
+examine this class shortly.</p>
+<p>The logic of the class is implemented using the <em>specialization system</em>. Instead
+of overriding the <code>execute</code> method(s), we mark a series of method with the
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html"><code>Specialization</code></a> and <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Fallback.html"><code>Fallback</code></a> annotations.</p>
+<p>The idea is that when the node is executed, Truffle will pick the first matching
+specialization and run it. There are two criteria used when matching
+specializations: the type of its parameters and additionals conditions specified
+by the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html#guards--"><code>guards</code></a> annotation element.</p>
+<p>This is a very simple node, so it only has two specializations and a fallback,
+one for when both values are <code>long</code> (Truffle will automatically perform unboxing
+whenever required), and one for when both values are strings. Additionally,
+there is a fallback specialization. A fallback specialization is a
+specialization whose guards are the negation of all other specializations, and
+will therefore always match when (and only when) no other specialization does.
+In this case, we just throw an type error. The implementation of <code>ExniException</code>
+is irrelevant, excepted that all exceptions thrown during guest language
+execution must implement <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleException.html"><code>TruffleException</code></a> (excepted those exceptions that
+represent errors in the implementation itself).</p>
+<p>Note that the names of the specialization methods are irrelevant, they could
+have been anything, including the same name (as long as it generates distinct
+method overloads, of course).</p>
+<h2 id="specializations-under-the-hood">Specializations: Under The Hood</h2>
+<p>Let&#39;s look at the class generated by Truffle to implement our abstract
+<code>AddNode</code>:</p>
+<p><a href="https://gist.github.com/norswap/a235123a4aa3a236fbdeb653ea389362#file-addnodegen-java"><code>AddNodeGen 🔗</code></a></p>
+<pre><code class="language-java">package exni.nodes;
+// ...
+
+@GeneratedBy(AddNode.class)
+public final class AddNodeGen extends AddNode {
+
+    @Child private ExniNode left_;
+    @Child private ExniNode right_;
+    @CompilationFinal private int state_;
+
+    private AddNodeGen(ExniNode left, ExniNode right) {
+        this.left_ = left;
+        this.right_ = right;
+    }
+
+    @Override
+    public Object execute(VirtualFrame frameValue) {
+        int state = state_;
+        Object leftValue_ = this.left_.execute(frameValue);
+        Object rightValue_ = this.right_.execute(frameValue);
+        if ((state &amp; 0b1) != 0 /* is-active addLongs(long, long) */ &amp;&amp; leftValue_ instanceof Long) {
+            long leftValue__ = (long) leftValue_;
+            if (rightValue_ instanceof Long) {
+                long rightValue__ = (long) rightValue_;
+                return addLongs(leftValue__, rightValue__);
+            }
+        }
+        if ((state &amp; 0b10) != 0 /* is-active addStrings(String, String) */ &amp;&amp; leftValue_ instanceof String) {
+            String leftValue__ = (String) leftValue_;
+            if (rightValue_ instanceof String) {
+                String rightValue__ = (String) rightValue_;
+                return addStrings(leftValue__, rightValue__);
+            }
+        }
+        CompilerDirectives.transferToInterpreterAndInvalidate();
+        return executeAndSpecialize(leftValue_, rightValue_);
+    }
+
+    private Object executeAndSpecialize(Object leftValue, Object rightValue) {
+        int state = state_;
+        if (leftValue instanceof Long) {
+            long leftValue_ = (long) leftValue;
+            if (rightValue instanceof Long) {
+                long rightValue_ = (long) rightValue;
+                this.state_ = state = state | 0b1 /* add-active addLongs(long, long) */;
+                return addLongs(leftValue_, rightValue_);
+            }
+        }
+        if (leftValue instanceof String) {
+            String leftValue_ = (String) leftValue;
+            if (rightValue instanceof String) {
+                String rightValue_ = (String) rightValue;
+                this.state_ = state = state | 0b10 /* add-active addStrings(String, String) */;
+                return addStrings(leftValue_, rightValue_);
+            }
+        }
+        this.state_ = state = state | 0b100 /* add-active typeError(Object, Object) */;
+        typeError(leftValue, rightValue);
+        return null;
+    }
+
+    @Override
+    public NodeCost getCost() { /* ... */ }
+
+    private static boolean fallbackGuard_(int state, Object leftValue, Object rightValue) {
+        if (((state &amp; 0b1)) == 0 /* is-not-active addLongs(long, long) */ &amp;&amp; leftValue instanceof Long &amp;&amp; rightValue instanceof Long) {
+            return false;
+        }
+        if (((state &amp; 0b10)) == 0 /* is-not-active addStrings(String, String) */ &amp;&amp; leftValue instanceof String &amp;&amp; rightValue instanceof String) {
+            return false;
+        }
+        return true;
+    }
+
+    public static AddNode create(ExniNode left, ExniNode right) {
+        return new AddNodeGen(left, right);
+    }
+
+}</code></pre>
+<p>It has three fields. The first two were generated by the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/NodeChild.html"><code>NodeChild</code></a>
+annotations. There is also a <code>create</code> method at the bottom, which can be used to
+get create an instance of <code>AddNode</code> if given its two children. The third field
+(<code>state_</code>) keeps track of what specializations are active for the node.</p>
+<p>Active specializations? What does that even mean? Well, whenever a
+specialization is first used, it becomes active. Mutliple specializations can be
+active at the same time (if they are used by the same node). A node starts with
+no active specializations.</p>
+<p>For instance, let&#39;s imagine a small syntax and a dummy program for our language:</p>
+<pre><code>def add(x, y)
+    return x + y; // AddNode 1
+
+add(1, 2)
+add(&quot;a&quot;, &quot;b&quot;)
+1 + 2 // AddNode 2</code></pre>
+<p>I have used comments to mark the two locations where an <code>AddNode</code> is generated.
+<code>AddNode 1</code> will see both integer and string values, and so both specializations
+will become active. <code>AddNode 2</code>, on the other hand, will only ever see integers.</p>
+<p>But why do we need to distinguish between active and inactive specializations?
+Doing so helps Graal&#39;s JIT compiler generate better compiled code. Whenever the
+node has to be JIT-compiled, Graal will only emit machine code for the
+specializations that have been activated. Having less possibilities has multiple
+benefits. First there are less cases to check. Second, the reduced set of
+possibilities may enable further optimizations (especially when there is only a
+single active specialization). Finally, all else being equal, shorter code is
+generally faster (more efficient cache utilisation).</p>
+<p>This raises one more question: what happens if, after generating compiled code,
+we encounter a case covered by a specialization that hasn&#39;t been activated yet?
+In that case, the compiled code is invalidated, and the new specialization is
+activated. New compiled code may subsequently be generated.</p>
+<p>Let&#39;s go back to the code. Truffle has automatically generated the <code>execute</code>
+method that was left abstract (in <code>ExniNode</code>, <code>AddNode</code>&#39;s superclass). It has
+also generated an <code>executeAndSpecialize</code> method that <code>execute</code> calls. Relating
+to our previous discussion, <code>execute</code> should be understood as running the active
+specializations, while <code>executeAndSpecialize</code> is responsible to activate new
+specializations.</p>
+<p><code>execute</code> starts by executing the two children node. Then, if our <code>addLongs</code>
+specialization is active, and if if both resulting values can be cast to <code>long</code>,
+it calls <code>AddNode#addLongs</code>. Otherwise, if our <code>addStrings</code> specialization and
+active and if the values can be cast to <code>String</code>, it calls <code>AddNode#addStrings</code>.
+If that&#39;s not possible either, it calls
+<code>CompilerDirectives.transferToInterpreterAndInvalidate()</code> and then
+<code>executeAndSpecialize</code>.</p>
+<p><code>executeAndSpecialize</code> does almost the same thing, but does not check for
+activated specializations, only for the specific conditions in which a
+specialization may apply. Additionally, it activates any specialization it
+calls. Finally, if none of the two specialization matches, it calls our fallback
+specialization <code>AddNode#typeError</code>.</p>
+<p>Now you might think from this that fallback specializations may never be
+activated. This is not so. The only reason that <code>typeError</code> does not appear in
+<code>execute</code> is that its return type (<code>void</code>) is incompatible with that of
+<code>execute</code> (<code>Object</code>). If we wanted the specialization to be activable, we could
+change its return type to <code>Object</code>. Since it is an extraordinary error
+condition, I chose not do that here. I encourage you to try it and check that
+the generated code changed accordingly.</p>
+<p>Note you can observe similar effects when multiple <code>execute</code> methods have
+different type parameters. The <code>execute</code> methods will be JIT-compiled
+separately, which can lead to more efficient code for the method whose signature
+is more restrictive (as it doesn&#39;t have to include the activated specializations
+that don&#39;t match the signature).</p>
+<h3 id="how-the-magic-happens">How the Magic Happens</h3>
+<p>Why is the logic split between <code>execute</code> and <code>executeAndSpecialize</code>? It&#39;s
+because <code>execute</code> is what will become JIT-compiled. All its calls to
+specializations are guarded by conditions on <code>_state</code>. <code>_state</code> is marked with
+<code>CompilationFinal</code> interface. This annotation tells Truffle to consider that the
+field is effectively final for partial evaluation and compilation purposes. In
+practice, this means that calls to inactive specializations will be pruned from
+the compiled code, hence only retaining the active specializations. It&#39;s exactly
+what we want to get the benefits I outlined a bit before.</p>
+<p>This also explains why specialization activation is relegated to
+<code>executeAndSpecialize</code>. That method will never be compiled, because it is only
+called from the <code>execute</code> methods, and always preceded by a call to
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--"><code>CompilerDirectives.transferToInterpreterAndInvalidate</code></a> which tells Truffle to
+invalidate the current compiled code for the method! Truffle is aware of this,
+and so will never inline <code>executeAndSpecialized</code> into <code>execute</code>.</p>
+<p>That [<code>CompilerDirectives.transferToInterpreterAndInvalidate</code>] call is also what
+ensures that we discard the current compiled code when a new specialization
+becomes active.</p>
+<p>You can learn more about the specialization system in <a href="https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters">Christian Hummer&#39;s master
+thesis</a>.</p>
+<h2 id="running">Running</h2>
+<p>Okay, so we have our grand addition/concatenation node. Let&#39;s actually use it.
+Here is our main class:</p>
+<p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniMain.java"><code>ExniMain</code> 🔗</a></p>
+<pre><code class="language-java">package exni;
+
+import com.oracle.truffle.api.Truffle;
+import exni.nodes.AddNode;
+import exni.nodes.IntLiteralNode;
+import exni.nodes.ExniRootNode;
+
+public abstract class ExniMain
+{
+    public static void main (String[] args)
+    {
+        var add = AddNode.create(new IntLiteralNode(1), new IntLiteralNode(2));
+        var root = new ExniRootNode(add);
+        var target = Truffle.getRuntime().createCallTarget(root);
+
+        // Uncomment this in order to use a CountNode instead of an AddNode.
+        // target = Truffle.getRuntime().createCallTarget(new MainNode(new CountNode()));
+
+        System.out.println(target.call());
+
+        // Uncomment this in order to force the compilation of the node.
+        // while (true) target.call();
+    }
+}</code></pre>
+<p>We construct our <code>AddNode</code> as expected, but then we wrap it into a
+<code>ExniRootNode</code>. This is an implementation of the Truffle <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a> class. In
+Truffle, runnable nodes belong to a tree with <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a> at the root. For
+instance, there is typically one <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a> per function definition.</p>
+<p><a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a> also holds a reference to a <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/FrameDescriptor.html"><code>FrameDescriptor</code></a> that describes the
+parameters expected by the node (in the case of a function definition: the
+function&#39;s parameters). We do not need to specify this here, since our addition
+expression does not take parameters.</p>
+<p><code>ExniRootNode</code> doesn&#39;t do anything fancy by itself: it just wraps an <code>ExniNode</code>,
+and extends <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a>.</p>
+<p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniRootNode.java"><code>ExniRootNode</code> 🔗</a></p>
+<pre><code class="language-java">package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.RootNode;
+
+public final class ExniRootNode extends RootNode
+{
+    @SuppressWarnings(&quot;FieldMayBeFinal&quot;)
+    private @Child ExniNode root;
+
+    public ExniRootNode(ExniNode root) {
+        super(null);
+        this.root = root;
+    }
+
+    @Override public Object execute (VirtualFrame frame) {
+        return root.execute(frame);
+    }
+}</code></pre>
+<p>The next step is to call
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleRuntime.html#createCallTarget-com.oracle.truffle.api.nodes.RootNode-"><code>Truffle.getRuntime().createCallTarget(root)</code></a> to create a
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a>. The call target represents something you can call (in this case,
+it&#39;s our add expression).</p>
+<p>We use a <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> instead of call the node&#39;s <code>execute</code> method directly so
+that Truffle may work some magic. For instance, whenever a call target is
+created, Truffle create a corresponding <a href="https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)">instrumentation</a> event that can be
+listened on. It also wires up the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> so that it will automatically
+create an object representing a <a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a> (i.e. the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a>
+argument taken by our various <code>execute</code> methods) when called.</p>
+<p>All that is left to do is to invoke <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget#call</code></a> and print
+the result.</p>
+<p>To run this after building with Maven, you can use the following command:</p>
+<pre><code class="language-bash">M2=$HOME/.m2/repository
+java \
+    -Dtruffle.class.path.append=target/classes \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
+    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
+    exni.ExniMain</code></pre>
+<p>A couple practical points:</p>
+<ul>
+<li>you need to be at the repository&#39;s root</li>
+<li><code>java</code> must point to the GraalVM version</li>
+<li><code>$M2</code> should point to your m2 repository (by default it&#39;s <code>$HOME/.m2/repository</code>).</li>
+<li>You can configure your IDE to run this instead, you&#39;ll just need to specify
+the main class and all the other non-classpath arguments.</li>
+<li>Don&#39;t forget to run this with GraalVM&#39;s <code>java</code>! It will run with other <code>java</code>
+but Truffle nodes won&#39;t be compiled specially.</li>
+</ul>
+<p>Lo and behold, your console should print the glorious number 3!</p>
+<blockquote>
+<p>Extra technical note: The <code>add-exports</code> arguments are needed because classes
+in <code>com.oracle.truffle.api</code> need to be loaded via Truffle&#39;s own class loader.
+The <code>add-exports</code> arguments ensure that the class loader associated with the
+module is used. Similarly, defining <code>truffle.class.path.append</code> enables that
+classloader to find our own node classes.</p>
+</blockquote>
+<h2 id="igv">IGV</h2>
+<p>To run IGV, simply run the <code>bin/idealgraphvisualizer</code> in your IGV install
+directory (just wherever you unzipped the downloaded archive). This will tie up
+the console in which IGV is run — if you it to run in the background, I
+recommend using <a href="https://www.man7.org/linux/man-pages/man1/screen.1.html"><code>screen</code></a>:</p>
+<pre><code>screen -dm -S igv bin/idealgraphvisualizer
+screen -r igv # to attach to the screen</code></pre>
+<p>Next you&#39;ll need to configure your java run command in order for it to generate
+compilation graphs and send them to IGV. You can achieve this by adding the
+following flags to your Java command: <code>-Dgraal.Dump=Truffle -Dgraal.PrintGraph=Network</code>.</p>
+<p>The <code>Dump=Truffle</code> option means to only dump graphs relevant to analysing
+Truffle&#39;s performance (for instance it won&#39;t include graphs for compiled Java
+code that is not related to Truffle).</p>
+<p>The <code>PrintGraph=Network</code> option means to send the graphs directly to a running
+IGV over the network. If you omit this, it will default to dumping the graphs as
+files in <code>graal_dumps/</code> in the working directory, and you can open those later
+from IGV.</p>
+<p>These flags are documented on Graal&#39;s git repository <a href="https://github.com/oracle/graal/tree/master/compiler/src/org.graalvm.compiler.debug/src/org/graalvm/compiler/debug/doc-files">here
+(master)</a> (<a href="https://github.com/oracle/graal/tree/32cd3db91fe4a141ee3016ac18b0f4cc9f51e447/compiler/src/org.graalvm.compiler.debug/src/org/graalvm/compiler/debug/doc-files">future-proof(er), commit-specific
+link</a>).</p>
+<p>IGV lets you inspect the result of JIT compilation. Our code so far is very
+simple, and does not trigger JIT compilation. However, we can trigger
+compilation simply by calling our <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> withing an infinite loop
+(<code>while (true) target.call;</code>).</p>
+<p>Run it, you should now see something like this in IGV:</p>
+<img class="centered" src="left_sidebar.png" width="400rem" />
+
+<p>If you select the AST graph, you&#39;ll see this, which is exactly the node hiearchy
+we build in our main class:</p>
+<img class="centered" src="ast_sum.png" width="300rem" />
+
+<p>The call tree is not interesting because our nodes do not contain a guest
+language function call (our language doesn&#39;t even have those).</p>
+<p>The &quot;Graal Graphs&quot; section contains graphs at various stages of the compilation
+process. We&#39;ll be particularly interested in &quot;Before phase Lowering&quot; which
+contains the graphs obtained after all of Truffle&#39;s optimizations have been run
+(GraalMV still run generic optimizations after this however). In this case,
+you&#39;ll see this:</p>
+<img class="centered" src="graph_sum_truffle.png" width="500rem" />
+
+<p>Which is to say, almost nothing! The compiler was smart and the addition of two
+constants was completely optimized away. Do you see that small <code>62</code> node? <code>C(3)</code>
+means &quot;constant with value 3&quot; and that&#39;s the result of our addition. At this
+stage, it still needs to <a href="https://docs.oracle.com/javase/tutorial/java/data/autoboxing.html">box</a> that value though. But if you look to any further
+graph, you&#39;ll see:</p>
+<img class="centered" src="graph_sum_further.png" width="400rem" />
+
+<p>The result of the boxing operation is a constant instance of <code>Long</code>, so we can
+eliminate the boxing operation.</p>
+<p>You may wonder why this does not get optimized even further. After all, the
+return value is never used. The answer is that the logic that calls the call
+target (<code>target.call()</code>) is quite complex and therefore cannot be optimized
+away. You can actually get to see the graph for that by replacing the
+<code>-Dgraal.Dump=Truffle</code> flag by <code>-Dgraal.Dump=:1</code> and looking for the code of the
+main method (<code>exni.ExniMain.main</code>). You can also move the loop to another method
+if you want to get rid of the part of the graph that corresponds to the
+construction of the AST. It looks <a href="graph_main.png">something like this</a>.</p>
+<p>So we can note that calling the call target within a loop is not a great idea.
+We could probably see that our <code>AddNode</code> gets optimized away completely if we
+implemented a loop in the guest language itself.</p>
+<h2 id="a-slightly-harder-graph-and-what-does-it-mean-anyway">A slightly harder graph, and what does it mean, anyway?</h2>
+<p>Okay, so let&#39;s see some actual graphs. We&#39;ll create a new node that doesn&#39;t
+optimize away. This node will be a counter that updates a public field:</p>
+<p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/CountNode.java"><code>CountNode</code> 🔗</a></p>
+<pre><code class="language-java">package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+
+public final class CountNode extends ExniNode {
+
+    public long counter;
+
+    @Override public Object execute (VirtualFrame frame) {
+        return counter++;
+    }
+}</code></pre>
+<p>Even though we&#39;ll never read the counter, the field is public and the compiler
+cannot prove that it won&#39;t be read, so it has to be dutifully incremented.</p>
+<p>If you modify the main method to run this node instead, and go to the graphs
+(still &quot;Before phase Lowering&quot;) — click for full size version:</p>
+<a href="graph_counter_full.png">
+<img class="centered" src="graph_counter_full.png" />
+</a>
+
+<p>First off, all the green stuff is &quot;state&quot;. I&#39;ll be honest: I&#39;m not too sure what
+&quot;state&quot; is supposed to be in general, but in this case (and in conjunction with
+grey boxes), it shows you a couple of the methods invoked to start the node&#39;s
+execution, as well as relevant parameter to these methods. In particular, node
+21 shows an instance of Truffle&#39;s internal <a href="https://github.com/oracle/graal/blob/7980245f92d00f4b6c38688d46f0a586ec397fde/compiler/src/org.graalvm.compiler.truffle.runtime/src/org/graalvm/compiler/truffle/runtime/FrameWithoutBoxing.java"><code>FrameWithoutBoxing</code></a> class, and all
+the <code>VirtualArray</code> nodes to the right of that are its fields.</p>
+<p>Anyway, you can hide the state in the &quot;Filters&quot; panel on the right in IGV. You
+could also hit &quot;Remove floating&quot; to get rid of the grey boxes, but I want to
+keep node 44 (+). Instead I&#39;ve hidden the other grey boxes manually, and we&#39;re
+left with this:</p>
+<img class="centered" src="graph_counter_simple.png" width="550rem" />
+
+<p>This is fairly simple to understand: our node loads the <code>counter</code> field in node
+41, and adds 1 to it in node 44. Notice how one operand comes from the blue
+line, while the other is given by the small box 43 on top: <code>C(1) i64</code> means that
+the operand is the constant 1, which is a 64-bits integer. We store the result
+of this operation back into the field in node 42. Notice how node 41 has a line
+going to node 44 and one line going to node 72 (Box), which is the return value?
+That&#39;s because we used <code>return counter++</code> (and not <code>return ++counter</code>): the node
+evaluates to the pre-incremented value!</p>
+<p>From this explanation, you can see that blue lines represent data flow: a blue
+line going down means the data coming out of the higher node is being used by
+the lower node. There is also a thick red line: that represents control flow,
+i.e. it determines what operations happen before which others.</p>
+<p>We&#39;ve barely scratched the surface of Graal graphs here (we haven&#39;t even talked
+about conditionals and loops). If you want to know more, I highly recommend
+these two writeups by Chris Seaton (the first one is essentially a much shorter
+teaser version of the second one, which you really ought to read in full if
+you&#39;re going to work with IGV):</p>
+<ul>
+<li><a href="https://engineering.shopify.com/blogs/engineering/understanding-programs-using-graphs">Understanding Programs Using Graphs @ Shopify Engineering</a></li>
+<li><a href="https://chrisseaton.com/truffleruby/basic-graal-graphs/">Understanding Basic Graal Graphs @ chrisseaton.com</a></li>
+</ul>
+<h2 id="going-further">Going Further</h2>
+<p>That&#39;s it for today! I have some extra material that was cut from this article
+that I might rework and post in a couple weeks. Namely, it covers how to set up
+the boilerplate to create a &quot;real&quot; <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleLanguage.html">Truffle guest language</a> and how to implement
+loops inside the guest language.</p>
+<p>If you do want to go further, I encouage to experiment (showing you how was the
+whole point of this article). Be sure to check the Truffle learning ressources I
+outlined <a href="#objective-documentation">at the top of the post</a>.</p>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
+<script
+src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>
+<script
+src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/prism-autoloader.min.js'></script>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

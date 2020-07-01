@@ -7,9 +7,7 @@
   <title>
        norswap &middot; The Ultimate PATH Management Guide
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -76,8 +74,7 @@ the PATH, where both values get concatenated (user PATH, <code>;</code>, system 
 <ul>
 <li>User environment variables are stored in <code>HKEY_CURRENT_USER\Environment</code>.</li>
 <li>System environment variables are stored in
-<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session
-Manager\Environment</code>.</li>
+<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment</code>.</li>
 </ul>
 <p><code>explorer.exe</code> will immediately reflect any change to these values, and any
 program launched by it will inherit these values.</p>
@@ -163,7 +160,8 @@ lexicographic order, so you can control the order of entries in the PATH.</p>
 its fully qualified name <code>/usr/libexec/path_helper</code>. The output of <code>path_helper</code>
 is a shell command to set the PATH. This command must itself be evaluated.</p>
 <p>I suggest to define the following shell alias for ease of use:</p>
-<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;</code></pre><p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
+<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;</code></pre>
+<p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
 <p>By default, OS X calls <code>path_helper</code> in <code>/etc/profile</code> so you do not need to add
 it yourself.</p>
 <p>Oh and by the way, <code>path_helper</code> does the same thing it does to <code>PATH</code> to
@@ -182,8 +180,7 @@ breaking. You may read on the net about <code>~/.MacOSX/environment.plist</code>
 <code>~/Library/LaunchAgents/environment.plist</code>, enter a bunch of boilerplate and
 include <code>launchtl setenv</code> commands to set environment variables.
 See <a href="http://stackoverflow.com/a/26586170">this explanation</a> for details.</p>
-<p>After a change, you can make it take effect with <code>launchctl load
-~/Library/LaunchAgents/environment.plist</code> (or wait for a reboot).</p>
+<p>After a change, you can make it take effect with <code>launchctl load ~/Library/LaunchAgents/environment.plist</code> (or wait for a reboot).</p>
 <p>Once applied, new applications started from the Finder (or Spotlight) will
 inherit the environment variables set in <code>environment.plist</code>.</p>
 <p>Note that what <code>environment.plist</code> does is simply run a script. You could use

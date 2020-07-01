@@ -3,8 +3,6 @@ title: "A ps / pkill / pgrep Alternative"
 layout: post
 ---
 
-<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
-
 As I was prepping my new computer, and [toying with unix daemons], I found
 myself checking on running processes regularly, and occasionally killing them. I
 also found myself being quite frustrated with the tools provided by the system
@@ -464,6 +462,7 @@ fi
 exit $EXIT
 ```
 
+<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
 <script
 src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>
 <script

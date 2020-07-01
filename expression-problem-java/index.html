@@ -7,9 +7,7 @@
   <title>
        norswap &middot; The Expression Problem in Java (Litterature Review)
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -217,8 +215,7 @@ F-bound: <code>C extends Exp&lt;C&gt;</code>. F-bounds are a crude way to encode
 Java. Basically it lets us use <code>C</code> as though it meant &quot;the type of this class&quot;
 (or, like here, the type of one of its superclasses or superinterfaces).
 However, to use an F-bound, you need to &quot;fix&quot; <code>C</code>. This is the role of all the
-classes whose name end with <code>F</code>, such as <code>class LitF extends Lit&lt;ExpF&gt;
-implements ExpF</code>. Unfortunately, that makes the solution more verbose as we need
+classes whose name end with <code>F</code>, such as <code>class LitF extends Lit&lt;ExpF&gt; implements ExpF</code>. Unfortunately, that makes the solution more verbose as we need
 to actually add in all of these <code>F</code> classes.</p>
 <p>The second difficulty — which is only hinted at in the paper — is the need to
 carry the node creation logic to the places where you would normally call a data
@@ -247,8 +244,7 @@ visitors that implement <code>NegVisitor</code>.</p>
 <p>But it doesn&#39;t stop there. If an <code>Add</code> node has a <code>Neg</code> child, it too should
 only accept visitors that implement <code>NegVisitor</code> — since they can invoke the
 visitor on their children.</p>
-<p>Again, generics come to the rescue: we parameterize all data classes with <code>&lt;V
-extends Visitor&gt;</code> (for the initial data classes) or <code>&lt;V extends NegVisitor&gt;</code>
+<p>Again, generics come to the rescue: we parameterize all data classes with <code>&lt;V extends Visitor&gt;</code> (for the initial data classes) or <code>&lt;V extends NegVisitor&gt;</code>
 (for <code>Neg</code> — same principle would apply if we added new data classes).</p>
 <p>This doesn&#39;t entirely fix the problem. In the <code>visit</code> methods, it wouldnt work
 to call, for instance, <code>add.left.accept(this)</code>. Why? Because there is no
@@ -379,8 +375,7 @@ node it corresponds to.</p>
 possible. One could imagine that <code>Exp</code> has a <code>E visit(Algebra&lt;E&gt;)</code> method that
 is overriden in data classes to simply call the corresponding algebra method.
 The problem happens when you have introduced new data cases. If you added a
-<code>neg</code> method in <code>NegAlgebra&lt;E&gt;</code>, now you need the signature to be <code>E
-visit(NegAlgebra&lt;E&gt;)</code>. This is <em>almost</em> feasible, supposing we could
+<code>neg</code> method in <code>NegAlgebra&lt;E&gt;</code>, now you need the signature to be <code>E visit(NegAlgebra&lt;E&gt;)</code>. This is <em>almost</em> feasible, supposing we could
 parameterize <code>Exp</code> as follow: <code>Exp&lt;A extends Algebra&gt;</code> and then define the
 method <code>E visit (A&lt;E&gt;)</code>. Unfortunately that would make <code>A</code> a <a href="https://en.wikipedia.org/wiki/Type_constructor">higher-order type</a>
 (i.e. a type that takes a parameter, here <code>E</code>) and Java doesn&#39;t have those.</p>
@@ -426,8 +421,7 @@ prevents you from using two algebra with different semantics together, passing
 the result of one to the other... as long as <code>E</code> is the same.</p>
 <p>The paper mentions other interesting possibilities: multi-parameter algebra
 (mimicking <a href="https://en.wikipedia.org/wiki/Type_family">type families</a>), combinators for automatic combination of multiple
-algebra, as well as allowing extension of the <code>E</code> parameter (e.g. <code>Eval&lt;E
-extends Number&gt; implements Algebra&lt;E&gt;</code>), ...</p>
+algebra, as well as allowing extension of the <code>E</code> parameter (e.g. <code>Eval&lt;E extends Number&gt; implements Algebra&lt;E&gt;</code>), ...</p>
 <p>There is a lot to like about object algebra, it&#39;s a really elegant technique —
 in fact it&#39;s the shortest implementation, and one of the most readable. It has
 many advantages, from the possibility of building a real data structure to &quot;tree

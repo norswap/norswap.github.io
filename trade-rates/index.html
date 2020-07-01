@@ -7,9 +7,7 @@
   <title>
        norswap &middot; Simple Math: Trade Rates
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -63,7 +61,8 @@ can trade for a thing B:</p>
 --- --- = 1
  Y   B
 
-X A = Y B</code></pre><p>So naturally, 120 km/h allows us to trade an hour for 120 kilometers.</p>
+X A = Y B</code></pre>
+<p>So naturally, 120 km/h allows us to trade an hour for 120 kilometers.</p>
 <h2 id="trade-rates-multiplications">Trade Rates Multiplications</h2>
 <p>Going from 120 km/h to 150 km/h, we add 30 km/h. That is precisely the quartier
 of the base speed.</p>
@@ -75,12 +74,14 @@ of the base speed.</p>
 
 5 * 120 km = 4 h
 
-150 km = 1 h</code></pre><p>As expected, we can now trade one hour for 150 kilometers. But what if we want
+150 km = 1 h</code></pre>
+<p>As expected, we can now trade one hour for 150 kilometers. But what if we want
 to keep 120 km on the left side of that equation? Say we actually have to drive
 for 120 km, how much time do we save?</p>
 <pre><code>5 * 120 km = 4 h
 
-120 km = 4/5 h = 38 m</code></pre><p>We gained 1/5 of an hour, so 12 minutes.</p>
+120 km = 4/5 h = 38 m</code></pre>
+<p>We gained 1/5 of an hour, so 12 minutes.</p>
 <p>That&#39;s interesting: we increased our speed by a quarter, but only reduced the
 time by a fifth. This is actually more intuitive when the numbers become larger:
 double your speed, halve the required time, which corresponds to +100% speed for
@@ -108,7 +109,8 @@ numbers is not random. In fact we can generalize.</p>
  z
        z
 X A = --- Y B
-       u</code></pre><h2 id="trade-rates-increases">Trade Rates Increases</h2>
+       u</code></pre>
+<h2 id="trade-rates-increases">Trade Rates Increases</h2>
 <p>We can think about this in another way. Multiplying the speed by 5/4 was
 actually multiplying it by (1 + 1/4), so we can see this as an 1/4 increase in
 speed.</p>
@@ -122,14 +124,16 @@ find this without going through the whole development?</p>
 <p>(I have no idea how this property is called in reality, or whether it even has a name)</p>
 <pre><code>   X             Y
 ------- = 1 - -------
- X + Y         X + Y</code></pre><p>Proof:</p>
+ X + Y         X + Y</code></pre>
+<p>Proof:</p>
 <pre><code>   X       X + Y     X + Y       X
 ------- = ------- - ------- + -------  (1)
  X + Y     X + Y     X + Y     X + Y
 
                  Y
         = 1 - -------                  (2)
-               X + Y</code></pre><p>In (1) we simply add and remove <code>(X+Y)/(X+Y)</code>.</p>
+               X + Y</code></pre>
+<p>In (1) we simply add and remove <code>(X+Y)/(X+Y)</code>.</p>
 <p>In (2), the first term becomes 1, while the <code>X</code> in the second and third terms
 have different signs and cancel each other out.</p>
 <p><strong>End Side Property</strong></p>
@@ -150,12 +154,12 @@ X A = ------- Y B           (2)
 
               u
 X A = (1 - -------) Y B     (3)
-            z + u</code></pre><p>In (1), we pass <code>Y B</code> to the other side, and we replace <code>1</code> by the equivalent
+            z + u</code></pre>
+<p>In (1), we pass <code>Y B</code> to the other side, and we replace <code>1</code> by the equivalent
 <code>z/z</code>, leading to the simplified <code>(z + u) / z</code>.</p>
 <p>In (2), we just pass that term to the other side.</p>
 <p>In (3), we use our side property and get our final form.</p>
-<p>In our speed example, <code>u/z = 1/4</code>, so <code>u = 1</code> and <code>z = 4</code>. We can see that <code>u /
-(z + u)</code> is indeed 1/5, and as the equation shows, that is the portion that the
+<p>In our speed example, <code>u/z = 1/4</code>, so <code>u = 1</code> and <code>z = 4</code>. We can see that <code>u / (z + u)</code> is indeed 1/5, and as the equation shows, that is the portion that the
 quantity of B gets reduced by.</p>
 <p>The gist of this is: add the numerator to the denominator.</p>
 <ul>

@@ -7,9 +7,7 @@
   <title>
        norswap &middot; LaTeX Tooling Guide
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -123,7 +121,8 @@ compiling the <a href="http://www.sigplan.org/Resources/Author/">acmart</a> exam
 | &quot;comment.cut&quot;
 | &quot;(msharpe)&quot;
 | &quot;]&quot; &amp;&amp; !&quot;..&quot;
-)</code></pre><p>The first line matches <code>pulp</code>&#39;s default specification.</p>
+)</code></pre>
+<p>The first line matches <code>pulp</code>&#39;s default specification.</p>
 <p><code>pulp</code> can be integrated with <code>latexmk</code> fairly easily, by means of a
 configuration file.</p>
 <p><code>pulp</code> is not as friendly to install as the other tools. Here is how to install
@@ -133,7 +132,8 @@ to install the Haskell platform in some other way):</p>
 git clone https://github.com/dmwit/pulp.git
 cabal update
 cabal install
-PATH=&quot;$HOME/Library/Haskell/bin:$PATH&quot;</code></pre><h2 id="preview">Preview</h2>
+PATH=&quot;$HOME/Library/Haskell/bin:$PATH&quot;</code></pre>
+<h2 id="preview">Preview</h2>
 <p>Unless you&#39;re working with TeXstudio or ShareLatex, you&#39;ll need to preview the
 generated PDF files using a PDF viewer. You want to use one that picks up
 changes to the PDF on the disk, and reloads it on the fly, while keeping your
@@ -157,8 +157,7 @@ the <a href="http://www.sigplan.org/Resources/Author/">ascmart sigplan</a> style
 <p>If you don&#39;t have <code>pulp</code>, just delete or rename the <code>.latexmkrc</code> file from the
 repo.</p>
 <p>If <code>latexmk</code> is not found or doesn&#39;t work (for instance if Perl is not
-installed), the makefile will fall back to using plain make rules, and <code>make
-pdf</code> will be verbose by default.</p>
+installed), the makefile will fall back to using plain make rules, and <code>make pdf</code> will be verbose by default.</p>
 <p>It is also possible to use <code>latexrun</code>, which is bundled in the repository, by
 running <code>make run</code> (Python3 required).</p>
 <p><code>pulp</code> can be run standalone with <code>make pulp</code> (pulp is not bundled in the

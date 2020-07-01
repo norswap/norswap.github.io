@@ -7,9 +7,7 @@
   <title>
        norswap &middot; Language Design Notes 1: A Precise Typeclass Scheme
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -74,13 +72,15 @@ here it is!</p>
 <p>This is how you declare a single-parameter typeclass:</p>
 <pre><code>class Serializable $T
     fun serialize (it: $T): String
-    fun deserialize (str: String): $T</code></pre><p><code>$T</code> is a generic type. Generic types all start with a dollar sign. This makes
+    fun deserialize (str: String): $T</code></pre>
+<p><code>$T</code> is a generic type. Generic types all start with a dollar sign. This makes
 them easy to pick out and avoids namespace clashes with regular types. It also
 dispenses us from declaring which types are generic separately. This is not a
 problem for typeclass declarations, but it is for function declaration, where
 generic types may be mingled with normal types.</p>
 <p>For instance, java lists the generic types before the function signature:</p>
-<pre><code>&lt;T&gt; String serialize (T it);</code></pre><p>Haskell uses the scheme we propose, but with lowercase letters for generic
+<pre><code>&lt;T&gt; String serialize (T it);</code></pre>
+<p>Haskell uses the scheme we propose, but with lowercase letters for generic
 types. We&#39;d like to keep lowercase letters for things in the domain of values,
 while things in the domain of types are capitalized. (That being said, types
 will also be first-class values in our language.)</p>
@@ -91,11 +91,13 @@ called <code>Point</code>:</p>
         return it.x + &quot;,&quot; + it.y
     fun deserialize (str: String): Point
         val strs = str.split(&quot;,&quot;)
-        return Point(parse_int(strs[0]), parse_int(strs[1]))</code></pre><p>Here is how you declare a multiple-parameter typeclass:</p>
+        return Point(parse_int(strs[0]), parse_int(strs[1]))</code></pre>
+<p>Here is how you declare a multiple-parameter typeclass:</p>
 <pre><code>enum Order { BIGGER, EQUAL, SMALLER }
 
 class Orderable $X $Y
-    fun order (x: $X, y: $Y): Order</code></pre><p>Here is how you create an instance of a multiple-parameter typeclass for types
+    fun order (x: $X, y: $Y): Order</code></pre>
+<p>Here is how you create an instance of a multiple-parameter typeclass for types
 <code>String</code> and <code>Char</code>:</p>
 <pre><code>instance Orderable String Char
     fun order (x: String, y: Char): Order
@@ -104,12 +106,14 @@ class Orderable $X $Y
         if x[0] == y
             return x.size == 1 ? EQUAL : BIGGER
         else
-            return x[0] &gt; y ? BIGGER : SMALLER</code></pre><p>Note that both type parameters of <code>Orderable</code> can be the same type:</p>
+            return x[0] &gt; y ? BIGGER : SMALLER</code></pre>
+<p>Note that both type parameters of <code>Orderable</code> can be the same type:</p>
 <pre><code>instance Orderable Int Int
     fun order (x: Int, y: Int): Order
         if (x &gt; y) return BIGGER
         if (x &lt; y) return SMALLER
-        return EQUAL</code></pre><h2 id="instances-names">Instances Names</h2>
+        return EQUAL</code></pre>
+<h2 id="instances-names">Instances Names</h2>
 <p>Every instance must have a name. A subsequent section (<a href="#picking-instances">Picking
 Instances</a>) will explain why names are needed, but for the
 moment bear with me.</p>
@@ -123,7 +127,8 @@ slashes (/) because of an obscure data format we use:</p>
         return it.x + &quot;/&quot; + it.y
     fun deserialize (str: String): Point
         val strs = str.split(&quot;/&quot;)
-        return Point(parse_int(strs[0]), parse_int(strs[1]))</code></pre><p>(The definition is the same as <code>Serializable_Point</code>, except the comma has been replaced by a
+        return Point(parse_int(strs[0]), parse_int(strs[1]))</code></pre>
+<p>(The definition is the same as <code>Serializable_Point</code>, except the comma has been replaced by a
 slash.)</p>
 <p>This instance will be called <code>PointSlash</code>. It will not receive an automatically
 generated name.</p>
@@ -139,9 +144,10 @@ follows:</p>
         val rev = Reverse.order(y, x)
         if (rev == BIGGER)  return SMALLER
         if (rev == SMALLER) return BIGGER
-        return EQUAL</code></pre><p>We call this declaration an <em>instance derivation</em>. The instance that will
-fullfill the from-clause is called the <em>source instance</em>. The instance derived
-from a specific source instance is simply known as a <em>derived instance</em>.</p>
+        return EQUAL</code></pre>
+<p>We call this declaration an <em>instance derivation<em>. The instance that will
+fullfill the from-clause is called the *source instance</em>. The instance derived
+from a specific source instance is simply known as a *derived instance</em>.</p>
 <p>Instance selection will always prefer an explicit instance rather than a derived
 instance when both are in the same scope. So our derived <code>Orderable</code> instance
 does not cause issues when <code>$X</code> and <code>$Y</code> are the same type. We&#39;ll talk about
@@ -151,7 +157,8 @@ Selection</a> section.</p>
 explicit names:</p>
 <pre><code>derive instance Reversed: Orderable $X $Y
         from Reverse: Orderable $Y $X
-    // ...</code></pre><p>But otherwise an automatic name is attributed. For our example, the name would
+    // ...</code></pre>
+<p>But otherwise an automatic name is attributed. For our example, the name would
 be <code>Orderable_$X_$Y_from_Orderable_$Y_$X</code>.</p>
 <p>A single derivation can yield many different instances. There will of course be
 instances with different type arguments, but also instances using a different
@@ -196,7 +203,8 @@ typeclass function!</p>
     fun receive (it: $T, item: $X)
     fun receive_all (it: $T, items: List[$T])
         for item in items:
-            receive(it, item)</code></pre><p>It&#39;s even possible to have two functions in terms of one another — the user
+            receive(it, item)</code></pre>
+<p>It&#39;s even possible to have two functions in terms of one another — the user
 implementing the instance will have to override at least one of them.</p>
 <p>(It would be possible to add language-level support to defining such sets of
 functions, at least one of which needs to be overriden, but I&#39;m not sure the
@@ -211,11 +219,13 @@ which can be especially interesting if the implementation targets supports it
 they possess a typeclass instance: method definition and typeclass declarations.</p>
 <p>Here is a method with a typeclass constraint:</p>
 <pre><code>fun foo (it: $T) where Serializable $T
-    output(serialize(it))</code></pre><p>And here is a typeclass with a constraint:</p>
+    output(serialize(it))</code></pre>
+<p>And here is a typeclass with a constraint:</p>
 <pre><code>class Reducible $T $X
         where Sequential: Sequence $T $X
 
-    fun reduce (it: $T): $X</code></pre><p>The function&#39;s constraint prevents us from calling <code>foo</code> with a type <code>$T</code> that
+    fun reduce (it: $T): $X</code></pre>
+<p>The function&#39;s constraint prevents us from calling <code>foo</code> with a type <code>$T</code> that
 does not have a corresponding <code>Serializable $T</code> instance.</p>
 <p>Similarly, the typeclass&#39; constraint prevents us from instanciating <code>Reducible</code>
 for pair of types that do not have a corresponding <code>Sequence $T $X</code> instance.</p>
@@ -266,20 +276,22 @@ and add precisions for other types of selections later, as required.</p>
 <p>Imagine that we import <code>Serializable_Point</code> and <code>PointSlash</code> from before, two
 instances of <code>Serializable Point</code>.</p>
 <p><u>Small aside</u>: it would be more proper to say &quot;two instances of <code>Serializable</code>
-for the type <code>Point</code>&quot; — but that&#39;s tedious. And what category does <code>Serializable
-Point</code> even belong to? It&#39;s not a typeclass (<code>Serializable</code> is) nor an instance
+for the type <code>Point</code>&quot; — but that&#39;s tedious. And what category does <code>Serializable Point</code> even belong to? It&#39;s not a typeclass (<code>Serializable</code> is) nor an instance
 (<code>Serializable_Point</code> is). If we really need a name, we could could this a
 <em>typeclass specification</em>.</p>
 <pre><code>fun foo (it: Point)
-    output(serialize(it))</code></pre><p>Which instance should this code use?</p>
+    output(serialize(it))</code></pre>
+<p>Which instance should this code use?</p>
 <p>We can select the proper instance in two ways:</p>
 <p>1) Specify the instance to use at the instance selection site:</p>
 <pre><code>fun foo (it: Point)
-    output(Serializable_Point.serialize(it))</code></pre><p>2) Specify the instance to use in a certain scope (e.g. file or function) with
+    output(Serializable_Point.serialize(it))</code></pre>
+<p>2) Specify the instance to use in a certain scope (e.g. file or function) with
    an <code>use</code> declaration.</p>
 <pre><code>fun foo (it: Point)
     use PointSlash
-    output(serialize(it))</code></pre><p>Of course, you could do <code>PointSlash.serialize(it)</code> and <code>use Serializable_Point</code>
+    output(serialize(it))</code></pre>
+<p>Of course, you could do <code>PointSlash.serialize(it)</code> and <code>use Serializable_Point</code>
 as well.</p>
 <p>When your two instances have automatically generated names which therefore clash
 (i.e. both are named <code>Serializable_Point</code>), you can prefix with module names to
@@ -292,7 +304,8 @@ Instances</a> section.</p>
     use PointSlash
     output(serialize(it))
     use Serializable_Point
-    output(serialize(it))</code></pre><p>Nevertheless, <code>use</code> remains a <em>declaration</em> whose scope is purely static. It is
+    output(serialize(it))</code></pre>
+<p>Nevertheless, <code>use</code> remains a <em>declaration</em> whose scope is purely static. It is
 not a <em>statement</em> (and so cannot be guarded by an if statement, etc).</p>
 <h2 id="type-derivations-and-instance-selection">Type Derivations and Instance Selection</h2>
 <p>Derived instances do complicate the instance selection mechanism somewhat.</p>
@@ -319,7 +332,8 @@ derive instance Stringifiable $T from Named $T
         return name(it)
 
 fun foo (usr: User)
-    output(to_string(usr))</code></pre><p>Should <code>foo</code> output the users&#39;s first or last name? Say we want the last name.</p>
+    output(to_string(usr))</code></pre>
+<p>Should <code>foo</code> output the users&#39;s first or last name? Say we want the last name.</p>
 <p>There is an easy ways to fix that conflict, should write <code>use UserLast</code>. This
 will have the effect of disambiguating the <em>source instance selection</em> of the
 type derivation, hence <code>foo</code> will use the <code>Stringifiable</code> instance derived from
@@ -328,7 +342,8 @@ type derivation, hence <code>foo</code> will use the <code>Stringifiable</code> 
 <pre><code>derive instance ThingNamed: Stringifiable $T
         from Named $T
     fun to_string (it: $T): String
-        return &quot;the thing named &#39;&quot; + name(it) + &quot;&#39;&quot;</code></pre><p>Now we also need to specify which derivation we want. We can do this in a couple
+        return &quot;the thing named &#39;&quot; + name(it) + &quot;&#39;&quot;</code></pre>
+<p>Now we also need to specify which derivation we want. We can do this in a couple
 ways:</p>
 <ol>
 <li><code>use ThingNamed</code> — always use the <code>ThingNamed</code> derivation to supply a
@@ -360,7 +375,8 @@ already saw a derivation like that:</p>
 // assume we imported this
 derive instance Reversed: Orderable $X $Y
         from Reverse: Orderable $Y $X
-    // ...</code></pre><p>I said earlier:</p>
+    // ...</code></pre>
+<p>I said earlier:</p>
 <blockquote>
 <p>Instance selection will always prefer an explicit instance rather than a
 derived instance when both are in the same scope.</p>
@@ -385,7 +401,8 @@ specify the full instance name: <code>use Reversed(Orderable_Int_Int)</code>.</p
 
 fun foo2 (it: $T) where Serializable $T
     use Serializable_$T
-    output(serialize(it))</code></pre><p>The same principle applies for typeclass&#39; constraints.</p>
+    output(serialize(it))</code></pre>
+<p>The same principle applies for typeclass&#39; constraints.</p>
 <h2 id="type-constraints-vs-type-derivations">Type Constraints vs Type Derivations</h2>
 <p>When we introduced typeclass&#39; constraints in the <a href="#typeclass-constraints">Typeclass
 Constraints</a> section, we said that a big difference
@@ -408,7 +425,8 @@ affected by <code>use</code> statements. Manual disambiguation is also possible 
 
 instance FooUser User using LastName
     // ...
-</code></pre><p>On occasions, the capture of required instances, might lead to situations that
+</code></pre>
+<p>On occasions, the capture of required instances, might lead to situations that
 are very slightly unintuitive:</p>
 <pre><code>class Reducible $T $X
         where Sequential: Sequence $T $X
@@ -418,7 +436,8 @@ are very slightly unintuitive:</p>
 // ...
 
 fun foo (seq: $T) where Reducible $T Point, Sequence $T Point
-    reduce(seq)</code></pre><p>In the above example, there is not guarantee that the instance selected for the
+    reduce(seq)</code></pre>
+<p>In the above example, there is not guarantee that the instance selected for the
 function&#39;s <code>Sequence $T Point</code> constraint will be the same as the instance
 selected for the typeclass&#39; constraint!</p>
 <p>The first one is selected when the instance satisfying <code>Reducible $T Point</code> is
@@ -427,8 +446,10 @@ defined, whereas the second is selected when the function <code>foo</code> is ca
 <p>We admit a shortcut notation for uses of unary typeclasses, so thoses two
 snippets are equivalent:</p>
 <pre><code>fun foo (mk_string: $A) where Stringifiable $A
-    // ...</code></pre><pre><code>fun foo (mk_string: Stringifiable)
-    // ...</code></pre><p>The second one sure looks nicer!</p>
+    // ...</code></pre>
+<pre><code>fun foo (mk_string: Stringifiable)
+    // ...</code></pre>
+<p>The second one sure looks nicer!</p>
 <p>There are a few reason not to use the shorthand though:</p>
 <ul>
 <li>When you need to express other constraints on the actual type.</li>
@@ -437,19 +458,24 @@ snippets are equivalent:</p>
 <p>For instance, these two snippets are equivalent:</p>
 <pre><code>fun foo (mk_string1: $A, mk_string2 $B)
         where Stringifiable $A, Stringifiable $B
-    // ...</code></pre><pre><code>fun foo (mk_string1: Stringifiable, mk_string2: Stringifiable)
-    // ...</code></pre><p>In practice, names will likely need to be attributed to the underlying generic
+    // ...</code></pre>
+<pre><code>fun foo (mk_string1: Stringifiable, mk_string2: Stringifiable)
+    // ...</code></pre>
+<p>In practice, names will likely need to be attributed to the underlying generic
 type when using the shortcut notation. The current plan is to use simple
 sequential identifiers preceded by a reserved string (something like <code>__$A</code>,
 <code>__$B</code>, ...).</p>
 <p>The shortcut notation can also be used for multi-parameter typeclasses, for
 instance the two following snippets are equivalent:</p>
 <pre><code>fun foo (seq: $A) where Sequence $A String
-    // ...</code></pre><pre><code>fun foo (seq: Sequence[String])
-    // ...</code></pre><p>If there are more than two parameters to the typeclass, supplemental parameters
+    // ...</code></pre>
+<pre><code>fun foo (seq: Sequence[String])
+    // ...</code></pre>
+<p>If there are more than two parameters to the typeclass, supplemental parameters
 are separated by a comma:</p>
 <pre><code>fun foo (graph: Graph[Node, Edge]) // Graph $A Node Edge
-    // ...</code></pre><p>This is an example notation anyway, but I&#39;m wondering if using <code>Sequence String</code>
+    // ...</code></pre>
+<p>This is an example notation anyway, but I&#39;m wondering if using <code>Sequence String</code>
 and <code>Graph Node Edge</code> wouldn&#39;t be more pleasant? If I don&#39;t type need type-level
 operators, maybe I&#39;ll do just that.</p>
 <h2 id="empty-typeclasses">Empty Typeclasses</h2>
@@ -465,23 +491,25 @@ requirements:</p>
 <pre><code>class List $T $X where
     Sequential $T $X,
     Indexable $T $X,
-    Iterable $T $X</code></pre><p>Assuming we have an instance of this class, we can access the required instances
+    Iterable $T $X</code></pre>
+<p>Assuming we have an instance of this class, we can access the required instances
 by dot references: <code>ListInstance.Sequential_$T_$X</code>.</p>
 <p>We can also bring required instances in scope via some local import statement:
-<code>import ListInstance.Sequential_$T_$X</code>. Or if we want all of them: <code>import
-ListInstance.*</code>.</p>
+<code>import ListInstance.Sequential_$T_$X</code>. Or if we want all of them: <code>import ListInstance.*</code>.</p>
 <p>Note that importing the instances brings them in scope. It pointedly <em>does not</em>
 resolve ambiguities. It is not an <code>use</code> statement! (But you can also supply
 required instances to <code>use</code>, of course.)</p>
 <h2 id="aliases">Aliases</h2>
 <p>What if you import an instance and the original author hasn&#39;t given it a nice
 name? Fortunately for you, the <code>alias</code> declaration has you covered:</p>
-<pre><code>alias PointComma = Serializable_Point</code></pre><p><code>alias</code> work for any kind of names: typeclass derivations, constructed instance
+<pre><code>alias PointComma = Serializable_Point</code></pre>
+<p><code>alias</code> work for any kind of names: typeclass derivations, constructed instance
 names, ...</p>
 <pre><code>alias Reversed = Orderable_$X_$Y_from_Orderable_$Y_$X
 alias ReversedIntComp = Orderable_$X_$Y_from_Orderable_$Y_$X(Orderable_Int_Int)
 // or, using the first allias:
-alias ReversedIntComp = Reversed(Orderable_Int_Int)</code></pre><p>An alias makes its left and right part interchangeable for code in which the
+alias ReversedIntComp = Reversed(Orderable_Int_Int)</code></pre>
+<p>An alias makes its left and right part interchangeable for code in which the
 <code>alias</code> is in scope. It&#39;s not the same as giving a name to the instance when
 it&#39;s declared: in that case, no automatically generated name is attributed!</p>
 <h2 id="what-remains-to-be-done">What Remains to be Done</h2>

@@ -7,9 +7,7 @@
   <title>
        norswap &middot; Ruby&#39;s `super` Keyword Weirdness
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -80,8 +78,7 @@ lambda.</p>
 <p>Since the lambda is then bound to <code>B#foo</code>, it would stand to reason to think
 that the <code>super</code> from <code>F#foo</code> would invoke <code>A#foo</code>. But here&#39;s the rub: it
 invokes <code>B#foo</code> recursively.</p>
-<p>And so it turns out that the last line fails with <code>SystemStackError: stack level
-too deep</code>.</p>
+<p>And so it turns out that the last line fails with <code>SystemStackError: stack level too deep</code>.</p>
 <p>Of course, the code is actually needlessly complicated. You could do this:</p>
 <pre><code class="language-ruby">method = F.instance_method(:foo)
 B.send(:define_method, :foo, method)</code></pre>

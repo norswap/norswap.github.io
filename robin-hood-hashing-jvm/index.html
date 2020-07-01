@@ -7,9 +7,7 @@
   <title>
        norswap &middot; Robin Hood Hashing on the JVM
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -55,9 +53,9 @@ way to implement <a href="https://en.wikipedia.org/wiki/Linear_probing">linear-p
 already taken (due to hash collision), you probe ahead until you find an empty
 slot. When the hash table is highly loaded, this can lead to entries being
 stored far away from their preferred position.</p>
-<p>Robin Hood Hashing features a notion of <em>displacement</em>. The displacement of an
+<p>Robin Hood Hashing features a notion of <em>displacement*. The displacement of an
 entry is the distance between its actual position and its preferred position.
-Furthermore, we call <em>probe count</em> the number of probed slots in order to find a
+Furthermore, we call *probe count</em> the number of probed slots in order to find a
 free slot. When inserting an entry, the final probe count is the diplacement.</p>
 <p>When inserting an entry A using Robin Hood Hashing, if you encounter an entry B
 whose displacement is smaller than the probe count, you insert A in B&#39;s

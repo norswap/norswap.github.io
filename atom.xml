@@ -841,8 +841,7 @@ this is done through the &lt;code&gt;-o&lt;/code&gt; flag followed by a comma-se
 specifiers described in &lt;code&gt;man ps&lt;/code&gt;, the whole list of which can be obtained by
 running &lt;code&gt;ps -L&lt;/code&gt; or &lt;code&gt;nps -l&lt;/code&gt;. So if you just need the PID, you&amp;#39;d use &lt;code&gt;-o pid&lt;/code&gt;. If
 you just need to lookup some frequently used info, I included the verbose &lt;code&gt;-v&lt;/code&gt;
-flag, which acts like the &lt;code&gt;ps -j&lt;/code&gt; flag, though implemented in terms of &lt;code&gt;-o
-&amp;#39;user, pid, ppid, pgid, sess, jobc, state, tt, time, command&amp;#39;&lt;/code&gt;, which are the
+flag, which acts like the &lt;code&gt;ps -j&lt;/code&gt; flag, though implemented in terms of &lt;code&gt;-o &amp;#39;user, pid, ppid, pgid, sess, jobc, state, tt, time, command&amp;#39;&lt;/code&gt;, which are the
 displayed fields.&lt;/p&gt;
 &lt;p&gt;In terms of matching, the command defaults to case-insensitive matching for
 faster typing, but case-sensitivity can be obtained with the &lt;code&gt;-s&lt;/code&gt; flag. &lt;code&gt;nps&lt;/code&gt;
@@ -902,14 +901,12 @@ special &lt;code&gt;--&lt;/code&gt; separator:&lt;/p&gt;
 # 2043 bash -li
 #  519 bash -li&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I think it would be &lt;em&gt;slightly&lt;/em&gt; better if one could still have regular options
-after. We could imagine to bracket sensitive options with &lt;code&gt;--&lt;/code&gt;: &lt;code&gt;nps -- -li --
--k&lt;/code&gt;, but then we also need a way to specify we want to match &lt;code&gt;--&lt;/code&gt; itself,
+after. We could imagine to bracket sensitive options with &lt;code&gt;--&lt;/code&gt;: &lt;code&gt;nps -- -li -- -k&lt;/code&gt;, but then we also need a way to specify we want to match &lt;code&gt;--&lt;/code&gt; itself,
 probably as a special flag (e.g. &lt;code&gt;--sep&lt;/code&gt;). This is a pretty big change to the
 script for little benefits, so I&amp;#39;m holding out for now.&lt;/p&gt;
 &lt;p&gt;All the &amp;quot;search&amp;quot; arguments are collected in order and merged (separated by a
 whitespace). So in reality, it doesn&amp;#39;t really make sense to have more than one,
-though it can be convenient to type &lt;code&gt;nps sleep 300&lt;/code&gt; rather than &lt;code&gt;nps &amp;#39;sleep
-300&amp;#39;&lt;/code&gt;.&lt;/p&gt;
+though it can be convenient to type &lt;code&gt;nps sleep 300&lt;/code&gt; rather than &lt;code&gt;nps &amp;#39;sleep 300&amp;#39;&lt;/code&gt;.&lt;/p&gt;
 &lt;h2 id=&quot;regular-expressions-and-return-code&quot;&gt;Regular Expressions, and Return Code&lt;/h2&gt;
 &lt;p&gt;The final search parameter (obtained through argument processing as described in
 the last section) will be used as a &lt;a href=&quot;https://www.regular-expressions.info/posix.html&quot;&gt;Posix extended regular expression
@@ -1434,7 +1431,8 @@ performing sets with the same rep count until you reach the same rep count.&lt;/
  - 100kg  ×5 @9      (top set)
  - 95kg   ×5 @8      (drop 5%)
  - 95kg   ×5 @8.5
- - 95kg   ×5 @9      (fatigue reached)&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+ - 95kg   ×5 @9      (fatigue reached)&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Repeats. Instead of working your way up to a top heavy set, you pick some
 fixed weight under your max. You then repeat sets using this weight until you
 reach some pre-determined RPE. To determine the fatigue accrued from working
@@ -1793,8 +1791,7 @@ backbone of my solution.&lt;/p&gt;
 &lt;p&gt;The obvious way is to append &lt;code&gt;&amp;amp;&lt;/code&gt; at the end of your command. This runs in the
 background, but the command is now a child of the current shell, and will be
 terminated along with the shell.&lt;/p&gt;
-&lt;p&gt;The traditional approach in this case is to do something like &lt;code&gt;nohup &amp;lt;command&amp;gt; &amp;amp;
-disown&lt;/code&gt;. &lt;a href=&quot;https://unix.stackexchange.com/a/148698&quot;&gt;Here is a very thorough explanation of that command.&lt;/a&gt;
+&lt;p&gt;The traditional approach in this case is to do something like &lt;code&gt;nohup &amp;lt;command&amp;gt; &amp;amp; disown&lt;/code&gt;. &lt;a href=&quot;https://unix.stackexchange.com/a/148698&quot;&gt;Here is a very thorough explanation of that command.&lt;/a&gt;
 But basically: &lt;code&gt;disown&lt;/code&gt; just removes the command from the list of the shell&amp;#39;s
 job while &lt;code&gt;nohup&lt;/code&gt; redirects the terminal output to a file called &lt;code&gt;nohup.out&lt;/code&gt; in
 the current directory (or you can just redirect it yourself), as well as closes
@@ -1859,16 +1856,12 @@ function.&lt;/p&gt;
 pipeline (including pipes &lt;code&gt;|&lt;/code&gt; and redirects &lt;code&gt;&amp;gt;&lt;/code&gt;). But if we try the naive way,
 we&amp;#39;ll rune into a parser issue.&lt;/p&gt;
 &lt;p&gt;Consider the command &lt;code&gt;echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This prints &lt;code&gt;1 x&lt;/code&gt; to standard output
-(&lt;code&gt;-n&lt;/code&gt; is the option for line numbering). Then try running &lt;code&gt;repeat echo &amp;quot;x&amp;quot; | cat
--n&lt;/code&gt;. This &lt;em&gt;should&lt;/em&gt; output &lt;code&gt;1 x&lt;/code&gt; multiple times. Instead it prints &lt;code&gt;1 x&lt;/code&gt;, then &lt;code&gt;2
-x&lt;/code&gt;, then &lt;code&gt;3 x&lt;/code&gt;, etc. This is because the command is interpreted as &lt;code&gt;(repeat echo
-&amp;quot;a&amp;quot;) | cat&lt;/code&gt; and not &lt;code&gt;repeat (echo &amp;quot;a&amp;quot; | cat)&lt;/code&gt; (note the use of parentheses here
+(&lt;code&gt;-n&lt;/code&gt; is the option for line numbering). Then try running &lt;code&gt;repeat echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt;. This &lt;em&gt;should&lt;/em&gt; output &lt;code&gt;1 x&lt;/code&gt; multiple times. Instead it prints &lt;code&gt;1 x&lt;/code&gt;, then &lt;code&gt;2 x&lt;/code&gt;, then &lt;code&gt;3 x&lt;/code&gt;, etc. This is because the command is interpreted as &lt;code&gt;(repeat echo &amp;quot;a&amp;quot;) | cat&lt;/code&gt; and not &lt;code&gt;repeat (echo &amp;quot;a&amp;quot; | cat)&lt;/code&gt; (note the use of parentheses here
 is not valid Bash syntax).&lt;/p&gt;
 &lt;p&gt;How to pass a pipe then? We have to quote it, then pass it as a parameter to
 &lt;code&gt;bash -c&lt;/code&gt;. e.g. &lt;code&gt;repeat &amp;#39;echo &amp;quot;a&amp;quot; | cat -n&amp;#39;&lt;/code&gt; This is by no means perfect — it
 gets annoying when dealing with commands that already have multiple level of
-quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted as &lt;code&gt;&amp;#39;echo
-&amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;. But it&amp;#39;s still a good step forward.&lt;/p&gt;
+quotations: for instance &lt;code&gt;echo &amp;quot;&amp;#39;a&amp;#39;&amp;quot;&lt;/code&gt; should have been quoted as &lt;code&gt;&amp;#39;echo &amp;quot;\&amp;#39;a\&amp;#39;&amp;quot;&amp;#39;&lt;/code&gt;. But it&amp;#39;s still a good step forward.&lt;/p&gt;
 &lt;p&gt;With all the considerations factored in, we get the following function:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;repeat() {
     local OPT OPTIND OPTARG T=3
@@ -1894,8 +1887,7 @@ options from the list of arguments (accessible via &lt;code&gt;$*&lt;/code&gt;, 
 ...). Check &lt;a href=&quot;https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/&quot;&gt;this tutorial&lt;/a&gt; for more information.&lt;/p&gt;
 &lt;p&gt;An important note on &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt;: &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; will expand to all remaining
 arguments, &lt;em&gt;quoted as a single parameter&lt;/em&gt;. In this way, &lt;code&gt;repeat&lt;/code&gt; can be used
-with or without quoting whenever supported: &lt;code&gt;repeat echo &amp;quot;x&amp;quot;&lt;/code&gt; or &lt;code&gt;repeat &amp;#39;echo
-&amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; (using pipes while not quoting still doesn&amp;#39;t work).&lt;/p&gt;
+with or without quoting whenever supported: &lt;code&gt;repeat echo &amp;quot;x&amp;quot;&lt;/code&gt; or &lt;code&gt;repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; (using pipes while not quoting still doesn&amp;#39;t work).&lt;/p&gt;
 &lt;p&gt;The alternative to &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; is &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; which expands to the same arguments, but
 quoted individually. Since &lt;code&gt;bash -c&lt;/code&gt; expects a single argument, this wouldn&amp;#39;t
 work when used without quotes. We&amp;#39;ll however use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; later!&lt;/p&gt;
@@ -1944,15 +1936,15 @@ tiny bit more economical.&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s time for a little confession: &lt;code&gt;repeat&lt;/code&gt; and &lt;code&gt;remain&lt;/code&gt; are not entirely robust
 as-is.&lt;/p&gt;
 &lt;p&gt;Consider that we want to use &lt;code&gt;remain&lt;/code&gt; with &lt;code&gt;repeat&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;What happens is that the &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt; line in &lt;code&gt;remain&lt;/code&gt; expands to something
+&lt;pre&gt;&lt;code&gt;remain repeat &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What happens is that the &lt;code&gt;bash -c &amp;quot;$*&amp;quot;&lt;/code&gt; line in &lt;code&gt;remain&lt;/code&gt; expands to something
 equivalent to &lt;code&gt;bash -c &amp;#39;repeat echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — the outer quotes have been
 stripped! This will misbeheave in &lt;code&gt;repeat&lt;/code&gt;, producing the wrong &lt;code&gt;1 x&lt;/code&gt;, &lt;code&gt;2 x&lt;/code&gt;
 (etc) output rather than straight &lt;code&gt;1 x&lt;/code&gt; each time.&lt;/p&gt;
 &lt;p&gt;We cannot &amp;quot;just&amp;quot; use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; instead of &lt;code&gt;&amp;quot;$*&amp;quot;&lt;/code&gt; either: &lt;code&gt;bash -c &amp;quot;$@&amp;quot;&lt;/code&gt; would
 expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt; — but &lt;code&gt;bash -c&lt;/code&gt; expects a
 single argument!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Important note:&lt;/strong&gt; I&amp;#39;m slighlty simplifying here. In particular here, &lt;code&gt;bash -c
-&amp;quot;$@&amp;quot;&lt;/code&gt; would not &lt;em&gt;literally&lt;/em&gt; expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;.
+&lt;p&gt;&lt;strong&gt;Important note:&lt;/strong&gt; I&amp;#39;m slighlty simplifying here. In particular here, &lt;code&gt;bash -c &amp;quot;$@&amp;quot;&lt;/code&gt; would not &lt;em&gt;literally&lt;/em&gt; expand to &lt;code&gt;bash -c &amp;#39;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&amp;#39;&lt;/code&gt;.
 Instead the shell would perform expansion and the result would be an
 interpretation like &amp;quot;invoke &lt;code&gt;bash&lt;/code&gt; with three parameters of value &lt;code&gt;-c&lt;/code&gt;, &lt;code&gt;repeat&lt;/code&gt;
 and &lt;code&gt;repeat&amp;#39; &amp;#39;echo &amp;quot;x&amp;quot; | cat -n&lt;/code&gt; on which no further expansion must be
@@ -2167,13 +2159,15 @@ P=/Users/norswap/startup
 for file in $P/*
 do
     $file
-done&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The shebang (&lt;code&gt;#!/bin/bash&lt;/code&gt;) is actually important and &lt;code&gt;launchd&lt;/code&gt; will complain
+done&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The shebang (&lt;code&gt;#!/bin/bash&lt;/code&gt;) is actually important and &lt;code&gt;launchd&lt;/code&gt; will complain
 if it&amp;#39;s not present.&lt;/p&gt;
 &lt;p&gt;And here is an example of file in &lt;code&gt;~/startup&lt;/code&gt;, namely the one I use to run my
 VPN (with confidential details redacted).&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;#!/bin/bash -l
 daemon -n proxyvpn &amp;#39;echo &amp;lt;password&amp;gt; | openconnect --script-tun \
-    --script &amp;quot;ocproxy -D 9999&amp;quot; -u &amp;lt;username&amp;gt; -passwd-on-stdin &amp;lt;vpn address&amp;gt;&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Two notes. First off, don&amp;#39;t write your password in a readable bash script unless you want
+    --script &amp;quot;ocproxy -D 9999&amp;quot; -u &amp;lt;username&amp;gt; -passwd-on-stdin &amp;lt;vpn address&amp;gt;&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Two notes. First off, don&amp;#39;t write your password in a readable bash script unless you want
 your local sysadmin to berate and/or murder you.&lt;/p&gt;
 &lt;p&gt;Second, note how the script specifies &lt;code&gt;bash -l&lt;/code&gt; after the shebang to get a
 &amp;quot;login shell&amp;quot; — login shell source &lt;code&gt;.bash_profile&lt;/code&gt; while other don&amp;#39;t, and that&amp;#39;s
@@ -2184,7 +2178,8 @@ on shell initialization&lt;/a&gt;.&lt;/p&gt;
 &lt;div class=nsep&gt;&lt;/div&gt;
 
 &lt;p&gt;You&amp;#39;ll probably want to test all of this. To do so you can run:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;launchctl load -w ~/Library/LaunchAgents/com.startup.plist&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The &lt;code&gt;-w&lt;/code&gt; option ignores some file where the agent can be disabled for some
+&lt;pre&gt;&lt;code&gt;launchctl load -w ~/Library/LaunchAgents/com.startup.plist&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;-w&lt;/code&gt; option ignores some file where the agent can be disabled for some
 nefarious reasons. I didn&amp;#39;t need it, but it doesn&amp;#39;t hurt either.&lt;/p&gt;
 &lt;p&gt;You might see stuff about a &lt;code&gt;start&lt;/code&gt; command that can in the place of &lt;code&gt;load&lt;/code&gt;.
 That didn&amp;#39;t work for me (but it might be because my &lt;code&gt;plist&lt;/code&gt; file is too
@@ -2198,7 +2193,8 @@ script that returns, the agent is not considered to be &amp;quot;loaded&amp;quot
 in another shell. This will give you messages such as the following if things go
 wrong.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Service could not initialize: 19D76: xpcproxy + 15636
-com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;parting-thoughts&quot;&gt;Parting Thoughts&lt;/h2&gt;
+com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;parting-thoughts&quot;&gt;Parting Thoughts&lt;/h2&gt;
 &lt;p&gt;When I started my &amp;quot;quest&amp;quot; for a quick daemon setup, I didn&amp;#39;t think it would end
 taking as much time, nor require me to go so deep (but then, getting lost in the
 depths seems like a recurring theme on this blog and in my life).&lt;/p&gt;
@@ -3059,7 +3055,8 @@ morality&amp;quot; to 100 = &amp;quot;red meat consumption increases mortality, 
 have puts us at around 1.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;                 👇 evidence points here
 -100 ---------- 0 ---------- 100
-meat 👼      meat 🤷     meat ☠️ &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;controversy-and-the-shills&quot;&gt;Controversy and The Shills&lt;/h2&gt;
+meat 👼      meat 🤷     meat ☠️ &lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;controversy-and-the-shills&quot;&gt;Controversy and The Shills&lt;/h2&gt;
 &lt;p&gt;The good people at the Harvard School of Public Health weren&amp;#39;t too happy with
 the Annals of Internal Medicine&amp;#39;s guidelines, as evidenced by &lt;a href=&quot;https://www.hsph.harvard.edu/nutritionsource/2019/09/30/flawed-guidelines-red-processed-meat/&quot;&gt;this article&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I should probably warn you, I&amp;#39;m going to say bad things about the good people of
@@ -3092,7 +3089,8 @@ already said, it shows very very weak evidence of that.&lt;/p&gt;
 -100 ---------- 0 ---------- 100
 meat 👼      meat 🤷    | meat ☠️ 
                        👆
-                    where Harvard SPH says the evidence points&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And that&amp;#39;s why they&amp;#39;re being disingenuous.&lt;/p&gt;
+                    where Harvard SPH says the evidence points&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And that&amp;#39;s why they&amp;#39;re being disingenuous.&lt;/p&gt;
 &lt;p&gt;Let&amp;#39;s also plug &lt;a href=&quot;https://old.reddit.com/r/gwern/comments/dbw577/effect_of_lower_versus_higher_red_meat_intake_on/f266lfq/&quot;&gt;the reaction of Gwern Branwern&lt;/a&gt; on that article:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;You don&amp;#39;t see any problem with the Noble Lie? &amp;#39;They should not publish these

@@ -7,9 +7,7 @@
   <title>
        norswap &middot; A ps / pkill / pgrep Alternative
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -49,8 +47,6 @@
     <div class="post">
       <h1 class="post-title">A ps / pkill / pgrep Alternative</h1>
       <span class="post-date">25 Mar 2020</span>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
-
 <p>As I was prepping my new computer, and <a href="/unix-daemons/">toying with unix daemons</a>, I found
 myself checking on running processes regularly, and occasionally killing them. I
 also found myself being quite frustrated with the tools provided by the system
@@ -188,8 +184,7 @@ this is done through the <code>-o</code> flag followed by a comma-separated set 
 specifiers described in <code>man ps</code>, the whole list of which can be obtained by
 running <code>ps -L</code> or <code>nps -l</code>. So if you just need the PID, you&#39;d use <code>-o pid</code>. If
 you just need to lookup some frequently used info, I included the verbose <code>-v</code>
-flag, which acts like the <code>ps -j</code> flag, though implemented in terms of <code>-o
-&#39;user, pid, ppid, pgid, sess, jobc, state, tt, time, command&#39;</code>, which are the
+flag, which acts like the <code>ps -j</code> flag, though implemented in terms of <code>-o &#39;user, pid, ppid, pgid, sess, jobc, state, tt, time, command&#39;</code>, which are the
 displayed fields.</p>
 <p>In terms of matching, the command defaults to case-insensitive matching for
 faster typing, but case-sensitivity can be obtained with the <code>-s</code> flag. <code>nps</code>
@@ -249,14 +244,12 @@ special <code>--</code> separator:</p>
 # 2043 bash -li
 #  519 bash -li</code></pre>
 <p>I think it would be <em>slightly</em> better if one could still have regular options
-after. We could imagine to bracket sensitive options with <code>--</code>: <code>nps -- -li --
--k</code>, but then we also need a way to specify we want to match <code>--</code> itself,
+after. We could imagine to bracket sensitive options with <code>--</code>: <code>nps -- -li -- -k</code>, but then we also need a way to specify we want to match <code>--</code> itself,
 probably as a special flag (e.g. <code>--sep</code>). This is a pretty big change to the
 script for little benefits, so I&#39;m holding out for now.</p>
 <p>All the &quot;search&quot; arguments are collected in order and merged (separated by a
 whitespace). So in reality, it doesn&#39;t really make sense to have more than one,
-though it can be convenient to type <code>nps sleep 300</code> rather than <code>nps &#39;sleep
-300&#39;</code>.</p>
+though it can be convenient to type <code>nps sleep 300</code> rather than <code>nps &#39;sleep 300&#39;</code>.</p>
 <h2 id="regular-expressions-and-return-code">Regular Expressions, and Return Code</h2>
 <p>The final search parameter (obtained through argument processing as described in
 the last section) will be used as a <a href="https://www.regular-expressions.info/posix.html">Posix extended regular expression
@@ -393,6 +386,7 @@ if [[ $KILL == 1 ]]; then
 fi
 
 exit $EXIT</code></pre>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
 <script
 src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>
 <script

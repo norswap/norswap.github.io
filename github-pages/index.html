@@ -7,9 +7,7 @@
   <title>
        norswap &middot; A website for your project with Github
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -60,7 +58,8 @@ git init .
 git remote add origin git@github.com:USERNAME/REPO.git
 git checkout --orphan gh-pages
 git commit --allow-empty -m &quot;initial empty commit (pages)&quot;
-git push -u origin gh-pages</code></pre><p>Finally, add <code>/pages/</code> to the <code>.gitignore</code> file for your project.</p>
+git push -u origin gh-pages</code></pre>
+<p>Finally, add <code>/pages/</code> to the <code>.gitignore</code> file for your project.</p>
 <p>What it does: basically it clones your repo inside the <code>pages</code> directory and
 immediately switches to an empty, commit-less branch called <code>gh-pages</code> (as
 required by Github).</p>

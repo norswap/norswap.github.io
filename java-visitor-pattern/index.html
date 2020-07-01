@@ -7,9 +7,7 @@
   <title>
        norswap &middot; The Visitor Pattern in Java 8
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -248,8 +246,7 @@ implementation for the <code>visit(C)</code> overload.</p>
 if we extend <code>AddRankVisitor</code>.</p>
 <p>The trick works: we can use a <code>PrintVisitorC</code> and <code>AddRankVisitorC</code> to visit
 both the previous <code>A</code> and <code>B</code> classes but also the new <code>C</code> class.</p>
-<p>In the process however, we&#39;ve jeopardized type safety. We could write: <code>new
-C().accept(new PrintVisitor())</code> and the code would compile but crash at run-time
+<p>In the process however, we&#39;ve jeopardized type safety. We could write: <code>new C().accept(new PrintVisitor())</code> and the code would compile but crash at run-time
 with a <code>ClassCastException</code>.</p>
 <p>There actually is a pretty rich literature on how to solve the expression
 problem in Java with proper statical type safety. So it <em>is</em> possible. However,

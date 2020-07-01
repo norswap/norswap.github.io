@@ -7,9 +7,7 @@
   <title>
        norswap &middot; C: Scope, Duration &amp; Linkage
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -273,12 +271,14 @@ different name.</p>
 <pre><code>if (first declaration for same object was static)
     static linkage
 else
-    external linkage</code></pre><p>While no-specifier (at file-scope) means:</p>
+    external linkage</code></pre>
+<p>While no-specifier (at file-scope) means:</p>
 <pre><code>if (object is a function
         &amp;&amp; first declaration for same object was static)
     static linkage
 else
-    external linkage</code></pre><p>The reason for making the lack of a specifier act like <code>extern</code> for functions is
+    external linkage</code></pre>
+<p>The reason for making the lack of a specifier act like <code>extern</code> for functions is
 that functions don&#39;t have tentative definitions.</p>
 <p>Why do we even need tentative definitions? The only advantage I see is that one
 can declare a variable only in a header file and get a definition for it. The

@@ -7,9 +7,7 @@
   <title>
        norswap &middot; Language Design Notes 0: A Map of Polymorphism
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -72,15 +70,16 @@ in different execution path on that basis. For instance:</p>
     elif type(x) is Baz:
         foo_baz(x)
     else
-        raise TypeError(&quot;x is neither Bar nor Baz&quot;)</code></pre><p>Some people also say that <em>overloading</em> in statically-typed languages (having
+        raise TypeError(&quot;x is neither Bar nor Baz&quot;)</code></pre>
+<p>Some people also say that <em>overloading</em> in statically-typed languages (having
 multiple functions with the same name, but differing in the type of their
 arguments) counts as polymorphism. I&#39;m not anal about definitions, but
 overloading isn&#39;t what I&#39;m talking about here.</p>
 <p>The problem is that (unlike every other types of &quot;polymorphism&quot;), overloading
 doesn&#39;t compose. The specific overload that gets called must be determined
 statically. As such the type must be fully determined — we can&#39;t use a type
-parameter (cf. <em>parametric polymorphism</em>) and the specific subtype (cf.
-<em>subtyping polymorphism</em>) isn&#39;t taken into account.</p>
+parameter (cf. <em>parametric polymorphism*) and the specific subtype (cf.
+*subtyping polymorphism</em>) isn&#39;t taken into account.</p>
 <p>Basically, you can never reuse code that calls an overloaded function for
 multiple types. Overloading is ultimately just a naming convenience: you could
 give each overload its own name and nothing would change. (There is an exception
@@ -110,7 +109,8 @@ long as the object does implement a method by that name, it will work.</p>
 polymorphic for any object that has both a <code>bar()</code> and <code>baz()</code> method.</p>
 <pre><code>def foo(x):
     x.bar()
-    x.baz()</code></pre><h2 id="parametric-polymorphism">Parametric Polymorphism</h2>
+    x.baz()</code></pre>
+<h2 id="parametric-polymorphism">Parametric Polymorphism</h2>
 <p>Finally, last of the big three, we have <strong>parametric polymorphism</strong>. There are a
 few famous examples of that: generics in Java and C#, templates in C++.
 Basically you endow bits of code (typically functions and data structures) with

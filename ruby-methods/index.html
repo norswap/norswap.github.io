@@ -7,9 +7,7 @@
   <title>
        norswap &middot; Ruby Methods, Procs and Blocks
   </title>
-  <link rel="stylesheet" href="/assets/poole.css">
-  <link rel="stylesheet" href="/assets/syntax.css">
-  <link rel="stylesheet" href="/assets/hyde.css">
+  <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
@@ -60,8 +58,8 @@
 </ul>
 <h2 id="declaring-parameters">Declaring Parameters</h2>
 <p>In everything that follows we make the distinction between <em>parameters</em> (or
-<em>formal parameters</em>): the parameters as they appear in method definitions; and
-<em>arguments</em> (or <em>actual parameters</em>): the value passed to method calls.</p>
+<em>formal parameters*): the parameters as they appear in method definitions; and
+*arguments</em> (or <em>actual parameters</em>): the value passed to method calls.</p>
 <p>A method definition admits the following types of parameters:</p>
 <table>
 <thead>
@@ -110,14 +108,14 @@
 <li><p>Optional parameters can have a default value.</p>
 </li>
 <li><p>Array decomposition parameters are required parameters that decompose an array
-argument into parts. Here are some examples, assuming the argument is <code>[[1,
-2], 3]</code>:</p>
+argument into parts. Here are some examples, assuming the argument is <code>[[1, 2], 3]</code>:</p>
 <pre><code>(*a)          a = [[1, 2], 3]
 (a, b)        a = [1, 2], b = 3
 (a, *b)       a = [1, 2], b = [3]
 (a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
-((a, *b), c)  a = 1,      b = [2], c = 3</code></pre></li>
+((a, *b), c)  a = 1,      b = [2], c = 3</code></pre>
+</li>
 <li><p>The splat parameter enables variable length argument lists and receives all
 extra arguments.</p>
 </li>
@@ -218,8 +216,7 @@ method, it is expanded inside the method call: <code>foo(1, *[2, 3], 3)</code> i
 equivalent to <code>foo(1, 2, 3, 4)</code>. Otherwise the splat expands to a regular
 argument.</p>
 </li>
-<li><p>A double splat works the same, but for hashes: <code>foo(a: 1, **{b: 2, c: 3}, e:
-4)</code> is equivalent to <code>foo(a: 1, b: 2, c: 3, d: 4)</code>. It performs implicit
+<li><p>A double splat works the same, but for hashes: <code>foo(a: 1, **{b: 2, c: 3}, e: 4)</code> is equivalent to <code>foo(a: 1, b: 2, c: 3, d: 4)</code>. It performs implicit
 conversion to <code>Hash</code> for objects that support the <code>to_hash</code> method. Note in
 passing that by convention <code>to_hash</code> represents implicit conversion to a
 <code>Hash</code>, while <code>to_h</code> represents explicit (on-demand only) conversion.</p>
@@ -338,8 +335,7 @@ which will be automatically &quot;splatted&quot;.</p>
 </ul>
 <p><code>proc</code> and <code>Proc.new</code> are used to create regular procs, while <code>lambda</code> and <code>-&gt;</code>
 create lambdas.</p>
-<p>It seems possible to convert between proc and lambda like this: <code>lambda
-&amp;my_proc</code> or <code>proc &amp;my_lambda</code>. However, these conversions don&#39;t do anything:
+<p>It seems possible to convert between proc and lambda like this: <code>lambda &amp;my_proc</code> or <code>proc &amp;my_lambda</code>. However, these conversions don&#39;t do anything:
 <code>lambda &amp;my_proc</code> returns <code>my_proc</code>, and the regular proc behaviour is
 preserved. The converse is true for the reverse conversion.</p>
 <h3 id="curly-brackets--vs-do--end">Curly Brackets (<code>{}</code>) vs <code>do .. end</code></h3>

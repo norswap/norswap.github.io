@@ -44,8 +44,10 @@
     </div>
   </div>
   <div class="content container">
-<h1 id="truffle-tutorial-adding-1-and-1-together">Truffle Tutorial: Adding 1 And 1 Together</h1>
-<p>I&#39;ve now been working on <a href="https://github.com/oracle/truffleruby">TruffleRuby</a> for about 6 months. TruffleRuby is a Ruby
+    <div class="post">
+      <h1 class="post-title">Truffle Tutorial: Adding 1 and 1 Together</h1>
+      <span class="post-date">18 Jul 2020</span>
+<p>I&#39;ve now been working on <a href="https://github.com/oracle/truffleruby">TruffleRuby</a> for about 7 months. TruffleRuby is a Ruby
 implementation built on top of <a href="https://www.graalvm.org/docs/">GraalVM</a> and its <a href="https://www.graalvm.org/docs/Truffle-Framework/user/README">Truffle API</a>. Truffle allows
 languages to be implemented on top of Graal as <a href="https://en.wikipedia.org/wiki/Interpreter_(computing)#Abstract_syntax_tree_interpreters">AST interpreters</a>.</p>
 <p>I wanted to share a little bit of what I learned of Graal and Truffle, so I
@@ -81,14 +83,16 @@ notably avoid a lot of the <a href="https://dzone.com/articles/too-fast-too-mega
 interpreter would normally suffer from.</p>
 <p>The Truffle API also offers other ways to improve performance. Most notably is
 its reliance on <a href="https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching">(polymorphic) inline caching</a>. In a program, there are
-regularities that are hard or impossible to detect statically. Truffle lets you
-specify <em>specializations</em> which handle a subset of all cases that are allowed to
-occur. Then, at runtime, Truffle will generate optimized code only for the
-specializations that were actually encountered in practice, and insert a check
-to verify that we do not encounter other cases (in which case we need to throw
-away the compiled code and start the process again). This is called <em>inline
-caching</em> because we cache the encountered specializations in the AST. We&#39;ll
-cover the specialization mechanism in detail in this article.</p>
+regularities that are hard or impossible to detect statically. For instance,
+maybe a function works on different kinds of values, but in practice only ever
+receives a single kind. Truffle lets you specify <em>specializations</em> which handle
+a subset of all cases that are allowed to occur. Then, at runtime, Truffle will
+generate optimized code only for the specializations that were actually
+encountered in practice, and insert a check to verify that we do not encounter
+other cases (in which case we need to throw away the compiled code and start the
+process again). This is called <em>inline caching</em> because we cache the encountered
+specializations in the AST. We&#39;ll cover the specialization mechanism in detail
+in this article.</p>
 <p>The typical use case for inline caching is method lookup: virtual method calls
 have a tendency to always be done on an instance of the same class. Using inline
 caching, we can store this class, and specialize the code for it, which avoids
@@ -96,33 +100,10 @@ repeating the costly method lookup. However, Truffle&#39;s caches are very flexi
 and it&#39;s possible to specialize on arbitrary conditions — depending on what the
 language implementer specifies. See <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html">here</a> and <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Cached.html">there</a>
 for more details.</p>
-<p>The API has a lot of other tools and possibilities too, such as <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.CompilationFinal.html">compilation
-final values</a> and <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/Assumption.html">assumptions</a>.</p>
-<h2 id="objective--documentation">Objective &amp; Documentation</h2>
-<p>As I said, we&#39;ll keep it real simple in this article. Our language is only going
-to be able to add numbers together and to concatenate strings.</p>
-<p>As it turns out, this is enough to illustrate some fundamental Truffle
-principles, as well as explore some aspects of Truffle code generation.</p>
-<p>In terms of documentation for Truffle, there are three main ressources:</p>
-<ul>
-<li><p><a href="https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters">Christian Hummer&#39;s master thesis</a> document the Truffle DSL,
-i.e. how to actually use Truffle. It&#39;s very clearly written and if you&#39;re
-going to jump on the Truffle bandwagon, you really ought to read chapters 2
-and 3. This will give you a good understanding of the principles behind the
-Truffle DSL.</p>
-</li>
-<li><p><a href="https://www.graalvm.org/truffle/javadoc/">The Truffle Javadoc</a> is very decent, but it will rarely tell you the <em>why</em> of
-things.</p>
-</li>
-<li><p>The <a href="https://github.com/graalvm/simplelanguage">SimpleLanguage example</a> is a full language implemented with a lot of
-comments as an example of how things should generally be done in Truffle. It&#39;s
-the main ressource on how to actually do the advanced stuff.</p>
-</li>
-</ul>
-<p>You can read this blog post without touching any of these resources, but you
-will need them to go further.</p>
-<p>Most of what I will say is covered in the thesis, but this post will have a more
-hands-on approach.</p>
+<p>The Truffle API also offers more advanced utilities to optimize your language,
+such as <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.CompilationFinal.html">compilation final values</a> and <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/Assumption.html">assumptions</a> (in particular, those two
+help improve the result of partial evaluation). We won&#39;t talk about these here,
+but maybe some other time.</p>
 <h2 id="setup">Setup</h2>
 <p>To follow along with the examples, you&#39;ll need to install GraalVM. In
 particular, I used the 20.1.0 version with OpenJDK 11. You can <a href="https://www.graalvm.org/downloads/">download it
@@ -192,10 +173,10 @@ the <a href="http://maven.apache.org/install.html">install instruction</a>.</p>
 &lt;/project&gt;</code></pre>
 <p>There&#39;s nothing incredibly tricky going on here. Sources go to <code>src</code>
 (<a href="https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html"><code>src/main/java</code></a> can burn in hell), we&#39;re using Java version 11, and pulling down
-the Truffle API and Truffle annotation processor version 20.0.0.</p>
+the Truffle API and Truffle annotation processor version 20.1.0.</p>
 <p>I&#39;m calling this project <code>exni</code> for &quot;ex nihilo&quot;. I&#39;m cute like that.</p>
 <h2 id="building-the-ast">Building the AST</h2>
-<p>The first we need to do is to build a simple AST to be evaluated.</p>
+<p>The first thing we need to do is to build a simple AST to be evaluated.</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/ExniNode.java"><code>ExniNode.java</code> 🔗</a></p>
 <pre><code class="language-java">package exni.nodes;
 
@@ -207,18 +188,15 @@ public abstract class ExniNode extends Node
     /** main execute method */
     public abstract Object execute (VirtualFrame frame);
 }</code></pre>
-<p>We&#39;ll use this as the parent class for all our AST nodes. The <code>execute</code> method
-evaluates the node and returns a result of type <code>Object</code>. It takes a
-<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a>, which represents a <a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a>: that of the &quot;function&quot; (or
-equivalent concept) to which the node belongs.</p>
+<p>We&#39;ll use this as the parent class for all our AST nodes. It inherits from the
+Truffle <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/Node.html"><code>Node</code></a> class itself. The <code>execute</code> method evaluates the node and returns
+a result of type <code>Object</code>. It takes a <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a>, which represents a
+<a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a>: that of the &quot;function&quot; (or equivalent concept) to which the node belongs.</p>
 <p>The name <code>execute</code> is special in Truffle. Truffle is aware of node methods whose
 name start with <code>execute</code> and will call the appropriate one when it needs to
 evaluate the children of another AST node. Which <code>execute</code> method is appropriate
 depends on the requested value type (<code>Object</code> being the most general, and
 therefore always applicable) as well as available parameters.</p>
-<p>When using the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html">specialization system</a> (which we&#39;ll discuss
-shortly), Truffle will also automatically implement every abstract <code>execute</code>
-method for us.</p>
 <p>Let&#39;s move to the simplest node implementation possible:</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/IntLiteralNode.java"><code>IntLiteralNode.java</code> 🔗</a></p>
 <pre><code class="language-java">package exni.nodes;
@@ -268,9 +246,10 @@ public abstract class AddNode extends ExniNode
         throw new ExniException(&quot;type error: args must be two longs, or two strings&quot;, this);
     }
 }</code></pre>
-<p>The two <code>NodeChild</code> annotations define children nodes of this AST. By default,
-these have the type of the superclass (<code>ExniNode</code> in this case), but it&#39;s also
-possible to specify the type explicitly with the <code>type</code> annotation element.</p>
+<p>The two <code>NodeChild</code> annotations define children nodes of this AST node. By
+default, these have the type of the superclass (<code>ExniNode</code> in this case), but
+it&#39;s also possible to specify the type explicitly with the <code>type</code> annotation
+element.</p>
 <p>This class is abstract, but Truffle will generate a concrete implementation for
 us, named <code>AddNodeGen</code>. If you load <a href="exni-github">the project</a> in your IDE, you
 can navigate there easily (import the Maven project and build first). We will
@@ -286,12 +265,14 @@ by the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/d
 one for when both values are <code>long</code> (Truffle will automatically perform unboxing
 whenever required), and one for when both values are strings. Additionally,
 there is a fallback specialization. A fallback specialization is a
-specialization whose guards are the negation of all other specializations, and
-will therefore always match when (and only when) no other specialization does.
-In this case, we just throw an type error. The implementation of <code>ExniException</code>
-is irrelevant, excepted that all exceptions thrown during guest language
-execution must implement <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleException.html"><code>TruffleException</code></a> (excepted those exceptions that
-represent errors in the implementation itself).</p>
+specialization that will always match when (and only when) no other
+specialization does. In this case, we just throw an type error.</p>
+<blockquote>
+<p>The implementation of <code>ExniException</code> is irrelevant, excepted that all
+exceptions thrown during guest language execution must implement
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleException.html"><code>TruffleException</code></a> — excepted those exceptions that represent errors in the
+implementation itself.</p>
+</blockquote>
 <p>Note that the names of the specialization methods are irrelevant, they could
 have been anything, including the same name (as long as it generates distinct
 method overloads, of course).</p>
@@ -383,9 +364,9 @@ annotations. There is also a <code>create</code> method at the bottom, which can
 get create an instance of <code>AddNode</code> if given its two children. The third field
 (<code>state_</code>) keeps track of what specializations are active for the node.</p>
 <p>Active specializations? What does that even mean? Well, whenever a
-specialization is first used, it becomes active. Mutliple specializations can be
-active at the same time (if they are used by the same node). A node starts with
-no active specializations.</p>
+specialization is first used, it becomes active. One node can have multiple
+specializations active at the same time. A new node starts with no active
+specializations.</p>
 <p>For instance, let&#39;s imagine a small syntax and a dummy program for our language:</p>
 <pre><code>def add(x, y)
     return x + y; // AddNode 1
@@ -414,9 +395,9 @@ also generated an <code>executeAndSpecialize</code> method that <code>execute</c
 to our previous discussion, <code>execute</code> should be understood as running the active
 specializations, while <code>executeAndSpecialize</code> is responsible to activate new
 specializations.</p>
-<p><code>execute</code> starts by executing the two children node. Then, if our <code>addLongs</code>
-specialization is active, and if if both resulting values can be cast to <code>long</code>,
-it calls <code>AddNode#addLongs</code>. Otherwise, if our <code>addStrings</code> specialization and
+<p><code>execute</code> starts by executing the two children nodes. Then, if our <code>addLongs</code>
+specialization is active, and if both resulting values can be cast to <code>long</code>, it
+calls <code>AddNode#addLongs</code>. Otherwise, if our <code>addStrings</code> specialization is
 active and if the values can be cast to <code>String</code>, it calls <code>AddNode#addStrings</code>.
 If that&#39;s not possible either, it calls
 <code>CompilerDirectives.transferToInterpreterAndInvalidate()</code> and then
@@ -442,19 +423,19 @@ that don&#39;t match the signature).</p>
 <p>Why is the logic split between <code>execute</code> and <code>executeAndSpecialize</code>? It&#39;s
 because <code>execute</code> is what will become JIT-compiled. All its calls to
 specializations are guarded by conditions on <code>_state</code>. <code>_state</code> is marked with
-<code>CompilationFinal</code> interface. This annotation tells Truffle to consider that the
-field is effectively final for partial evaluation and compilation purposes. In
-practice, this means that calls to inactive specializations will be pruned from
-the compiled code, hence only retaining the active specializations. It&#39;s exactly
-what we want to get the benefits I outlined a bit before.</p>
+<code>CompilationFinal</code> annotation. This annotation tells Truffle to consider that
+the field is effectively final for partial evaluation and compilation purposes.
+In practice, this means that calls to inactive specializations will be pruned
+from the compiled code, hence only retaining the active specializations. It&#39;s
+exactly what we want to get the benefits I outlined a bit before.</p>
 <p>This also explains why specialization activation is relegated to
 <code>executeAndSpecialize</code>. That method will never be compiled, because it is only
 called from the <code>execute</code> methods, and always preceded by a call to
 <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--"><code>CompilerDirectives.transferToInterpreterAndInvalidate</code></a> which tells Truffle to
 invalidate the current compiled code for the method! Truffle is aware of this,
 and so will never inline <code>executeAndSpecialized</code> into <code>execute</code>.</p>
-<p>That [<code>CompilerDirectives.transferToInterpreterAndInvalidate</code>] call is also what
-ensures that we discard the current compiled code when a new specialization
+<p>That <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--"><code>CompilerDirectives.transferToInterpreterAndInvalidate</code></a> call is also
+what ensures that we discard the current compiled code when a new specialization
 becomes active.</p>
 <p>You can learn more about the specialization system in <a href="https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters">Christian Hummer&#39;s master
 thesis</a>.</p>
@@ -486,6 +467,9 @@ public abstract class ExniMain
         // while (true) target.call();
     }
 }</code></pre>
+<blockquote>
+<p>Don&#39;t worry about the &quot;uncomment&quot; bit. We&#39;ll get to those later.</p>
+</blockquote>
 <p>We construct our <code>AddNode</code> as expected, but then we wrap it into a
 <code>ExniRootNode</code>. This is an implementation of the Truffle <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a> class. In
 Truffle, runnable nodes belong to a tree with <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a> at the root. For
@@ -520,12 +504,18 @@ public final class ExniRootNode extends RootNode
 <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleRuntime.html#createCallTarget-com.oracle.truffle.api.nodes.RootNode-"><code>Truffle.getRuntime().createCallTarget(root)</code></a> to create a
 <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a>. The call target represents something you can call (in this case,
 it&#39;s our add expression).</p>
+<blockquote>
+<p>Note that in general, expressions don&#39;t have an associated <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a>. It&#39;s
+typically reserved for callable things like functions and methods. But our
+language does not have those, and we need a <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> to run the code.</p>
+</blockquote>
 <p>We use a <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> instead of call the node&#39;s <code>execute</code> method directly so
-that Truffle may work some magic. For instance, whenever a call target is
-created, Truffle create a corresponding <a href="https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)">instrumentation</a> event that can be
-listened on. It also wires up the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> so that it will automatically
-create an object representing a <a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a> (i.e. the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a>
-argument taken by our various <code>execute</code> methods) when called.</p>
+that Truffle may perform some bookkeeping on the call. In particular, the
+<a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> records how often our node is called, so that Truffle may decide
+when to JIT-compile it. It can also be used for <a href="https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)">instrumentation</a>. Finally, it
+wires up the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> so that it will automatically create an object
+representing a <a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a> (i.e. the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a> argument taken by our
+various <code>execute</code> methods) when called.</p>
 <p>All that is left to do is to invoke <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget#call</code></a> and print
 the result.</p>
 <p>To run this after building with Maven, you can use the following command:</p>
@@ -563,7 +553,16 @@ recommend using <a href="https://www.man7.org/linux/man-pages/man1/screen.1.html
 screen -r igv # to attach to the screen</code></pre>
 <p>Next you&#39;ll need to configure your java run command in order for it to generate
 compilation graphs and send them to IGV. You can achieve this by adding the
-following flags to your Java command: <code>-Dgraal.Dump=Truffle -Dgraal.PrintGraph=Network</code>.</p>
+following flags to your Java command: <code>-Dgraal.Dump=Truffle -Dgraal.PrintGraph=Network</code>. Full command:</p>
+<pre><code class="language-bash">M2=$HOME/.m2/repository
+java \
+    -Dtruffle.class.path.append=target/classes \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
+    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
+    -Dgraal.Dump=Truffle \
+    -Dgraal.PrintGraph=Network \
+    exni.ExniMain</code></pre>
 <p>The <code>Dump=Truffle</code> option means to only dump graphs relevant to analysing
 Truffle&#39;s performance (for instance it won&#39;t include graphs for compiled Java
 code that is not related to Truffle).</p>
@@ -577,7 +576,12 @@ link</a>).</p>
 <p>IGV lets you inspect the result of JIT compilation. Our code so far is very
 simple, and does not trigger JIT compilation. However, we can trigger
 compilation simply by calling our <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> withing an infinite loop
-(<code>while (true) target.call;</code>).</p>
+(<code>while (true) target.call();</code>).</p>
+<blockquote>
+<p>Remember that we said that <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a> counts calls in order to decide what
+to optimize? You will now see it&#39;s true: calling inside a loop causes the
+counter to cross the threshold for compilation.</p>
+</blockquote>
 <p>Run it, you should now see something like this in IGV:</p>
 <img class="centered" src="left_sidebar.png" width="400rem" />
 
@@ -585,8 +589,8 @@ compilation simply by calling our <a href="https://www.graalvm.org/truffle/javad
 we build in our main class:</p>
 <img class="centered" src="ast_sum.png" width="300rem" />
 
-<p>The call tree is not interesting because our nodes do not contain a guest
-language function call (our language doesn&#39;t even have those).</p>
+<p>The &quot;call tree&quot; graph is not interesting because our nodes do not contain a
+guest language function call (our language doesn&#39;t even have those).</p>
 <p>The &quot;Graal Graphs&quot; section contains graphs at various stages of the compilation
 process. We&#39;ll be particularly interested in &quot;Before phase Lowering&quot; which
 contains the graphs obtained after all of Truffle&#39;s optimizations have been run
@@ -676,14 +680,51 @@ you&#39;re going to work with IGV):</p>
 that I might rework and post in a couple weeks. Namely, it covers how to set up
 the boilerplate to create a &quot;real&quot; <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleLanguage.html">Truffle guest language</a> and how to implement
 loops inside the guest language.</p>
-<p>If you do want to go further, I encouage to experiment (showing you how was the
-whole point of this article). Be sure to check the Truffle learning ressources I
-outlined <a href="#objective-documentation">at the top of the post</a>.</p>
+<p>If you want to learn more about Graal &amp; Truffle, here a few pointers on where to
+find information &amp; documentation:</p>
+<ul>
+<li><p><a href="https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters">Christian Hummer&#39;s master thesis</a> document the Truffle DSL,
+i.e. how to actually use Truffle. It&#39;s very clearly written and if you&#39;re
+going to jump on the Truffle bandwagon, you really ought to read chapters 2
+and 3. This will give you a good understanding of the principles behind the
+Truffle DSL.</p>
+</li>
+<li><p><a href="https://www.graalvm.org/truffle/javadoc/">The Truffle Javadoc</a> is very decent, but it will rarely tell you the <em>why</em> of
+things.</p>
+</li>
+<li><p>The <a href="https://github.com/graalvm/simplelanguage">SimpleLanguage example</a> is a full language implemented with a lot of
+comments as an example of how things should generally be done in Truffle. It&#39;s
+the main ressource on how to actually do the advanced stuff.</p>
+</li>
+</ul>
+<p>I also encourage you to experiment with Truffle directly (showing you how was
+the whole point of this article)!</p>
+<p>In closing, I want to thank my amazing and talented colleagues at Oracle, who
+patiently answer my many questions, and in particular Benoit Daloze — for
+teaching me most of what I know about Truffle, Christian Humer — for always
+helping wherever Truffle is concerned, and Boris Spasojevic for supplying very
+helpful feedback on the present article.</p>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
 <script
 src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>
 <script
 src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/prism-autoloader.min.js'></script>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/truffle-tutorial";
+        this.page.identifier = "truffle-tutorial";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
   <script src="//static.getclicky.com/js" type="text/javascript"></script>
   <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>

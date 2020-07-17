@@ -6,6 +6,676 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Truffle Tutorial: Adding 1 and 1 Together</title>
+      <description>
+&lt;p&gt;I&amp;#39;ve now been working on &lt;a href=&quot;https://github.com/oracle/truffleruby&quot;&gt;TruffleRuby&lt;/a&gt; for about 7 months. TruffleRuby is a Ruby
+implementation built on top of &lt;a href=&quot;https://www.graalvm.org/docs/&quot;&gt;GraalVM&lt;/a&gt; and its &lt;a href=&quot;https://www.graalvm.org/docs/Truffle-Framework/user/README&quot;&gt;Truffle API&lt;/a&gt;. Truffle allows
+languages to be implemented on top of Graal as &lt;a href=&quot;https://en.wikipedia.org/wiki/Interpreter_(computing)#Abstract_syntax_tree_interpreters&quot;&gt;AST interpreters&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I wanted to share a little bit of what I learned of Graal and Truffle, so I
+decided to write this tutorial, which demonstrates the basics of Truffle through
+simplistic examples.&lt;/p&gt;
+&lt;p&gt;We are setting our ambition very low for this post. We are going to implement
+the almost-simplest possible language. It will only be able to add numbers and
+strings together. Doing this will teach us about some core principles of
+Truffle. Then, we will use the &lt;a href=&quot;https://docs.oracle.com/en/graalvm/enterprise/20/guide/reference/ideal-graph-visualizer.html&quot;&gt;Ideal Graph Visualizer (IGV)&lt;/a&gt; tool to
+inspect the result of compilation.&lt;/p&gt;
+&lt;h2 id=&quot;what-graal-and-truffle-do&quot;&gt;What Graal and Truffle Do&lt;/h2&gt;
+&lt;p&gt;Before entering into the minute details, I want to give you an overview of what
+Graal and Truffle actually do, and why it&amp;#39;s interesting to use them at all.&lt;/p&gt;
+&lt;p&gt;Why build your language on Graal/Truffle? The one line answer is that you can
+make it go fast, easily. The more dynamic / abstract your language, the more it
+will benefit from the optimizations offered by Truffle: writing your own
+advanced JIT compiler is not a light undertaking.&lt;/p&gt;
+&lt;p&gt;You will also get other goodness, such as debugging support for free. There are
+two good articles that should sell you on the technology: &lt;a href=&quot;https://blog.plan99.net/graal-truffle-134d8f28fb69&quot;&gt;&amp;quot;Graal &amp;amp; Truffle&amp;quot; by
+Mike Hearn&lt;/a&gt; (hype check: not every promise is entirely realized, but it&amp;#39;s
+in the works) and &lt;a href=&quot;https://medium.com/graalvm/graalvm-ten-things-12d9111f307d&quot;&gt;&amp;quot;Top 10 Things To Do With GraalVM&amp;quot; by Chris Seaton&lt;/a&gt;
+(hype check: this is all real).&lt;/p&gt;
+&lt;p&gt;As for how the technology actually works, the best explanation for Graal is
+probably Chris Seaton&amp;#39;s talk &lt;a href=&quot;https://chrisseaton.com/truffleruby/jokerconf17/&quot;&gt;Understanding How GraalVM Works&lt;/a&gt; (a
+full transcript with inline slides is available!). This is deep technical
+content, clearly explained. It doesn&amp;#39;t cover Truffle, however.&lt;/p&gt;
+&lt;p&gt;Here is my own broad overview of how Graal/Truffle makes your code fast:&lt;/p&gt;
+&lt;p&gt;When using the Truffle API, Graal (which includes a &lt;a href=&quot;https://en.wikipedia.org/wiki/Just-in-time_compilation&quot;&gt;just in time (JIT)
+compiler&lt;/a&gt;) will compile &lt;a href=&quot;https://en.wikipedia.org/wiki/Hot_spot_(computer_programming)&quot;&gt;hot parts of the AST&lt;/a&gt; to efficient
+machine code. In particular, the hot parts of the AST will be &lt;a href=&quot;https://en.wikipedia.org/wiki/Partial_evaluation&quot;&gt;partially
+evaluated&lt;/a&gt;. While this has multiple performance implications, it will most
+notably avoid a lot of the &lt;a href=&quot;https://dzone.com/articles/too-fast-too-megamorphic-what&quot;&gt;megamorphic call overhead&lt;/a&gt; that an AST
+interpreter would normally suffer from.&lt;/p&gt;
+&lt;p&gt;The Truffle API also offers other ways to improve performance. Most notably is
+its reliance on &lt;a href=&quot;https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching&quot;&gt;(polymorphic) inline caching&lt;/a&gt;. In a program, there are
+regularities that are hard or impossible to detect statically. For instance,
+maybe a function works on different kinds of values, but in practice only ever
+receives a single kind. Truffle lets you specify &lt;em&gt;specializations&lt;/em&gt; which handle
+a subset of all cases that are allowed to occur. Then, at runtime, Truffle will
+generate optimized code only for the specializations that were actually
+encountered in practice, and insert a check to verify that we do not encounter
+other cases (in which case we need to throw away the compiled code and start the
+process again). This is called &lt;em&gt;inline caching&lt;/em&gt; because we cache the encountered
+specializations in the AST. We&amp;#39;ll cover the specialization mechanism in detail
+in this article.&lt;/p&gt;
+&lt;p&gt;The typical use case for inline caching is method lookup: virtual method calls
+have a tendency to always be done on an instance of the same class. Using inline
+caching, we can store this class, and specialize the code for it, which avoids
+repeating the costly method lookup. However, Truffle&amp;#39;s caches are very flexible,
+and it&amp;#39;s possible to specialize on arbitrary conditions — depending on what the
+language implementer specifies. See &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Cached.html&quot;&gt;there&lt;/a&gt;
+for more details.&lt;/p&gt;
+&lt;p&gt;The Truffle API also offers more advanced utilities to optimize your language,
+such as &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.CompilationFinal.html&quot;&gt;compilation final values&lt;/a&gt; and &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/Assumption.html&quot;&gt;assumptions&lt;/a&gt; (in particular, those two
+help improve the result of partial evaluation). We won&amp;#39;t talk about these here,
+but maybe some other time.&lt;/p&gt;
+&lt;h2 id=&quot;setup&quot;&gt;Setup&lt;/h2&gt;
+&lt;p&gt;To follow along with the examples, you&amp;#39;ll need to install GraalVM. In
+particular, I used the 20.1.0 version with OpenJDK 11. You can &lt;a href=&quot;https://www.graalvm.org/downloads/&quot;&gt;download it
+here&lt;/a&gt;. Then follow the &lt;a href=&quot;https://www.graalvm.org/getting-started/&quot;&gt;installation instructions&lt;/a&gt;. You can also add
+it as a SDK to your IDE, usually you&amp;#39;ll need to point it to the Java home
+directory (the thing you&amp;#39;re told to put in &lt;code&gt;JAVA_HOME&lt;/code&gt; in the installation
+instructions).&lt;/p&gt;
+&lt;p&gt;Note that if you&amp;#39;re on macOS and you&amp;#39;re hit with an error that reads
+&lt;code&gt;“graalvm-ce-java11-20.1.0” cannot be opened because the developer cannot be verified.&lt;/code&gt; or &lt;code&gt;macOS cannot verify that this app is free from malware.&lt;/code&gt; when
+trying one of GraalVM&amp;#39;s binaries (&lt;code&gt;java&lt;/code&gt;, &lt;code&gt;javac&lt;/code&gt;, ...), you can fix the
+situation by running:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sudo xattr -dr com.apple.quarantine graalvm-ce-java11-20.1.0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(Replace &lt;code&gt;graalvm-ce-java11-20.1.0&lt;/code&gt; by the path to the root directory of your
+GraalVM installation.)&lt;/p&gt;
+&lt;p&gt;You&amp;#39;ll also need the Ideal Graph Visualizer (IGV), (again, I used version 20.1.0
+for Java 11). IGV is normally part of the (paid/licensed) Entreprise Edition of
+GraalVM, but you can evaluate it for free. Be aware that, in principle, the code
+you evaluate IGV on cannot be used commercially (&lt;a href=&quot;https://en.wikipedia.org/wiki/IANAL&quot;&gt;IANAL etc&lt;/a&gt;). You can &lt;a href=&quot;https://www.oracle.com/downloads/graalvm-downloads.html&quot;&gt;download
+it here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Same as before, if you get an error on macOS, you might need to run the
+following (where &lt;code&gt;idealgraphvisualizer&lt;/code&gt; is the directory where you extracted
+IGV):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sudo xattr -dr com.apple.quarantine idealgraphvisualizer&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I&amp;#39;m going to walk through my whole language example, showing you the code as I
+go. However, the entire source is avaiable &lt;a href=&quot;https://github.com/norswap/truffle-tutorial&quot;&gt;on this Github repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s get started. We&amp;#39;ll use Maven to build the project and pull in the
+dependencies. To install it, just use your package manager of choice, or follow
+the &lt;a href=&quot;http://maven.apache.org/install.html&quot;&gt;install instruction&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is the Maven config file for the project (&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/pom.xml&quot;&gt;&lt;code&gt;pom.xml&lt;/code&gt; 🔗&lt;/a&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;quot;&amp;gt;
+    &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt;
+    &amp;lt;groupId&amp;gt;com.norswap&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;exni&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;1.0.0-SNAPSHOT&amp;lt;/version&amp;gt;
+    &amp;lt;build&amp;gt;
+        &amp;lt;sourceDirectory&amp;gt;src&amp;lt;/sourceDirectory&amp;gt;
+        &amp;lt;plugins&amp;gt;
+            &amp;lt;plugin&amp;gt;
+                &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
+                &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
+                &amp;lt;version&amp;gt;3.8.1&amp;lt;/version&amp;gt;
+                &amp;lt;configuration&amp;gt;
+                    &amp;lt;source&amp;gt;11&amp;lt;/source&amp;gt;
+                    &amp;lt;target&amp;gt;11&amp;lt;/target&amp;gt;
+                &amp;lt;/configuration&amp;gt;
+            &amp;lt;/plugin&amp;gt;
+        &amp;lt;/plugins&amp;gt;
+    &amp;lt;/build&amp;gt;
+    &amp;lt;properties&amp;gt;
+        &amp;lt;project.build.sourceEncoding&amp;gt;UTF-8&amp;lt;/project.build.sourceEncoding&amp;gt;
+        &amp;lt;graalvm.version&amp;gt;20.1.0&amp;lt;/graalvm.version&amp;gt;
+    &amp;lt;/properties&amp;gt;
+    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.graalvm.truffle&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;truffle-api&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;${graalvm.version}&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.graalvm.truffle&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;truffle-dsl-processor&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;${graalvm.version}&amp;lt;/version&amp;gt;
+            &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&amp;lt;/project&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There&amp;#39;s nothing incredibly tricky going on here. Sources go to &lt;code&gt;src&lt;/code&gt;
+(&lt;a href=&quot;https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html&quot;&gt;&lt;code&gt;src/main/java&lt;/code&gt;&lt;/a&gt; can burn in hell), we&amp;#39;re using Java version 11, and pulling down
+the Truffle API and Truffle annotation processor version 20.1.0.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m calling this project &lt;code&gt;exni&lt;/code&gt; for &amp;quot;ex nihilo&amp;quot;. I&amp;#39;m cute like that.&lt;/p&gt;
+&lt;h2 id=&quot;building-the-ast&quot;&gt;Building the AST&lt;/h2&gt;
+&lt;p&gt;The first thing we need to do is to build a simple AST to be evaluated.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/ExniNode.java&quot;&gt;&lt;code&gt;ExniNode.java&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.Node;
+
+public abstract class ExniNode extends Node
+{
+    /** main execute method */
+    public abstract Object execute (VirtualFrame frame);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We&amp;#39;ll use this as the parent class for all our AST nodes. It inherits from the
+Truffle &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/Node.html&quot;&gt;&lt;code&gt;Node&lt;/code&gt;&lt;/a&gt; class itself. The &lt;code&gt;execute&lt;/code&gt; method evaluates the node and returns
+a result of type &lt;code&gt;Object&lt;/code&gt;. It takes a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html&quot;&gt;&lt;code&gt;VirtualFrame&lt;/code&gt;&lt;/a&gt;, which represents a
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Call_stack&quot;&gt;stack frame&lt;/a&gt;: that of the &amp;quot;function&amp;quot; (or equivalent concept) to which the node belongs.&lt;/p&gt;
+&lt;p&gt;The name &lt;code&gt;execute&lt;/code&gt; is special in Truffle. Truffle is aware of node methods whose
+name start with &lt;code&gt;execute&lt;/code&gt; and will call the appropriate one when it needs to
+evaluate the children of another AST node. Which &lt;code&gt;execute&lt;/code&gt; method is appropriate
+depends on the requested value type (&lt;code&gt;Object&lt;/code&gt; being the most general, and
+therefore always applicable) as well as available parameters.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s move to the simplest node implementation possible:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/IntLiteralNode.java&quot;&gt;&lt;code&gt;IntLiteralNode.java&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+
+public final class IntLiteralNode extends ExniNode
+{
+    public final long value;
+
+    public IntLiteralNode (long value) {
+        this.value = value;
+    }
+
+    @Override public Object execute (VirtualFrame frame) {
+        return value;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This node represents an integer literal that appears in source code. We
+implement the &lt;code&gt;execute&lt;/code&gt; method to simply return that number.&lt;/p&gt;
+&lt;p&gt;Now, a node for the &lt;code&gt;+&lt;/code&gt; operator:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/AddNode.java&quot;&gt;&lt;code&gt;AddNode.java&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
+
+import com.oracle.truffle.api.dsl.Fallback;
+import com.oracle.truffle.api.dsl.NodeChild;
+import com.oracle.truffle.api.dsl.Specialization;
+import exni.ExniException;
+
+@NodeChild(&amp;quot;left&amp;quot;)
+@NodeChild(&amp;quot;right&amp;quot;)
+public abstract class AddNode extends ExniNode
+{
+    public static AddNode create (ExniNode left, ExniNode right) {
+        return AddNodeGen.create(left, right);
+    }
+
+    @Specialization protected long addLongs (long left, long right) {
+        return left + right;
+    }
+
+    @Specialization String addStrings (String left, String right) {
+        return left + right;
+    }
+
+    @Fallback protected void typeError (Object left, Object right) {
+        throw new ExniException(&amp;quot;type error: args must be two longs, or two strings&amp;quot;, this);
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The two &lt;code&gt;NodeChild&lt;/code&gt; annotations define children nodes of this AST node. By
+default, these have the type of the superclass (&lt;code&gt;ExniNode&lt;/code&gt; in this case), but
+it&amp;#39;s also possible to specify the type explicitly with the &lt;code&gt;type&lt;/code&gt; annotation
+element.&lt;/p&gt;
+&lt;p&gt;This class is abstract, but Truffle will generate a concrete implementation for
+us, named &lt;code&gt;AddNodeGen&lt;/code&gt;. If you load &lt;a href=&quot;exni-github&quot;&gt;the project&lt;/a&gt; in your IDE, you
+can navigate there easily (import the Maven project and build first). We will
+examine this class shortly.&lt;/p&gt;
+&lt;p&gt;The logic of the class is implemented using the &lt;em&gt;specialization system&lt;/em&gt;. Instead
+of overriding the &lt;code&gt;execute&lt;/code&gt; method(s), we mark a series of method with the
+&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html&quot;&gt;&lt;code&gt;Specialization&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Fallback.html&quot;&gt;&lt;code&gt;Fallback&lt;/code&gt;&lt;/a&gt; annotations.&lt;/p&gt;
+&lt;p&gt;The idea is that when the node is executed, Truffle will pick the first matching
+specialization and run it. There are two criteria used when matching
+specializations: the type of its parameters and additionals conditions specified
+by the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html#guards--&quot;&gt;&lt;code&gt;guards&lt;/code&gt;&lt;/a&gt; annotation element.&lt;/p&gt;
+&lt;p&gt;This is a very simple node, so it only has two specializations and a fallback,
+one for when both values are &lt;code&gt;long&lt;/code&gt; (Truffle will automatically perform unboxing
+whenever required), and one for when both values are strings. Additionally,
+there is a fallback specialization. A fallback specialization is a
+specialization that will always match when (and only when) no other
+specialization does. In this case, we just throw an type error.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The implementation of &lt;code&gt;ExniException&lt;/code&gt; is irrelevant, excepted that all
+exceptions thrown during guest language execution must implement
+&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleException.html&quot;&gt;&lt;code&gt;TruffleException&lt;/code&gt;&lt;/a&gt; — excepted those exceptions that represent errors in the
+implementation itself.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Note that the names of the specialization methods are irrelevant, they could
+have been anything, including the same name (as long as it generates distinct
+method overloads, of course).&lt;/p&gt;
+&lt;h2 id=&quot;specializations-under-the-hood&quot;&gt;Specializations: Under The Hood&lt;/h2&gt;
+&lt;p&gt;Let&amp;#39;s look at the class generated by Truffle to implement our abstract
+&lt;code&gt;AddNode&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/norswap/a235123a4aa3a236fbdeb653ea389362#file-addnodegen-java&quot;&gt;&lt;code&gt;AddNodeGen 🔗&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
+// ...
+
+@GeneratedBy(AddNode.class)
+public final class AddNodeGen extends AddNode {
+
+    @Child private ExniNode left_;
+    @Child private ExniNode right_;
+    @CompilationFinal private int state_;
+
+    private AddNodeGen(ExniNode left, ExniNode right) {
+        this.left_ = left;
+        this.right_ = right;
+    }
+
+    @Override
+    public Object execute(VirtualFrame frameValue) {
+        int state = state_;
+        Object leftValue_ = this.left_.execute(frameValue);
+        Object rightValue_ = this.right_.execute(frameValue);
+        if ((state &amp;amp; 0b1) != 0 /* is-active addLongs(long, long) */ &amp;amp;&amp;amp; leftValue_ instanceof Long) {
+            long leftValue__ = (long) leftValue_;
+            if (rightValue_ instanceof Long) {
+                long rightValue__ = (long) rightValue_;
+                return addLongs(leftValue__, rightValue__);
+            }
+        }
+        if ((state &amp;amp; 0b10) != 0 /* is-active addStrings(String, String) */ &amp;amp;&amp;amp; leftValue_ instanceof String) {
+            String leftValue__ = (String) leftValue_;
+            if (rightValue_ instanceof String) {
+                String rightValue__ = (String) rightValue_;
+                return addStrings(leftValue__, rightValue__);
+            }
+        }
+        CompilerDirectives.transferToInterpreterAndInvalidate();
+        return executeAndSpecialize(leftValue_, rightValue_);
+    }
+
+    private Object executeAndSpecialize(Object leftValue, Object rightValue) {
+        int state = state_;
+        if (leftValue instanceof Long) {
+            long leftValue_ = (long) leftValue;
+            if (rightValue instanceof Long) {
+                long rightValue_ = (long) rightValue;
+                this.state_ = state = state | 0b1 /* add-active addLongs(long, long) */;
+                return addLongs(leftValue_, rightValue_);
+            }
+        }
+        if (leftValue instanceof String) {
+            String leftValue_ = (String) leftValue;
+            if (rightValue instanceof String) {
+                String rightValue_ = (String) rightValue;
+                this.state_ = state = state | 0b10 /* add-active addStrings(String, String) */;
+                return addStrings(leftValue_, rightValue_);
+            }
+        }
+        this.state_ = state = state | 0b100 /* add-active typeError(Object, Object) */;
+        typeError(leftValue, rightValue);
+        return null;
+    }
+
+    @Override
+    public NodeCost getCost() { /* ... */ }
+
+    private static boolean fallbackGuard_(int state, Object leftValue, Object rightValue) {
+        if (((state &amp;amp; 0b1)) == 0 /* is-not-active addLongs(long, long) */ &amp;amp;&amp;amp; leftValue instanceof Long &amp;amp;&amp;amp; rightValue instanceof Long) {
+            return false;
+        }
+        if (((state &amp;amp; 0b10)) == 0 /* is-not-active addStrings(String, String) */ &amp;amp;&amp;amp; leftValue instanceof String &amp;amp;&amp;amp; rightValue instanceof String) {
+            return false;
+        }
+        return true;
+    }
+
+    public static AddNode create(ExniNode left, ExniNode right) {
+        return new AddNodeGen(left, right);
+    }
+
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It has three fields. The first two were generated by the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/NodeChild.html&quot;&gt;&lt;code&gt;NodeChild&lt;/code&gt;&lt;/a&gt;
+annotations. There is also a &lt;code&gt;create&lt;/code&gt; method at the bottom, which can be used to
+get create an instance of &lt;code&gt;AddNode&lt;/code&gt; if given its two children. The third field
+(&lt;code&gt;state_&lt;/code&gt;) keeps track of what specializations are active for the node.&lt;/p&gt;
+&lt;p&gt;Active specializations? What does that even mean? Well, whenever a
+specialization is first used, it becomes active. One node can have multiple
+specializations active at the same time. A new node starts with no active
+specializations.&lt;/p&gt;
+&lt;p&gt;For instance, let&amp;#39;s imagine a small syntax and a dummy program for our language:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def add(x, y)
+    return x + y; // AddNode 1
+
+add(1, 2)
+add(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;)
+1 + 2 // AddNode 2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I have used comments to mark the two locations where an &lt;code&gt;AddNode&lt;/code&gt; is generated.
+&lt;code&gt;AddNode 1&lt;/code&gt; will see both integer and string values, and so both specializations
+will become active. &lt;code&gt;AddNode 2&lt;/code&gt;, on the other hand, will only ever see integers.&lt;/p&gt;
+&lt;p&gt;But why do we need to distinguish between active and inactive specializations?
+Doing so helps Graal&amp;#39;s JIT compiler generate better compiled code. Whenever the
+node has to be JIT-compiled, Graal will only emit machine code for the
+specializations that have been activated. Having less possibilities has multiple
+benefits. First there are less cases to check. Second, the reduced set of
+possibilities may enable further optimizations (especially when there is only a
+single active specialization). Finally, all else being equal, shorter code is
+generally faster (more efficient cache utilisation).&lt;/p&gt;
+&lt;p&gt;This raises one more question: what happens if, after generating compiled code,
+we encounter a case covered by a specialization that hasn&amp;#39;t been activated yet?
+In that case, the compiled code is invalidated, and the new specialization is
+activated. New compiled code may subsequently be generated.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s go back to the code. Truffle has automatically generated the &lt;code&gt;execute&lt;/code&gt;
+method that was left abstract (in &lt;code&gt;ExniNode&lt;/code&gt;, &lt;code&gt;AddNode&lt;/code&gt;&amp;#39;s superclass). It has
+also generated an &lt;code&gt;executeAndSpecialize&lt;/code&gt; method that &lt;code&gt;execute&lt;/code&gt; calls. Relating
+to our previous discussion, &lt;code&gt;execute&lt;/code&gt; should be understood as running the active
+specializations, while &lt;code&gt;executeAndSpecialize&lt;/code&gt; is responsible to activate new
+specializations.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;execute&lt;/code&gt; starts by executing the two children nodes. Then, if our &lt;code&gt;addLongs&lt;/code&gt;
+specialization is active, and if both resulting values can be cast to &lt;code&gt;long&lt;/code&gt;, it
+calls &lt;code&gt;AddNode#addLongs&lt;/code&gt;. Otherwise, if our &lt;code&gt;addStrings&lt;/code&gt; specialization is
+active and if the values can be cast to &lt;code&gt;String&lt;/code&gt;, it calls &lt;code&gt;AddNode#addStrings&lt;/code&gt;.
+If that&amp;#39;s not possible either, it calls
+&lt;code&gt;CompilerDirectives.transferToInterpreterAndInvalidate()&lt;/code&gt; and then
+&lt;code&gt;executeAndSpecialize&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;executeAndSpecialize&lt;/code&gt; does almost the same thing, but does not check for
+activated specializations, only for the specific conditions in which a
+specialization may apply. Additionally, it activates any specialization it
+calls. Finally, if none of the two specialization matches, it calls our fallback
+specialization &lt;code&gt;AddNode#typeError&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now you might think from this that fallback specializations may never be
+activated. This is not so. The only reason that &lt;code&gt;typeError&lt;/code&gt; does not appear in
+&lt;code&gt;execute&lt;/code&gt; is that its return type (&lt;code&gt;void&lt;/code&gt;) is incompatible with that of
+&lt;code&gt;execute&lt;/code&gt; (&lt;code&gt;Object&lt;/code&gt;). If we wanted the specialization to be activable, we could
+change its return type to &lt;code&gt;Object&lt;/code&gt;. Since it is an extraordinary error
+condition, I chose not do that here. I encourage you to try it and check that
+the generated code changed accordingly.&lt;/p&gt;
+&lt;p&gt;Note you can observe similar effects when multiple &lt;code&gt;execute&lt;/code&gt; methods have
+different type parameters. The &lt;code&gt;execute&lt;/code&gt; methods will be JIT-compiled
+separately, which can lead to more efficient code for the method whose signature
+is more restrictive (as it doesn&amp;#39;t have to include the activated specializations
+that don&amp;#39;t match the signature).&lt;/p&gt;
+&lt;h3 id=&quot;how-the-magic-happens&quot;&gt;How the Magic Happens&lt;/h3&gt;
+&lt;p&gt;Why is the logic split between &lt;code&gt;execute&lt;/code&gt; and &lt;code&gt;executeAndSpecialize&lt;/code&gt;? It&amp;#39;s
+because &lt;code&gt;execute&lt;/code&gt; is what will become JIT-compiled. All its calls to
+specializations are guarded by conditions on &lt;code&gt;_state&lt;/code&gt;. &lt;code&gt;_state&lt;/code&gt; is marked with
+&lt;code&gt;CompilationFinal&lt;/code&gt; annotation. This annotation tells Truffle to consider that
+the field is effectively final for partial evaluation and compilation purposes.
+In practice, this means that calls to inactive specializations will be pruned
+from the compiled code, hence only retaining the active specializations. It&amp;#39;s
+exactly what we want to get the benefits I outlined a bit before.&lt;/p&gt;
+&lt;p&gt;This also explains why specialization activation is relegated to
+&lt;code&gt;executeAndSpecialize&lt;/code&gt;. That method will never be compiled, because it is only
+called from the &lt;code&gt;execute&lt;/code&gt; methods, and always preceded by a call to
+&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--&quot;&gt;&lt;code&gt;CompilerDirectives.transferToInterpreterAndInvalidate&lt;/code&gt;&lt;/a&gt; which tells Truffle to
+invalidate the current compiled code for the method! Truffle is aware of this,
+and so will never inline &lt;code&gt;executeAndSpecialized&lt;/code&gt; into &lt;code&gt;execute&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;That &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--&quot;&gt;&lt;code&gt;CompilerDirectives.transferToInterpreterAndInvalidate&lt;/code&gt;&lt;/a&gt; call is also
+what ensures that we discard the current compiled code when a new specialization
+becomes active.&lt;/p&gt;
+&lt;p&gt;You can learn more about the specialization system in &lt;a href=&quot;https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters&quot;&gt;Christian Hummer&amp;#39;s master
+thesis&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;running&quot;&gt;Running&lt;/h2&gt;
+&lt;p&gt;Okay, so we have our grand addition/concatenation node. Let&amp;#39;s actually use it.
+Here is our main class:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniMain.java&quot;&gt;&lt;code&gt;ExniMain&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni;
+
+import com.oracle.truffle.api.Truffle;
+import exni.nodes.AddNode;
+import exni.nodes.IntLiteralNode;
+import exni.nodes.ExniRootNode;
+
+public abstract class ExniMain
+{
+    public static void main (String[] args)
+    {
+        var add = AddNode.create(new IntLiteralNode(1), new IntLiteralNode(2));
+        var root = new ExniRootNode(add);
+        var target = Truffle.getRuntime().createCallTarget(root);
+
+        // Uncomment this in order to use a CountNode instead of an AddNode.
+        // target = Truffle.getRuntime().createCallTarget(new MainNode(new CountNode()));
+
+        System.out.println(target.call());
+
+        // Uncomment this in order to force the compilation of the node.
+        // while (true) target.call();
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Don&amp;#39;t worry about the &amp;quot;uncomment&amp;quot; bit. We&amp;#39;ll get to those later.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We construct our &lt;code&gt;AddNode&lt;/code&gt; as expected, but then we wrap it into a
+&lt;code&gt;ExniRootNode&lt;/code&gt;. This is an implementation of the Truffle &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; class. In
+Truffle, runnable nodes belong to a tree with &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; at the root. For
+instance, there is typically one &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; per function definition.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; also holds a reference to a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/FrameDescriptor.html&quot;&gt;&lt;code&gt;FrameDescriptor&lt;/code&gt;&lt;/a&gt; that describes the
+parameters expected by the node (in the case of a function definition: the
+function&amp;#39;s parameters). We do not need to specify this here, since our addition
+expression does not take parameters.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ExniRootNode&lt;/code&gt; doesn&amp;#39;t do anything fancy by itself: it just wraps an &lt;code&gt;ExniNode&lt;/code&gt;,
+and extends &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniRootNode.java&quot;&gt;&lt;code&gt;ExniRootNode&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.RootNode;
+
+public final class ExniRootNode extends RootNode
+{
+    @SuppressWarnings(&amp;quot;FieldMayBeFinal&amp;quot;)
+    private @Child ExniNode root;
+
+    public ExniRootNode(ExniNode root) {
+        super(null);
+        this.root = root;
+    }
+
+    @Override public Object execute (VirtualFrame frame) {
+        return root.execute(frame);
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The next step is to call
+&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleRuntime.html#createCallTarget-com.oracle.truffle.api.nodes.RootNode-&quot;&gt;&lt;code&gt;Truffle.getRuntime().createCallTarget(root)&lt;/code&gt;&lt;/a&gt; to create a
+&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt;. The call target represents something you can call (in this case,
+it&amp;#39;s our add expression).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note that in general, expressions don&amp;#39;t have an associated &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt;. It&amp;#39;s
+typically reserved for callable things like functions and methods. But our
+language does not have those, and we need a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; to run the code.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We use a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; instead of call the node&amp;#39;s &lt;code&gt;execute&lt;/code&gt; method directly so
+that Truffle may perform some bookkeeping on the call. In particular, the
+&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; records how often our node is called, so that Truffle may decide
+when to JIT-compile it. It can also be used for &lt;a href=&quot;https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)&quot;&gt;instrumentation&lt;/a&gt;. Finally, it
+wires up the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; so that it will automatically create an object
+representing a &lt;a href=&quot;https://en.wikipedia.org/wiki/Call_stack&quot;&gt;stack frame&lt;/a&gt; (i.e. the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html&quot;&gt;&lt;code&gt;VirtualFrame&lt;/code&gt;&lt;/a&gt; argument taken by our
+various &lt;code&gt;execute&lt;/code&gt; methods) when called.&lt;/p&gt;
+&lt;p&gt;All that is left to do is to invoke &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget#call&lt;/code&gt;&lt;/a&gt; and print
+the result.&lt;/p&gt;
+&lt;p&gt;To run this after building with Maven, you can use the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;M2=$HOME/.m2/repository
+java \
+    -Dtruffle.class.path.append=target/classes \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
+    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
+    exni.ExniMain&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A couple practical points:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;you need to be at the repository&amp;#39;s root&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;java&lt;/code&gt; must point to the GraalVM version&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$M2&lt;/code&gt; should point to your m2 repository (by default it&amp;#39;s &lt;code&gt;$HOME/.m2/repository&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;You can configure your IDE to run this instead, you&amp;#39;ll just need to specify
+the main class and all the other non-classpath arguments.&lt;/li&gt;
+&lt;li&gt;Don&amp;#39;t forget to run this with GraalVM&amp;#39;s &lt;code&gt;java&lt;/code&gt;! It will run with other &lt;code&gt;java&lt;/code&gt;
+but Truffle nodes won&amp;#39;t be compiled specially.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Lo and behold, your console should print the glorious number 3!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Extra technical note: The &lt;code&gt;add-exports&lt;/code&gt; arguments are needed because classes
+in &lt;code&gt;com.oracle.truffle.api&lt;/code&gt; need to be loaded via Truffle&amp;#39;s own class loader.
+The &lt;code&gt;add-exports&lt;/code&gt; arguments ensure that the class loader associated with the
+module is used. Similarly, defining &lt;code&gt;truffle.class.path.append&lt;/code&gt; enables that
+classloader to find our own node classes.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;igv&quot;&gt;IGV&lt;/h2&gt;
+&lt;p&gt;To run IGV, simply run the &lt;code&gt;bin/idealgraphvisualizer&lt;/code&gt; in your IGV install
+directory (just wherever you unzipped the downloaded archive). This will tie up
+the console in which IGV is run — if you it to run in the background, I
+recommend using &lt;a href=&quot;https://www.man7.org/linux/man-pages/man1/screen.1.html&quot;&gt;&lt;code&gt;screen&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;screen -dm -S igv bin/idealgraphvisualizer
+screen -r igv # to attach to the screen&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next you&amp;#39;ll need to configure your java run command in order for it to generate
+compilation graphs and send them to IGV. You can achieve this by adding the
+following flags to your Java command: &lt;code&gt;-Dgraal.Dump=Truffle -Dgraal.PrintGraph=Network&lt;/code&gt;. Full command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;M2=$HOME/.m2/repository
+java \
+    -Dtruffle.class.path.append=target/classes \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
+    --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
+    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
+    -Dgraal.Dump=Truffle \
+    -Dgraal.PrintGraph=Network \
+    exni.ExniMain&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;Dump=Truffle&lt;/code&gt; option means to only dump graphs relevant to analysing
+Truffle&amp;#39;s performance (for instance it won&amp;#39;t include graphs for compiled Java
+code that is not related to Truffle).&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;PrintGraph=Network&lt;/code&gt; option means to send the graphs directly to a running
+IGV over the network. If you omit this, it will default to dumping the graphs as
+files in &lt;code&gt;graal_dumps/&lt;/code&gt; in the working directory, and you can open those later
+from IGV.&lt;/p&gt;
+&lt;p&gt;These flags are documented on Graal&amp;#39;s git repository &lt;a href=&quot;https://github.com/oracle/graal/tree/master/compiler/src/org.graalvm.compiler.debug/src/org/graalvm/compiler/debug/doc-files&quot;&gt;here
+(master)&lt;/a&gt; (&lt;a href=&quot;https://github.com/oracle/graal/tree/32cd3db91fe4a141ee3016ac18b0f4cc9f51e447/compiler/src/org.graalvm.compiler.debug/src/org/graalvm/compiler/debug/doc-files&quot;&gt;future-proof(er), commit-specific
+link&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;IGV lets you inspect the result of JIT compilation. Our code so far is very
+simple, and does not trigger JIT compilation. However, we can trigger
+compilation simply by calling our &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; withing an infinite loop
+(&lt;code&gt;while (true) target.call();&lt;/code&gt;).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Remember that we said that &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; counts calls in order to decide what
+to optimize? You will now see it&amp;#39;s true: calling inside a loop causes the
+counter to cross the threshold for compilation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Run it, you should now see something like this in IGV:&lt;/p&gt;
+&lt;img class=&quot;centered&quot; src=&quot;left_sidebar.png&quot; width=&quot;400rem&quot; /&gt;
+
+&lt;p&gt;If you select the AST graph, you&amp;#39;ll see this, which is exactly the node hiearchy
+we build in our main class:&lt;/p&gt;
+&lt;img class=&quot;centered&quot; src=&quot;ast_sum.png&quot; width=&quot;300rem&quot; /&gt;
+
+&lt;p&gt;The &amp;quot;call tree&amp;quot; graph is not interesting because our nodes do not contain a
+guest language function call (our language doesn&amp;#39;t even have those).&lt;/p&gt;
+&lt;p&gt;The &amp;quot;Graal Graphs&amp;quot; section contains graphs at various stages of the compilation
+process. We&amp;#39;ll be particularly interested in &amp;quot;Before phase Lowering&amp;quot; which
+contains the graphs obtained after all of Truffle&amp;#39;s optimizations have been run
+(GraalMV still run generic optimizations after this however). In this case,
+you&amp;#39;ll see this:&lt;/p&gt;
+&lt;img class=&quot;centered&quot; src=&quot;graph_sum_truffle.png&quot; width=&quot;500rem&quot; /&gt;
+
+&lt;p&gt;Which is to say, almost nothing! The compiler was smart and the addition of two
+constants was completely optimized away. Do you see that small &lt;code&gt;62&lt;/code&gt; node? &lt;code&gt;C(3)&lt;/code&gt;
+means &amp;quot;constant with value 3&amp;quot; and that&amp;#39;s the result of our addition. At this
+stage, it still needs to &lt;a href=&quot;https://docs.oracle.com/javase/tutorial/java/data/autoboxing.html&quot;&gt;box&lt;/a&gt; that value though. But if you look to any further
+graph, you&amp;#39;ll see:&lt;/p&gt;
+&lt;img class=&quot;centered&quot; src=&quot;graph_sum_further.png&quot; width=&quot;400rem&quot; /&gt;
+
+&lt;p&gt;The result of the boxing operation is a constant instance of &lt;code&gt;Long&lt;/code&gt;, so we can
+eliminate the boxing operation.&lt;/p&gt;
+&lt;p&gt;You may wonder why this does not get optimized even further. After all, the
+return value is never used. The answer is that the logic that calls the call
+target (&lt;code&gt;target.call()&lt;/code&gt;) is quite complex and therefore cannot be optimized
+away. You can actually get to see the graph for that by replacing the
+&lt;code&gt;-Dgraal.Dump=Truffle&lt;/code&gt; flag by &lt;code&gt;-Dgraal.Dump=:1&lt;/code&gt; and looking for the code of the
+main method (&lt;code&gt;exni.ExniMain.main&lt;/code&gt;). You can also move the loop to another method
+if you want to get rid of the part of the graph that corresponds to the
+construction of the AST. It looks &lt;a href=&quot;graph_main.png&quot;&gt;something like this&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;So we can note that calling the call target within a loop is not a great idea.
+We could probably see that our &lt;code&gt;AddNode&lt;/code&gt; gets optimized away completely if we
+implemented a loop in the guest language itself.&lt;/p&gt;
+&lt;h2 id=&quot;a-slightly-harder-graph-and-what-does-it-mean-anyway&quot;&gt;A slightly harder graph, and what does it mean, anyway?&lt;/h2&gt;
+&lt;p&gt;Okay, so let&amp;#39;s see some actual graphs. We&amp;#39;ll create a new node that doesn&amp;#39;t
+optimize away. This node will be a counter that updates a public field:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/CountNode.java&quot;&gt;&lt;code&gt;CountNode&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
+
+import com.oracle.truffle.api.frame.VirtualFrame;
+
+public final class CountNode extends ExniNode {
+
+    public long counter;
+
+    @Override public Object execute (VirtualFrame frame) {
+        return counter++;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Even though we&amp;#39;ll never read the counter, the field is public and the compiler
+cannot prove that it won&amp;#39;t be read, so it has to be dutifully incremented.&lt;/p&gt;
+&lt;p&gt;If you modify the main method to run this node instead, and go to the graphs
+(still &amp;quot;Before phase Lowering&amp;quot;) — click for full size version:&lt;/p&gt;
+&lt;a href=&quot;graph_counter_full.png&quot;&gt;
+&lt;img class=&quot;centered&quot; src=&quot;graph_counter_full.png&quot; /&gt;
+&lt;/a&gt;
+
+&lt;p&gt;First off, all the green stuff is &amp;quot;state&amp;quot;. I&amp;#39;ll be honest: I&amp;#39;m not too sure what
+&amp;quot;state&amp;quot; is supposed to be in general, but in this case (and in conjunction with
+grey boxes), it shows you a couple of the methods invoked to start the node&amp;#39;s
+execution, as well as relevant parameter to these methods. In particular, node
+21 shows an instance of Truffle&amp;#39;s internal &lt;a href=&quot;https://github.com/oracle/graal/blob/7980245f92d00f4b6c38688d46f0a586ec397fde/compiler/src/org.graalvm.compiler.truffle.runtime/src/org/graalvm/compiler/truffle/runtime/FrameWithoutBoxing.java&quot;&gt;&lt;code&gt;FrameWithoutBoxing&lt;/code&gt;&lt;/a&gt; class, and all
+the &lt;code&gt;VirtualArray&lt;/code&gt; nodes to the right of that are its fields.&lt;/p&gt;
+&lt;p&gt;Anyway, you can hide the state in the &amp;quot;Filters&amp;quot; panel on the right in IGV. You
+could also hit &amp;quot;Remove floating&amp;quot; to get rid of the grey boxes, but I want to
+keep node 44 (+). Instead I&amp;#39;ve hidden the other grey boxes manually, and we&amp;#39;re
+left with this:&lt;/p&gt;
+&lt;img class=&quot;centered&quot; src=&quot;graph_counter_simple.png&quot; width=&quot;550rem&quot; /&gt;
+
+&lt;p&gt;This is fairly simple to understand: our node loads the &lt;code&gt;counter&lt;/code&gt; field in node
+41, and adds 1 to it in node 44. Notice how one operand comes from the blue
+line, while the other is given by the small box 43 on top: &lt;code&gt;C(1) i64&lt;/code&gt; means that
+the operand is the constant 1, which is a 64-bits integer. We store the result
+of this operation back into the field in node 42. Notice how node 41 has a line
+going to node 44 and one line going to node 72 (Box), which is the return value?
+That&amp;#39;s because we used &lt;code&gt;return counter++&lt;/code&gt; (and not &lt;code&gt;return ++counter&lt;/code&gt;): the node
+evaluates to the pre-incremented value!&lt;/p&gt;
+&lt;p&gt;From this explanation, you can see that blue lines represent data flow: a blue
+line going down means the data coming out of the higher node is being used by
+the lower node. There is also a thick red line: that represents control flow,
+i.e. it determines what operations happen before which others.&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ve barely scratched the surface of Graal graphs here (we haven&amp;#39;t even talked
+about conditionals and loops). If you want to know more, I highly recommend
+these two writeups by Chris Seaton (the first one is essentially a much shorter
+teaser version of the second one, which you really ought to read in full if
+you&amp;#39;re going to work with IGV):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://engineering.shopify.com/blogs/engineering/understanding-programs-using-graphs&quot;&gt;Understanding Programs Using Graphs @ Shopify Engineering&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://chrisseaton.com/truffleruby/basic-graal-graphs/&quot;&gt;Understanding Basic Graal Graphs @ chrisseaton.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;going-further&quot;&gt;Going Further&lt;/h2&gt;
+&lt;p&gt;That&amp;#39;s it for today! I have some extra material that was cut from this article
+that I might rework and post in a couple weeks. Namely, it covers how to set up
+the boilerplate to create a &amp;quot;real&amp;quot; &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleLanguage.html&quot;&gt;Truffle guest language&lt;/a&gt; and how to implement
+loops inside the guest language.&lt;/p&gt;
+&lt;p&gt;If you want to learn more about Graal &amp;amp; Truffle, here a few pointers on where to
+find information &amp;amp; documentation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters&quot;&gt;Christian Hummer&amp;#39;s master thesis&lt;/a&gt; document the Truffle DSL,
+i.e. how to actually use Truffle. It&amp;#39;s very clearly written and if you&amp;#39;re
+going to jump on the Truffle bandwagon, you really ought to read chapters 2
+and 3. This will give you a good understanding of the principles behind the
+Truffle DSL.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/&quot;&gt;The Truffle Javadoc&lt;/a&gt; is very decent, but it will rarely tell you the &lt;em&gt;why&lt;/em&gt; of
+things.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The &lt;a href=&quot;https://github.com/graalvm/simplelanguage&quot;&gt;SimpleLanguage example&lt;/a&gt; is a full language implemented with a lot of
+comments as an example of how things should generally be done in Truffle. It&amp;#39;s
+the main ressource on how to actually do the advanced stuff.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I also encourage you to experiment with Truffle directly (showing you how was
+the whole point of this article)!&lt;/p&gt;
+&lt;p&gt;In closing, I want to thank my amazing and talented colleagues at Oracle, who
+patiently answer my many questions, and in particular Benoit Daloze — for
+teaching me most of what I know about Truffle, Christian Humer — for always
+helping wherever Truffle is concerned, and Boris Spasojevic for supplying very
+helpful feedback on the present article.&lt;/p&gt;
+&lt;link href=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css&#39; rel=&#39;stylesheet&#39; /&gt;
+&lt;script
+src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js&#39;&gt;&lt;/script&gt;
+&lt;script
+src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/prism-autoloader.min.js&#39;&gt;&lt;/script&gt;
+      </description>
+      <pubDate>2020-07-17T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/truffle-tutorial</link>
+      <guid isPermaLink="true">http://norswap.com/truffle-tutorial</guid>
+    </item>
+    <item>
       <title>Animes, Shows &amp; Movies Reviews 6</title>
       <description>
 &lt;p&gt;Previously: &lt;a href=&quot;/every-anime/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/more-anime/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/even-more-anime/&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/reviews-4&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/reviews-5&quot;&gt;Five&lt;/a&gt;&lt;/p&gt;
@@ -702,8 +1372,6 @@ everything means not caring about yourself at all.&lt;/p&gt;
     <item>
       <title>A ps / pkill / pgrep Alternative</title>
       <description>
-&lt;link href=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css&#39; rel=&#39;stylesheet&#39; /&gt;
-
 &lt;p&gt;As I was prepping my new computer, and &lt;a href=&quot;/unix-daemons/&quot;&gt;toying with unix daemons&lt;/a&gt;, I found
 myself checking on running processes regularly, and occasionally killing them. I
 also found myself being quite frustrated with the tools provided by the system
@@ -1043,6 +1711,7 @@ if [[ $KILL == 1 ]]; then
 fi
 
 exit $EXIT&lt;/code&gt;&lt;/pre&gt;
+&lt;link href=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css&#39; rel=&#39;stylesheet&#39; /&gt;
 &lt;script
 src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js&#39;&gt;&lt;/script&gt;
 &lt;script
@@ -2915,221 +3584,6 @@ found in an &lt;a href=&quot;https://fic.colruytgroup.com/productinfo/en/cogo/18
       <pubDate>2020-01-27T23:00:00.000Z</pubDate>
       <link>http://norswap.com/nutrients-spreadsheet</link>
       <guid isPermaLink="true">http://norswap.com/nutrients-spreadsheet</guid>
-    </item>
-    <item>
-      <title>What We (Don&#39;t) Know About Nutrition: Red Meat</title>
-      <description>
-&lt;p&gt;While I was writing another article related to nutrition (coming out soon), I
-found myself plunging rather deep in a particular nutritional rabbit-hole.
-Namely: is red meat consumption bad for you?&lt;/p&gt;
-&lt;p&gt;The commonly accepted idea is that it is. But as we&amp;#39;ll see, there actually is
-little evidence that it is the case.&lt;/p&gt;
-&lt;p&gt;I think my investigation of this is an excellent way to demonstrate quite a few
-interesting ideas:&lt;/p&gt;
-&lt;h4&gt;It&#39;s incredibly difficult to link diet to health outcomes, and the impact
-variations in reasonable diets have is fairly small.&lt;/h4&gt;
-
-&lt;p&gt;This was the original point I was trying to make with the red meat litterature
-example.&lt;/p&gt;
-&lt;p&gt;If you have no egregious nutrient deficiencies and you keep your bodyfat
-percentage in check, I believe the impact of nutrition on your long-term health
-will be a couple percents (at best) change in the chance to get or not get some
-kind of cancer, etc.&lt;/p&gt;
-&lt;p&gt;You should also sleep well and do some exercise, but those are
-non-nutrition-related.&lt;/p&gt;
-&lt;h4&gt;You shouldn&#39;t necessarily trust the consensus in some branches of science (like nutrition).&lt;/h4&gt;
-
-&lt;p&gt;However, that doesn&amp;#39;t mean you should just stick to whatever opinion you had
-before, which is probably not based on facts, or merely on anecdote.&lt;/p&gt;
-&lt;p&gt;Instead, you should research the topic yourself (preferrably) or find people
-whose scientific judgement you trust (not easy, people tend to pick a camp).&lt;/p&gt;
-&lt;h4&gt;It&#39;s hard to do good science.&lt;/h4&gt;
-
-&lt;p&gt;Even the published litterature is rife with confounders and bias. And people
-forget that correlation doesn&amp;#39;t imply causation.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s also some bad faith going on in some higher instances.&lt;/p&gt;
-&lt;p&gt;Bonus: cool Slate Star Codex articles about confounders: &lt;a href=&quot;https://slatestarcodex.com/2014/04/26/stop-confounding-yourself-stop-confounding-yourself/&quot;&gt;one&lt;/a&gt;,
-&lt;a href=&quot;https://slatestarcodex.com/2019/06/24/you-need-more-confounders/&quot;&gt;two&lt;/a&gt;.&lt;/p&gt;
-&lt;h4&gt;Absence of evidence is evidence of absence.&lt;/h4&gt;
-
-&lt;p&gt;I stole this one from &lt;a href=&quot;https://www.lesswrong.com/posts/mnS2WYLCGJP2kQkRn/absence-of-evidence-is-evidence-of-absence&quot;&gt;LessWrong&lt;/a&gt;, but basically it means that if you try to
-find evidence of X (e.g. red meat increases mortality), and you find none or
-very little, that&amp;#39;s evidence that X is probably not true.&lt;/p&gt;
-&lt;p&gt;And last but not least:&lt;/p&gt;
-&lt;h4&gt;Relax, that ribeye steak is probably not going to kill you.&lt;/h4&gt;
-
-&lt;p&gt;So let&amp;#39;s get right into it.&lt;/p&gt;
-&lt;h2 id=&quot;anecdotes-and-confounders&quot;&gt;Anecdotes and Confounders&lt;/h2&gt;
-&lt;p&gt;It&amp;#39;s easy to find exemples of people who&amp;#39;ve follow a non-conventional diet
-(veganism, keto, carnivore) for a long time and seem to be doing quite fine.
-It&amp;#39;s also easy to find the opposite, but if you dig, you&amp;#39;ll often find other
-factors that can explain adverse health outcomes. The only way to link food and
-health outcomes is to do studies with fairly large populations... and to do them
-well. Your experience with your zombie-looking vegan neighbour and y our fat
-meathead friend don&amp;#39;t prove anything.&lt;/p&gt;
-&lt;p&gt;To give an example how studies can go astray, let&amp;#39;s talk about red meat. Red
-meat gets a bad rap as a cause of cancer and heart diseases, but no studies has
-ever found that red meat &lt;em&gt;causes&lt;/em&gt; those. Instead, quite a few studies have found
-that high red meat consumption is &lt;em&gt;correlated&lt;/em&gt; with these issues (and
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Correlation_does_not_imply_causation&quot;&gt;correlation does not imply causation&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;This is still pretty bad... excepted if the study fail to control relevant
-variables. The first that they should look for is bodyfat percentage. If you eat
-more meat but you also eat more of everything, yes, your health outcomes are
-going to look much gloomier, no surprise. Maybe it means you eat less vegetables
-and your gut flora suffers, also an issue. Unfortunately, poor control of
-confounders is the norm.&lt;/p&gt;
-&lt;h2 id=&quot;an-outrageous-guideline&quot;&gt;An Outrageous Guideline&lt;/h2&gt;
-&lt;p&gt;Something interesting occurred recently (November 2019). The prestigious &amp;quot;Annals
-of Internal Medicine&amp;quot; journal published some &lt;a href=&quot;https://annals.org/aim/fullarticle/2752328/unprocessed-red-meat-processed-meat-consumption-dietary-guideline-recommendations-from&quot;&gt;dietary guidelines&lt;/a&gt; for red meat
-consumption:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The panel suggests that adults continue current unprocessed red meat
-consumption (weak recommendation, low-certainty evidence). Similarly, the
-panel suggests adults continue current processed meat consumption (weak
-recommendation, low-certainty evidence).&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;The panel&amp;#39;s recommendation was based on 5 meta-reviews (more properly
-&amp;quot;systematic review and meta-analysis&amp;quot;). Three of those (&lt;a href=&quot;https://annals.org/aim/fullarticle/2752320/red-processed-meat-consumption-risk-all-cause-mortality-cardiometabolic-outcomes&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;https://annals.org/aim/fullarticle/2752321/reduction-red-processed-meat-intake-cancer-mortality-incidence-systematic-review&quot;&gt;2&lt;/a&gt;,
-&lt;a href=&quot;https://annals.org/aim/fullarticle/2752327/patterns-red-processed-meat-consumption-risk-cardiometabolic-cancer-outcomes-systematic&quot;&gt;3&lt;/a&gt;) looked at &amp;quot;observational studies&amp;quot; which study meat consumption in the
-context of people&amp;#39;s existing habits. These tend to be highly-confounded, for the
-reasons I explained above. In, in fact, the studies were found to be confounded:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Limitation: Inadequate adjustment for known confounders, residual confounding
-due to observational design, and recall bias associated with dietary
-measurement.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Limitations: Limited causal inferences due to residual confounding in observational
-studies, risk of bias due to limitations in diet assessment and adjustment for
-confounders, recall bias in dietary assessment, and insufficient data for
-planned subgroup analyses&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- --&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Limitations: Observational studies are prone to residual confounding, and
-these studies provide low- or very-low-certainty evidence according to the
-GRADE criteria.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;A &lt;a href=&quot;https://annals.org/aim/fullarticle/2752323/health-related-values-preferences-regarding-meat-consumption-mixed-methods-systematic&quot;&gt;fourth review&lt;/a&gt; just considered people&amp;#39;s preference and concludes they
-really like meat, even when faced with potential health consequences.&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://annals.org/aim/fullarticle/2752326/effect-lower-versus-higher-red-meat-intake-cardiometabolic-cancer-outcomes&quot;&gt;fifth meta-review&lt;/a&gt; (&lt;a href=&quot;https://www.gwern.net/docs/longevity/2019-zeraatkar.pdf&quot;&gt;pdf&lt;/a&gt;) is more interesting, as it reviews
-&lt;em&gt;randomized&lt;/em&gt; trials. Instead of observing people&amp;#39;s existing diet, diets are
-assigned to people randomly, which reduces confounding with other factors. But
-unfortunately, there are very few studies who did this over a long period of
-time (which is necessary to assess health outcomes), for ethical reasons. The
-conclusion ends being up based on a single study, which found no adverse health
-outcomes. Unfortunately, it&amp;#39;s not a low-red-meat study, but a low-fat-diet study
-in which the low-fat group ended up consuming less red meat than the control
-group: on average 1.4 less &amp;quot;servings&amp;quot; per week, which is not huge.&lt;/p&gt;
-&lt;h2 id=&quot;from-ignorance-to-knowledge&quot;&gt;From Ignorance to Knowledge&lt;/h2&gt;
-&lt;p&gt;All this may sound silly — do we actually know anything?&lt;/p&gt;
-&lt;p&gt;Well, yes we do! What this tells us is that there is no blatant evidence (or not
-even &lt;em&gt;much&lt;/em&gt; evidence) for the hypothesis that red meat increases mortality.&lt;/p&gt;
-&lt;p&gt;From the data we have (and the goal of these studies is to be relatively
-comprehensive, including all studies whose data can be exploited which are not
-methodologically hopeless), we know that:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;It is highly unlikely that eating more red meat decreases mortality.&lt;/li&gt;
-&lt;li&gt;It is unlikely that eating less red meat increases mortality.&lt;/li&gt;
-&lt;li&gt;It is highly unlikely that eating more red meat &lt;em&gt;significantly&lt;/em&gt; increases
-mortality.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;(1) is already consensus. As for (2), it is certainly &lt;em&gt;possible&lt;/em&gt; that red meat
-increases mortality (though (1) is &lt;em&gt;possible&lt;/em&gt; too) but if that were the case,
-we&amp;#39;d expect to see much stronger evidence. Regarding (3), even if there is an
-increase in mortality, it is unlikely to be high.&lt;/p&gt;
-&lt;p&gt;To distinguish (2) and (3), let&amp;#39;s think about them in another way. The paucity
-of evidence that we see means that either red meat doesn&amp;#39;t increase mortality at
-all (2), or that it does increase mortality, but ever so slightly so that it&amp;#39;s
-hard to distinguish the mortality of red-meat-eaters compared to that of
-non-red-meat-eaters.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s important to note that we learned something: we went from a state of not
-having evidence to a state of having evidence, with the evidence favoring the
-null hypothesis: that red meat consumption matters very little.&lt;/p&gt;
-&lt;p&gt;If you draw a line representing a continuum of hypotheses, from -100 = &amp;quot;red meat
-consumption decreases mortality&amp;quot; to 0 = &amp;quot;red meat consumption doesn&amp;#39;t change
-morality&amp;quot; to 100 = &amp;quot;red meat consumption increases mortality, the evidence we
-have puts us at around 1.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;                 👇 evidence points here
--100 ---------- 0 ---------- 100
-meat 👼      meat 🤷     meat ☠️ &lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;controversy-and-the-shills&quot;&gt;Controversy and The Shills&lt;/h2&gt;
-&lt;p&gt;The good people at the Harvard School of Public Health weren&amp;#39;t too happy with
-the Annals of Internal Medicine&amp;#39;s guidelines, as evidenced by &lt;a href=&quot;https://www.hsph.harvard.edu/nutritionsource/2019/09/30/flawed-guidelines-red-processed-meat/&quot;&gt;this article&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I should probably warn you, I&amp;#39;m going to say bad things about the good people of
-the Harvard School of Public Health.&lt;/p&gt;
-&lt;p&gt;In my opinion, their most egregious statement is the following:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The publication of these studies and the meat guidelines in a major medical
-journal is unfortunate because following the new guidelines may potentially
-harm individuals’ health, public health, and planetary health. It may also
-harm the credibility of nutrition science and erode public trust in scientific
-research. In addition, it may lead to further misuse of systematic reviews and
-meta-analyses, which could ultimately result in further confusion among the
-general public and health professionals.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;You should the (pretty short) article yourself. Essentially it tries to convince
-you that these guidelines are &lt;em&gt;a bad thing&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;One of their better argument is that the recommendations are bad because it says
-environmental considerations are out of scope. That is a whole other can of
-worm, and I personally don&amp;#39;t have an opinion on what the environmental impact of
-meat production is. This also veers political. But personally, I&amp;#39;m not very
-interested in the recommendation but rather in the question: &amp;quot;Is red meat bad
-for your health?&amp;quot;.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s here that Harvard sins, because they try to say that it is bad for your
-health. In the Q&amp;amp;A section of the article, they give a mostly accurate and fair
-criticism of the meta-reviews. But then they try to spin this by saying that the
-meta-reviews show that red meat consumption is bad for you. Except, as we
-already said, it shows very very weak evidence of that.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s update our graph from before:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;                 👇 evidence points here
--100 ---------- 0 ---------- 100
-meat 👼      meat 🤷    | meat ☠️ 
-                       👆
-                    where Harvard SPH says the evidence points&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And that&amp;#39;s why they&amp;#39;re being disingenuous.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s also plug &lt;a href=&quot;https://old.reddit.com/r/gwern/comments/dbw577/effect_of_lower_versus_higher_red_meat_intake_on/f266lfq/&quot;&gt;the reaction of Gwern Branwern&lt;/a&gt; on that article:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;You don&amp;#39;t see any problem with the Noble Lie? &amp;#39;They should not publish these
-results showing our nutrition research is bullshit, because it may justifiably
-erode public trust to know that nutrition research is bullshit, and it might
-spark further research which would lead to &amp;quot;further confusion&amp;quot; as the bullshit
-is further exposed; we don&amp;#39;t think there is any downside to lying to the
-public about meat consumption, damaging lifestyles and ignore the possibility
-that our own mistaken results are themselves damaging public health but will
-pretend it&amp;#39;s a one-sided wager - &amp;quot;heads we win tails meat loses&amp;quot;.&amp;#39;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;By the way, remember I spoke about people whose scientific judgement you trust?
-Gwern is someone like that, he has great in-depth research up &lt;a href=&quot;https://www.gwern.net/&quot;&gt;on his
-website&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Is Harvard really anti-meat? Well...&lt;/p&gt;
-&lt;h2 id=&quot;tmao--the-red-scare&quot;&gt;TMAO &amp;amp; The Red Scare&lt;/h2&gt;
-&lt;p&gt;Harvard is a big entity, which is probably not anti-meat as a whole.&lt;/p&gt;
-&lt;p&gt;That being said, Harvard Medical School did publish &lt;a href=&quot;https://www.health.harvard.edu/staying-healthy/red-meat-tmao-and-your-heart&quot;&gt;this online article&lt;/a&gt;.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A substance called trimethylamine N-oxide, which is produced when your body
-digests red meat, may raise the risk of cardiovascular problems.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Finally! A causal link from red meat to harm. Hallelujah!&lt;/p&gt;
-&lt;p&gt;Well they only reference (and not even link) is to &lt;a href=&quot;https://jamanetwork.com/journals/jama/article-abstract/2734678&quot;&gt;a paywalled editorial&lt;/a&gt;, but
-there is actually &lt;a href=&quot;https://academic.oup.com/eurheartj/article-abstract/40/7/583/5232723&quot;&gt;pretty solid research&lt;/a&gt; linking red meat with high TMAO. Case
-solved?&lt;/p&gt;
-&lt;p&gt;Well no, because the link between TMAO and cardiovascular problems is shaky, see
-for instance &lt;a href=&quot;https://www.sciencedirect.com/science/article/abs/pii/S1043276016301448&quot;&gt;this paper&lt;/a&gt; and this &lt;a href=&quot;https://lesslikely.com/nutrition/tmao-mendelian-randomization/&quot;&gt;quite nicely written
-article&lt;/a&gt; titled &amp;quot;How TMAO Fooled Us&amp;quot;.&lt;/p&gt;
-&lt;p&gt;Apparently, fish increases TMAO even more than red meat, but everyone knows that
-fish is healhty! Some people really aren&amp;#39;t bothered by apparent contradictions.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Well that&amp;#39;s it for today. I hope this was entertaining/interesting.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Psst, if you&amp;#39;re looking for the conclusions, they&amp;#39;re actually at the &lt;a href=&quot;#&quot;&gt;top&lt;/a&gt;
-of the article!&lt;/em&gt;&lt;/p&gt;
-      </description>
-      <pubDate>2020-01-25T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/red-meat</link>
-      <guid isPermaLink="true">http://norswap.com/red-meat</guid>
     </item>
   </channel>
 </rss>

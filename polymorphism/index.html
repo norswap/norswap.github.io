@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
-  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
   <style type="text/css">
     #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
   </style>
@@ -78,8 +77,8 @@ overloading isn&#39;t what I&#39;m talking about here.</p>
 <p>The problem is that (unlike every other types of &quot;polymorphism&quot;), overloading
 doesn&#39;t compose. The specific overload that gets called must be determined
 statically. As such the type must be fully determined — we can&#39;t use a type
-parameter (cf. <em>parametric polymorphism*) and the specific subtype (cf.
-*subtyping polymorphism</em>) isn&#39;t taken into account.</p>
+parameter (cf. <em>parametric polymorphism</em>) and the specific subtype (cf.
+<em>subtyping polymorphism</em>) isn&#39;t taken into account.</p>
 <p>Basically, you can never reuse code that calls an overloaded function for
 multiple types. Overloading is ultimately just a naming convenience: you could
 give each overload its own name and nothing would change. (There is an exception

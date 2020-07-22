@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
-  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
   <style type="text/css">
     #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
   </style>
@@ -56,8 +55,8 @@ modules. A class doesn&#39;t really &quot;inherit instance variables&quot;. Inst
 must not be declared, they exist just by virtue of being accessed. This means
 that if a class and its superclass (or an included module) both access a
 variable <code>@x</code>, they will access the same variable.</p>
-<p>This is because of <em>late binding</em> (aka <em>dynamic dispatch*): both instance
-variables and methods will be looked up from *self</em> at run-time.</p>
+<p>This is because of <em>late binding</em> (aka <em>dynamic dispatch</em>): both instance
+variables and methods will be looked up from <em>self</em> at run-time.</p>
 <p>While here is only a single copy of each instance variable, there could be
 multiple method declarations with the same name. How does Ruby select which one
 to use?</p>

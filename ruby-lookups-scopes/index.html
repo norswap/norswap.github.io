@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
-  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
   <style type="text/css">
     #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
   </style>
@@ -197,8 +196,8 @@ receiver, <code>self</code> is assumed. Then it&#39;s just a matter to perform t
 according to <a href="/ruby-module-linearization">linearization</a>. <code>self</code> may also have a meta-class which has
 priority on all other ancestors.</p>
 <p><strong>Refinements</strong></p>
-<p>However, there is another subtlety, called <em>refinements*. In Ruby, it is common
-to use *monkey patching</em> to open a class and add and redefine methods. However,
+<p>However, there is another subtlety, called <em>refinements</em>. In Ruby, it is common
+to use <em>monkey patching</em> to open a class and add and redefine methods. However,
 if every library starts doing this, you can end up with nasty conflicts.
 Refinements were introduced as a solution to this problem.</p>
 <p>Refinements can only be defined in non-class modules, and only classes can be refined:</p>

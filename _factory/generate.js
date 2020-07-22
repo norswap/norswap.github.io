@@ -138,7 +138,7 @@ function permalink (type, filename)
         case 'draft':
             return 'draft-' + filename.slice(0, -3) // strip extension
     }
-    throw "unknown page type"
+    throw 'unknown page type'
 }
 
 async function generate_page (type, filename, incremental) // relative filename
@@ -156,7 +156,7 @@ async function generate_page (type, filename, incremental) // relative filename
             return
         }
     }
-    
+
     const date = moment(filename.slice(0, 10), 'YYYY-MM-DD')
     const layout = type == 'draft' ? 'post' : type
     const obj = matter(await fsp.readFile(src_loc, {encoding: 'utf-8'}))
@@ -354,7 +354,7 @@ async function watch()
             case 'unlinkDir':
                 await unlink_dir(dir, base)
                 break
-        }  
+        }
     }
 
     const paths = ['top', 'posts', 'pages', 'drafts']

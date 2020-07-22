@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
-  <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
   <style type="text/css">
     #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
   </style>
@@ -145,9 +144,9 @@ follows:</p>
         if (rev == BIGGER)  return SMALLER
         if (rev == SMALLER) return BIGGER
         return EQUAL</code></pre>
-<p>We call this declaration an <em>instance derivation<em>. The instance that will
-fullfill the from-clause is called the *source instance</em>. The instance derived
-from a specific source instance is simply known as a *derived instance</em>.</p>
+<p>We call this declaration an <em>instance derivation</em>. The instance that will
+fullfill the from-clause is called the <em>source instance</em>. The instance derived
+from a specific source instance is simply known as a <em>derived instance</em>.</p>
 <p>Instance selection will always prefer an explicit instance rather than a derived
 instance when both are in the same scope. So our derived <code>Orderable</code> instance
 does not cause issues when <code>$X</code> and <code>$Y</code> are the same type. We&#39;ll talk about
@@ -283,11 +282,15 @@ for the type <code>Point</code>&quot; — but that&#39;s tedious. And what categ
     output(serialize(it))</code></pre>
 <p>Which instance should this code use?</p>
 <p>We can select the proper instance in two ways:</p>
-<p>1) Specify the instance to use at the instance selection site:</p>
+<ol>
+<li>Specify the instance to use at the instance selection site:</li>
+</ol>
 <pre><code>fun foo (it: Point)
     output(Serializable_Point.serialize(it))</code></pre>
-<p>2) Specify the instance to use in a certain scope (e.g. file or function) with
-   an <code>use</code> declaration.</p>
+<ol start="2">
+<li>Specify the instance to use in a certain scope (e.g. file or function) with
+an <code>use</code> declaration.</li>
+</ol>
 <pre><code>fun foo (it: Point)
     use PointSlash
     output(serialize(it))</code></pre>

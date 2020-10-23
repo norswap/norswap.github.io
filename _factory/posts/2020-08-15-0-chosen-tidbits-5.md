@@ -24,8 +24,53 @@ https://twitter.com/visakanv/status/1189756911677104128
 [The Categories Were Made For Man, Not Man For The Categories](
 https://slatestarcodex.com/2014/11/21/the-categories-were-made-for-man-not-man-for-the-categories/)
 
-This cannot be summarized, but it is a joy to read, and comes with an important
-lesson for your arguments and debates.
+This cannot be summarized in full, but it is a joy to read, and comes with an
+important lesson for your arguments and debates.
+
+Nevertheless, the key takeaway, and a taste:
+
+There are a series of disputes on categories, which are really disputes on the
+definition of the category. (Is a whale a fish? Is gender dysphoria a mental
+illness?)
+
+In reality, multiple definitions often makes sense. The key being to pick the
+right one for the task at hand. An alternative categorization system is not an
+error. You draw category boundaries in specific ways to capture tradeoffs you
+care about.
+
+The (controversial) hair dryer incident:
+
+> This one obsessive compulsive woman would drive to work every morning and
+> worry she had left the hair dryer on and it was going to burn down her house.
+> So she’d drive back home to check that the hair dryer was off, then drive back
+> to work, then worry that maybe she hadn’t really checked well enough, then
+> drive back, and so on ten or twenty times a day [...] to the point where her
+> career was in a downspin and she thought she would have to quit and go on
+> disability. [...]
+>
+> She’d seen countless psychiatrists, psychologists, and counselors, she’d
+> done all sorts of therapy, she’d taken every medication in the book, and none of
+> them had helped. [...]
+>
+> So she came to my hospital and was seen by a colleague of mine, who told her
+> “Hey, have you thought about just bringing the hair dryer with you?”
+>
+> And it worked.
+
+> Musashi is quoted as saying:
+>
+> > The primary thing when you take a sword in your hands is your intention to cut
+> > the enemy, whatever the means. Whenever you parry, hit, spring, strike or touch
+> > the enemy’s cutting sword, you must cut the enemy in the same movement. It is
+> > essential to attain this. If you think only of hitting, springing, striking or
+> > touching the enemy, you will not be able actually to cut him.
+>
+> Likewise, the primary thing in psychiatry is to help the patient, whatever the
+> means. Someone can concern-troll that the hair dryer technique leaves
+> something to be desired in that it might have prevented the patient from
+> seeking a more thorough cure that would prevent her from having to bring the
+> hair dryer with her. But compared to the alternative of “nothing else works”
+> it seems clearly superior.
 
 ---
 

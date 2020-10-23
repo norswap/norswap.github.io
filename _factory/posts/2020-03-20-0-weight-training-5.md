@@ -75,23 +75,23 @@ week). In concrete terms, here what was I was doing:
 Notes:
 
 - RPT stands for "reverse pyramidal training" and it means you lower the
-  weight on the bar for each successive sets (but the reps go up). 
-  
+  weight on the bar for each successive sets (but the reps go up).
+
 - The reps listed are a maximum but it's generally allowed to do 2 less if
   you're doing 6-10 reps and 4-5 less if you're doing 12-15 reps. The point
   being to allow for *double progression* (increase reps, then increase weight
   and lower reps, repeat).
-  
+
 - The program includes many more things, including warmup routines (mostly
   [dynamic stretches]) that I ran for a while, before time constraint got in the
   way. There are also *specialization phases* that I'll talk about later.
-  
+
 - You can see how much I lift on all of those, and how much I progressed in
   [Annex 1] at the bottom of this article.
 
 [dynamic stretches]: https://en.wikipedia.org/wiki/Stretching#Dynamic_stretching
 [Annex 1]: #annex-1-lift-progress
-  
+
 ---
 
 Okay, so you might be thinking "that's a lot of stuff!". And indeed, it is.
@@ -424,7 +424,7 @@ review] of the system as well as [this article on
 autoregulation][autoregulation].
 
 [Strong by Science]: https://www.strongerbyscience.com/
-[Powerlifting to Win review]: https://www.powerliftingtowin.com/a-review-of-mike-tuchscherers-reactive-training-systems-rt/sg
+[Powerlifting to Win review]: https://www.powerliftingtowin.com/a-review-of-mike-tuchscherers-reactive-training-systems-rt/
 [autoregulation]: https://www.powerliftingtowin.com/autoregulation/
 
 I've also started going through the articles on the [official website][rts] to
@@ -503,7 +503,7 @@ options.
 1. Load drops. You work your way to a top heavy set (usually your max for a
    given rep count & RPE). You then drop the fatigue percent, and keep
    performing sets with the same rep count until you reach the same rep count.
-   
+
    Example:
    ```
     - 90kg   ×5 @7      (warmup)
@@ -519,14 +519,14 @@ options.
    reach some pre-determined RPE. To determine the fatigue accrued from working
    up from the starting RPE to the final RPE, you consult an RPE chart like the
    one below and subtract the initial effort % from the final effort %.
-   
+
    One rep at RPE 10 is your one-rep max, and thus 100% effort. Other
    combinations have their effort expression as some percentage of that. Note
    that this is a "stock" version of the chart, but it could differ from person
    to person (some are better in certain rep ranges, or even on certain lifts),
    so Mike Tuscherer (RTS' creator) encourages you to [customize your RPE
    chart].
-   
+
    ![RPE chart: describe effort percent for RPE/number-of-reps pairs](rpe-chart.png)
 
 [customize your RPE chart]: https://articles.reactivetrainingsystems.com/2016/01/06/customizing-your-rpe-chart/
@@ -599,13 +599,13 @@ For each exercise, I'm reporting:
     - **peak:** 3x8x95
     - **current:** 3x8x90
     - Not done in February/March, mostly because I forgot :'(
-    
+
 - Overhead Press
     - **prior:** 4x3x62.5
     - **start:** 3x10x40
     - **current/peak:** 3x8x50
     - Slow but steady progression.
-    
+
 - Lat Pulldown
     - **prior/start:** 3x12x47
     - **current(?)/peak:** 3x12x56.6
@@ -667,7 +667,7 @@ For each exercise, I'm reporting:
     - **start/peak/current:** 34/32/30
     - Oh boy, I hadn't realized.
     - On the other hand, volume increased because it's now followed by the flat press.
-    
+
 - Flat Dumbbell Press
     - **start:** 10x28/10x28/12x26
     - **peak:** 8x34/6x32/11x30
@@ -675,24 +675,24 @@ For each exercise, I'm reporting:
 - Cable Lateral Raise
     - **start:** 2x11x9
     - **peak/current:** 2x10x11.3
-    
+
 - Dumbbell Lateral Raise
     - **prior:** 3x9x10
     - **start:** 2x12x9
     - **peak:** 2x12x10
     - **current:** 2x11x8
-    
+
 - Banded Push-Up
     - **start:** 13/9
     - **peak:** 18/14
     - **last:** 14/10
     - I typically did this at the tail end of long workouts, so it mostly
       reflects my energy level that day and not much else.
-    
+
 - Overhead Triceps Rope Extensions
     - **start:** 3x15x23
     - **peak/current:** 3x15x41
-    
+
 - Bar Triceps Pushdown
     - **start:** 3x12x43.3
     - **peak/current:** (9/13/11)x56.3
@@ -709,7 +709,7 @@ For each exercise, I'm reporting:
       in the interval. But this sure isn't progressing much either.
 
 - Seated Row
-    - **prior:** 
+    - **prior:**
     - **start:** 3x10x47.3
     - **peak:** 10x70.6/2x10x68.3
     - **current:** (15/14/11)x56.6
@@ -760,7 +760,7 @@ For each exercise, I'm reporting:
     - **peak/current:** 3x8x110
 
 - Bulgarian Split Squat
-    - **prior:** (9/12)x30 (peak: 
+    - **prior:** (9/12)x30 (peak:
     - **start:** 4x10x20
     - **peak:** 3x10x36
     - dropped (see above)

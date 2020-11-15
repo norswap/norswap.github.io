@@ -570,7 +570,7 @@ scene of Titanic.
 
 But clearly the superficial point made in this scene is memorable by itself: the
 rich vampirising the poor and Kate Winslet pushing off Leo di Caprio as a symbol
-of that. 
+of that.
 
 I think it is also relatively unconvincing - but also utimately uninteresting.
 For one, I can't bring any similar example to mind (maybe the myth of the noble
@@ -741,7 +741,7 @@ people are actually resisting the regime. The regime can still stay: "no these
 are just individual, not the true people".
 
 The standard Stalinist excuse for attrocity committed is that they do not enjoy
-it but act of behalf of the "Big Other" (historical progress). To this effect, 
+it but act of behalf of the "Big Other" (historical progress). To this effect,
 the iconography of a Stalinist leader always includes details like liking cats
 or small children.
 
@@ -1110,7 +1110,7 @@ hopefully, this will make the theme apparent (some of these intentionally ironic
 
 - Ideology is our spontaneous relationship to the world, how we perceive
   meaning. (1)
-  
+
 - You must be forced to be free of ideology. (1)
 
 - Enjoyment is always enjoyment in disturbed pleasure. (2)
@@ -1119,75 +1119,75 @@ hopefully, this will make the theme apparent (some of these intentionally ironic
 
 - People feel guilty not because of excessive pleasure, but because they are not
   enjoying enough. Enjoyment is a weird perverted duty. (2 & 3)
-  
+
 - A commodity always reflects an invisible transcendance. (3)
 
 - A desire is always also a desire for desire itself. (3)
 
 - The ultimate melancholic experience is the loss of desire itself: for all our
   desires to be met. (3)
-  
+
 - A commodity has a surplus (the transcendance) which is the cause of our
   desire. (3)
-  
+
 - Ideological motifs can be recycled. (4)
 
 - Universalist messages usually specify a place of exclusion. (4)
 
 - The disintegration of big ideologies (justice, equality, ...) leads to
   revolutions following the hegemonic ideology: consumerism. (5)
-  
+
 - Fantasy covers up a gap in consistency. (6)
 
 - Violence is never abstract: it's a brutal intervention in the real covering up
   an impotence concerning cognitive mapping. (6)
-  
+
 - If you want to have your cake and eat it too, set up a scapegoat. (7)
 
 - The enemy is invested with perverse enjoyment, or alternatively tries to steal
   our own enjoyment. (7)
-  
+
 - We can liberate enjoyment condensed in minimal gestures from specific
   ideologies. (8)
-  
+
 - These minimal gestures are bribes that ideologies use to seduce us. (8)
 
 - Commodities including the price for the countermeasure are the ultimate form
   of consumerism. (9)
-  
+
 - Maybe something new only emerges through the failure of our existing support
   network. (10)
-  
+
 - Rich people vampirise the poor. (11)
 
 - Sometimes a catastrophe elevates a person or idea into a myth (petrified
   enjoyment). (11)
-  
+
 - The logic of the couple in movies, an ideological motive that ties a movie
   together. (12)
-  
+
 - You can't just follow orders, there are to be something more. Either proper
   ironic distnace, or obscenity - bits of enjoyment as bribes. (13)
-  
+
 - Conservative wisdom: the truth is too strong, a politician should be a
   cynicist who tells the people a noble lie. (14)
-  
+
 - God justifies everything: his "instruments" are not bothered by petty moral
   considerations. (15)
-  
+
 - Both religious fundamentalism and totalitarianism are forms of "Big Other".
   (15)
-  
+
 - To undermine Stalinism, one has to undermine the mythic people it purports to
   serve. (15)
-  
+
 - The "Big Other" is (a) the guarantee of meaning for our actions. (16)
 
 - The "Big Other" is (b) the order of appearances we need to preserve. (16)
 
 - The "Big Other" is (c) an agency in which the truth of ourselves is to be
   inscribed and accepted, an agency in which to confide. (16)
-  
+
 - There is no "Big Other". (16)
 
 - In a radically atheist universe you are not only responsible for doing your
@@ -1195,18 +1195,18 @@ hopefully, this will make the theme apparent (some of these intentionally ironic
 
 - Bureaucracy as a self-perpetuating mechanism for enjoyment that serves
   nothing, a distraction to avoid deciding what our duty is. (17)
-  
+
 - Hysteria is a question addressed at the authority which defines my identity, a
   position of doubt (unlike perversion), hence very productive. (18)
-  
+
 - A reading of Christianity as announcing the death of the "Big Other" and
   delegitimizing suffering. (18)
-  
+
 - We are responsible for our dreams. (19)
 
 - Transcendence of the existing constraints end up being reincorporated into the
   hegemonic ideology. (20)
-  
+
 - Revolución! (21)
 
 ---

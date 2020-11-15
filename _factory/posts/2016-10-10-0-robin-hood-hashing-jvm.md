@@ -24,8 +24,7 @@ position, and relocate B further in the table (following the same rules).
 
 The result is that the displacements of all entries in the map tend to even out.
 The length of the longest displacement tends to increase as the load increase
-but very slowly (around 6 for a load of 0.9 &mdash; see
-[this paper (pdf)][paper1]).
+but very slowly (around 6 for a load of 0.9 — see [this paper (pdf)][paper1]).
 
 The technique is actually quite old. It was first [published in 1986][paper2].
 As for me, I first become aware of Robin Hood Hashing through
@@ -56,13 +55,13 @@ conclusions:
 
 - Robin Hood Hashing is practical and fast enough to rival separate-chaining
   hash table implementation (like Java's `HashMap`) on the JVM.
-  
+
 - However, it is not significantly faster either, and so it's probably not worth
   the trouble of maintaining my own implementation.
-  
+
 Note this says nothing about the relative performance of Robin Hood Hashing and
 separate-chaining on other platforms than the JVM.
-  
+
 And off course, you should totally perform you own measurements. You can get
 started from [my own code][source]. If anyone has more data to add to the
 discussion, make sure to share it in the comments.

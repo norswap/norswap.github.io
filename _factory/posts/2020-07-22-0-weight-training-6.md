@@ -112,7 +112,7 @@ possible".
 
 - 2x [Pull-Ups](https://www.youtube.com/watch?v=sIvJTfGxdFo)
 - 2x [TRX Row](https://www.youtube.com/watch?v=d3mEoo5b0mw)
-- 2x [Straight Arm TRX Pulldown](https://www.youtube.com/watch?v=UHU0rxi-8wM)  
+- 2x [Straight Arm TRX Pulldown](https://www.youtube.com/watch?v=UHU0rxi-8wM)
 - 2x [TRX Reverse Flies](https://www.youtube.com/watch?v=4gLRdMisOeA)
   (do not neglect the eccentric part — true for other TRX exercises too)
 - 2x [Incline Dumbbell Curls](https://youtu.be/20ibpB635Rw?t=183)

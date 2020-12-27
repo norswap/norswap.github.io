@@ -6,6 +6,541 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Stock Market Adventures: Introduction</title>
+      <description>
+&lt;p&gt;In recent months, I&amp;#39;ve taken an interest in the stock market, and started
+trading. Now that I&amp;#39;ve figured a few things about it, I want to share a bit of
+information about how I trade.&lt;/p&gt;
+&lt;p&gt;But before I get there, I want to give you the backstory of how I came to trade.
+It involves many details that I find interesting &amp;amp; relevant, like index funds
+and market cycles.&lt;/p&gt;
+&lt;h1 id=&quot;invest-in-etfs&quot;&gt;Invest in ETFs?&lt;/h1&gt;
+&lt;p&gt;My interest in the stock market started very pragmatic. I had some money set
+aside, and it was gathering dust. My bank&amp;#39;s savings account nets me a 0.10%
+interest, which is both a joke in poor taste, and a competitive market rate. I
+needed better yield.&lt;/p&gt;
+&lt;p&gt;I actually already knew the answer: invest in &lt;a href=&quot;https://en.wikipedia.org/wiki/Exchange-traded_fund&quot;&gt;ETFs&lt;/a&gt; (Exchange Traded Funds), in
+particular funds tracking a broad market index (&lt;a href=&quot;https://en.wikipedia.org/wiki/Index_fund&quot;&gt;&amp;quot;index funds&amp;quot;&lt;/a&gt;). The target
+index could be the ever-popular &lt;a href=&quot;https://en.wikipedia.org/wiki/S%26P_500_Index&quot;&gt;S&amp;amp;P 500&lt;/a&gt; (indexing the 500 biggest US
+companies), or if I wanted to be more diversified than just the US, the &lt;a href=&quot;https://en.wikipedia.org/wiki/MSCI_World&quot;&gt;MSCI
+World index&lt;/a&gt;, which tries to be representative of the world&amp;#39;s economy.&lt;/p&gt;
+&lt;p&gt;This is the boring-as-it-gets investment strategy. It&amp;#39;s quite safe too. Sure,
+there are recessions. But the S&amp;amp;P 500 has grown historically at &amp;gt; 5% on average.&lt;/p&gt;
+&lt;p&gt;How safe is it? Pretty safe, barring a zombie apocalypse or a nuclear holocaust.
+All thanks to &lt;a href=&quot;https://www.investopedia.com/terms/c/compounding.asp&quot;&gt;compounding&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I stumbled on an interesting &lt;a href=&quot;https://www.youtube.com/watch?v=pFgPNVytlwA&quot;&gt;what-if video&lt;/a&gt; the other day: &amp;quot;What if you
+invested only at market peaks?&amp;quot;&lt;/p&gt;
+&lt;p&gt;In fact, even if you had invested a sum of 230k$ (2k$ annual payment, increased
+by 2k$ every decade) &lt;strong&gt;only&lt;/strong&gt; at the peak that preceded each recession for the
+period starting in 1977, you&amp;#39;d still end up with 1M$ by retirement. It bears
+repeating this is the absolute worst-case scenario. If instead, you&amp;#39;d just
+invested every year, you&amp;#39;d end up with 2.5M$ instead.&lt;/p&gt;
+&lt;p&gt;This was a simple solution to my problem. But at the time, I had some
+misgivings. First, the market was at an all-time high, and there was a lot of
+&lt;a href=&quot;https://letstalklovetoday.wordpress.com/2017/04/01/the-definite-indefinite-optimist-and-pessimist/&quot;&gt;indefinite&lt;/a&gt; unease floating around.&lt;/p&gt;
+&lt;p&gt;In fact, since the Coronavirus crisis, more definite criticism has emerged.
+Legendary investor Charlie Munger &lt;a href=&quot;https://www.youtube.com/watch?v=tO5kr0r9g58&quot;&gt;is afraid&lt;/a&gt; about record-like valuations and
+inflation by means of &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantitative_easing&quot;&gt;quantitative easing&lt;/a&gt;. Other people worry about many
+companies (and in particular tech companies) being valued at historically high
+&lt;a href=&quot;https://www.investopedia.com/terms/e/earningsmultiplier.asp&quot;&gt;P/E multipliers&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;(By the way, I&amp;#39;ve written &lt;a href=&quot;/munger/&quot;&gt;about Charlie Munger&amp;#39;s philosophy&lt;/a&gt; before.)&lt;/p&gt;
+&lt;p&gt;So there was a possibility that market would take a hit for ~10 years. If you
+look at the S&amp;amp;P 500 chart, this is what happened after 2000. The index only
+recovered in 2008, then plunged again to only recover in 2012. 0% profit over 12
+years is a long time with no returns, even if the market growth has since made
+up for that slump.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;sp500.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;By the way, if you look at the slope of that graph in recent years, you can
+understand why people are uneasy about us being at the peak of a bubble.&lt;/p&gt;
+&lt;p&gt;Now there was, maybe, a way out: you could time the market. One option is wait
+for the crash to get in. The only issue is that it might be in 1 years or in 10,
+and your fear of losses could end up costing you more in lost profits. Another
+strategy is to sell at the start of the crash and buy back at the bottom. But
+that&amp;#39;s hard to distinguish a normal retracement from a temporary panic, and from
+the start of a crash. Timing the bottom is similarly not so easy.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s also common wisdom that &lt;a href=&quot;https://www.youtube.com/watch?v=w_aOERmUWdA&quot;&gt;timing the market is typically a bad
+idea&lt;/a&gt;. (Just like it is it &amp;quot;common wisdom&amp;quot; that trading is ruinous.
+Yet some people do both consistently and successfully. We&amp;#39;ll get back to that later.)&lt;/p&gt;
+&lt;p&gt;At this stage, only one thing was clear: I had to learn more before I came out
+with a plan.&lt;/p&gt;
+&lt;h1 id=&quot;getting-the-ball-rolling&quot;&gt;Getting the Ball Rolling&lt;/h1&gt;
+&lt;p&gt;Everything I&amp;#39;ve laid out so far had mostly been background thinking, but I&amp;#39;d
+been busy with other things.&lt;/p&gt;
+&lt;p&gt;I finally decided to give myself a shove and start doing something. An extra
+motivation here was that a family member had made quite a bit of money investing
+in Tesla options. Him and my brother were very bullish on the company and
+claimed of a ton of upside. I found myself agreeing about that for the
+short-term.&lt;/p&gt;
+&lt;p&gt;And so I decided to get my feet wet with brokers, and to buy a Tesla share (1.6k$
+at the time) as well as investing very small amounts in ETFs.&lt;/p&gt;
+&lt;p&gt;There is a lot to be said for getting the ball rolling like this. This was a
+small enough amount of money that I could afford to lose it all (and obviously,
+that was almost impossible anyway), but more than enough for me to care. I
+started having questions and googling around for answers, and found quite a
+treasure trove of information online, in particular on YouTube.&lt;/p&gt;
+&lt;p&gt;Some on these videos were on active investing, and some were on trading. I
+started entertaining the notion that I could make some money in this way, and I
+began running some small experiments.&lt;/p&gt;
+&lt;h1 id=&quot;penny-stocks&quot;&gt;Penny Stocks&lt;/h1&gt;
+&lt;p&gt;I started buying some stocks, for no more than 200€. Because that&amp;#39;s quite a low
+amount, I was driven to buy &lt;a href=&quot;https://en.wikipedia.org/wiki/Penny_stock&quot;&gt;penny stocks&lt;/a&gt;. Those are also often volatile —
+very risky, but potentially profitable.&lt;/p&gt;
+&lt;p&gt;It didn&amp;#39;t go incredibly well, but that wasn&amp;#39;t particularly unexpected. If common
+wisdom treats trading like gambling, penny stocks are treated like Russian
+roulette.&lt;/p&gt;
+&lt;p&gt;I lost some money (not too much, less than I&amp;#39;d made on my Tesla trade and on a
+couple other &lt;a href=&quot;https://www.investopedia.com/terms/b/bluechipstock.asp&quot;&gt;blue-chip stock&lt;/a&gt; trades). But I did learn a lot.&lt;/p&gt;
+&lt;p&gt;In fact I think&amp;#39;s it&amp;#39;s very hard to learn to trade penny stocks other than by
+trading them. You can&amp;#39;t really learn anything by looking at past scenarios:
+you&amp;#39;ll get a full dose of &lt;a href=&quot;https://en.wikipedia.org/wiki/Hindsight_bias&quot;&gt;hindsight bias&lt;/a&gt;. And penny stock trading is all about
+timing entries (buying) and exits (selling).&lt;/p&gt;
+&lt;p&gt;You could potentially learn by &lt;a href=&quot;https://www.investopedia.com/terms/p/papertrade.asp&quot;&gt;paper trading&lt;/a&gt;, but you need to be very
+disciplined and not make any excuses like &amp;quot;I was busy with X so this trade
+doesn&amp;#39;t count&amp;quot;. You&amp;#39;re still going to be busy with X when you trade your own
+money — even if X is an emergency.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s also a dearth of literature on the topic of penny trading. The topic is
+not very conducive to theorization, but rather to some sort of
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Fingerspitzengef%C3%BChl&quot;&gt;fingerspitzgefühl&lt;/a&gt; intuition. Basically, you learn to be more paranoid, and
+understand the (many) ways in which a penny stock trade can go south, or at
+least no go how you predicted. You also learn to manage your emotions, and cut
+your losses early.&lt;/p&gt;
+&lt;p&gt;This is not facilitated by the fact that penny stock trading is extremely
+speculative. To give you a very simple explanation, it&amp;#39;s often based around
+&amp;quot;catalysts&amp;quot; that are expected to move the stock price. For instance: a drug
+being approved for a pharma company. This causes the price to run up in
+anticipation of the decision, and then to crash right before, or right after the
+decision, as people sell to secure profits. Even if the drug was approved!&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s sometimes even worse than this — there are a number of stock market pundits
+running &lt;a href=&quot;https://en.wikipedia.org/wiki/Pump_and_dump&quot;&gt;pump and dump&lt;/a&gt; schemes. It&amp;#39;s sometimes hard to tell apart from &amp;quot;regular
+speculation&amp;quot;. When a pundit with many followers hypes a stock due for a
+catalyst, you get a de facto, quite unintentional, pump-and-dump. A whole new way
+to &amp;quot;monetize your audience&amp;quot;.&lt;/p&gt;
+&lt;p&gt;I didn&amp;#39;t find trading penny stocks to be the most pleasant activities, but I
+don&amp;#39;t begrudge it either. I think it&amp;#39;s quite possible to make a consistent
+profit doing so — if one is willing to be careful and learn from mistakes.&lt;/p&gt;
+&lt;h1 id=&quot;irrational-fears&quot;&gt;Irrational Fears&lt;/h1&gt;
+&lt;p&gt;This brings us to an important sidebar.&lt;/p&gt;
+&lt;p&gt;I said before that the &amp;quot;common sense&amp;quot; opinion was that trading was ruinous.&lt;/p&gt;
+&lt;p&gt;And to be sure, I think that for most people, dissuading them from trading is
+the correct position.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s because most people are dumb. It&amp;#39;s not a nice thing to say, and it isn&amp;#39;t
+to say they&amp;#39;re not also nice and valuable people. But it&amp;#39;s true.&lt;/p&gt;
+&lt;p&gt;In fact, trading tends to attract particularly dumb people. Just have a look at
+&lt;a href=&quot;https://old.reddit.com/r/pennystocks/&quot;&gt;r/pennystocks&lt;/a&gt; and &lt;a href=&quot;https://old.reddit.com/r/wallstreetbets/&quot;&gt;r/wallstreetbets&lt;/a&gt;, and you&amp;#39;ll see off-the-charts stupidity.&lt;/p&gt;
+&lt;p&gt;Trading requires you to plan, think things through, manage risk/exposure, and,
+most of all, manage your own emotions. It&amp;#39;s hard. Too hard for people that
+haven&amp;#39;t developed these skills and virtues.&lt;/p&gt;
+&lt;p&gt;The flip side is that if you are able to do all that, trading can be a viable
+avenue to generating extra money.&lt;/p&gt;
+&lt;p&gt;Anybody that says that &amp;quot;trading is ruinous&amp;quot; or &amp;quot;trading is too risky&amp;quot; should
+feel the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cognitive_dissonance&quot;&gt;cognitive dissonance&lt;/a&gt; with the fact that they are quite a lot of people
+who make a consistent profit or even a living trading.&lt;/p&gt;
+&lt;p&gt;At least, there should be nuance. &amp;quot;Trading is too risky for most people&amp;quot;. I
+agree with that. This leads to an interesting question: what sets the successful
+traders apart from the rest of us?&lt;/p&gt;
+&lt;p&gt;This led to me to this interesting thought: Imagine someone that has praised you
+for being smart and level-headed. But when you tell them you&amp;#39;re going to trade;
+they try to dissuade you out of it. Either they&amp;#39;re thoroughly confused in the
+sense outlined above, or their real opinion of you is that you&amp;#39;re not, in fact,
+smart and level-headed enough to take on this endeavour. (Fortunately this
+remains a hypothetical scenario for me. Nobody has thrown shade on my trading so
+far).&lt;/p&gt;
+&lt;h1 id=&quot;finally-options&quot;&gt;Finally, Options&lt;/h1&gt;
+&lt;p&gt;Trading penny stocks could have been profitable, but it wasn&amp;#39;t my favourite
+thing. For one, the activity has inherent uncertainty. I once saw a stock trader
+that made hundreds of thousands of dollars in profit a year run the numbers on
+his trading, and his trade win rate was &amp;quot;only&amp;quot; 68%. The average profit was only
+~20% higher than the average loss. Considering that these wins and losses are
+not distributed uniformly, it does take some mental fortitude to ride through
+the highs and lows. I&amp;#39;m really risk-averse, and even though I think I can muster
+the mental fortitude, I&amp;#39;d rather not deal with the stress if I don&amp;#39;t have to.&lt;/p&gt;
+&lt;p&gt;Fortunately, I found a method much better suited to my taste. And it involves
+dealing in &lt;a href=&quot;https://www.investopedia.com/terms/s/stockoption.asp&quot;&gt;stock options&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Options are incredibly more flexible than stock, which you can merely buy and
+sell. Options enable very safe plays (though with lower payout), but also
+getting more &lt;a href=&quot;https://www.investopedia.com/terms/l/leverage.asp&quot;&gt;leverage&lt;/a&gt; when you want to make aggressive moves. They can also be
+used to manage/lower your losses.&lt;/p&gt;
+&lt;p&gt;This increased flexibility also makes options much more interesting — and
+frankly more fun to work with.&lt;/p&gt;
+&lt;p&gt;In future articles, I will explain various kinds of trades I undertake using
+options. Stay tuned!&lt;/p&gt;
+      </description>
+      <pubDate>2020-12-26T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/stock-market-intro</link>
+      <guid isPermaLink="true">http://norswap.com/stock-market-intro</guid>
+    </item>
+    <item>
+      <title>Reviews 9</title>
+      <description>
+&lt;p&gt;Previously: &lt;a href=&quot;/every-anime/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/more-anime/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/even-more-anime/&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/reviews-4&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/reviews-5&quot;&gt;Five&lt;/a&gt; / &lt;a href=&quot;/reviews-6&quot;&gt;Six&lt;/a&gt; / &lt;a href=&quot;/reviews-7&quot;&gt;Seven&lt;/a&gt; / &lt;a href=&quot;/reviews-8&quot;&gt;Eight&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;solo-leveling&quot;&gt;Solo Leveling&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Webtoon&lt;/li&gt;
+&lt;li&gt;Volume 1+, up to chapter 131&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;solo-leveling.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Another webtoon, somewhat similar &lt;a href=&quot;/reviews-8/#skeleton-soldier-couldnt-defend-the-dungeon-up-to-chapter-109&quot;&gt;Skeleton Soldier&lt;/a&gt;, albeit more popular (given
+it&amp;#39;s the only webtoon anyone&amp;#39;s ever told me about besides the even more popular
+&lt;a href=&quot;/reviews-8/#tower-of-god-webtoon---up-to-episode-485&quot;&gt;Tower of God&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In this universe there are &amp;quot;gates&amp;quot; that appear regularly, which lead to dungeons
+full of monsters. These dungeons must be cleared under a certain number of days,
+lest the monsters pour out in the real world. However, at the same time these
+gates appeared, some people started developing powers, basically turning them
+into RPG characters with superior physical abilities and/or magical powers.&lt;/p&gt;
+&lt;p&gt;The main character is not very strong, but through the vicissitudes of
+&lt;del&gt;narrative facility&lt;/del&gt; fate, he gets to power up pretty quickly (I&amp;#39;m sure you were
+able to guess that from the title).&lt;/p&gt;
+&lt;p&gt;The story is a massive power trip, but somehow it works.&lt;/p&gt;
+&lt;p&gt;I mean, I don&amp;#39;t really know why, but I&amp;#39;m a bit of a fan of the aesthetics and
+the genre (just like Isekai). I guess I wasted too much time grinding in
+World of Warcraft and now my brain is permanently damaged. Expect to see many
+more review of &lt;strong&gt;very&lt;/strong&gt; similar anime (as it turns out, there are a ton).&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t know whether to recommend it, I obviously enjoyed it very much, but at
+the same time I have no specific glowing praise for it. It&amp;#39;s not clever in any
+particularly unique way. Give it a few chapters and drop it if it doesn&amp;#39;t speak
+to you!&lt;/p&gt;
+&lt;p&gt;Somewhat more interestingly, I think this webtoon doesn&amp;#39;t compare super
+favorably to &lt;a href=&quot;/reviews-8/#skeleton-soldier-couldnt-defend-the-dungeon-up-to-chapter-109&quot;&gt;Skeleton Soldier&lt;/a&gt;. The fact that the main character can die
+(albeit temporarily) in Skeleton Soldier does tend to make the stakes higher.
+The story is also more involved, with characters coming in and out of the story.
+In general, I&amp;#39;m also intrigued in Skeleton&amp;#39;s universe. The mystery in Solo
+Leveling is rather singular for my taste.&lt;/p&gt;
+&lt;h2 id=&quot;jujutsu-kaisen&quot;&gt;Jujutsu Kaisen&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Anime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I watched 5 episodes of this, but it just didn&amp;#39;t click for me. It&amp;#39;s a very
+generic shonen that punches under its weight.&lt;/p&gt;
+&lt;p&gt;Being generic is not a death sentence. Nobody will accuse [My Hero Academia] of
+being incredibly original, yet it&amp;#39;s the best thing since sliced bread.&lt;/p&gt;
+&lt;p&gt;Jujutsu Kaisen completely failed to pull me into its universe. I found the
+moments of tension completely unbelievable. For instance, at some point early in
+the series, the main character loses a hand, and I didn&amp;#39;t believe it for even a
+second. A bit later in the same episode, something even more egregious happens,
+and same thing, didn&amp;#39;t believe it one bit. It&amp;#39;s not like there are amazing
+fights, or really interesting character designs / personalities either.&lt;/p&gt;
+&lt;p&gt;Again, the contrast with Hero Academia is stark: some of the key fights in the
+anime so far really got me invested.&lt;/p&gt;
+&lt;p&gt;I did like the ending theme however, it&amp;#39;s &lt;a href=&quot;https://www.youtube.com/watch?v=6riDJMI-Y8U&quot;&gt;quite funky&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;zenkyou-no-terror-terror-in-resonance&quot;&gt;Zenkyou no Terror (Terror in Resonance)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Anime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;zenkyou-no-terror.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;This has been on my list for quite a while, and I&amp;#39;m happy I finally got around
+to watching it.&lt;/p&gt;
+&lt;p&gt;The story follows two teenagers committing various acts of terrorism in Tokyo.
+The big question: what&amp;#39;s their purpose?&lt;/p&gt;
+&lt;p&gt;I think it works on two plans. First, it&amp;#39;s a &amp;quot;planned crime&amp;quot; show. Early Death
+Note comes to mind (sorry, I&amp;#39;m lacking better references here).&lt;/p&gt;
+&lt;p&gt;Second there is the mystery of purpose. You can kind of infer it as the story
+unfolds, but I still found it very interesting.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;d classify alongside &lt;a href=&quot;/reviews-4/#parasyte&quot;&gt;Parasyte&lt;/a&gt; and &lt;a href=&quot;/reviews-7/#erased-boku-dake-ga-inai-machi&quot;&gt;Erased&lt;/a&gt; in the list of seinens that are
+worth your time.&lt;/p&gt;
+&lt;p&gt;The show is short (only 11 episodes). This is good, as no time is wasted. But on
+the other hand, some aspects feel neglected. In particular the character of Lisa
+Mishima, a girl that finds herself entangled with the terrorists, lacks in
+depth. I understand why she&amp;#39;s in the story, but it feels like a bit more
+attention could have made her into more than simply a plot device.&lt;/p&gt;
+&lt;h2 id=&quot;a-returners-magic-should-be-special&quot;&gt;A Returner&amp;#39;s Magic Should Be Special&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Webtoon&lt;/li&gt;
+&lt;li&gt;Season 1-2, up to chapter 124&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And here we are again, with a webtoon that has an RPG-like setting.&lt;/p&gt;
+&lt;p&gt;The setting is surprisingly similar to &lt;a href=&quot;#solo-leveling&quot;&gt;Solo Leveling&lt;/a&gt;: dungeons appear in the
+world. If they are not cleared, they absorb the surrounding land in some kind of
+void. Clearing the dungeons is not just about killing monsters, but also
+fulfilling various quests.&lt;/p&gt;
+&lt;p&gt;This time, the main character is part of an elite group that defeated the final
+boss of the worst dungeon to ever appear - only to be killed by the blowback.
+Consequently, he wakes up a student in an academy for dungeon-fighters, 10 years
+before the appearance of the disastrous dungeon.&lt;/p&gt;
+&lt;p&gt;Besides the quests inside the dungeons, the RPG element is toned out here: there
+is no XP and attributes here, only good old training.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s also a political dimension as the hero tries to fix what&amp;#39;s wrong with
+the continent (namely literal class warfare) to unite people against the coming
+threat. Enjoyable, but a bit too much on the nose for my taste.&lt;/p&gt;
+&lt;p&gt;Just like before: I&amp;#39;m susceptible to this genre, and I liked it.&lt;/p&gt;
+&lt;h2 id=&quot;barakamon&quot;&gt;Barakamon&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Anime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;barakamon.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Another anime recommended by my girlfriend Sasha, and another very pleasant
+surprise.&lt;/p&gt;
+&lt;p&gt;This one is about a professional calligrapher in lack of inspiration and
+professional turmoil. His father ships him out a tiny island to shore up his
+inspiration.&lt;/p&gt;
+&lt;p&gt;There he befriends the local townspeople and in particularly the kids. He falls
+for the pastoral charm of the country life and learns from the folksy wisdom of
+the people. etc. etc. The pitch is not very original — but it works.&lt;/p&gt;
+&lt;p&gt;In addition to the cute story, the show is pretty hilarious. It&amp;#39;s honestly one
+of the funniest showsI&amp;#39;ve seen so far. Probably in my top 2, up there with
+&lt;a href=&quot;/reviews-8/#kaguya-sama-love-is-war-season-2&quot;&gt;Love is War&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s also a short one (12 episodes), so don&amp;#39;t hold back.&lt;/p&gt;
+&lt;h2 id=&quot;gateless-by-sebastian-marshall--kai-zau&quot;&gt;Gateless, by Sebastian Marshall &amp;amp; Kai Zau&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Book&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Sebastian Marshall is a &amp;quot;productivity expert&amp;quot;. That sounds pretty corny, but I
+don&amp;#39;t know how else to describe him. It might be better to say he&amp;#39;s someone
+obsessed with peak performance, who built a &lt;a href=&quot;https://www.ultraworking.com/&quot;&gt;whole business&lt;/a&gt; around that
+obsession.&lt;/p&gt;
+&lt;p&gt;He&amp;#39;s also one I respect immensely, despite not always agreeing with him. That
+doesn&amp;#39;t preclude me from mining for useful insights, of which there are many.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve been following Sebastian for a while, in particular &lt;a href=&quot;http://www.thestrategicreview.net/&quot;&gt;The Strategic Review&lt;/a&gt;
+(I&amp;#39;ve posted &lt;a href=&quot;https://norswap.com/celerity/&quot;&gt;a summary of one of the series&lt;/a&gt; back in 2017), his
+&lt;a href=&quot;https://www.ultraworking.com/podcast&quot;&gt;podcast&lt;/a&gt;, and &lt;a href=&quot;http://sebastianmarshall.com/&quot;&gt;his blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s also not the first book by Sebastian I&amp;#39;m reading. Besides &lt;a href=&quot;https://www.goodreads.com/book/show/23642948-gateless&quot;&gt;Gateless&lt;/a&gt; - I&amp;#39;ve
+previously read &lt;a href=&quot;https://www.goodreads.com/en/book/show/25535056-roguelike&quot;&gt;Roguelike&lt;/a&gt; which extracts lessons and analogies from classical
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Roguelike&quot;&gt;roguelikes&lt;/a&gt; with application towards real-life endeavours. (I guess you&amp;#39;d see
+how that would talk to me!)&lt;/p&gt;
+&lt;p&gt;Note that Gateless was co-authored by Sebastian&amp;#39;s co-founder and friend Kai Zau.
+Unfortunately, I have much fewer interesting things to tell you about Kai.&lt;/p&gt;
+&lt;p&gt;So, about this book himself. Well, I didn&amp;#39;t learn much. But that&amp;#39;s also because
+I&amp;#39;m well acquainted with Sebastian&amp;#39;s idea, as I think I&amp;#39;ve established.&lt;/p&gt;
+&lt;p&gt;The book is basically a manual in how to improve in your endeavours. It&amp;#39;s
+probably most directly useful if that endeavour is something that resembles &amp;quot;a
+career&amp;quot;, but it is general enough to be useful in other areas too.&lt;/p&gt;
+&lt;p&gt;The book is short enough, but I worry that if you&amp;#39;re at the level where most of
+these basics are news to you, then it might actually be a bit much to take in.
+It&amp;#39;s also not the funniest read, and it&amp;#39;s notably less fun to read than most of
+the Marshall stuff I&amp;#39;ve read before.&lt;/p&gt;
+&lt;p&gt;So, recommended if you&amp;#39;re a dutiful person looking to fill the gaps in your
+strategy. But I&amp;#39;d advise to start with the Marshall productions linked in this
+summary.&lt;/p&gt;
+&lt;p&gt;Finally, I find myself concurring with this (4/5 stars!)
+&lt;a href=&quot;https://www.goodreads.com/review/show/1377037687&quot;&gt;review&lt;/a&gt; from GoodReads, which will also give you a bit more
+details about the book itself:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A collection of blog-like essays on thinking about and developing personal
+(&amp;quot;Capacity&amp;quot; and &amp;quot;Meaning&amp;quot; sections), social (&amp;quot;Signal&amp;quot; and &amp;quot;Network&amp;quot;) and
+financial capital (&amp;quot;Assets&amp;quot;).&lt;/p&gt;
+&lt;p&gt;There is nothing terribly new here and large chunks of the book are verbatim
+quotes taken from other sources. Meaning and Assets sections are largely
+cursory.&lt;/p&gt;
+&lt;p&gt;Despite this, I quite enjoyed it - though nothing particularly new, their
+particular formulation of the ideas resonated with me.&lt;/p&gt;
+&lt;p&gt;Generally, recommendable - especially for fresh graduates just entering the
+world.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;tactical-barbell&quot;&gt;Tactical Barbell&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Book&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And now for something completely different, a book about weightlifting.&lt;/p&gt;
+&lt;p&gt;I must say this one disappointed me. First, because I heard the Tactical Barbell
+approach integrated conditioning (i.e. cardio &amp;amp; high intensity endurance work),
+but it turns out that part is outlined in the second book.&lt;/p&gt;
+&lt;p&gt;Second, because the book says very little about lifting, and does so in too many
+words.&lt;/p&gt;
+&lt;p&gt;The core approach is to train only big compound lifts (squat, bench press,
+deadlift, pullups, ...) at submaximal intensities (i.e. maybe a &lt;a href=&quot;/weight-training-5/#reactive-training-systems-rts&quot;&gt;7-8 RPE&lt;/a&gt;)
+with plenty of rest (up to 5 minutes) between sets.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s pretty boring, though I have no doubts that it works, at least up to a
+certain point (but far enough for most people, including me currently).&lt;/p&gt;
+&lt;p&gt;An important point is that the book is targeted to an &amp;quot;operational&amp;quot; audience:
+police, army, SWAT, firefighters, ... (hence the &amp;quot;tactical&amp;quot; in the title). A big
+point is that these people may already have some fairly intense physical
+workloads (in the course of work, or because of work-mandated training), so the
+strength work should be as efficient as possible and not leave them too tired to
+perform well.&lt;/p&gt;
+&lt;p&gt;That being said, the book goes so much out of its way to evoke out this
+&amp;quot;operational&amp;quot; image that it had me wonder if it wasn&amp;#39;t &lt;em&gt;really&lt;/em&gt; marketed at
+people who have a tactical fetish.&lt;/p&gt;
+&lt;p&gt;A few parts of the book also inspire distrust. The author claims to have reached
+4% body fat at some point, for instance. The section on supplements is as best a
+N=1 field report, and contains no actual scientific facts.&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ll see if book 2 is better!&lt;/p&gt;
+&lt;h2 id=&quot;tactical-barbell-2-conditioning&quot;&gt;Tactical Barbell 2: Conditioning&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Book&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I liked the second book much better. One reason is that it actually contained
+things I wasn&amp;#39;t really much informed about. It also contains an actionable plan
+(a program, really). It&amp;#39;s easy to find good quality strength programs online
+(e.g. &lt;a href=&quot;https://stronglifts.com/5x5/&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;https://builtwithscience.com/best-full-body-workout/&quot;&gt;two&lt;/a&gt;), but I haven&amp;#39;t stumbled on a program aiming to
+develop and maintain conditioning before.&lt;/p&gt;
+&lt;p&gt;The book is also better organized, with the principles outlined in the first
+part (+ still quite a bit of fluff) and the extensive exercise plan in the
+second part.&lt;/p&gt;
+&lt;p&gt;Ultimately, reviewing the book is not that useful — I ought to try this and
+review the program. I&amp;#39;m thinking I might do the &amp;quot;base-building&amp;quot; 8-week block
+after I redo a strength block when the gym re-opens.&lt;/p&gt;
+&lt;h2 id=&quot;from-dusk-till-dawn&quot;&gt;From Dusk Till Dawn&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Movie&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;from-dusk-till-dawn.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;This was the last &amp;quot;Tarantino movie&amp;quot; that I hadn&amp;#39;t seen. It isn&amp;#39;t &lt;em&gt;really&lt;/em&gt; a
+Tarantino movie, as Tarantino only wrote the script (and plays a major acting
+role in the movie), but the movie was directed by Robert Rodriguez.&lt;/p&gt;
+&lt;p&gt;The flick is fast-paced and pretty fun. At first glance, it looks like it&amp;#39;s
+going to be classical rough-n-dirty Tarantino flick, but the genre of this movie
+is actually action horror.&lt;/p&gt;
+&lt;p&gt;And so things take a turn for the weird at some point. And it&amp;#39;s great.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s a bit hard to say if it&amp;#39;s a B-movie or an homage to B-movies. It&amp;#39;s
+certainly a bit of parody, albeit of nothing in particular.&lt;/p&gt;
+&lt;p&gt;A good time that happens to involve a lot of gore.&lt;/p&gt;
+&lt;h2 id=&quot;gone-girl&quot;&gt;Gone Girl&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Movie&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This movie is tricky to describe. Wikipedia says it&amp;#39;s a &amp;quot;psychological thriller&amp;quot;
+and I think that does fit the bill. To me, it&amp;#39;s one of those &amp;quot;guess movies&amp;quot;,
+where I can&amp;#39;t prevent myself from annoying the hell of whoever I&amp;#39;m watching it
+with (in this case, Sasha) by interjecting all my hypothesis about what the hell
+could be going on.&lt;/p&gt;
+&lt;p&gt;Anyhow, the pitch: writer Nick Dunne finds his wife missing and contacts the
+police. A search is organized, and troublesome truths about the relationship
+come to light.&lt;/p&gt;
+&lt;p&gt;That does sound a bit dull, but there is a mystery, and the twist and turns are
+quite satisfying. This movie will have you wondering.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s only really one thing I disliked about it: the very ending. Not that I
+objected to it, I just thought it was poorly justified and didn&amp;#39;t make a lot of
+sense.&lt;/p&gt;
+&lt;p&gt;In making this review, I realized that (a) this is a David Fincher, and (b) I&amp;#39;ve
+actually consumed most of Fincher&amp;#39;s cinematographic output: Seven, The Game,
+Fight Club, Benjamin Button, The Social Network, The Girl With The Dragon
+Tattoo, Zodiac, and now Gone Girl - as well as House of Cards. Most of those are
+pretty good. If you haven&amp;#39;t seen them, I&amp;#39;d particularly recommend Gone Girl, The
+Game, Fight Club, and the first season of House of Cards.&lt;/p&gt;
+&lt;h2 id=&quot;zero-to-one&quot;&gt;Zero to One&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Book&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The book outlines Peter Thiel&amp;#39;s (a founder of PayPal and Palantir) business
+philosophy - especially regarding startups.&lt;/p&gt;
+&lt;p&gt;I think it&amp;#39;s well worth reading for anyone interested in eventually starting a
+business (especially an ambitious one), or just interesting in business in
+general.&lt;/p&gt;
+&lt;p&gt;To give you an idea, here&amp;#39;s my very short summary of a few ideas I took away
+from the book.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Startups should aim to become monopolies — because a monopoly is not
+constantly under threat and thus has the space to innovate.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;One of the ways to establish a monopoly is networks effects. And paradoxically,
+network effect monopolies must get started with a small market — one that the
+startup can completely corner. For instance, Facebook started serving only
+Harvard students.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A startup&amp;#39;s most important asset is new thinking. A startup needs &amp;quot;a secret&amp;quot; —
+something it believes to be true, while the consensus (not just the majority)
+thinks that it is false. What valuable company is no one else building?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Sales &amp;amp; distribution matter more than they&amp;#39;re made out to in the startup
+world.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Sales is always hidden. &amp;quot;Salesman&amp;quot; is nobody&amp;#39;s title, instead it might be
+&amp;quot;customer happiness office&amp;quot; for a very transparent example. You don&amp;#39;t know
+any sales grandmaster - because you don&amp;#39;t think of them as such.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Computers will not replace humans - the future is complementarity.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;solo-bug-leveling&quot;&gt;Solo Bug Leveling&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Webtoon&lt;/li&gt;
+&lt;li&gt;Season 1, up to chapter 40&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Veteran MMO player dies, gets reincarnated in the game. Can&amp;#39;t be more classic
+than that.&lt;/p&gt;
+&lt;p&gt;Here though, the hero gets reincarnated as an (adult) lord of some small
+province. Armed with his encyclopedic knowledge of the game (and, as the title
+implies, of its bugs), he sets out to make right everything that is wrong, and
+to prepare adequately for future turmoil.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m not sure I have too much to say about this one. The setting and the
+execution are both solid. An enjoyable read.&lt;/p&gt;
+&lt;h2 id=&quot;slave-b&quot;&gt;Slave B&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Webtoon&lt;/li&gt;
+&lt;li&gt;Season 1, up to chapter 50&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;slave-b.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;So this one departs &lt;em&gt;a little bit&lt;/em&gt; from the leveling webtoons I&amp;#39;ve been reading,
+but it&amp;#39;s not too far away.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s the story of slave kid who, after some mishap, finds the opportunity to
+attend a prestigious caster/fighter military academy.&lt;/p&gt;
+&lt;p&gt;The focus is not too much on leveling or skill acquisition (although there is a
+bit of that), but more on inter-personal relationships and in particular the
+ostracism towards the slaves. In that it&amp;#39;s a bit similar to &lt;a href=&quot;#a-returner-s-magic-should-be-special-webtoon&quot;&gt;Returner&lt;/a&gt; and its
+commoner/noble distinction — except way worse.&lt;/p&gt;
+&lt;p&gt;This one is also different in that it&amp;#39;s not a clean nice power trip drive. The
+hero does experience quite a few setbacks, and a lot of suffering. The story is
+also interested in dealing with the resulting anger (instead of featuring a
+noble hero that would brush it off instantly).&lt;/p&gt;
+&lt;p&gt;I&amp;#39;d say this story has more ambition than what I&amp;#39;d read so far. Or if not that,
+at least it takes more risk by dealing with emotions and more complex
+relationship dynamics. It&amp;#39;s not quite as masterful as some of these others (like
+Skeleton or Solo Leveling), perhaps precisely because of these dimensions.&lt;/p&gt;
+&lt;p&gt;But all in all, quite interesting, and might appeal to a more mainstream
+audience that doesn&amp;#39;t have some kind of leveling fetish.&lt;/p&gt;
+&lt;h2 id=&quot;the-beginning-after-the-end&quot;&gt;The Beginning After The End&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Webtoon&lt;/li&gt;
+&lt;li&gt;Season 1-3, up to chapter 85&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yet another webtoon in the same vein.&lt;/p&gt;
+&lt;p&gt;In this one, our hero is nothing less than a conqueror king, reincarnated. His
+original lifetime seemingly had magic but also a futuristic setting, while his
+reincarnated life happens in a more medieval type of settings, complete with
+elves and dwarves.&lt;/p&gt;
+&lt;p&gt;I felt like this webtoon did itself a service by taking some breathing room.
+Over 85 chapters, the plot advances much less than some other webtoons in the
+same genre. Amusingly, we see the reincarnated hero age from 0 to 13 years old -
+and he is just now about to join some kind of magic school.&lt;/p&gt;
+&lt;p&gt;This space is mostly potentiality - it means the webtoon does not commit faults
+by rushing the plot and the relationships between the characters, but it also
+means that the number of plot points has been limited so far. If done correctly
+though, the greater familiarity we have acquired with the characters will lead
+to a much more satisfying punch down the line, and the character development
+will feel meaningful. We can only hope.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s not to say that nothing happened, and it&amp;#39;s been a very enjoyable read so
+far, it&amp;#39;s not exactly a tapestry of intrigue, but I have nothing critical to say
+about it either.&lt;/p&gt;
+&lt;p&gt;Just like &lt;a href=&quot;#slave-b-webtoon-up-to-chapter-50&quot;&gt;Slave B&lt;/a&gt;, this one is also much less leveling oriented (though the
+theme is present as skill acquisition and mana mastery).&lt;/p&gt;
+&lt;p&gt;Interestingly, I got a very &lt;em&gt;cozy&lt;/em&gt; vibe from this toon. The hero&amp;#39;s original (and
+still mysterious) life was lonely, as an orphan that somehow made it to the top.
+The webtoon emphasizes, on the other hand, how precious his family and friends
+are to him in his new life. And you know what, I&amp;#39;m all for that.&lt;/p&gt;
+&lt;p&gt;All in all, very recommended.&lt;/p&gt;
+&lt;h2 id=&quot;the-mandalorian-season-2&quot;&gt;The Mandalorian Season 2&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Previously: &lt;a href=&quot;/reviews-5/#the-mandalorian&quot;&gt;Season 1&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The second season does not disappoint — it&amp;#39;s still great. It does tell us more
+about the character of the show, however. Sasha sent me this comic:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;mandalorian.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;And so it is - it&amp;#39;s an episodic show. The second season doesn&amp;#39;t launch in grand
+intrigues any more than the first one does. With only 8 episodes and a flair for
+showing great action sequences, maybe that&amp;#39;s preferable (the counterexample
+here would be John Wick - great first movie, terrible franchise).&lt;/p&gt;
+&lt;p&gt;I did get a bit frustrated by the 6th episode, however. There were too many
+frustrations of the type where I go like &amp;quot;why didn&amp;#39;t you do this? you literally
+did it 5 minutes ago! but now it&amp;#39;s useful!&amp;quot; and &amp;quot;of course that&amp;#39;s precisely the
+moment where X would happen!!&amp;quot;. Probably this is actually a weakness of the show
+and this happens more than I realize — I&amp;#39;m typically an easy audience. But in
+that episode, it was really hard to overlook. Fortunately, the show made up for
+it with an excellent 7th episode and an adequate, if
+not-quite-as-good-as-first-season&amp;#39;s, finale.&lt;/p&gt;
+&lt;p&gt;Disney is apparently very intent on milking the Star Wars cow, and in particular
+the Mandalorian cow (probably especially so after they drove the main series
+into the ground). Next year we can expect, in addition to season 3, a show on
+Bobba Fett. But there&amp;#39;s more! Disney is working on two more Mandalorian spinoffs,
+one on Jedi &lt;a href=&quot;https://starwars.fandom.com/wiki/Ahsoka_Tano&quot;&gt;Ahsoka Tano&lt;/a&gt; (from the animated movies and appearing in this season
+of Mando), one on the New Republic Rangers. And there&amp;#39;s also one on Lando
+Calrissian. I expect a mixed bag, but let&amp;#39;s hope for one or two gems in there.
+This is the way.&lt;/p&gt;
+      </description>
+      <pubDate>2020-12-24T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/reviews-9</link>
+      <guid isPermaLink="true">http://norswap.com/reviews-9</guid>
+    </item>
+    <item>
       <title>Weight Training 8: Gains</title>
       <description>
 &lt;p&gt;Previously: &lt;a href=&quot;/weight-training&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/weight-training-2&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/weight-training-3&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/weight-training-4&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/weight-training-5&quot;&gt;Five&lt;/a&gt; / &lt;a href=&quot;/weight-training-6&quot;&gt;Six&lt;/a&gt; / &lt;a href=&quot;/weight-training-7&quot;&gt;Seven&lt;/a&gt;&lt;/p&gt;
@@ -2131,1030 +2666,6 @@ soon (hopefully).&lt;/p&gt;
       <pubDate>2020-07-21T22:00:00.000Z</pubDate>
       <link>http://norswap.com/weight-training-6</link>
       <guid isPermaLink="true">http://norswap.com/weight-training-6</guid>
-    </item>
-    <item>
-      <title>Truffle Tutorial: Adding 1 and 1 Together</title>
-      <description>
-&lt;p&gt;I&amp;#39;ve now been working on &lt;a href=&quot;https://github.com/oracle/truffleruby&quot;&gt;TruffleRuby&lt;/a&gt; for about 7 months. TruffleRuby is a Ruby
-implementation built on top of &lt;a href=&quot;https://www.graalvm.org/docs/&quot;&gt;GraalVM&lt;/a&gt; and its &lt;a href=&quot;https://www.graalvm.org/docs/Truffle-Framework/user/README&quot;&gt;Truffle API&lt;/a&gt;. Truffle allows
-languages to be implemented on top of Graal as &lt;a href=&quot;https://en.wikipedia.org/wiki/Interpreter_(computing)#Abstract_syntax_tree_interpreters&quot;&gt;AST interpreters&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I wanted to share a little bit of what I learned of Graal and Truffle, so I
-decided to write this tutorial, which demonstrates the basics of Truffle through
-simplistic examples.&lt;/p&gt;
-&lt;p&gt;We are setting our ambition very low for this post. We are going to implement
-the almost-simplest possible language. It will only be able to add numbers and
-strings together. Doing this will teach us about some core principles of
-Truffle. Then, we will use the &lt;a href=&quot;https://docs.oracle.com/en/graalvm/enterprise/20/guide/reference/ideal-graph-visualizer.html&quot;&gt;Ideal Graph Visualizer (IGV)&lt;/a&gt; tool to
-inspect the result of compilation.&lt;/p&gt;
-&lt;h2 id=&quot;what-graal-and-truffle-do&quot;&gt;What Graal and Truffle Do&lt;/h2&gt;
-&lt;p&gt;Before entering into the minute details, I want to give you an overview of what
-Graal and Truffle actually do, and why it&amp;#39;s interesting to use them at all.&lt;/p&gt;
-&lt;p&gt;Why build your language on Graal/Truffle? The one line answer is that you can
-make it go fast, easily. The more dynamic / abstract your language, the more it
-will benefit from the optimizations offered by Truffle: writing your own
-advanced JIT compiler is not a light undertaking.&lt;/p&gt;
-&lt;p&gt;You will also get other goodness, such as debugging support for free. There are
-two good articles that should sell you on the technology: &lt;a href=&quot;https://blog.plan99.net/graal-truffle-134d8f28fb69&quot;&gt;&amp;quot;Graal &amp;amp; Truffle&amp;quot; by
-Mike Hearn&lt;/a&gt; (hype check: not every promise is entirely realized, but it&amp;#39;s
-in the works) and &lt;a href=&quot;https://medium.com/graalvm/graalvm-ten-things-12d9111f307d&quot;&gt;&amp;quot;Top 10 Things To Do With GraalVM&amp;quot; by Chris Seaton&lt;/a&gt;
-(hype check: this is all real).&lt;/p&gt;
-&lt;p&gt;As for how the technology actually works, the best explanation for Graal is
-probably Chris Seaton&amp;#39;s talk &lt;a href=&quot;https://chrisseaton.com/truffleruby/jokerconf17/&quot;&gt;Understanding How GraalVM Works&lt;/a&gt; (a
-full transcript with inline slides is available!). This is deep technical
-content, clearly explained. It doesn&amp;#39;t cover Truffle, however.&lt;/p&gt;
-&lt;p&gt;Here is my own broad overview of how Graal/Truffle makes your code fast:&lt;/p&gt;
-&lt;p&gt;When using the Truffle API, Graal (which includes a &lt;a href=&quot;https://en.wikipedia.org/wiki/Just-in-time_compilation&quot;&gt;just in time (JIT)
-compiler&lt;/a&gt;) will compile &lt;a href=&quot;https://en.wikipedia.org/wiki/Hot_spot_(computer_programming)&quot;&gt;hot parts of the AST&lt;/a&gt; to efficient
-machine code. In particular, the hot parts of the AST will be &lt;a href=&quot;https://en.wikipedia.org/wiki/Partial_evaluation&quot;&gt;partially
-evaluated&lt;/a&gt;. While this has multiple performance implications, it will most
-notably avoid a lot of the &lt;a href=&quot;https://dzone.com/articles/too-fast-too-megamorphic-what&quot;&gt;megamorphic call overhead&lt;/a&gt; that an AST
-interpreter would normally suffer from.&lt;/p&gt;
-&lt;p&gt;The Truffle API also offers other ways to improve performance. Most notably is
-its reliance on &lt;a href=&quot;https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching&quot;&gt;(polymorphic) inline caching&lt;/a&gt;. In a program, there are
-regularities that are hard or impossible to detect statically. For instance,
-maybe a function works on different kinds of values, but in practice only ever
-receives a single kind. Truffle lets you specify &lt;em&gt;specializations&lt;/em&gt; which handle
-a subset of all cases that are allowed to occur. Then, at runtime, Truffle will
-generate optimized code only for the specializations that were actually
-encountered in practice, and insert a check to verify that we do not encounter
-other cases (in which case we need to throw away the compiled code and start the
-process again). This is called &lt;em&gt;inline caching&lt;/em&gt; because we cache the encountered
-specializations in the AST. We&amp;#39;ll cover the specialization mechanism in detail
-in this article.&lt;/p&gt;
-&lt;p&gt;The typical use case for inline caching is method lookup: virtual method calls
-have a tendency to always be done on an instance of the same class. Using inline
-caching, we can store this class, and specialize the code for it, which avoids
-repeating the costly method lookup. However, Truffle&amp;#39;s caches are very flexible,
-and it&amp;#39;s possible to specialize on arbitrary conditions — depending on what the
-language implementer specifies. See &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Cached.html&quot;&gt;there&lt;/a&gt;
-for more details.&lt;/p&gt;
-&lt;p&gt;The Truffle API also offers more advanced utilities to optimize your language,
-such as &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.CompilationFinal.html&quot;&gt;compilation final values&lt;/a&gt; and &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/Assumption.html&quot;&gt;assumptions&lt;/a&gt; (in particular, those two
-help improve the result of partial evaluation). We won&amp;#39;t talk about these here,
-but maybe some other time.&lt;/p&gt;
-&lt;h2 id=&quot;setup&quot;&gt;Setup&lt;/h2&gt;
-&lt;p&gt;To follow along with the examples, you&amp;#39;ll need to install GraalVM. In
-particular, I used the 20.1.0 version with OpenJDK 11. You can &lt;a href=&quot;https://www.graalvm.org/downloads/&quot;&gt;download it
-here&lt;/a&gt;. Then follow the &lt;a href=&quot;https://www.graalvm.org/getting-started/&quot;&gt;installation instructions&lt;/a&gt;. You can also add
-it as a SDK to your IDE, usually you&amp;#39;ll need to point it to the Java home
-directory (the thing you&amp;#39;re told to put in &lt;code&gt;JAVA_HOME&lt;/code&gt; in the installation
-instructions).&lt;/p&gt;
-&lt;p&gt;Note that if you&amp;#39;re on macOS and you&amp;#39;re hit with an error that reads
-&lt;code&gt;“graalvm-ce-java11-20.1.0” cannot be opened because the developer cannot be verified.&lt;/code&gt; or &lt;code&gt;macOS cannot verify that this app is free from malware.&lt;/code&gt; when
-trying one of GraalVM&amp;#39;s binaries (&lt;code&gt;java&lt;/code&gt;, &lt;code&gt;javac&lt;/code&gt;, ...), you can fix the
-situation by running:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sudo xattr -dr com.apple.quarantine graalvm-ce-java11-20.1.0&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;(Replace &lt;code&gt;graalvm-ce-java11-20.1.0&lt;/code&gt; by the path to the root directory of your
-GraalVM installation.)&lt;/p&gt;
-&lt;p&gt;You&amp;#39;ll also need the Ideal Graph Visualizer (IGV), (again, I used version 20.1.0
-for Java 11). IGV is normally part of the (paid/licensed) Entreprise Edition of
-GraalVM, but you can evaluate it for free. Be aware that, in principle, the code
-you evaluate IGV on cannot be used commercially (&lt;a href=&quot;https://en.wikipedia.org/wiki/IANAL&quot;&gt;IANAL etc&lt;/a&gt;). You can &lt;a href=&quot;https://www.oracle.com/downloads/graalvm-downloads.html&quot;&gt;download
-it here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Same as before, if you get an error on macOS, you might need to run the
-following (where &lt;code&gt;idealgraphvisualizer&lt;/code&gt; is the directory where you extracted
-IGV):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;sudo xattr -dr com.apple.quarantine idealgraphvisualizer&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I&amp;#39;m going to walk through my whole language example, showing you the code as I
-go. However, the entire source is avaiable &lt;a href=&quot;https://github.com/norswap/truffle-tutorial&quot;&gt;on this Github repository&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s get started. We&amp;#39;ll use Maven to build the project and pull in the
-dependencies. To install it, just use your package manager of choice, or follow
-the &lt;a href=&quot;http://maven.apache.org/install.html&quot;&gt;install instruction&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Here is the Maven config file for the project (&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/pom.xml&quot;&gt;&lt;code&gt;pom.xml&lt;/code&gt; 🔗&lt;/a&gt;):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;project xmlns=&amp;quot;http://maven.apache.org/POM/4.0.0&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; xsi:schemaLocation=&amp;quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&amp;quot;&amp;gt;
-    &amp;lt;modelVersion&amp;gt;4.0.0&amp;lt;/modelVersion&amp;gt;
-    &amp;lt;groupId&amp;gt;com.norswap&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;exni&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;1.0.0-SNAPSHOT&amp;lt;/version&amp;gt;
-    &amp;lt;build&amp;gt;
-        &amp;lt;sourceDirectory&amp;gt;src&amp;lt;/sourceDirectory&amp;gt;
-        &amp;lt;plugins&amp;gt;
-            &amp;lt;plugin&amp;gt;
-                &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
-                &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
-                &amp;lt;version&amp;gt;3.8.1&amp;lt;/version&amp;gt;
-                &amp;lt;configuration&amp;gt;
-                    &amp;lt;source&amp;gt;11&amp;lt;/source&amp;gt;
-                    &amp;lt;target&amp;gt;11&amp;lt;/target&amp;gt;
-                &amp;lt;/configuration&amp;gt;
-            &amp;lt;/plugin&amp;gt;
-        &amp;lt;/plugins&amp;gt;
-    &amp;lt;/build&amp;gt;
-    &amp;lt;properties&amp;gt;
-        &amp;lt;project.build.sourceEncoding&amp;gt;UTF-8&amp;lt;/project.build.sourceEncoding&amp;gt;
-        &amp;lt;graalvm.version&amp;gt;20.1.0&amp;lt;/graalvm.version&amp;gt;
-    &amp;lt;/properties&amp;gt;
-    &amp;lt;dependencies&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.graalvm.truffle&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;truffle-api&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;${graalvm.version}&amp;lt;/version&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.graalvm.truffle&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;truffle-dsl-processor&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;${graalvm.version}&amp;lt;/version&amp;gt;
-            &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-    &amp;lt;/dependencies&amp;gt;
-&amp;lt;/project&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;There&amp;#39;s nothing incredibly tricky going on here. Sources go to &lt;code&gt;src&lt;/code&gt;
-(&lt;a href=&quot;https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html&quot;&gt;&lt;code&gt;src/main/java&lt;/code&gt;&lt;/a&gt; can burn in hell), we&amp;#39;re using Java version 11, and pulling down
-the Truffle API and Truffle annotation processor version 20.1.0.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m calling this project &lt;code&gt;exni&lt;/code&gt; for &amp;quot;ex nihilo&amp;quot;. I&amp;#39;m cute like that.&lt;/p&gt;
-&lt;h2 id=&quot;building-the-ast&quot;&gt;Building the AST&lt;/h2&gt;
-&lt;p&gt;The first thing we need to do is to build a simple AST to be evaluated.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/ExniNode.java&quot;&gt;&lt;code&gt;ExniNode.java&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
-
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.Node;
-
-public abstract class ExniNode extends Node
-{
-    /** main execute method */
-    public abstract Object execute (VirtualFrame frame);
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We&amp;#39;ll use this as the parent class for all our AST nodes. It inherits from the
-Truffle &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/Node.html&quot;&gt;&lt;code&gt;Node&lt;/code&gt;&lt;/a&gt; class itself. The &lt;code&gt;execute&lt;/code&gt; method evaluates the node and returns
-a result of type &lt;code&gt;Object&lt;/code&gt;. It takes a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html&quot;&gt;&lt;code&gt;VirtualFrame&lt;/code&gt;&lt;/a&gt;, which represents a
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Call_stack&quot;&gt;stack frame&lt;/a&gt;: that of the &amp;quot;function&amp;quot; (or equivalent concept) to which the node belongs.&lt;/p&gt;
-&lt;p&gt;The name &lt;code&gt;execute&lt;/code&gt; is special in Truffle. Truffle is aware of node methods whose
-name start with &lt;code&gt;execute&lt;/code&gt; and will call the appropriate one when it needs to
-evaluate the children of another AST node. Which &lt;code&gt;execute&lt;/code&gt; method is appropriate
-depends on the requested value type (&lt;code&gt;Object&lt;/code&gt; being the most general, and
-therefore always applicable) as well as available parameters.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s move to the simplest node implementation possible:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/IntLiteralNode.java&quot;&gt;&lt;code&gt;IntLiteralNode.java&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
-
-import com.oracle.truffle.api.frame.VirtualFrame;
-
-public final class IntLiteralNode extends ExniNode
-{
-    public final long value;
-
-    public IntLiteralNode (long value) {
-        this.value = value;
-    }
-
-    @Override public Object execute (VirtualFrame frame) {
-        return value;
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This node represents an integer literal that appears in source code. We
-implement the &lt;code&gt;execute&lt;/code&gt; method to simply return that number.&lt;/p&gt;
-&lt;p&gt;Now, a node for the &lt;code&gt;+&lt;/code&gt; operator:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/AddNode.java&quot;&gt;&lt;code&gt;AddNode.java&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
-
-import com.oracle.truffle.api.dsl.Fallback;
-import com.oracle.truffle.api.dsl.NodeChild;
-import com.oracle.truffle.api.dsl.Specialization;
-import exni.ExniException;
-
-@NodeChild(&amp;quot;left&amp;quot;)
-@NodeChild(&amp;quot;right&amp;quot;)
-public abstract class AddNode extends ExniNode
-{
-    public static AddNode create (ExniNode left, ExniNode right) {
-        return AddNodeGen.create(left, right);
-    }
-
-    @Specialization protected long addLongs (long left, long right) {
-        return left + right;
-    }
-
-    @Specialization String addStrings (String left, String right) {
-        return left + right;
-    }
-
-    @Fallback protected void typeError (Object left, Object right) {
-        throw new ExniException(&amp;quot;type error: args must be two longs, or two strings&amp;quot;, this);
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The two &lt;code&gt;NodeChild&lt;/code&gt; annotations define children nodes of this AST node. By
-default, these have the type of the superclass (&lt;code&gt;ExniNode&lt;/code&gt; in this case), but
-it&amp;#39;s also possible to specify the type explicitly with the &lt;code&gt;type&lt;/code&gt; annotation
-element.&lt;/p&gt;
-&lt;p&gt;This class is abstract, but Truffle will generate a concrete implementation for
-us, named &lt;code&gt;AddNodeGen&lt;/code&gt;. If you load &lt;a href=&quot;exni-github&quot;&gt;the project&lt;/a&gt; in your IDE, you
-can navigate there easily (import the Maven project and build first). We will
-examine this class shortly.&lt;/p&gt;
-&lt;p&gt;The logic of the class is implemented using the &lt;em&gt;specialization system&lt;/em&gt;. Instead
-of overriding the &lt;code&gt;execute&lt;/code&gt; method(s), we mark a series of method with the
-&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html&quot;&gt;&lt;code&gt;Specialization&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Fallback.html&quot;&gt;&lt;code&gt;Fallback&lt;/code&gt;&lt;/a&gt; annotations.&lt;/p&gt;
-&lt;p&gt;The idea is that when the node is executed, Truffle will pick the first matching
-specialization and run it. There are two criteria used when matching
-specializations: the type of its parameters and additionals conditions specified
-by the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/Specialization.html#guards--&quot;&gt;&lt;code&gt;guards&lt;/code&gt;&lt;/a&gt; annotation element.&lt;/p&gt;
-&lt;p&gt;This is a very simple node, so it only has two specializations and a fallback,
-one for when both values are &lt;code&gt;long&lt;/code&gt; (Truffle will automatically perform unboxing
-whenever required), and one for when both values are strings. Additionally,
-there is a fallback specialization. A fallback specialization is a
-specialization that will always match when (and only when) no other
-specialization does. In this case, we just throw an type error.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The implementation of &lt;code&gt;ExniException&lt;/code&gt; is irrelevant, excepted that all
-exceptions thrown during guest language execution must implement
-&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleException.html&quot;&gt;&lt;code&gt;TruffleException&lt;/code&gt;&lt;/a&gt; — excepted those exceptions that represent errors in the
-implementation itself.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Note that the names of the specialization methods are irrelevant, they could
-have been anything, including the same name (as long as it generates distinct
-method overloads, of course).&lt;/p&gt;
-&lt;h2 id=&quot;specializations-under-the-hood&quot;&gt;Specializations: Under The Hood&lt;/h2&gt;
-&lt;p&gt;Let&amp;#39;s look at the class generated by Truffle to implement our abstract
-&lt;code&gt;AddNode&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://gist.github.com/norswap/a235123a4aa3a236fbdeb653ea389362#file-addnodegen-java&quot;&gt;&lt;code&gt;AddNodeGen 🔗&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
-// ...
-
-@GeneratedBy(AddNode.class)
-public final class AddNodeGen extends AddNode {
-
-    @Child private ExniNode left_;
-    @Child private ExniNode right_;
-    @CompilationFinal private int state_;
-
-    private AddNodeGen(ExniNode left, ExniNode right) {
-        this.left_ = left;
-        this.right_ = right;
-    }
-
-    @Override
-    public Object execute(VirtualFrame frameValue) {
-        int state = state_;
-        Object leftValue_ = this.left_.execute(frameValue);
-        Object rightValue_ = this.right_.execute(frameValue);
-        if ((state &amp;amp; 0b1) != 0 /* is-active addLongs(long, long) */ &amp;amp;&amp;amp; leftValue_ instanceof Long) {
-            long leftValue__ = (long) leftValue_;
-            if (rightValue_ instanceof Long) {
-                long rightValue__ = (long) rightValue_;
-                return addLongs(leftValue__, rightValue__);
-            }
-        }
-        if ((state &amp;amp; 0b10) != 0 /* is-active addStrings(String, String) */ &amp;amp;&amp;amp; leftValue_ instanceof String) {
-            String leftValue__ = (String) leftValue_;
-            if (rightValue_ instanceof String) {
-                String rightValue__ = (String) rightValue_;
-                return addStrings(leftValue__, rightValue__);
-            }
-        }
-        CompilerDirectives.transferToInterpreterAndInvalidate();
-        return executeAndSpecialize(leftValue_, rightValue_);
-    }
-
-    private Object executeAndSpecialize(Object leftValue, Object rightValue) {
-        int state = state_;
-        if (leftValue instanceof Long) {
-            long leftValue_ = (long) leftValue;
-            if (rightValue instanceof Long) {
-                long rightValue_ = (long) rightValue;
-                this.state_ = state = state | 0b1 /* add-active addLongs(long, long) */;
-                return addLongs(leftValue_, rightValue_);
-            }
-        }
-        if (leftValue instanceof String) {
-            String leftValue_ = (String) leftValue;
-            if (rightValue instanceof String) {
-                String rightValue_ = (String) rightValue;
-                this.state_ = state = state | 0b10 /* add-active addStrings(String, String) */;
-                return addStrings(leftValue_, rightValue_);
-            }
-        }
-        this.state_ = state = state | 0b100 /* add-active typeError(Object, Object) */;
-        typeError(leftValue, rightValue);
-        return null;
-    }
-
-    @Override
-    public NodeCost getCost() { /* ... */ }
-
-    private static boolean fallbackGuard_(int state, Object leftValue, Object rightValue) {
-        if (((state &amp;amp; 0b1)) == 0 /* is-not-active addLongs(long, long) */ &amp;amp;&amp;amp; leftValue instanceof Long &amp;amp;&amp;amp; rightValue instanceof Long) {
-            return false;
-        }
-        if (((state &amp;amp; 0b10)) == 0 /* is-not-active addStrings(String, String) */ &amp;amp;&amp;amp; leftValue instanceof String &amp;amp;&amp;amp; rightValue instanceof String) {
-            return false;
-        }
-        return true;
-    }
-
-    public static AddNode create(ExniNode left, ExniNode right) {
-        return new AddNodeGen(left, right);
-    }
-
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It has three fields. The first two were generated by the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/NodeChild.html&quot;&gt;&lt;code&gt;NodeChild&lt;/code&gt;&lt;/a&gt;
-annotations. There is also a &lt;code&gt;create&lt;/code&gt; method at the bottom, which can be used to
-get create an instance of &lt;code&gt;AddNode&lt;/code&gt; if given its two children. The third field
-(&lt;code&gt;state_&lt;/code&gt;) keeps track of what specializations are active for the node.&lt;/p&gt;
-&lt;p&gt;Active specializations? What does that even mean? Well, whenever a
-specialization is first used, it becomes active. One node can have multiple
-specializations active at the same time. A new node starts with no active
-specializations.&lt;/p&gt;
-&lt;p&gt;For instance, let&amp;#39;s imagine a small syntax and a dummy program for our language:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;def add(x, y)
-    return x + y; // AddNode 1
-
-add(1, 2)
-add(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;)
-1 + 2 // AddNode 2&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I have used comments to mark the two locations where an &lt;code&gt;AddNode&lt;/code&gt; is generated.
-&lt;code&gt;AddNode 1&lt;/code&gt; will see both integer and string values, and so both specializations
-will become active. &lt;code&gt;AddNode 2&lt;/code&gt;, on the other hand, will only ever see integers.&lt;/p&gt;
-&lt;p&gt;But why do we need to distinguish between active and inactive specializations?
-Doing so helps Graal&amp;#39;s JIT compiler generate better compiled code. Whenever the
-node has to be JIT-compiled, Graal will only emit machine code for the
-specializations that have been activated. Having less possibilities has multiple
-benefits. First there are less cases to check. Second, the reduced set of
-possibilities may enable further optimizations (especially when there is only a
-single active specialization). Finally, all else being equal, shorter code is
-generally faster (more efficient cache utilisation).&lt;/p&gt;
-&lt;p&gt;This raises one more question: what happens if, after generating compiled code,
-we encounter a case covered by a specialization that hasn&amp;#39;t been activated yet?
-In that case, the compiled code is invalidated, and the new specialization is
-activated. New compiled code may subsequently be generated.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s go back to the code. Truffle has automatically generated the &lt;code&gt;execute&lt;/code&gt;
-method that was left abstract (in &lt;code&gt;ExniNode&lt;/code&gt;, &lt;code&gt;AddNode&lt;/code&gt;&amp;#39;s superclass). It has
-also generated an &lt;code&gt;executeAndSpecialize&lt;/code&gt; method that &lt;code&gt;execute&lt;/code&gt; calls. Relating
-to our previous discussion, &lt;code&gt;execute&lt;/code&gt; should be understood as running the active
-specializations, while &lt;code&gt;executeAndSpecialize&lt;/code&gt; is responsible to activate new
-specializations.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;execute&lt;/code&gt; starts by executing the two children nodes. Then, if our &lt;code&gt;addLongs&lt;/code&gt;
-specialization is active, and if both resulting values can be cast to &lt;code&gt;long&lt;/code&gt;, it
-calls &lt;code&gt;AddNode#addLongs&lt;/code&gt;. Otherwise, if our &lt;code&gt;addStrings&lt;/code&gt; specialization is
-active and if the values can be cast to &lt;code&gt;String&lt;/code&gt;, it calls &lt;code&gt;AddNode#addStrings&lt;/code&gt;.
-If that&amp;#39;s not possible either, it calls
-&lt;code&gt;CompilerDirectives.transferToInterpreterAndInvalidate()&lt;/code&gt; and then
-&lt;code&gt;executeAndSpecialize&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;executeAndSpecialize&lt;/code&gt; does almost the same thing, but does not check for
-activated specializations, only for the specific conditions in which a
-specialization may apply. Additionally, it activates any specialization it
-calls. Finally, if none of the two specialization matches, it calls our fallback
-specialization &lt;code&gt;AddNode#typeError&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Now you might think from this that fallback specializations may never be
-activated. This is not so. The only reason that &lt;code&gt;typeError&lt;/code&gt; does not appear in
-&lt;code&gt;execute&lt;/code&gt; is that its return type (&lt;code&gt;void&lt;/code&gt;) is incompatible with that of
-&lt;code&gt;execute&lt;/code&gt; (&lt;code&gt;Object&lt;/code&gt;). If we wanted the specialization to be activable, we could
-change its return type to &lt;code&gt;Object&lt;/code&gt;. Since it is an extraordinary error
-condition, I chose not do that here. I encourage you to try it and check that
-the generated code changed accordingly.&lt;/p&gt;
-&lt;p&gt;Note you can observe similar effects when multiple &lt;code&gt;execute&lt;/code&gt; methods have
-different type parameters. The &lt;code&gt;execute&lt;/code&gt; methods will be JIT-compiled
-separately, which can lead to more efficient code for the method whose signature
-is more restrictive (as it doesn&amp;#39;t have to include the activated specializations
-that don&amp;#39;t match the signature).&lt;/p&gt;
-&lt;h3 id=&quot;how-the-magic-happens&quot;&gt;How the Magic Happens&lt;/h3&gt;
-&lt;p&gt;Why is the logic split between &lt;code&gt;execute&lt;/code&gt; and &lt;code&gt;executeAndSpecialize&lt;/code&gt;? It&amp;#39;s
-because &lt;code&gt;execute&lt;/code&gt; is what will become JIT-compiled. All its calls to
-specializations are guarded by conditions on &lt;code&gt;_state&lt;/code&gt;. &lt;code&gt;_state&lt;/code&gt; is marked with
-&lt;code&gt;CompilationFinal&lt;/code&gt; annotation. This annotation tells Truffle to consider that
-the field is effectively final for partial evaluation and compilation purposes.
-In practice, this means that calls to inactive specializations will be pruned
-from the compiled code, hence only retaining the active specializations. It&amp;#39;s
-exactly what we want to get the benefits I outlined a bit before.&lt;/p&gt;
-&lt;p&gt;This also explains why specialization activation is relegated to
-&lt;code&gt;executeAndSpecialize&lt;/code&gt;. That method will never be compiled, because it is only
-called from the &lt;code&gt;execute&lt;/code&gt; methods, and always preceded by a call to
-&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--&quot;&gt;&lt;code&gt;CompilerDirectives.transferToInterpreterAndInvalidate&lt;/code&gt;&lt;/a&gt; which tells Truffle to
-invalidate the current compiled code for the method! Truffle is aware of this,
-and so will never inline &lt;code&gt;executeAndSpecialized&lt;/code&gt; into &lt;code&gt;execute&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;That &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CompilerDirectives.html#transferToInterpreterAndInvalidate--&quot;&gt;&lt;code&gt;CompilerDirectives.transferToInterpreterAndInvalidate&lt;/code&gt;&lt;/a&gt; call is also
-what ensures that we discard the current compiled code when a new specialization
-becomes active.&lt;/p&gt;
-&lt;p&gt;You can learn more about the specialization system in &lt;a href=&quot;https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters&quot;&gt;Christian Hummer&amp;#39;s master
-thesis&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;running&quot;&gt;Running&lt;/h2&gt;
-&lt;p&gt;Okay, so we have our grand addition/concatenation node. Let&amp;#39;s actually use it.
-Here is our main class:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniMain.java&quot;&gt;&lt;code&gt;ExniMain&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni;
-
-import com.oracle.truffle.api.Truffle;
-import exni.nodes.AddNode;
-import exni.nodes.IntLiteralNode;
-import exni.nodes.ExniRootNode;
-
-public abstract class ExniMain
-{
-    public static void main (String[] args)
-    {
-        var add = AddNode.create(new IntLiteralNode(1), new IntLiteralNode(2));
-        var root = new ExniRootNode(add);
-        var target = Truffle.getRuntime().createCallTarget(root);
-
-        // Uncomment this in order to use a CountNode instead of an AddNode.
-        // target = Truffle.getRuntime().createCallTarget(new MainNode(new CountNode()));
-
-        System.out.println(target.call());
-
-        // Uncomment this in order to force the compilation of the node.
-        // while (true) target.call();
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Don&amp;#39;t worry about the &amp;quot;uncomment&amp;quot; bit. We&amp;#39;ll get to those later.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;We construct our &lt;code&gt;AddNode&lt;/code&gt; as expected, but then we wrap it into a
-&lt;code&gt;ExniRootNode&lt;/code&gt;. This is an implementation of the Truffle &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; class. In
-Truffle, runnable nodes belong to a tree with &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; at the root. For
-instance, there is typically one &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; per function definition.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt; also holds a reference to a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/FrameDescriptor.html&quot;&gt;&lt;code&gt;FrameDescriptor&lt;/code&gt;&lt;/a&gt; that describes the
-parameters expected by the node (in the case of a function definition: the
-function&amp;#39;s parameters). We do not need to specify this here, since our addition
-expression does not take parameters.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;ExniRootNode&lt;/code&gt; doesn&amp;#39;t do anything fancy by itself: it just wraps an &lt;code&gt;ExniNode&lt;/code&gt;,
-and extends &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html&quot;&gt;&lt;code&gt;RootNode&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniRootNode.java&quot;&gt;&lt;code&gt;ExniRootNode&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
-
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.RootNode;
-
-public final class ExniRootNode extends RootNode
-{
-    @SuppressWarnings(&amp;quot;FieldMayBeFinal&amp;quot;)
-    private @Child ExniNode root;
-
-    public ExniRootNode(ExniNode root) {
-        super(null);
-        this.root = root;
-    }
-
-    @Override public Object execute (VirtualFrame frame) {
-        return root.execute(frame);
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The next step is to call
-&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleRuntime.html#createCallTarget-com.oracle.truffle.api.nodes.RootNode-&quot;&gt;&lt;code&gt;Truffle.getRuntime().createCallTarget(root)&lt;/code&gt;&lt;/a&gt; to create a
-&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt;. The call target represents something you can call (in this case,
-it&amp;#39;s our add expression).&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Note that in general, expressions don&amp;#39;t have an associated &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt;. It&amp;#39;s
-typically reserved for callable things like functions and methods. But our
-language does not have those, and we need a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; to run the code.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;We use a &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; instead of call the node&amp;#39;s &lt;code&gt;execute&lt;/code&gt; method directly so
-that Truffle may perform some bookkeeping on the call. In particular, the
-&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; records how often our node is called, so that Truffle may decide
-when to JIT-compile it. It can also be used for &lt;a href=&quot;https://en.wikipedia.org/wiki/Instrumentation_(computer_programming)&quot;&gt;instrumentation&lt;/a&gt;. Finally, it
-wires up the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; so that it will automatically create an object
-representing a &lt;a href=&quot;https://en.wikipedia.org/wiki/Call_stack&quot;&gt;stack frame&lt;/a&gt; (i.e. the &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html&quot;&gt;&lt;code&gt;VirtualFrame&lt;/code&gt;&lt;/a&gt; argument taken by our
-various &lt;code&gt;execute&lt;/code&gt; methods) when called.&lt;/p&gt;
-&lt;p&gt;All that is left to do is to invoke &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget#call&lt;/code&gt;&lt;/a&gt; and print
-the result.&lt;/p&gt;
-&lt;p&gt;To run this after building with Maven, you can use the following command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;M2=$HOME/.m2/repository
-java \
-    -Dtruffle.class.path.append=target/classes \
-    --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
-    --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
-    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
-    exni.ExniMain&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;A couple practical points:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;you need to be at the repository&amp;#39;s root&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;java&lt;/code&gt; must point to the GraalVM version&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$M2&lt;/code&gt; should point to your m2 repository (by default it&amp;#39;s &lt;code&gt;$HOME/.m2/repository&lt;/code&gt;).&lt;/li&gt;
-&lt;li&gt;You can configure your IDE to run this instead, you&amp;#39;ll just need to specify
-the main class and all the other non-classpath arguments.&lt;/li&gt;
-&lt;li&gt;Don&amp;#39;t forget to run this with GraalVM&amp;#39;s &lt;code&gt;java&lt;/code&gt;! It will run with other &lt;code&gt;java&lt;/code&gt;
-but Truffle nodes won&amp;#39;t be compiled specially.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Lo and behold, your console should print the glorious number 3!&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Extra technical note: The &lt;code&gt;add-exports&lt;/code&gt; arguments are needed because classes
-in &lt;code&gt;com.oracle.truffle.api&lt;/code&gt; need to be loaded via Truffle&amp;#39;s own class loader.
-The &lt;code&gt;add-exports&lt;/code&gt; arguments ensure that the class loader associated with the
-module is used. Similarly, defining &lt;code&gt;truffle.class.path.append&lt;/code&gt; enables that
-classloader to find our own node classes.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;igv&quot;&gt;IGV&lt;/h2&gt;
-&lt;p&gt;To run IGV, simply run the &lt;code&gt;bin/idealgraphvisualizer&lt;/code&gt; in your IGV install
-directory (just wherever you unzipped the downloaded archive). This will tie up
-the console in which IGV is run — if you it to run in the background, I
-recommend using &lt;a href=&quot;https://www.man7.org/linux/man-pages/man1/screen.1.html&quot;&gt;&lt;code&gt;screen&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;screen -dm -S igv bin/idealgraphvisualizer
-screen -r igv # to attach to the screen&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Next you&amp;#39;ll need to configure your java run command in order for it to generate
-compilation graphs and send them to IGV. You can achieve this by adding the
-following flags to your Java command: &lt;code&gt;-Dgraal.Dump=Truffle -Dgraal.PrintGraph=Network&lt;/code&gt;. Full command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;M2=$HOME/.m2/repository
-java \
-    -Dtruffle.class.path.append=target/classes \
-    --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
-    --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
-    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
-    -Dgraal.Dump=Truffle \
-    -Dgraal.PrintGraph=Network \
-    exni.ExniMain&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;code&gt;Dump=Truffle&lt;/code&gt; option means to only dump graphs relevant to analysing
-Truffle&amp;#39;s performance (for instance it won&amp;#39;t include graphs for compiled Java
-code that is not related to Truffle).&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;PrintGraph=Network&lt;/code&gt; option means to send the graphs directly to a running
-IGV over the network. If you omit this, it will default to dumping the graphs as
-files in &lt;code&gt;graal_dumps/&lt;/code&gt; in the working directory, and you can open those later
-from IGV.&lt;/p&gt;
-&lt;p&gt;These flags are documented on Graal&amp;#39;s git repository &lt;a href=&quot;https://github.com/oracle/graal/tree/master/compiler/src/org.graalvm.compiler.debug/src/org/graalvm/compiler/debug/doc-files&quot;&gt;here
-(master)&lt;/a&gt; (&lt;a href=&quot;https://github.com/oracle/graal/tree/32cd3db91fe4a141ee3016ac18b0f4cc9f51e447/compiler/src/org.graalvm.compiler.debug/src/org/graalvm/compiler/debug/doc-files&quot;&gt;future-proof(er), commit-specific
-link&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;IGV lets you inspect the result of JIT compilation. Our code so far is very
-simple, and does not trigger JIT compilation. However, we can trigger
-compilation simply by calling our &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; withing an infinite loop
-(&lt;code&gt;while (true) target.call();&lt;/code&gt;).&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Remember that we said that &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html&quot;&gt;&lt;code&gt;CallTarget&lt;/code&gt;&lt;/a&gt; counts calls in order to decide what
-to optimize? You will now see it&amp;#39;s true: calling inside a loop causes the
-counter to cross the threshold for compilation.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Run it, you should now see something like this in IGV:&lt;/p&gt;
-&lt;img class=&quot;centered&quot; src=&quot;left_sidebar.png&quot; width=&quot;400rem&quot; /&gt;
-
-&lt;p&gt;If you select the AST graph, you&amp;#39;ll see this, which is exactly the node hiearchy
-we build in our main class:&lt;/p&gt;
-&lt;img class=&quot;centered&quot; src=&quot;ast_sum.png&quot; width=&quot;300rem&quot; /&gt;
-
-&lt;p&gt;The &amp;quot;call tree&amp;quot; graph is not interesting because our nodes do not contain a
-guest language function call (our language doesn&amp;#39;t even have those).&lt;/p&gt;
-&lt;p&gt;The &amp;quot;Graal Graphs&amp;quot; section contains graphs at various stages of the compilation
-process. We&amp;#39;ll be particularly interested in &amp;quot;Before phase Lowering&amp;quot; which
-contains the graphs obtained after all of Truffle&amp;#39;s optimizations have been run
-(GraalMV still run generic optimizations after this however). In this case,
-you&amp;#39;ll see this:&lt;/p&gt;
-&lt;img class=&quot;centered&quot; src=&quot;graph_sum_truffle.png&quot; width=&quot;500rem&quot; /&gt;
-
-&lt;p&gt;Which is to say, almost nothing! The compiler was smart and the addition of two
-constants was completely optimized away. Do you see that small &lt;code&gt;62&lt;/code&gt; node? &lt;code&gt;C(3)&lt;/code&gt;
-means &amp;quot;constant with value 3&amp;quot; and that&amp;#39;s the result of our addition. At this
-stage, it still needs to &lt;a href=&quot;https://docs.oracle.com/javase/tutorial/java/data/autoboxing.html&quot;&gt;box&lt;/a&gt; that value though. But if you look to any further
-graph, you&amp;#39;ll see:&lt;/p&gt;
-&lt;img class=&quot;centered&quot; src=&quot;graph_sum_further.png&quot; width=&quot;400rem&quot; /&gt;
-
-&lt;p&gt;The result of the boxing operation is a constant instance of &lt;code&gt;Long&lt;/code&gt;, so we can
-eliminate the boxing operation.&lt;/p&gt;
-&lt;p&gt;You may wonder why this does not get optimized even further. After all, the
-return value is never used. The answer is that the logic that calls the call
-target (&lt;code&gt;target.call()&lt;/code&gt;) is quite complex and therefore cannot be optimized
-away. You can actually get to see the graph for that by replacing the
-&lt;code&gt;-Dgraal.Dump=Truffle&lt;/code&gt; flag by &lt;code&gt;-Dgraal.Dump=:1&lt;/code&gt; and looking for the code of the
-main method (&lt;code&gt;exni.ExniMain.main&lt;/code&gt;). You can also move the loop to another method
-if you want to get rid of the part of the graph that corresponds to the
-construction of the AST. It looks &lt;a href=&quot;graph_main.png&quot;&gt;something like this&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;So we can note that calling the call target within a loop is not a great idea.
-We could probably see that our &lt;code&gt;AddNode&lt;/code&gt; gets optimized away completely if we
-implemented a loop in the guest language itself.&lt;/p&gt;
-&lt;h2 id=&quot;a-slightly-harder-graph-and-what-does-it-mean-anyway&quot;&gt;A slightly harder graph, and what does it mean, anyway?&lt;/h2&gt;
-&lt;p&gt;Okay, so let&amp;#39;s see some actual graphs. We&amp;#39;ll create a new node that doesn&amp;#39;t
-optimize away. This node will be a counter that updates a public field:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/CountNode.java&quot;&gt;&lt;code&gt;CountNode&lt;/code&gt; 🔗&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package exni.nodes;
-
-import com.oracle.truffle.api.frame.VirtualFrame;
-
-public final class CountNode extends ExniNode {
-
-    public long counter;
-
-    @Override public Object execute (VirtualFrame frame) {
-        return counter++;
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Even though we&amp;#39;ll never read the counter, the field is public and the compiler
-cannot prove that it won&amp;#39;t be read, so it has to be dutifully incremented.&lt;/p&gt;
-&lt;p&gt;If you modify the main method to run this node instead, and go to the graphs
-(still &amp;quot;Before phase Lowering&amp;quot;) — click for full size version:&lt;/p&gt;
-&lt;a href=&quot;graph_counter_full.png&quot;&gt;
-&lt;img class=&quot;centered&quot; src=&quot;graph_counter_full.png&quot; /&gt;
-&lt;/a&gt;
-
-&lt;p&gt;First off, all the green stuff is &amp;quot;state&amp;quot;. I&amp;#39;ll be honest: I&amp;#39;m not too sure what
-&amp;quot;state&amp;quot; is supposed to be in general, but in this case (and in conjunction with
-grey boxes), it shows you a couple of the methods invoked to start the node&amp;#39;s
-execution, as well as relevant parameter to these methods. In particular, node
-21 shows an instance of Truffle&amp;#39;s internal &lt;a href=&quot;https://github.com/oracle/graal/blob/7980245f92d00f4b6c38688d46f0a586ec397fde/compiler/src/org.graalvm.compiler.truffle.runtime/src/org/graalvm/compiler/truffle/runtime/FrameWithoutBoxing.java&quot;&gt;&lt;code&gt;FrameWithoutBoxing&lt;/code&gt;&lt;/a&gt; class, and all
-the &lt;code&gt;VirtualArray&lt;/code&gt; nodes to the right of that are its fields.&lt;/p&gt;
-&lt;p&gt;Anyway, you can hide the state in the &amp;quot;Filters&amp;quot; panel on the right in IGV. You
-could also hit &amp;quot;Remove floating&amp;quot; to get rid of the grey boxes, but I want to
-keep node 44 (+). Instead I&amp;#39;ve hidden the other grey boxes manually, and we&amp;#39;re
-left with this:&lt;/p&gt;
-&lt;img class=&quot;centered&quot; src=&quot;graph_counter_simple.png&quot; width=&quot;550rem&quot; /&gt;
-
-&lt;p&gt;This is fairly simple to understand: our node loads the &lt;code&gt;counter&lt;/code&gt; field in node
-41, and adds 1 to it in node 44. Notice how one operand comes from the blue
-line, while the other is given by the small box 43 on top: &lt;code&gt;C(1) i64&lt;/code&gt; means that
-the operand is the constant 1, which is a 64-bits integer. We store the result
-of this operation back into the field in node 42. Notice how node 41 has a line
-going to node 44 and one line going to node 72 (Box), which is the return value?
-That&amp;#39;s because we used &lt;code&gt;return counter++&lt;/code&gt; (and not &lt;code&gt;return ++counter&lt;/code&gt;): the node
-evaluates to the pre-incremented value!&lt;/p&gt;
-&lt;p&gt;From this explanation, you can see that blue lines represent data flow: a blue
-line going down means the data coming out of the higher node is being used by
-the lower node. There is also a thick red line: that represents control flow,
-i.e. it determines what operations happen before which others.&lt;/p&gt;
-&lt;p&gt;We&amp;#39;ve barely scratched the surface of Graal graphs here (we haven&amp;#39;t even talked
-about conditionals and loops). If you want to know more, I highly recommend
-these two writeups by Chris Seaton (the first one is essentially a much shorter
-teaser version of the second one, which you really ought to read in full if
-you&amp;#39;re going to work with IGV):&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://engineering.shopify.com/blogs/engineering/understanding-programs-using-graphs&quot;&gt;Understanding Programs Using Graphs @ Shopify Engineering&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://chrisseaton.com/truffleruby/basic-graal-graphs/&quot;&gt;Understanding Basic Graal Graphs @ chrisseaton.com&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;going-further&quot;&gt;Going Further&lt;/h2&gt;
-&lt;p&gt;That&amp;#39;s it for today! I have some extra material that was cut from this article
-that I might rework and post in a couple weeks. Namely, it covers how to set up
-the boilerplate to create a &amp;quot;real&amp;quot; &lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleLanguage.html&quot;&gt;Truffle guest language&lt;/a&gt; and how to implement
-loops inside the guest language.&lt;/p&gt;
-&lt;p&gt;If you want to learn more about Graal &amp;amp; Truffle, here a few pointers on where to
-find information &amp;amp; documentation:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.researchgate.net/publication/333510523_Truffle_DSL_A_DSL_for_Building_Self-Optimizing_AST_Interpreters&quot;&gt;Christian Hummer&amp;#39;s master thesis&lt;/a&gt; document the Truffle DSL,
-i.e. how to actually use Truffle. It&amp;#39;s very clearly written and if you&amp;#39;re
-going to jump on the Truffle bandwagon, you really ought to read chapters 2
-and 3. This will give you a good understanding of the principles behind the
-Truffle DSL.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.graalvm.org/truffle/javadoc/&quot;&gt;The Truffle Javadoc&lt;/a&gt; is very decent, but it will rarely tell you the &lt;em&gt;why&lt;/em&gt; of
-things.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;The &lt;a href=&quot;https://github.com/graalvm/simplelanguage&quot;&gt;SimpleLanguage example&lt;/a&gt; is a full language implemented with a lot of
-comments as an example of how things should generally be done in Truffle. It&amp;#39;s
-the main ressource on how to actually do the advanced stuff.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I also encourage you to experiment with Truffle directly (showing you how was
-the whole point of this article)!&lt;/p&gt;
-&lt;p&gt;In closing, I want to thank my amazing and talented colleagues at Oracle, who
-patiently answer my many questions, and in particular Benoit Daloze — for
-teaching me most of what I know about Truffle, Christian Humer — for always
-helping wherever Truffle is concerned, and Boris Spasojevic for supplying very
-helpful feedback on the present article.&lt;/p&gt;
-&lt;link href=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css&#39; rel=&#39;stylesheet&#39; /&gt;
-&lt;script
-src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js&#39;&gt;&lt;/script&gt;
-&lt;script
-src=&#39;https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/prism-autoloader.min.js&#39;&gt;&lt;/script&gt;
-      </description>
-      <pubDate>2020-07-17T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/truffle-tutorial</link>
-      <guid isPermaLink="true">http://norswap.com/truffle-tutorial</guid>
-    </item>
-    <item>
-      <title>Animes, Shows &amp; Movies Reviews 6</title>
-      <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/every-anime/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/more-anime/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/even-more-anime/&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/reviews-4&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/reviews-5&quot;&gt;Five&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;violet-evergarden&quot;&gt;Violet Evergarden&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;violet-evergarden.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;I knew this one by name, though I didn&amp;#39;t know what it was about. We
-binged-watched in two sittings with a few friends.&lt;/p&gt;
-&lt;p&gt;I think the word I dimly recall being associated with Violet Evergarden is
-&amp;quot;poetry&amp;quot;. And I can understand it. It looks georgeous, and it&amp;#39;s also sentimental
-without being overly hokey.&lt;/p&gt;
-&lt;p&gt;I think the show&amp;#39;s perspective is uniquely interesting: we following a character
-(Violet) that starts of as completely emotionally imature (in the sense of
-wholly unaware what emotions are, and how they affect her and others) in a
-journey of emotional discovery.&lt;/p&gt;
-&lt;p&gt;Very recommended.&lt;/p&gt;
-&lt;h2 id=&quot;my-hero-academia-season-4&quot;&gt;My Hero Academia Season 4&lt;/h2&gt;
-&lt;p&gt;Previously: &lt;a href=&quot;/even-more-anime/#my-hero-academia-season-3&quot;&gt;Season 3&lt;/a&gt;, &lt;a href=&quot;/more-anime/#my-hero-academia&quot;&gt;Season 1 &amp;amp; 2&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;My Hero Academia has been one of my favorite anime, and it&amp;#39;s still great.&lt;/p&gt;
-&lt;p&gt;That being said, this season is perhaps the weakest so far (but still strong in
-absolute terms).&lt;/p&gt;
-&lt;p&gt;My criticism here is that the arcs are too drawn out, some episodes almost
-bordering on being fillers. Not reeeeally, but what I mean is this: One of Hero
-Academia&amp;#39;s strength is being relatively earnest, and clear with its message.
-It&amp;#39;s going to tell you what it wants to say. In this season, they did that, but
-also — or so it felt to me — occasionally beat you over the head with it. I&amp;#39;m
-notably thinking of a whole episode where the whole point is to affirm how much
-certain characters care about saving another character, in a way that isn&amp;#39;t very
-interesting. And generally, things could have been condensed more.&lt;/p&gt;
-&lt;p&gt;Interestingly, this criticism holds both for the first longer, &amp;quot;heavier&amp;quot; arc,
-and for the second shorter more light-hearted arc.&lt;/p&gt;
-&lt;h2 id=&quot;idinvaded&quot;&gt;ID:Invaded&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;id-invaded.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;ID: Invaded was a really good surprise of a show. It&amp;#39;s part murder-mystery, part
-Matrix/Inception-style techno-thriller, part revenge flick.&lt;/p&gt;
-&lt;p&gt;What I appreciated most about the show is how it dealt out information
-sparingly, keeping you guessing at the nature of things, without ever being
-confusing, nor relying on information dumps. The pacing is also pretty good.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s even (at least on one occasion) really touching. And with only 13 episodes,
-it&amp;#39;s damn short. A perfect binge-watching candidate.&lt;/p&gt;
-&lt;h2 id=&quot;stranger-things-season-3&quot;&gt;Stranger Things, Season 3&lt;/h2&gt;
-&lt;p&gt;I had watched season 1 and season 2 (but not reviewed them on here, I only did
-anime back then), and enjoyed them a lot.&lt;/p&gt;
-&lt;p&gt;Season 3 is, mostly, more of the same. The narrative structure is very similar.
-I maybe felt that it took a bit too long to set things up, to get to the point
-where our heroes are actually active rather than clueless. But maybe it was like
-that for previous seasons too and I forgot.&lt;/p&gt;
-&lt;p&gt;The ending redeems whatever slack the start may have. And what a sucker punch of
-an ending that is! I&amp;#39;m glad season 4 has been confirmed and some things are
-hinted at, otherwise I&amp;#39;d have been outraged that the series end on that note.&lt;/p&gt;
-&lt;p&gt;I was also mildly annoyed at a lot of conflict between character without much
-stakes or interestingness going on — that&amp;#39;s not the wholesomeness I look for in
-Stranger Things!&lt;/p&gt;
-&lt;p&gt;Also: good humanization of a certain character towards the end.&lt;/p&gt;
-&lt;p&gt;Big like on Maya Hawke&amp;#39;s new character, Robin. Steve Harrington remains my
-favorite character. The parts with them, Dustin and Erica are the best of the
-season in my opinion.&lt;/p&gt;
-&lt;h2 id=&quot;infinite-dendrogram&quot;&gt;Infinite Dendrogram&lt;/h2&gt;
-&lt;p&gt;Here&amp;#39;s another watch-to-pass-time isekai. Honestly, it ended up better than I
-expected, without never really approaching greatness.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s something off about the thing. An artificiality that makes you think
-that this is the thing that someones setting out to write an isekai could come
-up with. I wish I was articulate enough to point out why the anime doesn&amp;#39;t quite
-work and is hard to take completely at face value. It feels like the trappings
-of the genre get in the way of telling a good story.&lt;/p&gt;
-&lt;p&gt;That being said, it&amp;#39;s not bad. I finished it and enjoyed the ride for what it
-was. From the initial reaction I&amp;#39;ve seen online, I thing this anime will largely
-be overlooked and under-rated.&lt;/p&gt;
-&lt;p&gt;For me, this is certainly not worse than &lt;a href=&quot;/even-more-anime/#that-time-i-got-reincarnated-as-a-slime&quot;&gt;Slime&lt;/a&gt;, and in many ways, better.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ll have more to say about this in the review for &lt;a href=&quot;#samurai-champloo&quot;&gt;Samurai Champloo&lt;/a&gt;, but if
-there&amp;#39;s at least something good you can say about Infinite Dendrogram is that it
-takes itself earnestly.&lt;/p&gt;
-&lt;h2 id=&quot;castlevania-all-3-seasons&quot;&gt;Castlevania (all 3 seasons)&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;castlevania.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Castlevania, the Netflix-produced American anime, was on the edge of my
-consciousness for a long time, though I didn&amp;#39;t what it was in substance.&lt;/p&gt;
-&lt;p&gt;With the hype of season 3, I finally gave it a go.&lt;/p&gt;
-&lt;p&gt;First shock: it&amp;#39;s much shorter than one would expect. Season 1 is almost a
-pilot, only 4 episodes. Season 2 has 8 and season 3 has 10.&lt;/p&gt;
-&lt;p&gt;Content-wise, I must concede it&amp;#39;s pretty good, though I think it fell short of
-what it could have been.&lt;/p&gt;
-&lt;p&gt;Without spoiling, there are events in season 2 happening much too soon in my
-opinion. The shows does play fast and loose with its premise, and I think that&amp;#39;s
-a shame.&lt;/p&gt;
-&lt;p&gt;In season 3, I thought one of the narrative arcs of the season (following a
-certain vampire) was completely useless and ex machina. I liked the entailed
-character development, but there were better, subtler, more believable ways to
-get there. Fortunately it&amp;#39;s also very short in screen time (which is perhaps
-also one of the reason it fails to work).&lt;/p&gt;
-&lt;p&gt;All in all, we are presented with a compelling universe, interesting characters,
-some mysteries to unravel. I wouldn&amp;#39;t add it to the hallowed list of the
-must-watch, but it&amp;#39;s a solid recommendation from me.&lt;/p&gt;
-&lt;p&gt;As a side note, this is an American production, but I watched it with the
-Japanese dub. I found the English dub rather awkward. I noticed the fact it&amp;#39;s a
-dub (and the lipsync is thus off) a lot, whereas I don&amp;#39;t in Japanese (simply due
-to being unfamiliar with the language).&lt;/p&gt;
-&lt;h2 id=&quot;samurai-champloo&quot;&gt;Samurai Champloo&lt;/h2&gt;
-&lt;p&gt;This is something I started binge watched with friends. I think we saw 7 or 8
-episodes. After that I decided not to continue watching it, I had other things
-that needed doing and I wasn&amp;#39;t hyped.&lt;/p&gt;
-&lt;p&gt;This anime is directed by Shinichiro Watanabe (*), as his next anime after &lt;a href=&quot;/every-anime/#cowboy-bebop&quot;&gt;Cowboy
-Bebop&lt;/a&gt;. Excerpting my own &lt;a href=&quot;/every-anime/#cowboy-bebop&quot;&gt;review&lt;/a&gt; of it:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;My impression of Cowboy Bebop is that it&amp;#39;s an impressive anime — one with
-mature themes and a real reflection — which happens to be buried in a heap of
-goofy filler.
-[...]
-Still, if you manage to power through the initial filler (I almost didn&amp;#39;t), I
-don&amp;#39;t think you&amp;#39;ll regret watching Cowboy Bebop.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;(*) Interestingly, Watanabe is also the director of &lt;a href=&quot;/reviews-4/#carole--tuesday&quot;&gt;Carole &amp;amp; Tuesday&lt;/a&gt;, another
-thing I dropped though I found it to be quite good.&lt;/p&gt;
-&lt;p&gt;Having only watched 7 episodes of Samurai Champloo, it&amp;#39;s hard to say whether it
-would be the same or not. The &lt;em&gt;goofy&lt;/em&gt; filler is there all right, and in spades.
-Would the story take a turn for the serious towards the end? I must imagine it
-would. But I&amp;#39;m not incredibly motivated to continue right now.&lt;/p&gt;
-&lt;p&gt;One issue with my non-motivation, besides the uncertainty that it gets better,
-is the characters. They&amp;#39;re not bad, but Mugen and Jin lack the aesthetic, almost
-mystical, charism of Spike Spiegel. &amp;quot;Brave girl&amp;quot; Fuu is less interseting than
-emotionally-stunted vixen Faye Valentine (though I do expect the rest of the
-series has character development for her in relation with this sunflower
-samurai).&lt;/p&gt;
-&lt;p&gt;I think I&amp;#39;ll be back to Samurais Champloo, if only by curiosity. It does feel
-like I&amp;#39;ve got better things to watch right now however.&lt;/p&gt;
-&lt;p&gt;Samurai Champloo is an interesting data point on my own taste. Clearly, I&amp;#39;m not
-into &amp;quot;goofy&amp;quot; story. In both Cowboy Bebop and this, the characters are somewhat
-loveable, and somewhat dumb, and can&amp;#39;t help but to keep losing. The problem is,
-I don&amp;#39;t find that very funny, and it makes for a poor story. It always circles
-back to the same spot, nothing is learned, so character development is absent.
-The stakes never move. Cowboy Bebop has a poignant story (and ending), but it
-gets condensed in maybe four or five episodes worth of content, in a 26-episodes
-series (some of those other episodes are genuinely good too though).&lt;/p&gt;
-&lt;p&gt;But additionally, I think what bothers me greatly is that it makes me feel like
-the story does not take itself seriously. It&amp;#39;s not earnest. It&amp;#39;s an unfunny
-comedy, when what I want out of it is a thriller, an epic or a drama.&lt;/p&gt;
-&lt;p&gt;I guess I&amp;#39;m a sucker for earnestness on the other hand. It&amp;#39;s why I watched the
-whole of &lt;a href=&quot;#infinite-dendrogram&quot;&gt;Infinite Dendrogram&lt;/a&gt;. Objectively, it&amp;#39;s of lesser quality than Samurai
-Champloo. But story never fails to take itself seriously (something that I think
-many people will count as a mark &lt;em&gt;against&lt;/em&gt; it). But in all honesty, if Samurai
-Champloo was airing weekly, I probably would have watched it all too.&lt;/p&gt;
-&lt;h2 id=&quot;mo-dao-zu-shi&quot;&gt;Mo Dao Zu Shi&lt;/h2&gt;
-&lt;p&gt;This is a popular Chinese anime (a &lt;em&gt;donghua&lt;/em&gt;) — honestly, the only dongua I&amp;#39;ve
-ever heard about. Plot:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;As the grandmaster who founded the Demonic Sect, Wei Wuxian roamed the world
-in his wanton ways, hated by millions for the crimes he was accused. In the
-end, he was stabbed in the back by his sworn brother Jiang Cheng and killed by
-the vicious ghosts he controlled when the cultivation clans attacked his
-stronghold to kill him. After 13 years, he is summoned into the body of a
-lunatic called Mo Xuanyu, who was rejected by his clan and bullied by his
-family, therefore sacrificing his own body to Wei Wuxian so he could avenge
-him. He&amp;#39;ll soon meet a famous cultivator from his past, Lan Wangji.&lt;/p&gt;
-&lt;p&gt;They will soon face a series of events that will take them to discover the
-truth behind the tragic events that led to the death of many people and Wei
-Wuxian himself.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;I dropped it after 2 episodes.&lt;/p&gt;
-&lt;p&gt;From the &lt;a href=&quot;https://www.youtube.com/watch?v=imUXzLeU__Y&quot;&gt;trailer&lt;/a&gt; it looked a stylish &lt;a href=&quot;/reviews-4/#demon-slayer&quot;&gt;Demon Slayer&lt;/a&gt; but more
-earnest and noir. In reality, the first two episodes are mostly comprised of
-characters bickering. It&amp;#39;s 30 minutes for an episode, so that&amp;#39;s 1 hours of
-mostly bickering and some cool combat mixed in... and absolutely no reason to
-care about the story whatsoever.&lt;/p&gt;
-&lt;p&gt;Really though. In one hour of play time, the main character gets reincarnated
-(that takes all of two minutes) then we are not given a single reason to really
-care about him, or Lan Wangji which is the only other character of consequence
-introduced. No real mystery is implanted either other than what is delivered as
-backstory exposition: Wei Wuxian was this warlock master, who apparently did
-some horrible things. What? Why?&lt;/p&gt;
-&lt;p&gt;My second huge gripe is this: If Wei Wuxian was this badass warlock king, then
-why as he is reincarnated in the body of a boy, does he take a definitely
-un-badass, and in fact boyish personality? I guess that&amp;#39;s the only harp on the
-mystery we get: how did someone with an apparently lame and kind disposition (he
-does take some pain to save people) do such horrible things?&lt;/p&gt;
-&lt;p&gt;But yeah. It wasn&amp;#39;t enjoyable viewing, and I was given no reason to keep
-watching, so I dropped it.&lt;/p&gt;
-&lt;p&gt;I guess the real mystery is why it has a 8.5 rating &lt;a href=&quot;https://myanimelist.net/anime/37208/Mo_Dao_Zu_Shi&quot;&gt;on
-MyAnimeList&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I did parse the reviews in search for something that wasn&amp;#39;t a 10 or a 9 to find
-some nuanced explanation but didn&amp;#39;t found anything that explains it. The 10 and
-9 review mostly praise the aesthetics.&lt;/p&gt;
-&lt;p&gt;I found this however, which I&amp;#39;ll confirm:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;On the other hand, the characters are less impressive. One of my biggest pet
-peeves is same facing. Same facing is when an artist consistently draws the
-same kind of face and the only way to distinguish them apart is from their
-hair or clothing. MDZS is very guilty of this. I couldn&amp;#39;t tell anyone apart
-because all the people from the same sect wore the same clothes and everyone
-has the same face.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;rezero-frozen-bonds&quot;&gt;Re:Zero Frozen Bonds&lt;/h2&gt;
-&lt;p&gt;Previously: &lt;a href=&quot;/even-more-anime/#rezero&quot;&gt;Season 1&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;A big coronavirus-induced disappointement this season was that Re:Zero season 2
-was pushed back. However there is an OVA that came out at the end of 2019. Since
-I really like Re:Zero, it was a no brainer to watch that.&lt;/p&gt;
-&lt;p&gt;And ... it kinda sucks. I&amp;#39;m sure real fans will enjoy learning about the tiny
-sliver of backstory we&amp;#39;re given here. But as a story on its own, it&amp;#39;s nothing to
-write home about.&lt;/p&gt;
-&lt;p&gt;Seriously, the thing just lacks &lt;em&gt;interestingness&lt;/em&gt;. The plot is basically (1)
-people are afraid of Emilia, who is an unreasonably nice person, (2) an ennemy
-appear, it has to be defeated.&lt;/p&gt;
-&lt;p&gt;If you want the backstory without wasting your time, go read a summary.&lt;/p&gt;
-&lt;h2 id=&quot;konosuba-legend-of-crimson&quot;&gt;Konosuba!: Legend of Crimson&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;konosuba-crimson.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;This is a movie (I had to look it up, but the main distinction seems to be that
-a movie airs in theaters, while an OVA does not), this time for &lt;a href=&quot;/every-anime/#konosuba&quot;&gt;Konosuba!&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This was very unlike the Re:Zero OVA, and I enjoyed it a lot.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s a spot on transcription of the show&amp;#39;s humor and feeling to a movie. It&amp;#39;s
-also paced like a good &lt;em&gt;movie&lt;/em&gt;: it avoids the trap of feeling like a drawn-out
-episode, or like something that would breathe better as a longer string of
-episodes.&lt;/p&gt;
-&lt;p&gt;Frankly, I&amp;#39;d forgotten how much I enjoyed Konosuba!, so this was really a nice
-surprise.&lt;/p&gt;
-&lt;p&gt;The franchise really has a unique texture to it. It&amp;#39;s quite funny in its own
-unique way, but — despite the show never being overtly sentimal — it&amp;#39;s also warm
-and fuzzy, when the characters reveal their underlying camaraderie in-between
-bouts of bickering.&lt;/p&gt;
-&lt;p&gt;Funnily enough, Konosuba! has a lot of the things I said I disliked in other
-shows: bickering (&lt;a href=&quot;#mo-dao-zu-shi&quot;&gt;Mo Dao Zu Shi&lt;/a&gt;), the protagonist being loveable/dumb losers
-(&lt;a href=&quot;#samurai-champloo&quot;&gt;Samurai Champloo&lt;/a&gt;), though crucially, in Konosuba! they do ultimately win and
-it can be argued they do progress, albeit slowly).&lt;/p&gt;
-&lt;p&gt;I guess the lesson is that everything can work under the right frame, and that
-describing aesthetics and &amp;quot;texture&amp;quot; is hard.&lt;/p&gt;
-&lt;p&gt;I realize I haven&amp;#39;t said much about the movie itself, but really it&amp;#39;s Konosuba!.
-If you enjoy the show, you&amp;#39;ll enjoy the movie just as much. Very recommended.&lt;/p&gt;
-&lt;h2 id=&quot;promare&quot;&gt;Promare&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;promare.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;As a fan of &lt;a href=&quot;/more-anime/#kill-la-kill&quot;&gt;Kill la Kill&lt;/a&gt; and &lt;a href=&quot;/every-anime/#gurren-lagann&quot;&gt;Gurren Lagann&lt;/a&gt;, I was naturally excited to see a
-new movie featuring the same director and head writer (Hiroyuki Imaishi &amp;amp; Kazuki
-Nakashima), especially since Promare is blatantly a riff on the same genre.
-Heck, the main character (&lt;a href=&quot;https://www.google.be/search?q=promare+galo&amp;amp;tbm=isch&quot;&gt;Galo&lt;/a&gt;) even looks like Gurren Lagann&amp;#39;s &lt;a href=&quot;https://www.google.be/search?q=gurren+lagann+kamina&amp;amp;tbm=isch&quot;&gt;Kamina&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;In fact, the ressemblance is so deep, it sometimes feels like an hommage.
-Battles fuelled by fighting spirit, huge mechas that change, battle that
-escalate to planetary scale, etc.&lt;/p&gt;
-&lt;p&gt;While &lt;em&gt;ostensibly&lt;/em&gt; the movie is somewhat closer to Gurren Lagann, it found it
-actually closer to Kill la Kill in terms of direction.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s constant action that almost never lets up, ultra-fast pacing with no
-useless downtime. This is a lot like Kill la Kill. Gurren Lagann is a story that
-breathes more. Characters have more complex emotions that are given screen time
-to be explored more in depth. Relationships are subtler.&lt;/p&gt;
-&lt;p&gt;But all this would be complex to render in a movie, and still make a good action
-flick. I reviewed the first &lt;a href=&quot;/even-more-anime/#gurren-lagann-the-movie-childhoods-end&quot;&gt;Gurren Lagann movie&lt;/a&gt;, which is an attempt to
-condense the TV show to two movies. My conclusion was that it was an abject
-failure — you&amp;#39;re rushed through emotional developments in a way that is simply
-not satisfying or meaningful enough.&lt;/p&gt;
-&lt;p&gt;But Promare is free of these shackles, and I found it to be &lt;em&gt;extremely&lt;/em&gt;
-satisfying. It works as a movie version of the genre (in this it is a bit like
-the &lt;a href=&quot;#konosuba-legend-of-crimson&quot;&gt;Konosuba! OVA&lt;/a&gt;). This is not to say that the characters don&amp;#39;t have emotions,
-but they are less complex and fraught, and can be satisfyingly handled in a bit
-less than two hours.&lt;/p&gt;
-&lt;p&gt;The movie is not totally a re-thread. In particular, it has its own distinctive
-visual style, that revolves around geometric shapes. Cubes feature prominently,
-for instance ice-cube shooting guns. There are a lot of triangles as well, for a
-distinctive low-polygon aesthetic on some effects (e.g. lightning). There is
-also a very tasteful use of pastel colors that I personally found delightful.&lt;/p&gt;
-&lt;p&gt;Still, it is &lt;em&gt;mostly&lt;/em&gt; a re-thread. If there is one bad thing to be said about
-Promare, it&amp;#39;s that it avoids the risk of proposing something new, which would
-really have made it stand out.&lt;/p&gt;
-&lt;p&gt;If you&amp;#39;ve liked Gurren Lagann or Kill la Kill, go watch Promare. If you don&amp;#39;t
-know about either, go watch one of those things and figure out if it&amp;#39;s your
-style.&lt;/p&gt;
-&lt;h2 id=&quot;lucky-star&quot;&gt;Lucky Star&lt;/h2&gt;
-&lt;p&gt;Lucky Star was another anime we were slated to binge, but I couldn&amp;#39;t be there on
-the first day. I tried to catch up on my own, but two episodes in, it was clear
-it wasn&amp;#39;t for me.&lt;/p&gt;
-&lt;p&gt;I think the first episode must be the most boring piece of anime I&amp;#39;ve seen in a
-very long time.&lt;/p&gt;
-&lt;p&gt;They just talk, about whatever (&amp;quot;how to eat a chocolate scone&amp;quot; is at topic that
-takes up a big chunk of the time in that first episode).&lt;/p&gt;
-&lt;p&gt;The second episode is a bit better, at least you get the passage of time for the
-semblance of plot (it&amp;#39;s holiday and they have to do homework, and then it&amp;#39;s
-school).&lt;/p&gt;
-&lt;p&gt;Slice of life is not my big thing, but I can get into it. I liked &lt;a href=&quot;/more-anime/#k-on&quot;&gt;K-On!&lt;/a&gt; a lot.
-But here it&amp;#39;s hard. There&amp;#39;s little sense of direction, absolutely no stakes or
-tension. It&amp;#39;s not particularly funny (though I get how it could get one to
-smile). I don&amp;#39;t begrudge the art style, but it&amp;#39;s not particularly pretty, and
-it&amp;#39;s obviously low-budget. I&amp;#39;m not very observant of these things, but it struck
-even me that there were no animated/detailed backgrounds in many scenes. Not
-that I matters much, but the animation is not the show redeeming&amp;#39;s quality.&lt;/p&gt;
-&lt;p&gt;At the same time, I kinda get it. In a way totally, utterly &lt;strong&gt;different&lt;/strong&gt; from
-Samurai Champloo, I get how people can like this. There&amp;#39;s something about the
-humor / aesthetic that&amp;#39;s kinda nice? If only they could manage to interest me at
-all.&lt;/p&gt;
-&lt;h2 id=&quot;westworld-season-3&quot;&gt;Westworld Season 3&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;westworld-3.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;(Note: I won&amp;#39;t spoil the events of the season below, but I will give some
-meta-spoiler that will let you know what twists to expect or not. If you don&amp;#39;t
-want that, now is the time to exit.)&lt;/p&gt;
-&lt;p&gt;Since I&amp;#39;ve not reviewed the first two seaons, let&amp;#39;s recap first.&lt;/p&gt;
-&lt;p&gt;I think Westworld season 1 is the best thing that&amp;#39;s ever been on TV. Ever. I
-think it&amp;#39;s superior to most movies and TV shows. Maybe something like The Lord
-of The Rings, The Dark Knight, or the first season of The Wire comes really
-close.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s a delightful story, there are (many) delightful mysteries that you can&amp;#39;t
-help but get caught thinking about. The story is compelling, the acting is on
-point, the dialogue is incredible. It&amp;#39;s one of the only things I&amp;#39;ve rewatched in
-recent years, and it was still supremely enjoyable on second viewing, even
-knowing all the twists.&lt;/p&gt;
-&lt;p&gt;So yeah. Season 2 though? Not so good. It has the twists and mysteries, but
-sometimes they feel a bit gratuitous, like they thought &amp;quot;Westworld is narrative
-twists&amp;quot; and contorted the story to add them. Some of the main characters&amp;#39; arcs
-are uninteresting, or downright bad (coughs &lt;em&gt;Shogun World&lt;/em&gt;).&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s still pretty good though, but a far cry from season 1. Just your &amp;quot;normal
-better-than-average TV&amp;quot;.&lt;/p&gt;
-&lt;p&gt;One sublime hit, one miss. Season 3 is the time of reckoning. Was season 2 a
-fluke?&lt;/p&gt;
-&lt;p&gt;Sadly it wasn&amp;#39;t. The more I think about season 3, the less I like it.&lt;/p&gt;
-&lt;p&gt;It starts strong though, I&amp;#39;d say I was pretty excited until the middle, then I
-progressively started feeling, with increased certainty with each passing
-episode, that the conclusion would be sub-par.&lt;/p&gt;
-&lt;p&gt;The premise is interesting. Aaron Paul&amp;#39;s character is very intriguing. All these
-new elements appear and you&amp;#39;re like &amp;quot;hoo, mysteries, twists&amp;quot;. Well except there
-is no real twist. Well there is a &amp;quot;twist&amp;quot; towards the middle of the season, but
-no narrative-reframing timeline-magic everything-falls-into-place twist like in
-the first two seasons. Yet there were signs... inconsistencies, small details in
-a show that is known for its attention to details. I&amp;#39;ve seen people on the
-&lt;a href=&quot;https://old.reddit.com/r/westworld/&quot;&gt;subreddit&lt;/a&gt; complain: have they become sloppy, or are they just messing with us?&lt;/p&gt;
-&lt;p&gt;I enjoyed where it could have gone, but at the end of the season, there is no
-part of it that I liked in its entirety. One of the main character arc is
-completely useless, serving only to remind us that the character exists. Mostly
-a waste of good screen time. One of the other main character&amp;#39;s motivation are
-dumb and tired, a re-thread from previous seasons, and should have been put to
-rest.&lt;/p&gt;
-&lt;p&gt;And yet another of the main characters has big plans. But obviously the
-showrunners have trouble writing a good (or even, clear) plan for a character
-with unlimited resources.&lt;/p&gt;
-&lt;p&gt;The mastermind played by Vincent Cassel was completely milquetoast compared to
-Anthony Hopkins&amp;#39; Ford in the first season. The only thing interesting about him
-was his biography, but nothing he says is particularly fascinating, the way
-Ford&amp;#39;s monologues are.&lt;/p&gt;
-&lt;p&gt;Besides twists and narratives, the big victim of the season is dialogue. There&amp;#39;s
-too little of it, and it&amp;#39;s not good enough. Season 1 had all these philosophical
-motifs that it would call often echo in dialogue, even if it wasn&amp;#39;t a deep
-philosophical conversation (of which there were some too). Instead we get a lot
-of action. Westworld is not so great with action. It&amp;#39;s not incompetent, but it&amp;#39;s
-not impressive, and it&amp;#39;s often dumb in season 2 and 3 (a lot of shooting and not
-a whole lot of hitting, some pretty heavy plot armors).&lt;/p&gt;
-&lt;p&gt;All around, it felt like a dumbing down of the show. I wonder if this was
-voluntary or not. Season 2 did worse than season 1. As it turns out, season 3
-did significantly worse than season 2 (but as it is, it&amp;#39;s still HBO&amp;#39;s most
-popular show this year).&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s end on a positive note though, the show looks really good. The locations
-(often in Singapore) are excellent, and the work on the environment (lighting,
-etc) is really nice. Some of the shots (in particular those that frame the
-characters agains the background locations) are very nice.&lt;/p&gt;
-&lt;p&gt;It also sounds pretty damn nice. I especially like the choice of &lt;a href=&quot;https://www.tunefind.com/show/westworld/season-3&quot;&gt;insert songs&lt;/a&gt;,
-from &amp;quot;Common People&amp;quot; to &amp;quot;Brain Damage&amp;quot;. On the more cinematic side, Ramin
-Djawadi is &lt;a href=&quot;https://www.youtube.com/playlist?list=PLRWL5oACOrQV_R9cQKGxZBJ3w0lIjJTom&quot;&gt;still rocking&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Though it ain&amp;#39;t great, it&amp;#39;s also not that bad. I&amp;#39;m invested enough that I&amp;#39;ll
-probably watch the next season.&lt;/p&gt;
-      </description>
-      <pubDate>2020-05-08T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/reviews-6</link>
-      <guid isPermaLink="true">http://norswap.com/reviews-6</guid>
     </item>
   </channel>
 </rss>

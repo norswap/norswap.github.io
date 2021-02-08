@@ -3,7 +3,7 @@ layout: page
 title: Compiler Class
 ---
 
-In 2021, I'm teaching a compiler class at [Université catholique de
+In 2021, I'm teaching a master-level compiler class at [Université catholique de
 Louvain][ucl].
 
 All the course materials are made available online, for anyone interested to

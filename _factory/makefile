@@ -9,6 +9,9 @@ preview:
 nukecontent:
 	rm -rf $$(find ../../web -maxdepth 1 -name "*" ! -name "web" ! -name ".git*" ! -name "*_factory")
 
+copytop:
+	cp -r top/* ../../web/
+
 rebuild: generate.js.rna nukecontent
 	echo '[]' > posts.json
 	node $< rebuild

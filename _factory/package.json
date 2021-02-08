@@ -9,7 +9,7 @@
     "gray-matter": "^4.0.2",
     "highlightjs": "^9.16.2",
     "live-server": "^1.2.1",
-    "marked": "^1.1.1",
+    "marked": "^2.0.0",
     "moment": "^2.24.0",
     "tmp-promise": "^3.0.2",
     "touch": "^3.1.0"

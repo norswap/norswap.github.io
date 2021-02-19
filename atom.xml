@@ -45,10 +45,12 @@ premium is usually lower than the stock price.&lt;/p&gt;
 &lt;p&gt;In a simple scenario, if you buy a call option and hold it until expiration, you
 will profit if the price of the stock ends up being superior to the sum of the
 strike price and the premium.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;call_profit_or_loss = stock_price - (strike_price + premium_paid)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;call_profit_or_loss = stock_price - (strike_price + premium_paid)
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;For put options, the logic is reversed, you profit if the stock price goes down
 enough:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;put_profit_or_loss = strike_price - (stock_price + premium_paid)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;put_profit_or_loss = strike_price - (stock_price + premium_paid)
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Try to understand these formulas. The key idea for a call option is that it
 allows you to purchase the stock at the strike price. If the current stock price
 is above the stock price, you can buy the stock (through the call option) and
@@ -229,7 +231,7 @@ Because of that, I can afford to pick a lower strike price (hence also a lower
 premium) and still make a respectable profit.&lt;/p&gt;
 &lt;p&gt;Now, it must be said that the market right now is an euphoric bull market. I
 would be foolish, I feel, to assume that this will last forever.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://i.ytimg.com/vi/if-2M3K1tqk/maxresdefault.jpg&quot;&gt;stonks&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;stonks.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Another difference from the wheel strategy is that my puts are not all
 cash-secured (this is only possible if you trade &lt;a href=&quot;https://www.investopedia.com/terms/m/margin.asp&quot;&gt;on margin&lt;/a&gt;). Since my puts
 mostly don&amp;#39;t get called, this is fine.&lt;/p&gt;

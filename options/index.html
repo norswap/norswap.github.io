@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Stock Market Adventures: Options &amp; The Wheel
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Stock Market Adventures: Options &amp; The Wheel</h1>
+      <span class="post-date">19 Feb 2021</span>
+<p>Previously: <a href="/stock-market-intro/">Intro</a></p>
+<p>I said last time I mostly trade using options. In this article I will explain my
+main strategy, known as <em>the wheel</em>. But first, I&#39;ll have to give you a bit of
+backgrounds on options. I&#39;ll finish by a more technical explanation of option
+pricing and linking to a few other intersting option strategies - in case you&#39;re
+interested.</p>
+<p>This is going to be a long post, with a lot of words (and a few numbers). If
+you&#39;d rather watch videos instead, I strongly recommend <a href="https://www.youtube.com/playlist?list=PLI2eVMd1wtdGwFXMFya1jHpWLvWw6a07X">Growing Wealth&#39;s
+Options Trading Course</a>. It will teach you option fundamentals, the
+wheel strategy, and a few others beside. Also no one says you can&#39;t read the
+post <strong>and</strong> watch the videos ;)</p>
+<h2 id="option-basics">Option Basics</h2>
+<p>A <em>call option</em> is a contract that allows (but does not force) you to buy 100
+shares of a stock at a pre-determined price (the <em>strike price</em>) until some
+point in the future (the <em>expiration date</em>).</p>
+<p>Conversely, a <em>put option</em> allows you to sell 100 shares at a pre-determined
+strike price until the expiration date.</p>
+<p>Actually buying or selling is called &quot;exercising&quot; the option. Options can be
+American-style — exercisable at any time until expiration, or European-style —
+exercisable only at expiration. In practice this does not make much of a
+difference because, excepted in two specific cases, it is always more profitable
+to sell an option than to exercise it before the expiration date.</p>
+<blockquote>
+<p>(Exceptions explained. Feel free to skip!)</p>
+<p>The first exception are that when the stock is going to pay a dividend, the
+holder of an option may wish to exercise the option to benefit from the
+dividend.</p>
+<p>The second exception is when the option is not very liquid, meaning there is no
+one interested in buying it at a greater price than the profit you would make by
+exercising the option. This should be extremely rare, as I expect these market
+inefficiencies to be <a href="https://www.investopedia.com/terms/a/arbitrage.asp">arbitraged</a> away.</p>
+</blockquote>
+<p>Options must be purchased for a price which is called <em>the premium</em>. This
+premium is usually lower than the stock price.</p>
+<p>In a simple scenario, if you buy a call option and hold it until expiration, you
+will profit if the price of the stock ends up being superior to the sum of the
+strike price and the premium.</p>
+<pre><code>call_profit_or_loss = stock_price - (strike_price + premium_paid)</code></pre>
+<p>For put options, the logic is reversed, you profit if the stock price goes down
+enough:</p>
+<pre><code>put_profit_or_loss = strike_price - (stock_price + premium_paid)</code></pre>
+<p>Try to understand these formulas. The key idea for a call option is that it
+allows you to purchase the stock at the strike price. If the current stock price
+is above the stock price, you can buy the stock (through the call option) and
+sell it for an instant markup.</p>
+<p>For a put option, you can sell stock at the strike price. If the stock price is
+under the strike price, you can buy the stock and sell it (through the put
+option) for an instant markup.</p>
+<p>Who do you buy these options from? Well, anyone really. Anyone that can buy
+options can also sell options. An option is a contracts formed between two
+parties, one that &quot;buys&quot; the option, and one that &quot;sells&quot; (or &quot;writes&quot;) it.</p>
+<p>The person selling the option is making a different bet than the buyer. She is
+betting that the stock price will not be high enough for a call option to be
+profitable, or that the stock price will not be low enough for a put option to
+be profitable.</p>
+<p>If that turns out true, the option is said to expire worthless. The buyer does
+not execute the option (as that would be a money-losing move) and so lost the
+premium he paid in the trade. The seller, on the other hand, profits by
+pocketing the premium.</p>
+<p>Options are characterized by the triplet [underlying stock, strike price,
+expiration date], so there a lot of possible combinations.</p>
+<p>Three useful abbreviations are used to talk about strike prices: an option can
+be <em>at the money</em> (ATM) when the strike price is more or less equal to the
+current stock price, <em>out of the money</em> (OTM) when the strike price is
+over/under (call/put) the stock price, and <em>in the money</em> (ITM) when the strike
+price is under/over (call/put) the stock price. When an option expires ITM, you
+profit, if it expires OTM, you made a loss.</p>
+<p>Note that OTM options are not worthless (before expiring) — they represent the
+potential for the stock price to move in desired direction until the expiration
+date. It&#39;s even possible to make money by trading OTM options that have never
+been ITM: it suffices to buy an OTM option, and sell it when the stock price has
+moved in the right direction (up for call, down for put) - so when the option is
+&quot;less OTM&quot;.</p>
+<h2 id="why-use-options">Why Use Options</h2>
+<p>Why use options rather than buy and sell shares? There are multiple reasons.</p>
+<p><strong>On the buy side</strong>, options offer <em>leverage</em>. We said option premiums are much
+cheaper than stocks. To give you an idea, let&#39;s consider ATM options on
+Microsoft stock.</p>
+<p>Such an option expiring in 20 days currently sells for ~3% of the stock price
+(in reality, 300% of the stock price, since an option commands 100 shares, but
+to make things convenient, option prices are usually denominated relative to a
+single share). For an option expiring in 50 days, the price is ~4.5%. And for
+January next year, it is ~13%.</p>
+<p>That&#39;s quite a discount! Of course, it comes at a price. First - there is an
+expiration. If the option expires worthless, you lose the premium, whereas you
+can hold stock indefinitely.</p>
+<p><a href="msft-header.png"></a>
+<a href="msft-28-01.png"></a></p>
+<p>Second, your profit margin on the 100 shares commanded by the option is reduced
+by the premium you paid. It is always more profitable to buy 100 shares than a
+call, in absolute terms (absolute meaning &quot;if you ignore the amount that you
+need to invest&quot;).</p>
+<p>That&#39;s where leverage comes in: because options are much cheaper, you can buy
+more of them compared to the stock - and so if you profit, the profit typically
+ends up much higher for the same amount of money invested.</p>
+<p><strong>The sell side</strong> is where, according to me, options really shine.</p>
+<p>While buying options (or shares) lets you make money by betting whether the
+stock will go up or down, selling options lets you make money by betting that
+the stock price will not fall below a certain price, or rise above a certain
+price.</p>
+<p>To me at least, that&#39;s a much easier bet. Stock prices are swingy and hard to
+predict, but I find it much easier to find conservative bounds for the price
+movement (especially on the down side).</p>
+<p>Even better, this has the magical property of letting you profit <em>after</em> a stock
+has run up in price. For instance, say a stock flies up from 10$ to 20$. You
+think it won&#39;t go back under 13$, and/or you wouldn&#39;t mind owning it as that
+price (as it is likely to go flying back up at some point in the future). Then
+you can sell a put with a 13$ strike price expiring in a few feeks. The best
+thing is, because of the recent price spike, there will be high demand
+(<em>volatility</em>) for the options and you&#39;re likely to sell it a a higher price
+compared to a similarly-priced, but stable stock. Of course, selling the put
+when the stock was worth 10$ or 13$ would have been even more profitable, but
+back then it was much more risky (as its upside was still uncertain).</p>
+<p>Finally, selling option lets you do all kind of fancy <a href="https://www.theoptionsguide.com/option-trading-strategies.aspx">options combo
+strategies</a>. I will list a few at the end of the article.</p>
+<h2 id="the-wheel">The Wheel</h2>
+<p>At this point, I&#39;m dying to tell you more about option pricing. Because I&#39;m
+apparently a finance nerd now, and I find this super cool, but also because it
+enables very interesting trading strategies.</p>
+<p>However, that wasn&#39;t quite the premise of this article, which was to describe a
+fairly conservative strategy using options. I still think you should understand
+option pricing if you&#39;re going to use them, but you don&#39;t need to understand all
+the intricacies to understand the strategy. So here it is.</p>
+<p>The strategy is called <strong>the wheel</strong>. It proceeds as follow:</p>
+<ul>
+<li><p>You pick a series of stock you like. These stock should be stable (mostly:
+very unlikely to go down a lot). They don&#39;t need to be very volatile, but they
+do need to be just volatile enough that the whole thing is worth your risk
+(I&#39;ll discuss numbers later). I wouldn&#39;t recommend running this on market-wide
+<a href="/stock-market-intro/">ETFs</a> for instance.</p>
+</li>
+<li><p>You sell cash-secured puts on the stocks you identified. A cash-secured put is
+just a put where you own the cash to buy the shares should you get assigned.
+You should pick a strike where you feel the stock is fairly- or under-valued.
+The expiration should in ~30 days (after that, the price of options start
+declining faster towards expiration, see section on option pricing).</p>
+</li>
+<li><p>You wait 30 days, and one of two things happen:</p>
+<ol>
+<li>The stock is over the strike at expiration. You get to keep the premium.
+You can re-start the process and again sell some puts on the stock (or on
+another stock if you prefer).</li>
+<li>The stock did go down, you get assigned, and you now own 100 shares of
+the stock. The next phase of the strategy begins here.</li>
+</ol>
+</li>
+<li><p>You now sell covered calls on the stock. A covered call is when you sell a
+call where you own the underlying stock. This is very safe since, should you
+get assigned, you can sell the stock you already own. The downside is that if
+the stock skyrockets, you will lose the upside, since the call you sold forces
+you to sell at the specified price. The game here is to select a strike that
+is a bit above where you think the stock could reach. If you think the stock
+could skyrocket, then just don&#39;t sell the covered call - that&#39;s fine (and
+smart) too. Like before, pick a ~30 days expiration.</p>
+</li>
+<li><p>Like before, after 30 days, either the call expired worthless, and you can
+sell another covered call — or you&#39;ve been assigned. In that case you make a
+double profit: the premium which is yours no matter what, plus the difference
+between the price at which you bought the shares and the strike price. Your
+capital is now freed to start another wheel cycle.</p>
+</li>
+</ul>
+<p>At this point, I should really give you an example trade. I&#39;m lazy, so I will
+simply redirect you to the <a href="https://www.youtube.com/watch?v=IFYrFeAygfc&amp;list=PLI2eVMd1wtdGwFXMFya1jHpWLvWw6a07X">appropriate video</a> from the <a href="https://www.youtube.com/playlist?list=PLI2eVMd1wtdGwFXMFya1jHpWLvWw6a07X">course</a> I linked
+earlier.</p>
+<p>Let&#39;s talk numbers. You should aim for the premium collect when selling the
+options to be high enough. Jun Hao from the videos I linked before recommends a
+minimum of 2%. That comes up to a 24% of profit a year, which is fairly
+reasonable.</p>
+<p>Now in pratice, you&#39;ll often achieve much better returns than 24%. That&#39;s
+because at some point your covered calls get assigned, you you get the pocket
+the increase in the stock price. Even for a stock that isn&#39;t too volatile, that
+could be a ~10% increase (it is <em>possible</em> for it be much more, if the stock
+price increases consistently but never reaches the strike of the calls that
+you&#39;re selling month after month).</p>
+<p>What about the downside? Well the downside is the downside of the stock. You can
+only lose money in this strategy if the stock loses value. That&#39;s why picking
+good stocks is important. There is a lot to be written about stock picking and
+fundamental analysis, but that won&#39;t be in this blog post.</p>
+<p>In fact I&#39;m not currently very inclined to write about valuation - I don&#39;t feel
+like I could tell you much more than a few good youtube channels. In fact here
+are three recommendations:</p>
+<ul>
+<li><p><a href="https://www.youtube.com/c/GrowingWealth/playlists">Growing Wealth</a> - the source of the videos linked before. Solid
+advice, nothing super exciting, but this is what I would recommend to most people.</p>
+</li>
+<li><p><a href="https://www.youtube.com/c/AdamKhoo/playlists">Adam Khoo</a> - fairly basic and repetitive, but basic is what you want to
+start at. He&#39;s a fairly entertaining speaker, so maybe this could go down
+better for you.</p>
+</li>
+<li><p><a href="https://www.youtube.com/c/AswathDamodaranonValuation/playlists">Aswath Damodaran</a> - a NY Stern professor no less, who shares his
+valuation and corporate finance classes online. I intend to follow the 2021
+class as it is being posted. From what I&#39;ve seen so far, it&#39;s top-notch, but
+slightly technical. Maybe not for complete beginners, unless you&#39;re quite
+curious. Otherwise, follow some lighter content (podcasts etc) on the market first.</p>
+</li>
+</ul>
+<p>Back to the downside of the strategy. The downside is strictly less than owning
+stock. Think about it: not only do you enter at an advantageous point (low
+price), but you get paid a premium monthly before and after holding. Even in
+case of loss, you will lose as much as the stock lost, minus all the premium you
+collected.</p>
+<p>The real price of the strategy is missing out on profits. If you really believe
+in a stock, don&#39;t wait until you puts are called, just buy out, or you could
+miss out. Similarly, if a stock is really poised for growth, selling covered
+call could amount to selling away most of your profits.</p>
+<p>Like I said, this strategy pays on stable stocks where you like the fundamentals
+and/or the prospects, but where you also don&#39;t that the stock is currently
+selling at a bargain.</p>
+<h2 id="honestly-what-ive-been-doing">Honestly, What I&#39;ve Been Doing</h2>
+<p>So the wheel strategy is sort of my base plan. However, in practice, I&#39;ve
+deviated from it significantly.</p>
+<p>In particular, I mostly sell puts, and I rarely get assigned. And second, I
+mostly sell puts on relatively hyped stocks, and consequently collect more
+premium.</p>
+<p>This seems relatively contradictory, but in fact isn&#39;t necessarily. Because the
+stocks are popular, they have high volatility, meaning the premiums are higher.
+Because of that, I can afford to pick a lower strike price (hence also a lower
+premium) and still make a respectable profit.</p>
+<p>Now, it must be said that the market right now is an euphoric bull market. I
+would be foolish, I feel, to assume that this will last forever.</p>
+<p><a href="https://i.ytimg.com/vi/if-2M3K1tqk/maxresdefault.jpg">stonks</a></p>
+<p>Another difference from the wheel strategy is that my puts are not all
+cash-secured (this is only possible if you trade <a href="https://www.investopedia.com/terms/m/margin.asp">on margin</a>). Since my puts
+mostly don&#39;t get called, this is fine.</p>
+<p>However, I must be wary of a particular risk: if the market <em>turns</em> and goes
+into a downtrend, I could potential be facing assignment on many/most of my
+puts, which would &quot;blow my account&quot; (since this is more money than I have
+because the puts are not cash-secured). I&#39;m actively monitoring for such a
+risk - it can be avoided by buying back the puts while there is still time
+(which isn&#39;t necessarily easy to do — trading psychology is fascinating and
+would probably deserve a blog post, a book review, or both).</p>
+<p>I&#39;ve also been relatively bummed by my experiences with selling cash-covered
+calls. There were a few stocks I really liked, that I acquired by selling puts
+very close to the money (I didn&#39;t mind getting called since I liked the stock).
+I wanted to follow the strategy and sold the puts, but ultimately I would have
+done better to just let them ride - I was cut out of a major part of the gains
+that the stocks made immediately after I was assigned.</p>
+<p>Another experience was a much more stable stock, where I felt like the amount of
+premium collected didn&#39;t justify the risk taken by the stock going down (and it
+was going down).</p>
+<p>Interestingly, this is also due to the market being so hyper recently. If things
+tend to go up, selling covered calls is probably not the best move. I expect
+this leg of the strategy will make more sense in boring times.</p>
+<h2 id="option-pricing">Option Pricing</h2>
+<p>I think a key thing to be able to trade effectively with options is to
+understand what influences the price of options (the premium).</p>
+<p>It&#39;s very important to understand that the price of the options, just like the
+price of the underlying stock, is set by the market. i.e. the price is what
+someone is willing to pay for it.</p>
+<blockquote>
+<p>In reality, though this is not super important here, there are two components
+to the price: the bid (what someone is willing to pay) and the ask (what
+someone is willing to sell for). When the two component meet, an option is
+sold. The different between the bid and the ask is called &quot;the spread&quot;. In a
+liquid market with a lot of transaction volume, the spread is small. In an
+illiquid market where not much is happening, the spread is wide.</p>
+</blockquote>
+<p>However, the price of options is influenced by four key factors:</p>
+<ul>
+<li>the price of the underlying stock (obviously)</li>
+<li>the time remaining until expiration</li>
+<li>the risk-free rate</li>
+</ul>
+<p>In fact, the price of options can be modelled using these factors, plus a fourth
+one (<em>volatility</em>). The most popular model is the <a href="https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model">Black-Scholes model</a>.</p>
+<h3 id="volatility">Volatility</h3>
+<p>Volatility is the last factor that helps to fit the model to the market price.
+You can think of volatility as &quot;demand&quot;: when volatility is high there is a lot
+of trading activity, hence demand for options, meaning the premium rises.</p>
+<p>Volatility is typically correlated with sudden changes or swings in the
+underlyings stock price.</p>
+<p>Because volatility helps the model fit to reality, it is called <em>implied
+volatility</em>, or <strong>IV</strong> for short. External conditions influence the demand for
+options, which is reflected in the price, and then we use the Black-Scholes
+model to extract a quantified measure of &quot;volatility&quot; from the price.</p>
+<p>Each stock has its own implied volatility. What qualifies as &quot;high&quot; IV varies
+from stock to stock. Some stocks are inherently more stable than other.
+Volatility can also be measured at the level of the market — this is notably
+done through <a href="https://en.wikipedia.org/wiki/VIX">the VIX index</a>.</p>
+<p>It&#39;s also theoretically possible to have a stock that has high IV without
+exhibiting erratic price movements in the underlying stock.</p>
+<p>Implied volatility is expressed in percentage. This percentage represents the
+predicted standard deviation range for the price of the underlying in the next
+year. So a 100$ stock with an IV of 25% is expected to end within the 75-125$
+price range after a year, with 68% probability (one standard deviation).</p>
+<p>How does the implied volatility predicts the expected price? Essentially, the
+higher market participants are willing to bid on an option, the higher the
+expected price movement — traders are willing to pay more because they expect a
+big move.</p>
+<p>An open question (that I can&#39;t answer): why is the range traditionally centered
+on the current stock price? This is obviously wrong for many stocks.</p>
+<h3 id="the-risk-free-rate">The Risk-Free Rate</h3>
+<p>Okay, before we dive in the really important stuff, let&#39;s evacuate something
+that is (currently) not very important: the risk-free rate.</p>
+<p>The risk-free rate represents the rate of return of a risk-free investment. It&#39;s
+typically embodied by the yield of <a href="https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/textview.aspx?data=yield">US treasury bonds</a> — which can&#39;t default
+unless the US government defaults, at which point we&#39;d all have other worries
+than the marginal return rates of our options.</p>
+<p>It&#39;s mostly a non-factor because this rate is at the moment relatively stable,
+and relatively low. The American federal reserved has vowed to keep this rate
+low for at least the next two years. I&#39;m a bit in over my head here, but from
+what I understand, it is widely considered that letting the interest rate
+increase would do bad things to do economy, and nobody seems particularly eager
+to do it.</p>
+<p>The <em>idea</em> of the risk-free rate as a factor in option price is simple: when the
+risk-free rate of return increase, you will demande increased returns for the
+risk that you actually take — which in this case takes the form of decreased
+premiums. It&#39;s also interesting to note that since the option seller pockets the
+premium up front (and not at expiration), an increased risk-free rate implies a
+greater ability for him to compound the premium until expiration.</p>
+<h3 id="option-greeks">Option Greeks</h3>
+<p>The most commonly used tool to analyze option prices are the <a href="https://en.wikipedia.org/wiki/Greeks_(finance)">option greeks</a>.
+The option greeks represent the variation of the option price relative to the
+factor we listed before (so they are derivatives).</p>
+<p>Here are the first-order greeks:</p>
+<ul>
+<li><p><strong>Delta</strong> (Δ): the most important one, how much does the price of the option increase
+(or decrease) when the price of the underlying stock moves by 1$ (like most
+numbers used with options, you actually need to multiply the quoted number by
+100 to obtain the correct figure).</p>
+</li>
+<li><p><strong>Theta</strong> (Θ): represents how the price of the option drops as time passes. It
+is expressed as a drop per year, but that number is actually meaningless,
+because theta increases constantly (and predictably) until expiration (more
+about this in a bit). To get a more useful figure, you should divide the
+quoted number by 365 (or by 3.65, remember the 100 factor) to get a daily
+drop. Note that options drop in value (all else being equal) even during the
+weekend.</p>
+</li>
+<li><p><strong>Vega</strong> (𝑉): represents how the price of the option increases/decreases when
+the implied volatility increases/decreases 1%.</p>
+<p>Now this may sound a bit weird, because we said earlier that IV is computed
+from the option price and not the other way round. Indeed, getting the value
+of vega is as simple as plugging the a reduced IV value in the Black-Scholes
+model and getting out the new price.</p>
+<p>This is nevertheless useful, because it helps us visualize how the option
+price would move if demand for the option were to increase/decrease (which in
+everyday talk will often be said as &quot;if volatility were to increase&quot;)</p>
+<p>Interesting anecdote: vega is not a greek letter. It is typically represent by
+a variant uppercase representation of the greek nu (ν) which doesn&#39;t even have
+a dedicated unicode character (I used the best approximation &quot;mathematic
+italic capital V&quot;).</p>
+</li>
+<li><p><strong>Rho</strong> (ρ): the least used one, representing how much the price
+increases/decreases if the risk-free rate increases/decreases by 1%.</p>
+</li>
+</ul>
+<p>A key considerations when dealing with greeks is that they all represent a rate
+of change relative to a given variable (price, time, volatility, risk-free rate)
+<strong>when all else stays equal</strong>. Said otherwise, the value of every greek depends
+on every variable. This is why not every option with 30 days until expiration
+has the same theta - of course the option price for a 10$ stock isn&#39;t going to
+drop as much over time as the option price for a 1000$ stock! The same goes for
+every other variable. Let us now go over some of these interesting correlations.</p>
+<p>Let&#39;s start with delta. Delta is about 0.5 when the option is at the money. The
+more the option gets in the money, the more delta increases, and the more it
+gets out of the money, the more it decreases.</p>
+<p><img src="delta-vs-price.gif" alt=""></p>
+<p>Why? If you own a 10$ call on a 1000$ stock, there is almost no option-specific
+risk involved in holding the option, so every extra dollar in the underlying
+price will translate to extra dollar in the option price.</p>
+<p>In fact, we can show that the price of an ITM call option must exceed
+<code>stock_price - strike_price</code>. It that weren&#39;t the case, you could exercise the
+option and immediately make a profit by selling the shares (in reality you would
+need for the <a href="https://www.optionstrading.org/introduction/how-options-really-work/settlement/">settlement</a> of the shares after exercising the option). A similar
+logic applies for put option, where the intrinsic value is <code>strike_price - stock_price</code> instead.</p>
+<p>The price of options can be divided into two parts. First, the <strong>intrinsic
+value</strong>, which is the aforementiond <code>stock_price - strike_price</code> factor (or
+vice-versa for puts). This factor is capped at 0, however: ATM and OTM shares
+have a 0 intrinsic value, not a negative one. Second, the <strong>time value</strong> which
+represents the potential for the option to appreciate and potentially get in the
+money (or further in the money).</p>
+<p>For call options, the intrinsic value is maximal at the 0 strike price, a point
+where the time value is also minimal. For puts, it&#39;s a bit more complicated, but
+if far enough strikes are available (*), you will also find put options where the
+option price is roughly equal to the intrinsic value.</p>
+<p>(*) The exchange decides how far the available strikes go, as well as the
+increment between two available strike prices!</p>
+<p>The time value is maximal at the money, and decreases the further out in the
+money or at the money the option goes. We said the time value represent the
+potential for appreciation of the option. It does make sense that an option far
+out of the money is unlikely to ever go into the money, while an option far in
+the money will more or less move in lockstep with the underlying stock.</p>
+<p>Let&#39;s tackle this from another angle. Buying a deeply ITM option is like holding
+stock: there is not much more risk than holding the stock. For this reason, the
+time value is small — the price of the option will move in lockstep with the
+underlying. But because the option is far in the money, the intrinsic value is
+large, and the option is pricey compared to an ATM option.</p>
+<p>Buying a deeply OTM option, on the other hand, is more like buying a lottery
+ticket. It&#39;s very likely it will expire worthless. Even if the underlying moves
+in the right direction and you sell before expiration, the price increase will
+be small because the further OTM an option is, the smaller delta is. This is
+therefore mostly a bet on an explosive change in the underlying price. For such
+a bet to make sense, the option price has to be very low. The intrinsic value is
+zero, and the time value is low, since the bet is very unlikely to succeed.</p>
+<p>Somewhere in the middle, ATM options have 0 intrinsic value, but maximal time
+value. That&#39;s because they are the most <em>swingy</em> of options. Since delta is also
+maximal (0.5) at the money, the price of ATM options will respond the fastest to
+changes in the price of the underlying. If your option is ATM a few days before
+expiration, even a 3% price move is often the difference between a 100% loss and
+100% profit at expiration. This potential for a quick profit is what makes the
+time value high at the money.</p>
+<p>Finally, we should mention that, just like time value, theta (the time decay) is
+greatest at the money. This is because an option has 0 time value at expiration,
+so the time value must tend to zero over time. When there is more time value
+(because the option is ATM), it therefore has to decrease faster over time.</p>
+<p><img src="theta-vs-price.gif" alt="Theta vs Price"></p>
+<blockquote>
+<p>In the chart above, the options are ATM and the underlying price is 6. Notice
+how the curve flattens when the remaining time diminishes — because the time
+value does too.</p>
+</blockquote>
+<p>As we mentionned somewhere above, the time values decays increasingly fast as
+expiration nears, and so does theta accelarate:</p>
+<p><img src="theta-vs-time.png" alt=""></p>
+<p><img src="price-vs-time.gif" alt="Time Value vs Time"></p>
+<blockquote>
+<p>In the chart above &quot;option value&quot; should really be &quot;time value&quot;. The option
+may still have intrinsic value at expiration.</p>
+</blockquote>
+<p>In passing, note that delta also varies with time. At expiration, ITM options
+(no matter how far) have a delta of 1 (intrinsic value == price), while OTM
+options have a delta of 0.</p>
+<p><img src="delta-vs-time.png" alt=""></p>
+<p>Sources for the charts: <a href="https://options-knowledge.com/the-greeks/">1</a>, <a href="http://smart-options.blogspot.com/2007/11/option-delta.html">2</a>, <a href="https://www.stockinvestor.com/36959/definition-greek-letter-theta-options-trading/">3</a></p>
+<p>And with this, I conclude my rather long exposition on options pricing. The
+topic is even broader than this. For instance, we didn&#39;t talk about the
+second-order greek gamma (Γ) which played a major role in the recent <a href="https://en.wikipedia.org/wiki/GameStop_short_squeeze">GameStop
+rally</a>.</p>
+<p>I hope this article has been useful. See you next time!</p>
+<p><strong>PS: Some Simple Option Strategies</strong></p>
+<ul>
+<li><a href="https://www.theoptionsguide.com/bull-put-spread.aspx">Bull Put Spread</a></li>
+<li><a href="https://www.theoptionsguide.com/bull-call-spread.aspx">Bull Call Spread</a></li>
+<li><a href="https://www.theoptionsguide.com/diagonal-bull-call-spread.aspx">Diagonal Bull Call Spread</a></li>
+<li><a href="https://www.theoptionsguide.com/iron-condor.aspx">Iron Condor</a></li>
+</ul>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/options";
+        this.page.identifier = "options";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

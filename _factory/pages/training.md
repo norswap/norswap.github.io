@@ -14,6 +14,7 @@ about my training. Here are the posts so far.
 - [Weight Training 6: Training at Home During Quarantine](/weight-training-6)
 - [Weight Training 7: All The Lifts, All The Time](/weight-training-7)
 - [Weight Training 8: Gains](/weight-training-8)
+- [Cardio Training](/cardio)
 
 I'm painfully aware that these posts sometimes get rambly. I've resolved to
 write a take-away / advice post at some point. If it's not yet done when you

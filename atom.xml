@@ -6,6 +6,59 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Running Myself Ragged</title>
+      <description>
+&lt;p&gt;The past few months have been some of the hardest in my life.&lt;/p&gt;
+&lt;p&gt;That is not saying too much — I&amp;#39;ve had, by and large, a very happy life. But as
+far as I ever came close to something maybe remotely resembling burn out, that
+time is now.&lt;/p&gt;
+&lt;p&gt;This was due to a combination of factors. Mostly it was the added workload of
+&lt;a href=&quot;/compilers&quot;&gt;teaching a class&lt;/a&gt; on top of main job (and doing it in my own effort-intensive
+way), and picking up a hobby of very (and not entirely intentionally) &lt;a href=&quot;/heat&quot;&gt;stressful
+trading&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Still, for all the unpleasantness, I think there is a silver lining too.&lt;/p&gt;
+&lt;p&gt;For one, it feels like my work capacity has permanently increased. I feel much
+more confident in my ability to stay on track and consistently work towards a
+long-term project. In particular, I think I might now be able to move faster by
+being able to spend more time on a project per time unit (day/week/...) than I
+did previously.&lt;/p&gt;
+&lt;p&gt;I also learned a lot. About finance, teaching, and compilers even. I got to
+improve &lt;a href=&quot;https://github.com/norswap/autumn&quot;&gt;existing software projects&lt;/a&gt; and even create new ones (&lt;a href=&quot;https://github.com/norswap/uranium&quot;&gt;one&lt;/a&gt;,
+&lt;a href=&quot;https://github.com/norswap/sigh&quot;&gt;two&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;These benefits did come at the cost of running too close to the red line, for
+too long. I think a &lt;a href=&quot;/training&quot;&gt;lifting&lt;/a&gt; metaphor is in order. If you want to get stronger
+or bigger, you need to train hard. But if you push yourself &lt;em&gt;too&lt;/em&gt; hard or for
+too long, you indulge in &lt;em&gt;overtraining&lt;/em&gt;, which is detrimental to your goals.&lt;/p&gt;
+&lt;p&gt;So another lessons from all this is that I might push myself hard in the future,
+but I&amp;#39;ll avoid to making it quite this intense. &lt;a href=&quot;https://www.lesswrong.com/posts/yLLkWMDbC9ZNKbjDG/slack&quot;&gt;Only with slack can one be a
+righteous dude.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Finally, the situation had me do a lot of hard thinking about where I was at,
+and where I wanted to go. &amp;quot;Never waste a good crisis&amp;quot;, as they say.&lt;/p&gt;
+&lt;p&gt;See, when you&amp;#39;re &amp;quot;working&amp;quot; all the time and most of the respite goes out the
+window, you&amp;#39;re really forced to consider whether you actually like what you&amp;#39;re
+doing.&lt;/p&gt;
+&lt;p&gt;Well, some of what I did (in which I include my job, teaching, and trading) I
+liked, and some I liked less. I&amp;#39;m planning to make changes. But first, maybe
+I&amp;#39;ll take a breather.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;PS&lt;/strong&gt;: I hesitated to write this post. The reason is that, while I write for myself
+first, I like to write things that are useful for other people, even if the
+style is a bit rough. This is mostly about my state of mind, there are not too
+many details (on purpose), and I&amp;#39;m not entirely sure the lessons transpose that
+easily to other people in other situations.&lt;/p&gt;
+&lt;p&gt;However, this blog acts as a public record of what&amp;#39;s going on with me, and this
+felt momentous enough that it deserved a mention.&lt;/p&gt;
+&lt;p&gt;Second, I&amp;#39;ve read similar things form other people in the past. Not only do I
+remember them, but they have helped shape how I think about such things (in
+particular, Sebastian Marshall&amp;#39;s &lt;a href=&quot;/celerity/#06-pace-maximum-vs-maximum-sustainable-speed&quot;&gt;writings on Celerity&lt;/a&gt; and &lt;a href=&quot;https://podbay.fm/p/the-ultraworking-podcast/e/1571375400&quot;&gt;his
+personal account on pushing himself too far&lt;/a&gt;). So maybe it&amp;#39;s not that
+useless.&lt;/p&gt;
+      </description>
+      <pubDate>2021-03-25T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/ragged</link>
+      <guid isPermaLink="true">http://norswap.com/ragged</guid>
+    </item>
+    <item>
       <title>Stock Market Adventures: Heat</title>
       <description>
 &lt;p&gt;Previously: &lt;a href=&quot;https://norswap.com/options/&quot;&gt;Stock Market Adventures: Options &amp;amp; The Wheel&lt;/a&gt;&lt;/p&gt;
@@ -1542,463 +1595,6 @@ kcal/week deficit at first.&lt;/p&gt;
       <pubDate>2020-11-16T23:00:00.000Z</pubDate>
       <link>http://norswap.com/weight-training-8</link>
       <guid isPermaLink="true">http://norswap.com/weight-training-8</guid>
-    </item>
-    <item>
-      <title>Chosen Tidbits 6</title>
-      <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/chosen-tidbits-1/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-2/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-3/&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-4/&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-5/&quot;&gt;Five&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://putanumonit.com/2019/12/30/100-ways-to-live-better/&quot;&gt;100 Ways to Live Better&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Any life advice that isn’t given to you personally is not designed to be
-followed to the letter. Try to resonate with the philosophy that generates it
-instead. Remember that directional advice (e.g., “be more …”) &lt;a href=&quot;https://slatestarcodex.com/2014/03/24/should-you-reverse-any-advice-you-hear/&quot;&gt;may need to be
-reversed&lt;/a&gt; before consumption.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If you&amp;#39;re not having fun then just leave.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;quot;I know we were just introduced, but I forgot your name.&amp;quot; &amp;quot;I saw the email you
-sent me last month, I just procrastinated and forgot.&amp;quot; &amp;quot;This is the best
-effort I was realistically going to make.&amp;quot; Try it, it&amp;#39;s liberating.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If your spouse, friend, or family member is doing something dumb but not
-strictly harmful, try thinking of it as their artistic expression instead of
-using facts and logic to fail to talk them out of it.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When you&amp;#39;re home alone, blast some music and dance. Don&amp;#39;t think about your
-body, just focus on the music. Then do the exact same thing when you&amp;#39;re at a
-dance party.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Get massages, give massages. You don&amp;#39;t have to know what you&amp;#39;re doing to
-make someone feel great. Use scentless baby oil, or moisturizer if the recipient
-is not going to shower afterward.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Don&amp;#39;t nitpick tweets, that&amp;#39;s the opposite of good improv. - &amp;quot;But what you
-wrote doesn&amp;#39;t always apply because...&amp;quot; Congrats, you got someone annoyed and now
-you&amp;#39;ll just sit there getting frustrated because you expect a response and
-aren&amp;#39;t going to get one.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Stop lurking; write that comment. You know the saying about letting people
-suspect you&amp;#39;re dumb rather than opening your mouth and removing all doubt? Fuck
-that. We know you&amp;#39;re dumb, and you get less dumb by saying things and getting
-feedback.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Are you really going to give up on expressing yourself, learning from
-mistakes, attracting like-minded people, building a reputation, and changing the
-world because someone may someday try to cancel you? They can smell the fear,
-you know.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If you&amp;#39;re moving chargers and cables around, you need to buy more chargers
-and cables. A girl in every port, a USB-C in every room.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Doctors are human, they have biases and make mistakes. It&amp;#39;s your job to be
-educated about your conditions and the drugs you are prescribed. If you&amp;#39;re
-confused, ask for details or a second opinion.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.richardwiseman.com/resources/The_Luck_Factor.pdf&quot;&gt;The Luck Factor (PDF)&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Lucky people generate their own good fortune via four basic principles. They
-are skilled at creating and noticing chance opportunities, make lucky
-decisions by listening to their intuition, create self-fulfilling prohesies
-via positive expectations, and adopt a resilient attitude that transforms bad
-luck into good.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://theartofmachinery.com/2020/01/27/systems_programming_probability.html&quot;&gt;Some Useful Probability Facts for Systems Programming&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If an outcome has probability 1/N for each &amp;quot;attempt&amp;quot;, and it is attempted N
-times, the probability it will occur at least once stabilizes at 0.62 as N
-increases.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Suppose you throw N balls randomly (independently and one at a time) into N
-buckets. On average, a bit over a third (1/e) of the buckets will stay empty, a
-bit over a third (1/e again) will have exactly one ball, and the remaining
-quarter or so (1 − 2/e) will contain multiple balls.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If a group of things are randomly shuffled, a bit of over a third (1/e) of the
-time there’ll be no fixed points (something that lands in the same position), a
-bit of over a third (1/e) of the time there’ll be just one fixed point, and the
-remaining quarter or so of the time there’ll be two or more.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Let’s look at the common “loot box” mechanism. Specifically, suppose there are
-10 collector items (say, one for each hero in a franchise) that are sold in
-blind boxes. Let’s take the fairest case in which there are no rare items and
-each item has an equal 1/10 chance of being in a given box. How many boxes will a
-collector buy on average before getting a complete set? This is the called the
-coupon collector’s problem, and for 10 items the answer is about 29.&lt;/p&gt;
-&lt;p&gt;The answer to the coupon collector’s problem is a bit more than N * ln(N) (add N/2
-for some more accuracy).&lt;/p&gt;
-&lt;p&gt;The coupon collector’s problem hints at why the loot box mechanism is so
-powerful. The N balls in N buckets rule tells us that the collector will have
-about two thirds of the items after buying 10 boxes. It feels like the collector
-is most of the way there, and it would be a shame to give up and let so much
-progress go to waste, but actually 10 boxes is only about a third of the
-expected number of boxes needed.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/G_S_Bhogal/status/1225561131122597896?s=09&quot;&gt;40 powerful concepts for understanding the world&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Ergodicity: A die rolled 100 times has equal probabilities to 100 dice rolled
-once; rolling a die is “ergodic”. But if the die gets chipped after 10 throws
-so it’s likelier to roll 4, then 1 die 100 times =/= 100 dice once
-(non-ergodic). Many treat non-ergodic systems as ergodic.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;See &lt;a href=&quot;https://larspsyll.wordpress.com/2016/11/23/what-is-ergodicity-2/&quot;&gt;another good explanation&lt;/a&gt;.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Simpson’s Paradox: A trend can appear in groups of data but disappear when these
-groups are combined. This effect can easily be exploited by limiting a dataset
-so that it shows exactly what one wants it to show. Thus: beware of even the
-strongest correlations. (&lt;a href=&quot;https://twitter.com/G_S_Bhogal/status/1225561191470260227&quot;&gt;illustration&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Condorcet Paradox: a special instance of Simpson’s paradox applied to elections,
-in which a populace prefers candidate A to candidate B, candidate B to C, and
-yet candidate C to A. This occurs because the majority that favors C is
-misleadingly divided among different groups.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Concept Creep: As a social issue such as racism or sexual harassment becomes
-rarer, people react by expanding their definition of it, creating the illusion
-that the issue is actually getting worse.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Streetlight Effect: People tend to get their information from where it’s easiest
-to look.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Woozle Effect: An article makes a claim without evidence, is then cited by
-another, which is cited by another, and so on, until the range of citations
-creates the impression that the claim has evidence, when really all articles are
-citing the same uncorroborated source.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Tocqueville Paradox: As the living standards in a society rise, the people’s
-expectations of the society rise with it. The rise in expectations eventually
-surpasses the rise in living standards, inevitably resulting in disaffection
-(and sometimes populist uprisings).&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Nirvana Fallacy: When people reject a thing because it compares unfavorably to
-an ideal that in reality is unattainable. E.g. condemning capitalism due to
-the superiority of imagined socialism, condemning ruthlessness in war due to
-imagining humane (but unrealistic) ways to win.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;http://spotthedrowningchild.com/&quot;&gt;It&amp;#39;s surprisingly difficult to spot someone
-drowning&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://slatestarcodex.com/2020/03/06/socratic-grilling/&quot;&gt;Socratic Grilling&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;In a dialog with a lot of questions from a student, it might sound as though the
-student is nitpicking and/or challenging the teacher, when he&amp;#39;s really just
-trying to understand.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/webdevMason/status/1232406997712003072&quot;&gt;Tweet by Mason&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I&amp;#39;ve noticed that many of the most persistent childhood traumas related to being
-made to feel unwanted, a burden, the &amp;quot;bad&amp;quot; one. I think they may persist as
-&amp;quot;chronic mental illness&amp;quot; because being sick doesn&amp;#39;t heal the wound of being a
-burden — being &lt;em&gt;the healer&lt;/em&gt; does&lt;/p&gt;
-&lt;p&gt;I sincerely believe that many western communities are now suffering not for lack
-of services to be received by hurting people, but for lack of services to be
-&lt;em&gt;provided&lt;/em&gt; by hurting people.&lt;/p&gt;
-&lt;p&gt;Counterintuitive as it is, next time someone around you is struggling with
-living in their own head, don&amp;#39;t ask how you can help; ask them to help you. If
-they don&amp;#39;t, or they flake, just keep asking for small things. Don&amp;#39;t pressure or
-punish for lack of follow-through, just ask&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&amp;quot;You&amp;#39;re not so broken that we don&amp;#39;t need you&amp;quot;&lt;/em&gt; is something that has to be
-lived to be believed&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://larvalsubjects.wordpress.com/2011/11/07/this-extended-mind-again-we-dont-know-what-a-human-being-is/&quot;&gt;This Extended Mind Again: We Don’t Know What a Human Being
-Is&lt;/a&gt;
-via &lt;a href=&quot;https://twitter.com/rsnous/status/1046286119095033858&quot;&gt;Omar Rizwan&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If it is true that… many of our beliefs are actually &lt;em&gt;external&lt;/em&gt; to our internal
-world, off-loaded on to the internet, books, authorities we identify with, etc…
-then it might be that the project of &amp;#39;debunking&amp;#39; is of limited value.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It seems that &lt;em&gt;identification&lt;/em&gt; with many institutions… is every bit as much a
-mechanism that binds people to oppressive systems as conscious belief… a major
-strategy for undermining certain social formations would consist in the question
-of how to produce &lt;em&gt;disidentification&lt;/em&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/nosilverv/status/1247187708184629248&quot;&gt;Tweet by Rival Voices&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Lock-and-key approach to life: each thing it either a perfect fit or not. What
-is a perfect fit changes with each past fit. TRY a lot of things and ITERATE
-through trying them really fast (quit early, quit often). Don’t do anything
-hard, do what effortlessly &lt;em&gt;clicks&lt;/em&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.edge.org/response-detail/11783&quot;&gt;Concept: Kayfabe&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Because professional wrestling is a simulated sport, all competitors who face
-each other in the ring are actually close collaborators who must form a closed
-system (called &amp;quot;a promotion&amp;quot;) sealed against outsiders. With external
-competitors generally excluded, antagonists are chosen from within the promotion
-and their ritualized battles are largely negotiated, choreographed, and
-rehearsed at a significantly decreased risk of injury or death. With outcomes
-predetermined under Kayfabe, betrayal in wrestling comes not from engaging in
-unsportsmanlike conduct, but by the surprise appearance of actual sporting
-behavior. Such unwelcome sportsmanship which &amp;quot;breaks Kayfabe&amp;quot; is called
-&amp;quot;shooting&amp;quot; to distinguish it from the expected scripted deception called
-&amp;quot;working&amp;quot;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;[Wrestling evolved out of &amp;quot;catch&amp;quot;.] Typical matches could last hours with no
-satisfying action, or end suddenly with crippling injuries to a promising
-athlete in whom much had been invested. This highlighted the close
-relationship between two paradoxical risks which define the category of
-activity which wrestling shares with other human spheres:&lt;/p&gt;
-&lt;p&gt;A) Occasional but Extreme Peril for the participants.
-B) General: Monotony for both audience and participants.&lt;/p&gt;
-&lt;p&gt;Kayfabrication (the process of transition from reality towards Kayfabe) arises
-out of attempts to deliver a dependably engaging product for a mass audience
-while removing the unpredictable upheavals that imperil participants. As such
-Kayfabrication is a dependable feature of many of our most important systems
-which share the above two characteristics such as war, finance, love, politics
-and science.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;At the point Kayfabe was forced to own up to the fact that professional
-wrestling contained no sport whatsoever, it did more than avoid being regulated
-and taxed into oblivion. Wrestling discovered the unthinkable: its audience did
-not seem to require even a thin veneer of realism. Professional wrestling had
-come full circle to its honest origins by at last moving the responsibility for
-deception off of the shoulders of the performers and into the willing minds of
-the audience.&lt;/p&gt;
-&lt;p&gt;Kayfabe, it appears, is a dish best served client-side.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.edge.org/response-detail/27181&quot;&gt;Concept: Russell Conjugation&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;As the theory goes, it is not that we don’t have our own opinions so much as
-that we have too many contradictory ones, and it is generally our emotional
-state alone which determines on which ones we will predicate action or inaction.&lt;/p&gt;
-&lt;p&gt;Russell Conjugation (or “emotive conjugation”) is a presently obscure
-construction from linguistics, psychology and rhetoric which demonstrates how
-our rational minds are shielded from understanding the junior role factual
-information generally plays relative to empathy in our formation of opinions.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Where words can be considered “synonyms” if they carry the same factual content
-(I) regardless of the emotional content (II). This however leads to the peculiar
-effect that the synonyms for a positive word like “whistle-blower” cannot be
-used in its place as they are almost universally negative (with “snitch,”
-“fink,” “tattletale” being representative examples). This is our first clue that
-something is wrong, or at least incomplete with our concept of synonym requiring
-an upgrade to distinguish words that may be content synonyms but emotional
-antonyms.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Other examples:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;firm&lt;/em&gt; vs &lt;em&gt;obstinate&lt;/em&gt; vs &lt;em&gt;pig-headed&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;death tax&lt;/em&gt; vs &lt;em&gt;estate tax&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;illegal alien&lt;/em&gt; vs &lt;em&gt;undocumented migrant&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://churchlifejournal.nd.edu/articles/youre-a-slave-to-money-then-you-die/&quot;&gt;You&amp;#39;re a Slave to Money, Then You
-Die&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Like the student and other forms of personal debt that prepare undergraduates
-to say two words — &amp;quot;Yes, boss&amp;quot; — the ideal of the entrepreneurial self serves
-a fundamentally disciplinary function: reinforcing the precarious nature of
-work in today’s digitalized, low-wage, precariously employed, and increasingly
-automated capitalism, one in which you are casually expendable and which
-places a premium on everlasting metamorphosis: upgrade your skills, your
-profile, your resume. But don’t worry, complain, or God help you, call a
-union: losing your job or seeing your skill set rendered obsolescent is an
-opportunity for &amp;quot;growth,&amp;quot; creativity, empowerment. When your own exploitation
-can be recast as a project rather than a problem—a source of fulfillment
-rather than an instance of injustice—then solidarity with others can be
-vilified as conformism, the herd instinct of normies, the last refuge of
-losers and mediocrities.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.lesswrong.com/posts/freWTrdfxwpn4imwn/the-value-is-in-the-tails&quot;&gt;The Value is In The Tails&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When I asked him why he bet on Trump, he said he didn&amp;#39;t really understand
-American politics, but that it seemed extremely complicated, with random things
-like whether it rains in certain parts of Pennsylvania potentially being
-important. If it&amp;#39;s extremely complicated and arbitrary, then it&amp;#39;s probably also
-hard to model. The projections he saw had the most likely outcome being a
-moderate win by Hilary, but since he didn&amp;#39;t trust the models, he figured the
-value was in the tails: the models are likely off, which likely affects the
-tails more than the mean. So a landslide win by Hilary or a Trump victory seemed
-undervalued by gambling markets. He wished he could hedge his bets by betting on
-both outcomes (as opposed to a moderate Hilary win), but the only option he had
-was to bet on Trump to win.&lt;/p&gt;
-&lt;p&gt;This logic has stuck with me ever since: in the face of large uncertainty, we&amp;#39;re
-probably getting the tails wrong more than the mean. The value is in the tails.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.lesswrong.com/posts/rMfpnorsMoRwyn4iP/choosing-the-zero-point&quot;&gt;Choosing The Zero Point&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;You can decide what state of affairs counts as neutral, and what counts as
-positive or negative.&lt;/p&gt;
-&lt;p&gt;e.g. animal suffering: you can define the zero point as &amp;quot;animal shouldn&amp;#39;t suffer
-more than if humans were there&amp;quot; and if you accept it, that makes you a monster.
-You could frame the zero point as the current situation, and every improvement
-you make as a net gain.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://deluks917.wordpress.com/2020/04/15/people-hate-non-shockers/&quot;&gt;People Hate Non-Shockers&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A society has the following rules:&lt;/p&gt;
-&lt;p&gt;— Everyone must publicly electro-shock themselves 8 hours per day.&lt;/p&gt;
-&lt;p&gt;— If you see someone not shocking themselves then you must kill them&lt;/p&gt;
-&lt;p&gt;— Anyone who violates the second rule must also be killed. The same is true for
-  all meta levels. Non-killers of non-killers of ... of non-shockers must be
-  killed.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;This equilibrium can get locked in even if every single person dislikes it. I
-think similar but weaker dynamics apply all the time in normal life. Why is
-there so much hyperbolic hate direct against furries?&lt;/p&gt;
-&lt;p&gt;Most are people are very repressed. Society has a norm that you need to keep
-‘low status’ or ‘cringey’ aspects of yourself private. Furries often violate
-these norms. People feel the urge to punish them. And people often feel
-uncomfortable even being seen as being tolerant. Afterall tolerators are at risk
-too!&lt;/p&gt;
-&lt;p&gt;I don’t claim this is the only dynamic at play. People also like to look down on
-official low-status groups to feel better about themselves. Notably, even if
-people don’t intrinsically want to punish non-shockers may still hate them. If
-you let me see you not shocking yourself now you have put me at risk unless I
-punish you!&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.visakanv.com/blog/prestige/&quot;&gt;Prestige&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I’ve had several conversations with friends who’ve been incapacitated by the
-burdensome bullshit obligation to Have A Meaningful Life / Be Remembered / Do
-Important Work.&lt;/p&gt;
-&lt;p&gt;It strikes me as socially inherited bloatware that causes tedious lag, which
-ironically prevents you from being awesome. When people say things like “just be
-yourself”, I think often what they mean is “be less laggy” – ie, uninstall the
-bloatware.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Wonderfully, it seems to me that lots of people who end up Doing Important Work
-often got there by being playful and curious. Richard Feynman, for example, got
-his Nobel prize from piddling around with spinning plates. And the point isn’t
-to get the Nobel prize, the point is to enjoy the piddling.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Paul Graham:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Prestige is like a powerful magnet that warps even your beliefs about what you
-enjoy. It causes you to work not on what you like, but what you’d like to
-like.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Do not be too timid and squeamish about your actions. All life is an experiment.
-The more experiments you make, the better. What if they are a little coarse and
-you may get your coat soiled or torn? What if you do fail, and get fairly rolled
-in the dirt once or twice? Up again; you shall never be so afraid of a tumble.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;— Ralph Waldo Emerson&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=SqhVaWKaWi&quot;&gt;5 Jokes That Make People Instantly Like
-You&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/noampomsky/status/1261007947410206720&quot;&gt;Tweet by Ava&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;“radical honesty” is actually pretty hard because we’re so used to language
-being gamified that even if you say exactly what you feel people will
-generally presume you must be implying something else&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/visakanv/status/1261082945462267905&quot;&gt;Comment by Visa&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This was the insight that blew my mind around age 20 when I read 48 Laws of
-Power. The realisation that my social relations were suffering because people
-weren’t interpreting my words as honest, likely because they simply weren’t used
-to dealing with someone like me&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://slatestarcodex.com/2020/05/28/creationism-unchallenged/&quot;&gt;Creationism Unchallenged&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Creationism was cancer and the most dangerous thing in the early 2000s. Yet
-still as many people believe it. Yet we don&amp;#39;t talk about anymore, and it&amp;#39;s not
-been an apocalypse. Talking about it hasn&amp;#39;t hindered or helped.&lt;/p&gt;
-&lt;p&gt;Maybe it&amp;#39;s the same with the issue of the day.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I see people using rivers of ink to fight the modern equivalents of
-creationists. Pizzagaters, flat-earthers, moon-hoaxers, QAnon, deep-staters,
-people who say the coronavirus is a bioweapon, Alex Jones. Are they sure it’s
-not equally useless? Equally counterproductive?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;http://tynan.com/valuableoutput&quot;&gt;Long Term Valuable Output&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It&amp;#39;s important to realize that what you create when you are at your best will be
-many times more valuable than what you create at average or worse. Sometimes
-work created can even be a net negative.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Sleep is one of the biggest factors.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It&amp;#39;s also important to optimize your workspace as much as possible. Get a huge
-monitor, a comfy chair, and a nice desk. Get some plants. Spend the time
-customizing your computer to make it easy and efficient to use. These are basic
-things but they really matter a lot.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When you sit down to work, your task must be connected to a goal that matters to
-you and it must be an effective lever.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When you are at your best and are working on something that matters, that&amp;#39;s when
-it&amp;#39;s time to step on the gas and work hard. The amount of valuable output you
-can create in even 4-6 hours of peak performance can be better than days or even
-weeks of mediocre output.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://roamresearch.com/#/app/visakanv-public/page/tdzT6EDGb&quot;&gt;Visa&amp;#39;s talking points&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Earnestness will make you edgier than trying to be edgy.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Persistence: geniuses are mostly just people who are uncommonly persistent in
-pursuing their curiosities and interests.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Prolificacy is a superpower: if you want to get good at something, do it 1,000
-times.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Doing anything for a long period of time (do it 100 times, do it for 10 years)
-will reveal interesting things, and make you an interesting person.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Sex: lots of people want to be fuckable more than they want to fuck. fucking is
-labor, fuckability is capital.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;People think focus means saying yes to the thing you&amp;#39;ve got to focus on. But
-that&amp;#39;s not what it means at all. It means saying no to the hundred other good
-ideas that there are... I&amp;#39;m actually as proud of the things we haven&amp;#39;t done as
-the things I have done...&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;— Steve Jobs&lt;/p&gt;
-      </description>
-      <pubDate>2020-11-16T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/chosen-tidbits-6</link>
-      <guid isPermaLink="true">http://norswap.com/chosen-tidbits-6</guid>
     </item>
   </channel>
 </rss>

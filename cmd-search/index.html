@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -74,10 +77,12 @@ unclear, check the animated gif on the <a href="https://github.com/garybernhardt
 <p>Unfortunately selecta is Unix-only, however there are a few clones and I ended
 up settling on the multi-platform <a href="https://github.com/rschmitt/heatseeker">heatseeker</a>.</p>
 <p>Here&#39;s an example of what I can do with <code>ag</code> and heatseeker (<code>hs</code>):</p>
-<pre><code>em $(ag -l parser | hs)</code></pre>
+<pre><code>em $(ag -l parser | hs)
+</code></pre>
 <p>Or the Windows equivalent (assuming you have <code>xargs</code> installed, it comes with
 <a href="https://www.cygwin.com/">Cygwin</a>, <a href="http://www.mingw.org/">MinGW</a> and even Git):</p>
-<pre><code>ag -l parser | hs | xargs em</code></pre>
+<pre><code>ag -l parser | hs | xargs em
+</code></pre>
 <p>What I&#39;m doing is that I&#39;m searching for the string &quot;parser&quot; in the current
 directory. The <code>-l</code> flag says to only print the file name (not the line number)
 of matches. Then heatseeker is used for the selection, and once the selection is

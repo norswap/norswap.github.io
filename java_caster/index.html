@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -55,15 +58,18 @@
     {
         return (T) obj;
     }
-}</code></pre>
+}
+</code></pre>
 <p>Now you can write:</p>
 <pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
-functionExpectingStringList(Caster.cast(x));</code></pre>
+functionExpectingStringList(Caster.cast(x));
+</code></pre>
 <p>instead of:</p>
 <pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
 @SuppressWarnings(&quot;unchecked&quot;)
 List&lt;String&gt; y = (List&lt;String&gt;) x;
-functionExpectingStringList(y);</code></pre>
+functionExpectingStringList(y);
+</code></pre>
 <p>So, it does two things: (1) automatically infer the destination type and (2)
 avoid an intermediate variable declaration, which you need if you want to ignore
 the resulting &quot;unchecked cast&quot; warning. This warning appears when the cast can&#39;t
@@ -74,7 +80,8 @@ their generic type parameters.</p>
 <p>In the cases where the type cannot be inferred, you need to specify it
 explicitly:</p>
 <pre><code>Object x = &quot;cthulhu&quot;;
-functionExpectingString(Caster.&lt;String&gt;cast(x));</code></pre>
+functionExpectingString(Caster.&lt;String&gt;cast(x));
+</code></pre>
 <p>It also holds up remarkably well when using multiple casts with generics:</p>
 <pre><code>static &lt;T&gt; void takeArrayListPair(ArrayList&lt;T&gt; a, ArrayList&lt;T&gt; b) {}
 
@@ -85,7 +92,8 @@ static void test()
 
     takeArrayListPair(Caster.cast(x), Caster.cast(y));
     // x and y are casted to ArrayList&lt;Object&gt;
-}</code></pre>
+}
+</code></pre>
     </div>
     <hr>
     <div id="disqus_thread"></div>

@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -58,7 +61,8 @@ resulting ambiguity in function signatures. And of course, how we could make
 things better.</p>
 <h2 id="an-ambiguous-function">An Ambiguous Function</h2>
 <p>Consider the following function signature:</p>
-<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);</code></pre>
+<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);
+</code></pre>
 <p>In a purely functional language, you know that <code>list</code> cannot be modified, and
 the returned list will depend only on <code>list</code> and whatever data was captured via
 <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)">closure</a> at the function definition point (data which, of course, does not
@@ -88,7 +92,8 @@ be aware of the interface of the callee.</p>
 <p>When we talk about ambiguity, we talk about the ambiguity of this interface.</p>
 <h2 id="interpretations">Interpretations</h2>
 <p>Let&#39;s consider a few possible interpretations of the function:</p>
-<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);</code></pre>
+<pre><code>List&lt;T&gt; process(List&lt;T&gt; list);
+</code></pre>
 <ul>
 <li><p><strong>Immutable</strong>: no one can modify the argument list: not the caller, not the
 callee, nor anyone else.</p>
@@ -114,11 +119,11 @@ is being <em>piped out</em> of the callee.</p>
 <li><p><strong>Sync</strong>: the callee may read or write the list and retain a reference that
 outlives the function&#39;s execution. The caller may still read and write the
 list.</p>
-</li>
-</ul>
 <p>Since things are complex enough as it is, we omit discussing whether the
 returned list is an alias or the argument list, as well as considerations
 relating to concurrent execution.</p>
+</li>
+</ul>
 <h2 id="in-practice">In Practice</h2>
 <p>Is it possible to disambiguate all these scenarios in a way that can be enforced
 by a compiler?</p>

@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -56,7 +59,8 @@ command like this (here, assuming I&#39;m interested in the status of the <code>
 process):</p>
 <pre><code class="language-bash">$ ps aux | grep sleep
 # norswap    58694   0.0  0.0  4399328    728 s006  S+    2:26PM   0:00.00 grep sleep
-# norswap    58686   0.0  0.0  4268240    576 s003  S+    2:26PM   0:00.00 sleep 300</code></pre>
+# norswap    58686   0.0  0.0  4268240    576 s003  S+    2:26PM   0:00.00 sleep 300
+</code></pre>
 <p>This is an incantation I&#39;ve personally memorized a long time ago. I didn&#39;t even
 remember what those <code>aux</code> flags meant.</p>
 <p>(As it turns out, omitting the dash (<code>-</code>) toggles legacy mode, in which <code>u</code>
@@ -67,14 +71,16 @@ to a controlling terminal.)</p>
 <code>grep</code> command itself!</p>
 <p>Here is the remedy, where <code>grep -v</code> excludes matching lines (and no, there is no
 easy way to merge the two <code>grep</code> commands):</p>
-<pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep foobar</code></pre>
+<pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep foobar
+</code></pre>
 <p>Frankly, not something you&#39;d want to type each time.</p>
 <p>Another thing that bothers me is: what are all these numbers and letters? Do I
 care?</p>
 <p>Let&#39;s start by omitting our legacy <code>u</code> option. Then, by default (at leasts on
 stock macOS Catalina!), you&#39;ll get the following fields:</p>
 <pre><code class="language-bash">$ ps ax | head -1
-#  PID   TT  STAT      TIME COMMAND</code></pre>
+#  PID   TT  STAT      TIME COMMAND
+</code></pre>
 <p>You should know what the <code>PID</code> is (the process ID), <code>TT</code> is an identifier for
 the controlling terminal (e.g. <code>s006</code>) or <code>??</code> if there are no controlling
 terminal.</p>
@@ -108,7 +114,8 @@ process. Info about which can be found under the &quot;state&quot; heading when 
   s       The process is a session leader.
   V       The process is suspended during a vfork(2).
   W       The process is swapped out.
-  X       The process is being traced or debugged.</code></pre>
+  X       The process is being traced or debugged.
+</code></pre>
 <p>There is a different output (probably Linux) <a href="https://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean#360253">listed in this StackOverflow
 answer</a> that you might find handy.</p>
 <p>The <code>TIME</code> column: the CPU time the process has consumed since it started, in
@@ -119,11 +126,13 @@ answer</a> that you might find handy.</p>
 some point have recognized this. What did these good souls do? Come up with
 <code>pgrep</code>, of course!</p>
 <pre><code class="language-bash">$ pgrep sleep
-# 58686</code></pre>
+# 58686
+</code></pre>
 <p>The number printed out is the PID of matched processes. That <code>pgrep sleep</code>
 command is approximately equivalent to the following full pipe:</p>
 <pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep sleep | awk &#39;{ print $1 }&#39;
-# 58686</code></pre>
+# 58686
+</code></pre>
 <p>But not exactly. On the plus side, it&#39;s slightly more robust, for instance it
 wouldn&#39;t ignore entries in the very unlikely scneario where entries of interest
 contain the &quot; grep &quot; string. <code>pgrep</code> just ignores its own process and that&#39;s it.</p>
@@ -144,12 +153,14 @@ given). But there are no flags to retrieve any other piece of information.</p>
 hand.</p>
 <p>Another way is use some piping:</p>
 <pre><code class="language-bash">$ ps -ax | grep sleep # identify process
-$ ps -ax | grep sleep | grep -v &quot; grep &quot; | awk &#39;{ print $1 }&#39; | xargs kill -9 # kill it</code></pre>
+$ ps -ax | grep sleep | grep -v &quot; grep &quot; | awk &#39;{ print $1 }&#39; | xargs kill -9 # kill it
+</code></pre>
 <p>Adding <code>awk &#39;{ print $1 }&#39;</code> outputs the first column (the PIDs), while <code>xargs</code>
 transmits them to <code>kill -9</code> as arguments.</p>
 <p>Or using <code>pgrep</code>:</p>
 <pre><code class="language-bash">$ pgrep -l sleep # identify process
-$ pkill !* # kill it</code></pre>
+$ pkill !* # kill it
+</code></pre>
 <p>Here the trick is <code>!*</code> which passes the same arguments as the previous command
  (<code>pgrep</code>) to <code>pkill</code>. <code>pkill</code> is <code>pgrep</code>&#39;s cousin, which instead of printing
  the matched PIDs, kills them.</p>
@@ -210,7 +221,8 @@ option.</p>
 <h2 id="killing-processes-with-nps">Killing Processes with <code>nps</code></h2>
 <p>Killing processes? Easy peezy, lemon squeezy, just add the <code>-k</code> flag:</p>
 <pre><code class="language-bash">$ nps -k sleep
-# 60772 sleep 300</code></pre>
+# 60772 sleep 300
+</code></pre>
 <p><code>nps</code> still prints the matched processes, which it also kills. Note it may fail
 to kill the matched processes! If the exit code is 0 when using <code>-k</code>, it means
 that all matched processes were killed (or that no process was matched).</p>
@@ -234,14 +246,16 @@ process, you can first verify your query, then kill the process by appening the
 # 59325 sleep 300
 # # (press up, type &#39; -k&#39;)
 $ nps foobar -k
-# 59325 sleep 300</code></pre>
+# 59325 sleep 300
+</code></pre>
 <p>If you use an unknown flag (e.g. <code>-z</code> or <code>--foobar</code>), <code>nps</code> will display its
 help and exit with code 1. But what if you want to match flags — a totally
 reasonable thing to do? Then you need to put those flags at the end, <em>after</em> the
 special <code>--</code> separator:</p>
 <pre><code class="language-bash">$ nps -- -li
 # 2043 bash -li
-#  519 bash -li</code></pre>
+#  519 bash -li
+</code></pre>
 <p>I think it would be <em>slightly</em> better if one could still have regular options
 after. We could imagine to bracket sensitive options with <code>--</code>: <code>nps -- -li -- -k</code>, but then we also need a way to specify we want to match <code>--</code> itself,
 probably as a special flag (e.g. <code>--sep</code>). This is a pretty big change to the
@@ -257,7 +271,8 @@ the last section) will be used as a <a href="https://www.regular-expressions.inf
 to be quoted. For instance, to search for an interrogation mark: <code>nps &#39;\?&#39;</code>.</p>
 <p>For instance, the following command will match and highlight all string literals
 in running commands arguments:</p>
-<pre><code class="language-bash">$ nps &#39;&quot;.*&quot;&#39;</code></pre>
+<pre><code class="language-bash">$ nps &#39;&quot;.*&quot;&#39;
+</code></pre>
 <p>As for the return code, <code>nps</code> returns 0 if it matched processes, 1 otherwise.
 This is different when using the <code>-k</code> flag, as discussed above.</p>
 <h2 id="potential-pitfalls">Potential Pitfalls</h2>
@@ -384,7 +399,8 @@ if [[ $KILL == 1 ]]; then
     EXIT=$?
 fi
 
-exit $EXIT</code></pre>
+exit $EXIT
+</code></pre>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
 <script
 src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>

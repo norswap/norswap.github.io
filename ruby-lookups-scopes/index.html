@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -85,12 +88,14 @@ sometimes said that <code>module</code>, <code>class</code> and <code>def</code>
 <pre><code class="language-ruby">x = 1
 module Foo
   p x # NameError
-end</code></pre>
+end
+</code></pre>
 <p>There is however a trick you can use:</p>
 <pre><code class="language-ruby">x = 1
 Foo = Module.new do
   p x # ok
-end</code></pre>
+end
+</code></pre>
 <p>It is possible to make local variables survive their lexical scope:</p>
 <pre><code class="language-ruby">def foo
   x = 0
@@ -98,14 +103,16 @@ end</code></pre>
 end
 x, y = foo
 x.call()
-y.call() # 1</code></pre>
+y.call() # 1
+</code></pre>
 <p>Something else that is peculiar: a variable is &quot;in scope&quot; in an assignment to it
 has appeared before in the current scope.</p>
 <pre><code class="language-ruby">p x # NameError
 x = 1
 # but
 x = 1 if false
-p x # nil</code></pre>
+p x # nil
+</code></pre>
 <p>Reflection can help with local variables too: the <code>binding</code> method (both
 <code>Kernel#binding</code> and <code>Proc#binding</code>) returns a <code>Binding</code> object which describes
 the local variables in scope.</p>
@@ -135,7 +142,8 @@ class Object; @@a = &#39;o&#39;; end
 class T
   p @@a # o
   p class_variables(false) # []
-end</code></pre>
+end
+</code></pre>
 <p>If a class variable is accessed before it has been assigned, a <code>NameError</code>
 occurs.</p>
 <p>Final catch, class variables can only be accessed inside the body of a class
@@ -158,7 +166,8 @@ module A
     p X # 1
     p B::C::Y
   end
-end</code></pre>
+end
+</code></pre>
 <p>The following exemple illustrates two gotchas:</p>
 <ul>
 <li>You don&#39;t have access to constants defined in an ancestor of a surrounding
@@ -176,16 +185,19 @@ module C
     p Y # &#39;c&#39;!
     p X # NameError
   end
-end</code></pre>
+end
+</code></pre>
 <p>The module body really has to be around you:</p>
 <pre><code class="language-ruby">module A::B::C; p Y; end # ok (Y defined in C)
-module A::D; p X; end # NameError (X defined in A)</code></pre>
+module A::D; p X; end # NameError (X defined in A)
+</code></pre>
 <p>We can access the current nesting with <code>Module::nesting</code> and clarify the
 example:</p>
 <pre><code class="language-ruby">module A
   module D; p Module.nesting; end # [A, A::D]
 end
-module A::D; p Module.nesting; end # [A::D]</code></pre>
+module A::D; p Module.nesting; end # [A::D]
+</code></pre>
 <p>Of course, if you try to access a constant before it has been assigned, a
 <code>NameError</code> ensues. <code>Module::constants</code> will list the constants defined at the
 point of call, while <code>Module#constants</code> will list the constants defined by the
@@ -209,7 +221,8 @@ module M
   refine C do
     def foo; &#39;bar&#39;; end
   end
-end</code></pre>
+end
+</code></pre>
 <p>Defining a refinement does nothing by itself. You have to use the <code>Module#using</code>
 function to enable some refinements in the current module:</p>
 <pre><code class="language-ruby">module N
@@ -217,7 +230,8 @@ function to enable some refinements in the current module:</p>
   using M
   p C.new.foo # &#39;bar&#39;
 end
-p C.new.foo # &#39;foo&#39;</code></pre>
+p C.new.foo # &#39;foo&#39;
+</code></pre>
 <p><code>using</code> statements are somewhat peculiar, because they are strictly lexical in
 scope. Said otherwise, the introduced refinements have the same visibility as
 constants, <strong>excepted</strong> that the <code>using</code> is not inherited (via sublassing or
@@ -225,7 +239,8 @@ include):</p>
 <pre><code class="language-ruby">class A; using M; end
 class B &lt; A
   p C.new.foo # &#39;foo&#39;
-end</code></pre>
+end
+</code></pre>
 <p>However, refinements themselves are inherited:</p>
 <pre><code class="language-ruby">module O
   include M
@@ -233,7 +248,8 @@ end
 module P
   using O
   p C.new.foo # &#39;bar&#39;
-end</code></pre>
+end
+</code></pre>
 <p>How prioritary are refinements? Refinements always take priority over everything
 else. What if multiple refinements conflicts? The latest innermost <code>using</code> statement
 always wins.</p>

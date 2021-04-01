@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -69,7 +72,8 @@ and, in my opinion, easier to understand.</p>
 <h2 id="the-mockingbird-code-injection">The Mockingbird (Code Injection)</h2>
 <p>Let&#39;s start with a recursive (JavaScript) function:</p>
 <pre><code class="language-javascript">const is_even = n =&gt;
-    (n === 0) || !is_even(n - 1);</code></pre>
+    (n === 0) || !is_even(n - 1);
+</code></pre>
 <p>This implement a very inefficient way to check if a number is even. It&#39;s a toy
 example, obviously.</p>
 <p>Let&#39;s take our first goal first: &quot;inject code at each recursive call in a
@@ -77,7 +81,8 @@ recursive function&quot;.</p>
 <p>To achieve this, we need to rewrite the function in a different form. Here is
 the so-called &quot;mockingbird form&quot;:</p>
 <pre><code class="language-javascript">const mock_is_even = (myself, n) =&gt;
-    (n === 0) || !myself(myself, n - 1);</code></pre>
+    (n === 0) || !myself(myself, n - 1);
+</code></pre>
 <p><code>is_even</code> now take a <code>myself</code> function as argument, which it called recursively,
 passing itself along.</p>
 <p>We can call <code>mock_is_even(mock_is_even, 10)</code>, and it will behave just like
@@ -88,8 +93,9 @@ combinator:</p>
     fn =&gt;
         (...args) =&gt;
             fn(fn, ...args);
-
-const is_even = mockingbird(mock_is_even);</code></pre>
+      
+const is_even = mockingbird(mock_is_even);
+</code></pre>
 <p>Okay, that works: when we call <code>is_even(10)</code>, the call becomes
 <code>mock_is_even(mock_is_even, 10)</code>, exactly what we wanted.</p>
 <p>What&#39;s the point?</p>
@@ -103,7 +109,8 @@ the result of <code>is_even(X)</code> will always be the same for a given <code>
     }
 }
 
-const is_even_memo = mockingbird(memoized(mock_is_even));</code></pre>
+const is_even_memo = mockingbird(memoized(mock_is_even));
+</code></pre>
 <p>We can verify it&#39;s working by measuring the run time:</p>
 <pre><code class="language-javascript">console.time(&#39;slow&#39;);
 is_even_memo(100); // not memoized yet
@@ -111,24 +118,29 @@ console.timeEnd(&#39;slow&#39;);
 
 console.time(&#39;fast&#39;);
 is_even_memo(100); // memoized
-console.timeEnd(&#39;fast&#39;);</code></pre>
+console.timeEnd(&#39;fast&#39;);
+</code></pre>
 <h2 id="the-y-combinator-better-code-injection">The Y Combinator (Better Code Injection)</h2>
 <p>This <code>myself(myself, ...)</code> business is ugly. Can we do better? Yes.</p>
 <p>Instead of the mockingbird form:</p>
 <pre><code class="language-javascript">const mock_is_even = (myself, n) =&gt;
-    (n === 0) || !myself(myself, n - 1);</code></pre>
+    (n === 0) || !myself(myself, n - 1);
+</code></pre>
 <p>We can write our function in Y form:</p>
 <pre><code class="language-javascript">const Y_is_even = (myself, n) =&gt;
-    (n === 0) || !myself(n - 1);</code></pre>
+    (n === 0) || !myself(n - 1);
+</code></pre>
 <p>And here is how we derive the <code>is_even</code> from the Y combinator:</p>
 <pre><code class="language-javascript">const Y = fn =&gt; {
     const wrapper = (...args) =&gt; fn(wrapper, ...args);
     return wrapper;
 }
 
-const is_even = Y(Y_is_even);</code></pre>
+const is_even = Y(Y_is_even);
+</code></pre>
 <p>Injection is done the same way as before:</p>
-<pre><code class="language-javascript">const is_even_memo = Y(memoized(Y_is_even));</code></pre>
+<pre><code class="language-javascript">const is_even_memo = Y(memoized(Y_is_even));
+</code></pre>
 <p>Let&#39;s explain: the Y combinator is similar to the mockingbird, but takes care of
 passing the function to itself, so that we don&#39;t need to do it in Y-form
 functions, unlike in mockingbird-form.</p>
@@ -148,7 +160,8 @@ operator, which is applied after the call to <code>myself</code> returns.</p>
 <pre><code class="language-javascript">const Y_is_even_tailrec = (myself, n) =&gt;
     n === 0 ? true
     n === 1 ? false
-    : myself(n - 2);</code></pre>
+    : myself(n - 2);
+</code></pre>
 <p>The idea behind the longtailed widowbird is that, instead of injecting code
 around the recursive function call, we will <em>replace</em> the recursive call by code
 that returns a function (which executes the &quot;recursive&quot; function call).</p>
@@ -168,7 +181,7 @@ Recursion has been eliminated in favor of iteration!</p>
             return this.delayed();
         }
     }
-
+    
     const wrapper = (...args) =&gt;
         new Thunk(() =&gt; fn(wrapper, ...args));
 
@@ -178,7 +191,8 @@ Recursion has been eliminated in favor of iteration!</p>
         value = value.evaluate();
 
     return value;
-}</code></pre>
+}
+</code></pre>
 <p>Let&#39;s go over this.</p>
 <p>The <code>Thunk</code> class is just a way to identify the functions we need to execute in
 the loop (it&#39;s used in the <code>value instancceof Thunk</code> test). If we didn&#39;t have
@@ -198,7 +212,8 @@ iter_is_even(1000000);
 is_even(1000000);
 </code></pre>
 <p>Can we still memoize? Of course:</p>
-<pre><code class="language-javascript">const iter_is_even_memo = longtailed(memoized(Y_is_even_tailrec));</code></pre>
+<pre><code class="language-javascript">const iter_is_even_memo = longtailed(memoized(Y_is_even_tailrec));
+</code></pre>
 <p>And that&#39;s it folks! Code injection in recursive functions, and tail call
 optimization in JavaScript, easy as pie!</p>
 <p>You can find all the code in this article collected <a href="https://gist.github.com/norswap/be5fa7938f8331a252d3ff79e61e5834">in this gist</a>.</p>

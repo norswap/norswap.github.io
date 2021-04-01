@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -101,7 +104,8 @@ public class Example
     public static void main (String[] args) {
         print(new A());
     }
-}</code></pre>
+}
+</code></pre>
 <p>What happens is that the <code>accept()</code> method declared in <code>Base</code> must be overriden
 in all of its implementations (<code>Base</code> could have been a class as well). The role
 of the overriden method is to redirect the execution to the correct
@@ -128,11 +132,11 @@ Here is an example:</p>
 {
     public int result;
     public final int base;
-
+    
     public AddRankVisitor (int base) {
         this.base = base;
     }
-
+    
     @Override public void visit (A object) { set_result(base + 1); }
     @Override public void visit (B object) { set_result(base + 2); }
 }
@@ -145,11 +149,12 @@ public class Example
         object.accept(visitor);
         return visitor.result;
     }
-
+    
     public static void main (String[] args) {
         System.out.println(add_rank(new A(), 5)); // prints 6
     }
-}</code></pre>
+}
+</code></pre>
 <p>We use <code>result</code> to represent the return value, and <code>base</code> as a parameter. Pretty
 easy, isn&#39;t it?</p>
 <h2 id="the-expression-problem">The Expression Problem</h2>
@@ -221,21 +226,22 @@ public class Example
     public static void print (Base object) {
         object.accept(new PrintVisitorC());
     }
-
+    
     public static void add_rank (Base object, int base)
     {
         VisitorC visitor = new AddRankVisitorC(base);
         object.accept(visitor);
         return visitor.result;
     }
-
+    
     public static void main (String[] args) {
         print(new A());
         print(new C());
         System.out.println(add_rank(new A(), 5)); // prints 6
         System.out.println(add_rank(new C(), 5)); // prints 8
     }
-}</code></pre>
+}
+</code></pre>
 <p>Since <code>Visitor</code> doesn&#39;t have an overload for <code>C</code>, we add this overload in an
 extension of <code>Visitor</code> called <code>VisitorC</code>. The only worry: <code>accept</code> takes
 <code>Visitor</code>, not <code>VisitorC</code>, so we have to perform a cast.</p>
@@ -273,13 +279,14 @@ before adding <code>C</code>:</p>
     }
 }
 
-class PrintVisitor implements _PrintVisitor {}</code></pre>
+class PrintVisitor implements _PrintVisitor {}
+</code></pre>
 <pre><code class="language-java">interface _AddRankVisitor extends Visitor
 {
     int result();
     void set_result (int result);
     int base();
-
+    
     @Override default void visit (A object) { set_result(base() + 1); }
     @Override default void visit (B object) { set_result(base() + 2); }
 }
@@ -288,19 +295,20 @@ class AddRankVisitor implements _AddRankVisitor
 {
     private int result;
     private int base;
-
+    
     @Override public int result() { return result; }
-
+    
     @Override public void set_result (int result) {
         this.result = result;
     }
-
+    
     @Override int base() { return base; }
-
+    
     public AddRankVisitor (int base) {
         this.base = base;
     }
-}</code></pre>
+}
+</code></pre>
 <p>For <code>PrintVisitor</code>, the class becomes an interface with a prefix <code>_</code> and we add
 a class with an empty body — no extra work required.</p>
 <p>For <code>AddRankVisitor</code>, our fields are replaced with getter/setters in the
@@ -329,7 +337,8 @@ class AddRankVisitorC extends AddRankVistor
     implements _AddRankVisitorC
 {
     public AddRankVisitorC (int base) { super(base); }
-}</code></pre>
+}
+</code></pre>
 <p>This is a lot like what we just did for the base visitors. Like before, we don&#39;t
 need to reimplement the storage for <code>AddRankVisitorC</code> if we extend
 <code>AddRankVisitor</code>.</p>
@@ -364,7 +373,8 @@ class AddRankVisitorD extends AddRankVistor
     implements _AddRankVisitorD
 {
     public AddRankVisitorD (int base) { super(base); }
-}</code></pre>
+}
+</code></pre>
 <p>Now that we have our two independant extensions setup properly with interfaces,
 let&#39;s compose them into a single one.</p>
 <pre><code class="language-java">interface VisitorCD
@@ -390,14 +400,14 @@ public class Example
     public static void print (Base object) {
         object.accept(new PrintVisitorCD());
     }
-
+    
     public static void add_rank (Base object, int base)
     {
         VisitorCD visitor = new AddRankVisitorCD(base);
         object.accept(visitor);
         return visitor.result;
     }
-
+    
     public static void main (String[] args) {
         print(new A());
         print(new C());
@@ -406,7 +416,8 @@ public class Example
         System.out.println(add_rank(new C(), 5)); // prints 8
         System.out.println(add_rank(new D(), 5)); // prints 9
     }
-}</code></pre>
+}
+</code></pre>
 <p>That&#39;s it? Yep that&#39;s it! And that&#39;s actually the long version — which you
 should use when you expose the visitor as part of a library. Even then
 <code>VisitorCD</code> is not capital and just helps add a tiny bit of type safety.</p>
@@ -420,7 +431,8 @@ class AddRankVisitorCD
     implements, _AddRankVisitorC, _AddRankVisitorD
 {
     public AddRankVisitorCD (int base) { super(base); }
-}</code></pre>
+}
+</code></pre>
 <p>Isn&#39;t life beautiful?</p>
 <p>You can consult the full final example (with <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>PrintVisitor</code>
 and <code>AddRankVisitor</code>) on <a href="https://gist.github.com/norswap/7f3d40adb85491d440bdf026b738890a">this page</a>.</p>

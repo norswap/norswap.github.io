@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -69,7 +72,8 @@ in different execution path on that basis. For instance:</p>
     elif type(x) is Baz:
         foo_baz(x)
     else
-        raise TypeError(&quot;x is neither Bar nor Baz&quot;)</code></pre>
+        raise TypeError(&quot;x is neither Bar nor Baz&quot;)
+</code></pre>
 <p>Some people also say that <em>overloading</em> in statically-typed languages (having
 multiple functions with the same name, but differing in the type of their
 arguments) counts as polymorphism. I&#39;m not anal about definitions, but
@@ -108,7 +112,8 @@ long as the object does implement a method by that name, it will work.</p>
 polymorphic for any object that has both a <code>bar()</code> and <code>baz()</code> method.</p>
 <pre><code>def foo(x):
     x.bar()
-    x.baz()</code></pre>
+    x.baz()
+</code></pre>
 <h2 id="parametric-polymorphism">Parametric Polymorphism</h2>
 <p>Finally, last of the big three, we have <strong>parametric polymorphism</strong>. There are a
 few famous examples of that: generics in Java and C#, templates in C++.

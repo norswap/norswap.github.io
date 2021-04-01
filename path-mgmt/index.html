@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -147,9 +150,9 @@ few caveats:</p>
 <p>case for <code>PATH</code>, where you append to the existing definition.</p>
 <p>In this case, if you reload the <code>.profile</code>, you&#39;ll end up with many duplicate
 entries in your PATH, and you&#39;ll fail to clear entries you want removed.</p>
+<p>Hence: no side-effects; set variables, don&#39;t modify them.</p>
 </li>
 </ul>
-<p>Hence: no side-effects; set variables, don&#39;t modify them.</p>
 <h2 id="mac-os-x">Mac OS X</h2>
 <p>OS X has a fantastic little utility called <code>path_helper</code> that will help you
 manage the PATH. Basically what it does is read the files in <code>/etc/paths.d</code> and
@@ -159,7 +162,8 @@ lexicographic order, so you can control the order of entries in the PATH.</p>
 its fully qualified name <code>/usr/libexec/path_helper</code>. The output of <code>path_helper</code>
 is a shell command to set the PATH. This command must itself be evaluated.</p>
 <p>I suggest to define the following shell alias for ease of use:</p>
-<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;</code></pre>
+<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;
+</code></pre>
 <p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
 <p>By default, OS X calls <code>path_helper</code> in <code>/etc/profile</code> so you do not need to add
 it yourself.</p>

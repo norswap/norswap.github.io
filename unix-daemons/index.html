@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -98,7 +101,8 @@ want to kill the command at that point, you need to find out its PID and use
 $ screen -dm -S &lt;name&gt; &lt;command&gt; # ... and give it a specific name
 $ screen -ls                     # list all running screens
 $ screen -r &lt;name&gt;               # (re)attach to the given screen
-$ screen -S &lt;name&gt; -X quit       # kill the given screen</code></pre>
+$ screen -S &lt;name&gt; -X quit       # kill the given screen
+</code></pre>
 <p>Since some of those are not super intuitive, I propose the use of the following
 aliases and functions:</p>
 <pre><code class="language-bash">alias sjobls=&#39;screen -ls&#39;
@@ -107,17 +111,20 @@ alias sjobmk=&#39;screen -dm -S&#39;
 
 sjobk() {
     screen -S $1 -X quit
-}</code></pre>
+}
+</code></pre>
 <p>Final tip: when you attach to the screen, it&#39;s <code>ctrl+a d</code> (or <code>cmd+a d</code> on mac)
 to detach.</p>
 <h2 id="repeating-the-command">Repeating the Command</h2>
 <p>To repeat a command in <code>bash</code>, with 3 seconds of delay between each execution,
 you&#39;d normaly do:</p>
-<pre><code class="language-bash">while true; do &lt;command&gt;; sleep 3; done</code></pre>
+<pre><code class="language-bash">while true; do &lt;command&gt;; sleep 3; done
+</code></pre>
 <p>Which you can turn into the following function:</p>
 <pre><code class="language-bash">repeat() {
     while true; do $1; sleep 3; done
-}</code></pre>
+}
+</code></pre>
 <p><strong>IMPORTANT POINT:</strong> Making a function was a mistake. This is also valid for
 other functions that will be presented later. It should be a script to be put
 somewhere on the path instead. Why?</p>
@@ -158,7 +165,8 @@ quotations: for instance <code>echo &quot;&#39;a&#39;&quot;</code> should have b
     shift $((OPTIND - 1))
     while true; do bash -c &quot;$*&quot;; sleep $T; done
 }
-export -f repeat</code></pre>
+export -f repeat
+</code></pre>
 <p>For a brief description of argument handling: the option string <code>:t:</code> says that
 to disable getopt&#39;s normal error output (first colon <code>:</code>): we&#39;ll do it ourselves
 with the <code>\?</code> option. The <code>t:</code> part says we expect an optional argument <code>t</code> that
@@ -209,7 +217,8 @@ connect to the proxy, but let me see what&#39;s going on.) Well that&#39;s possi
     bash -c &quot;$*&quot;
     exec bash
 }
-export -f remain</code></pre>
+export -f remain
+</code></pre>
 <p>This traps <code>SIGINT</code>, making it echo a message rather than letting it kill the
 screen. We run our command using <code>bash -c</code> (again, to enable passing whole
 pipelines to the function). We end by <code>exec bash</code> which makes the process
@@ -219,7 +228,8 @@ tiny bit more economical.</p>
 <p>It&#39;s time for a little confession: <code>repeat</code> and <code>remain</code> are not entirely robust
 as-is.</p>
 <p>Consider that we want to use <code>remain</code> with <code>repeat</code>:</p>
-<pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code></pre>
+<pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;
+</code></pre>
 <p>What happens is that the <code>bash -c &quot;$*&quot;</code> line in <code>remain</code> expands to something
 equivalent to <code>bash -c &#39;repeat echo &quot;x&quot; | cat -n&#39;</code> — the outer quotes have been
 stripped! This will misbeheave in <code>repeat</code>, producing the wrong <code>1 x</code>, <code>2 x</code>
@@ -249,7 +259,8 @@ them (excepted when there is a single argument).</p>
         ARGS+=&quot;&#39;$ARG&#39;&quot;
     done
 }
-export -f quote_args</code></pre>
+export -f quote_args
+</code></pre>
 <p>Why add exception for single arguments? Consider the following examples given
 that we always quote even on single args:</p>
 <pre><code class="language-bash">always_quote_args echo hello
@@ -270,7 +281,8 @@ bash -c &quot;$ARGS&quot;
 
 bash -c $ARGS
 # 4.    &quot;expansion&quot;: bash -c &#39;echo hello&#39;
-#       output: &quot;hello&quot;</code></pre>
+#       output: &quot;hello&quot;
+</code></pre>
 <p>(<em>Expansion</em> is quoted because again, bash does not expand to a textual
 representation, but to an internal representation tracking &quot;words&quot;.)</p>
 <p>We would like behaviour 1 and 4, meaning we need to know the number of arguments
@@ -301,7 +313,8 @@ remain() {
     bash -c &quot;$ARGS&quot;
     exec bash
 }
-export -f remain</code></pre>
+export -f remain
+</code></pre>
 <p>So in our initial example (<code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code>), we end up with
 <code>ARGS</code> containing <code>&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code>. Using <code>&quot;$ARGS&quot;</code> within
 <code>remain</code> then produces a single argument where the individual arguments are
@@ -339,7 +352,8 @@ own <code>-S</code> parameter) and (a) parameter(s) to specify the command, simi
     quote_args &quot;$@&quot;
     screen -dm -S $N bash -c &quot;remain $ARGS&quot;
 }
-export -f sjob</code></pre>
+export -f sjob
+</code></pre>
 <p>You can see all our previous tricks: option handling, <code>quote_args</code> and a direct
 call to <code>remain</code>.</p>
 <p>Now for the full shebub, we also want to throw <code>repeat</code> in the mix. Since this
@@ -361,7 +375,8 @@ called multiple times. We&#39;ll use a unique name + <code>screen -ls</code> to 
     (screen -ls | grep -q $N) &amp;&amp; return
     sjob -n $N repeat -t $T &quot;$@&quot;
 }
-export -f daemon</code></pre>
+export -f daemon
+</code></pre>
 <p>Note that this doesn&#39;t use <code>quote_args</code>: <code>sjob</code> can handle that, and we use
 <code>&quot;$@&quot;</code> meaning the arguments we receive (minus the processed options) will be
 passed as &quot;as-is&quot; and not unduly split because of stripped quotes.</p>
@@ -434,7 +449,8 @@ symlink, and it works. The file itself will need to have read permissions, so
     &lt;key&gt;StandardErrorPath&lt;/key&gt;
     &lt;string&gt;/tmp/startup.stderr&lt;/string&gt;
   &lt;/dict&gt;
-&lt;/plist&gt;</code></pre>
+&lt;/plist&gt;
+</code></pre>
 <p>This is verbose but actually pretty straightforward. Notice the log files. The
 program being run is my <code>startup</code> script:</p>
 <pre><code>#!/bin/bash
@@ -442,14 +458,16 @@ P=/Users/norswap/startup
 for file in $P/*
 do
     $file
-done</code></pre>
+done
+</code></pre>
 <p>The shebang (<code>#!/bin/bash</code>) is actually important and <code>launchd</code> will complain
 if it&#39;s not present.</p>
 <p>And here is an example of file in <code>~/startup</code>, namely the one I use to run my
 VPN (with confidential details redacted).</p>
 <pre><code>#!/bin/bash -l
 daemon -n proxyvpn &#39;echo &lt;password&gt; | openconnect --script-tun \
-    --script &quot;ocproxy -D 9999&quot; -u &lt;username&gt; -passwd-on-stdin &lt;vpn address&gt;&#39;</code></pre>
+    --script &quot;ocproxy -D 9999&quot; -u &lt;username&gt; -passwd-on-stdin &lt;vpn address&gt;&#39;
+</code></pre>
 <p>Two notes. First off, don&#39;t write your password in a readable bash script unless you want
 your local sysadmin to berate and/or murder you.</p>
 <p>Second, note how the script specifies <code>bash -l</code> after the shebang to get a
@@ -461,7 +479,8 @@ on shell initialization</a>.</p>
 <div class=nsep></div>
 
 <p>You&#39;ll probably want to test all of this. To do so you can run:</p>
-<pre><code>launchctl load -w ~/Library/LaunchAgents/com.startup.plist</code></pre>
+<pre><code>launchctl load -w ~/Library/LaunchAgents/com.startup.plist
+</code></pre>
 <p>The <code>-w</code> option ignores some file where the agent can be disabled for some
 nefarious reasons. I didn&#39;t need it, but it doesn&#39;t hurt either.</p>
 <p>You might see stuff about a <code>start</code> command that can in the place of <code>load</code>.
@@ -476,7 +495,8 @@ script that returns, the agent is not considered to be &quot;loaded&quot;.</p>
 in another shell. This will give you messages such as the following if things go
 wrong.</p>
 <pre><code>Service could not initialize: 19D76: xpcproxy + 15636
-com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78</code></pre>
+com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78
+</code></pre>
 <h2 id="parting-thoughts">Parting Thoughts</h2>
 <p>When I started my &quot;quest&quot; for a quick daemon setup, I didn&#39;t think it would end
 taking as much time, nor require me to go so deep (but then, getting lost in the

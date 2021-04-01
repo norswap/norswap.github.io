@@ -39,6 +39,9 @@
             RSS Feed
           </a>
         </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
       </ul>
     </div>
   </div>
@@ -255,11 +258,11 @@ declaration with the <code>static</code> storage class specifier. This declarati
 happen before any <code>extern</code> declaration, and there cannot be any declaration
 without storage class specifier (or a compilation error ensues). Otherwise,
 they have external linkage.</p>
-</li>
-</ul>
 <p>Finally, for a variable to be defined there should be exactly one declaration
 with an initializer; or, failing that, at least one declaration without
 <code>extern</code>.</p>
+</li>
+</ul>
 <h1 id="if-we-could-do-it-over">If we could do it over...</h1>
 <p>Perhaps the most obvious flaw of the scheme is that <code>static</code> at file scope bears
 no relationship with <code>static</code> at block scope. One of the two should have a
@@ -270,13 +273,15 @@ different name.</p>
 <pre><code>if (first declaration for same object was static)
     static linkage
 else
-    external linkage</code></pre>
+    external linkage
+</code></pre>
 <p>While no-specifier (at file-scope) means:</p>
 <pre><code>if (object is a function
         &amp;&amp; first declaration for same object was static)
     static linkage
 else
-    external linkage</code></pre>
+    external linkage
+</code></pre>
 <p>The reason for making the lack of a specifier act like <code>extern</code> for functions is
 that functions don&#39;t have tentative definitions.</p>
 <p>Why do we even need tentative definitions? The only advantage I see is that one

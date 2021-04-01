@@ -3,10 +3,7 @@ title: Chosen Tidbits 3
 layout: post
 ---
 
-Previously: [One] / [Two]
-
-[One]: /chosen-tidbits-1/
-[Two]: /chosen-tidbits-2/
+Part of the [Chosen Tidbits](/chosen-tidbits) series.
 
 --------------------------------------------------------------------------------
 

@@ -8,7 +8,8 @@
     <item>
       <title>Reviews 10</title>
       <description>
-&lt;p&gt;Part of the &lt;a href=&quot;/reviews&quot;&gt;Reviews Series&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Part of the &lt;a href=&quot;/reviews&quot;&gt;Reviews Series&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
 &lt;h2 id=&quot;overgeared&quot;&gt;Overgeared&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Webtoon&lt;/li&gt;
@@ -588,12 +589,13 @@ useless.&lt;/p&gt;
     <item>
       <title>Stock Market Adventures: Heat</title>
       <description>
-&lt;p&gt;Previously: &lt;a href=&quot;https://norswap.com/options/&quot;&gt;Stock Market Adventures: Options &amp;amp; The Wheel&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://norswap.com/options/&quot;&gt;Last time&lt;/a&gt;, I presented the wheel option strategy (and gave a whole
+&lt;p&gt;Part of a series on &lt;a href=&quot;/finance&quot;&gt;Finance&lt;/a&gt;.&lt;br&gt;Previously: &lt;a href=&quot;/options&quot;&gt;Stock Market Adventures: Options &amp;amp; The Wheel&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;a href=&quot;/options&quot;&gt;Last time&lt;/a&gt;, I presented the wheel option strategy (and gave a whole
 bunch of background on options).&lt;/p&gt;
 &lt;p&gt;I also said that personally, I was mostly selling puts on growth stocks, using a
 wide margin of safety afforded by their high implied volatility. (You do not
-know what any of these words mean? Go read &lt;a href=&quot;https://norswap.com/options/&quot;&gt;the last article&lt;/a&gt;.)&lt;/p&gt;
+know what any of these words mean? Go read &lt;a href=&quot;/options&quot;&gt;the last article&lt;/a&gt;.)&lt;/p&gt;
 &lt;p&gt;This did not work out too well. Or rather, it worked fantastically well, but I
 failed to execute a proper pivot.&lt;/p&gt;
 &lt;p&gt;Don&amp;#39;t worry, I&amp;#39;m not ruined. In fact, I haven&amp;#39;t even lost money compared to when
@@ -677,6 +679,7 @@ system will prove superior in the current market conditions.&lt;/p&gt;
       <title>Cardio Training</title>
       <description>
 &lt;p&gt;This post is part of the &lt;a href=&quot;/training/&quot;&gt;Training Series&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
 &lt;p&gt;&lt;a href=&quot;/weight-training-8/&quot;&gt;Last time&lt;/a&gt;, the gyms had just closed again and I was looking at bodyweight
 movements.&lt;/p&gt;
 &lt;p&gt;I ended up training my handstand for a few weeks (complemented by a rather usual
@@ -835,7 +838,11 @@ other bodyweight exercises too?&lt;/p&gt;
     <item>
       <title>My Favourite Quotes from &quot;Hell Yeah Or No&quot;</title>
       <description>
-&lt;p&gt;&lt;a href=&quot;https://sive.rs/n&quot;&gt;Book Homepage&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://sive.rs/n&quot;&gt;Official Book Homepage&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;/reviews&quot;&gt;More Reviews Written by Me&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
 &lt;p&gt;Derek Sivers&amp;#39; writing style is incredibly terse and pithy. And frankly, it&amp;#39;s a
 pleasure to read. The book is very short, and I would recommend you read it in
 full.&lt;/p&gt;
@@ -909,7 +916,7 @@ folder and pick one to make real.&lt;/p&gt;
     <item>
       <title>Stock Market Adventures: Options &amp; The Wheel</title>
       <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/stock-market-intro/&quot;&gt;Intro&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Part of a series on &lt;a href=&quot;/finance&quot;&gt;Finance&lt;/a&gt;.&lt;br&gt;Previously: &lt;a href=&quot;/stock-market-intro/&quot;&gt;Intro&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;I said last time I mostly trade using options. In this article I will explain my
 main strategy, known as &lt;em&gt;the wheel&lt;/em&gt;. But first, I&amp;#39;ll have to give you a bit of
 backgrounds on options. I&amp;#39;ll finish by a more technical explanation of option
@@ -1370,7 +1377,7 @@ informations about the course.&lt;/p&gt;
     <item>
       <title>Chosen Tidbits 7</title>
       <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/chosen-tidbits-1/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-2/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-3/&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-4/&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-5/&quot;&gt;Five&lt;/a&gt; / &lt;a href=&quot;/chosen-tidbits-6/&quot;&gt;Six&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Part of the &lt;a href=&quot;/chosen-tidbits&quot;&gt;Chosen Tidbits&lt;/a&gt; series.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;a href=&quot;http://habitatchronicles.com/2004/04/you-cant-tell-people-anything/&quot;&gt;You Can&amp;#39;t Tell People Anything&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1542,6 +1549,8 @@ or a return to some golden age.&lt;/p&gt;
     <item>
       <title>Stock Market Adventures: Introduction</title>
       <description>
+&lt;p&gt;Part of a series on &lt;a href=&quot;/finance&quot;&gt;Finance&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
 &lt;p&gt;In recent months, I&amp;#39;ve taken an interest in the stock market, and started
 trading. Now that I&amp;#39;ve figured a few things about it, I want to share a bit of
 information about how I trade.&lt;/p&gt;
@@ -1706,7 +1715,8 @@ options. Stay tuned!&lt;/p&gt;
     <item>
       <title>Reviews 9</title>
       <description>
-&lt;p&gt;Previously: &lt;a href=&quot;/every-anime/&quot;&gt;One&lt;/a&gt; / &lt;a href=&quot;/more-anime/&quot;&gt;Two&lt;/a&gt; / &lt;a href=&quot;/even-more-anime/&quot;&gt;Three&lt;/a&gt; / &lt;a href=&quot;/reviews-4&quot;&gt;Four&lt;/a&gt; / &lt;a href=&quot;/reviews-5&quot;&gt;Five&lt;/a&gt; / &lt;a href=&quot;/reviews-6&quot;&gt;Six&lt;/a&gt; / &lt;a href=&quot;/reviews-7&quot;&gt;Seven&lt;/a&gt; / &lt;a href=&quot;/reviews-8&quot;&gt;Eight&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Part of the &lt;a href=&quot;/reviews&quot;&gt;Reviews Series&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
 &lt;h2 id=&quot;solo-leveling&quot;&gt;Solo Leveling&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Webtoon&lt;/li&gt;

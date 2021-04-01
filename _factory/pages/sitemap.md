@@ -9,9 +9,11 @@ website.
 Posts classified by category (work in progress):
 
 - [Programming Posts](/programming)
+- [Finance Posts](/finance)
 - [Reviews (Books, Anime, ...)](/reviews)
 - [(Weight) Training Log](/training)
 - [Chosen Tidbits (A Reader's Digest)](/chosen-tidbits)
+- [Personal Posts](/personal)
 
 You can also find here:
 

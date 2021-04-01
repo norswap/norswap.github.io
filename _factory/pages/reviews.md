@@ -21,6 +21,7 @@ I'm going to do it for me, I might as well force it on you as well.
 - [Reviews 7](/reviews-7) (Aug 2020)
 - [Reviews 8](/reviews-8) (Nov 2020)
 - [Reviews 9](/reviews-9) (Dec 2020)
+- [Reviews 10](/reviews-10) (Mar 2020)
 
 Single (short) reviews:
 
@@ -31,6 +32,7 @@ I also wrote a number of longer book summaries which I found particularly
 insightful:
 
 - [Patterns of Software: Highlights](/patterns-of-software)
+- [My Favorite Quotes from "Hell Yeah Or No"](/hell-yeah)
 
 I occassionally like to read book summaries instead of the book itself, when I
 have doubts about it being worth my time. I wrote about [where to find these

@@ -3,6 +3,10 @@ title: "Stock Market Adventures: Introduction"
 layout: post
 ---
 
+Part of a series on [Finance](/finance).
+
+---
+
 In recent months, I've taken an interest in the stock market, and started
 trading. Now that I've figured a few things about it, I want to share a bit of
 information about how I trade.

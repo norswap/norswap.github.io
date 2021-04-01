@@ -3,12 +3,13 @@ title: "Chosen Tidbits 2"
 layout: post
 ---
 
-Previously: [June 2019]
+Part of the [Chosen Tidbits](/chosen-tidbits) series.
 
-[June 2019]: https://norswap.com/chosen-tidbits-1/
+---
 
-Yes, I know it's now February... Truth be told I forgot I was sitting on so much
-material! Anyway, this content is evergreen, so enjoy. More to come!
+The previous entry was in [June](/chosen-tidbits-1). Yes, I know it's now
+February... Truth be told I forgot I was sitting on so much material! Anyway,
+this content is evergreen, so enjoy. More to come!
 
 ---
 

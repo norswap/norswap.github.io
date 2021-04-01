@@ -3,13 +3,7 @@ title: Chosen Tidbits 6
 layout: post
 ---
 
-Previously: [One] / [Two] / [Three] / [Four] / [Five]
-
-[One]: /chosen-tidbits-1/
-[Two]: /chosen-tidbits-2/
-[Three]: /chosen-tidbits-3/
-[Four]: /chosen-tidbits-4/
-[Five]: /chosen-tidbits-5/
+Part of the [Chosen Tidbits](/chosen-tidbits) series.
 
 ---
 

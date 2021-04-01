@@ -3,13 +3,9 @@ title: Chosen Tidbits 4
 layout: post
 ---
 
-Previously: [One] / [Two] / [Three]
+Part of the [Chosen Tidbits](/chosen-tidbits) series.
 
-[One]: /chosen-tidbits-1/
-[Two]: /chosen-tidbits-2/
-[Three]: /chosen-tidbits-3/
-
---------------------------------------------------------------------------------
+---
 
 [Heads I Win, Tails?—Never Heard of Her; Or, Selective Reporting and the Tragedy
 of the Green Rationalists](https://www.lesswrong.com/posts/DoPo4PDjgSySquHX8/heads-i-win-tails-never-heard-of-her-or-selective-reporting)

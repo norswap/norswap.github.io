@@ -3,6 +3,10 @@ title: "Chosen Tidbits: June 2019"
 layout: post
 ---
 
+Part of the [Chosen Tidbits](/chosen-tidbits) series.
+
+--------------------------------------------------------------------------------
+
 As some may know, I read a whole lot. So I thought to start a series to
 highlight the most interesting things I've read recently, along with some quotes
 or explanations why I liked it.

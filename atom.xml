@@ -6,6 +6,246 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>GameStop: Anatomy of a Short &amp; Gamma Squeeze</title>
+      <description>
+&lt;p&gt;Part of a series of posts on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Towards the end of January the stock price of GameStop (GME), a brick-and-mortar
+video game retailer, went completely crazy. This has been chronicled in a lot of
+details in the press, but I feel like shedding light on a few points.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m motivated to do so because (a) I have discussed/explained the events quite a
+bit with some friends and colleagues, and (b) the common narratives around the
+events are quite misleading, whether they come from the people who think we
+witnessed greatness, those who think we witnessed madness, those who think
+internet randos stuck it to Wall Street, or those who think Wall Street yet
+again took advantage of the little folks. Me? I believe all of the above. It&amp;#39;s
+complicated.&lt;/p&gt;
+&lt;p&gt;First of all, the year-to-date chart of the GME stock price (click the picture
+for a bigger version):&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;gme.png&quot;&gt;&lt;img src=&quot;gme.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m not going to write a summary of the events, you can find that online, &lt;a href=&quot;https://en.wikipedia.org/wiki/GameStop_short_squeeze&quot;&gt;on
+wikipedia&lt;/a&gt; or &lt;a href=&quot;https://archive.is/02nxI&quot;&gt;here&lt;/a&gt; (warning for that second link: lots
+of unreasonable speculation). If you&amp;#39;re not familiar with the matter, I highly
+recommend you give those a read, otherwise the rest of this article won&amp;#39;t make
+much sense. You can also try to google around for other takes, to see what the
+media coverage was like.&lt;/p&gt;
+&lt;h2 id=&quot;tldr&quot;&gt;tl;dr&lt;/h2&gt;
+&lt;p&gt;here is a short summary of the key points.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Short-selling is borrowing a share to sell it, hoping to repurchase it later at
+a smaller price, hence booking a profit.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A short squeeze occurs when the stock price increases instead, forcing
+short-seller to &amp;quot;purchase to cover&amp;quot; at loss, further driving the price up.
+Read to understand why they were forced to do so in this case, and how GME
+could be shorted at more than 100%.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Short-selling make the market more efficient by making prices reflect
+material information faster. This is not to say that markets are ultimately
+efficient (that much should be obvious), but they would be less efficient
+without short-selling. Short-selling also can&amp;#39;t bankrupt a business.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;What happened: retail investors hyping the stock, notably on the
+WallStreetBets reddit board, driving the price up. This triggered a short
+squeeze (which was part of the explicit plan of at least some redditors).
+This did in turn trigger a gamma squeeze.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;A gamma squeeze is an increase in the stock price driven by market makers
+(who sell options) &lt;a href=&quot;/options/#option-greeks&quot;&gt;delta&lt;/a&gt;-hedging their option contracts. This makes them
+insensitive to change in the stock price and lets them pocket the option
+premium. Having sold call options, the increase in stock price caused them to
+purchase more stock to maintain the hedge, further driving the price up.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Contrary to the prevalent narrative, there was a lot of fast, non-retail
+money at play in GME while the stock was acting crazy in January.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;short-selling-mechanics&quot;&gt;Short-Selling Mechanics&lt;/h2&gt;
+&lt;p&gt;GME&amp;#39;s incredibly run is often attributed to a &amp;quot;short squeeze&amp;quot;. But what is that
+even?&lt;/p&gt;
+&lt;p&gt;Short-sellers believe a stock&amp;#39;s price will go down. They act on this believe by
+borrowing the stock, selling it, and planning to repurchase it later, at a lower
+price.&lt;/p&gt;
+&lt;p&gt;A short squeeze occurs when the price of a stock rises sharply, forcing
+short-sellers to purchase back the stock.&lt;/p&gt;
+&lt;p&gt;If they believe the stock is worthless and will eventually crash back down, do
+they have to cover? Long story short: yes, because of margin requirements.&lt;/p&gt;
+&lt;p&gt;See, unlike purchasing stock, short-selling exposes you to potentially unlimited
+losses: there is no limit to how high a stock can go, but it can&amp;#39;t go lower than
+0. As the share price increase, you become insolvent on paper.&lt;/p&gt;
+&lt;p&gt;Brokerage firms do not like their clients to be insolvent, even if &amp;quot;it&amp;#39;s only
+temporary&amp;quot;. So they impose margin requirements, which dictate how much
+collateral you must own to offset the losses incurred by increase in the price
+of a stock you sold short.&lt;/p&gt;
+&lt;p&gt;Brokerage can also require that short sellers return the loaned share &amp;quot;with
+minimal notice&amp;quot;. It is my understanding that they do not tend to do this
+excepted in extraordinary situations, because they profit from lending the
+shares, and doing this abusively would lead to short-sellers to take their
+business elsewhere. The GME short-squeeze certainly qualifies as an
+extraordinary situation, but I haven&amp;#39;t heard any report that brokers recalled
+loaned shares. In general, the margin requirements will fulfill the same purpose
+in a more transparent manner.&lt;/p&gt;
+&lt;p&gt;If short-selling mechanisms are unclear for you, I recommend reading &lt;a href=&quot;https://en.wikipedia.org/wiki/Short_(finance)#Mechanism&quot;&gt;the
+&lt;em&gt;Mechanism&lt;/em&gt; section of the wikipedia page on shorting&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Something that&amp;#39;s very unusual and salient in the GameStop story is that GameStop
+had a short interest greater than 100%. Said otherwise, &lt;strong&gt;there were more shares
+being sold short than actually existing shares&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;How is this possible? It&amp;#39;s quite simple. When you sell a share short, you borrow
+it from person A, promising to return it, and sell it to person B. Person B does
+not know you&amp;#39;re a short-seller and perceives this as a completely normal
+transaction. Person B is entirely free to borrow his share to another
+short-seller, who will in turn sell it to person C. This process can
+theoretically continue forever. Now, persons A, B and C all own the same share.
+Note however that persons A and B, having loaned their shares, do not have the
+associated voting rights.&lt;/p&gt;
+&lt;h2 id=&quot;are-short-sellers-evil&quot;&gt;Are short-sellers evil?&lt;/h2&gt;
+&lt;p&gt;The WallStreetBets crowd — and many other people too, including some that should
+have known better, sadly — were quick to formulate all kind of spurious
+narratives regarding the event.&lt;/p&gt;
+&lt;p&gt;One of those narratives is that short sellers are evil greedy capitalists out to
+destroy companies like GameStop. Well, they are probably greedy capitalists —
+who on the stock market isn&amp;#39;t?&lt;/p&gt;
+&lt;p&gt;This is not a new idea. Would it surprise you that people blamed short-sellers
+for the 1929 stock market crash? Politicians passed restrictions on short
+selling at various time that systematically failed to have any impact.&lt;/p&gt;
+&lt;p&gt;A little bit of common sense should be sufficient to understand this. If
+short-sellers drive the price down, they are offering a bargain to those who
+believed the prevous price to be fair. The stock is now under-valued and there
+is a profit to be made.&lt;/p&gt;
+&lt;p&gt;Short-sellers also cannot literally destroy a business. What they can do is
+severely impede the company&amp;#39;s ability to finance itself by emitting new shares
+(since the value of those is much lower). However, a stock offering is not the
+only means to finance a company, and you get the idea that if the company can&amp;#39;t
+even secure a loan, the short-seller might have a point.&lt;/p&gt;
+&lt;p&gt;In fact, short-sellers fulfill a useful function in the market — they help make
+price more accurate. (This is not to say that market prices are generally very
+accurate, but they would be even less so without short-sellers.)&lt;/p&gt;
+&lt;p&gt;See, if a stock is mostly owned by slow-moving &amp;quot;instutional&amp;quot; investors (banks,
+pension funds, etc), a negative piece of news (lackluster earnings report,
+business problems, ...) might take some time to be reflected in the stock price.
+For a stock that used to be up, retail (= normal people) investors would also be
+reluctant to sell without seeing that the stock is actually dropping.
+Short-sellers provide that impetus.&lt;/p&gt;
+&lt;p&gt;On the longer term, imagine a &amp;quot;growth&amp;quot; company. Its proponents affirm it will be
+the next Amazon/Apple/Tesla. Other people believe it be a scam. Without
+short-selling, the second group has no bearing on the stock price, which will
+only reflect the bull view. But with short-selling, this group now has a
+financial incentive to express its opinion in the market. This is particularly
+important because while the stock price should ideally be the endpoint of
+reflection about a company&amp;#39;s value, the price (and its history) is in practice
+also a big data point in the investment decision. Would you rather purchase a
+company whose valuation has consistently been high compared to fundamentals, or
+one whose valuation has consistently been low? The former is typically (and with
+reason) interpreted has a sign of optimism regarding the company&amp;#39;s prospects,
+and vice-versa for the latter.&lt;/p&gt;
+&lt;p&gt;That being said, short-selling is quite risky — since the market is skewed to
+the upside (thankfully!), and has been particularly so in recent years, given
+historically high company valuations, and rampant speculation in growth stocks
+(I&amp;#39;m not judging, I did my part).&lt;/p&gt;
+&lt;h2 id=&quot;short-squeeze-gamma-squeeze&quot;&gt;Short Squeeze? Gamma Squeeze?&lt;/h2&gt;
+&lt;p&gt;GME&amp;#39;s incredibly run is often attributed to a &amp;quot;short squeeze&amp;quot; (the wikipedia
+article is even titled &lt;em&gt;GameStop short squeeze&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;But that picture is incomplete. Retail interest, causing the price to go up, and
+the subsequent short squeeze were certainly the initial drivers of the stock&amp;#39;s
+stratospheric rise. But it&amp;#39;s not the only thing that sustained its growth to
+almost 500$.&lt;/p&gt;
+&lt;p&gt;There was at least one other major component to the price action, and that was a
+&lt;em&gt;gamma squeeze&lt;/em&gt; (also known as &lt;em&gt;gamma trap&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;Gamma is a second-order stock option greek. If you don&amp;#39;t know anything about
+stock options, I wrote &lt;a href=&quot;/options&quot;&gt;a primer here&lt;/a&gt;. The primer covers first-order
+options greeks, including &lt;em&gt;delta&lt;/em&gt;, but not the second-order &lt;em&gt;gamma&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;/options/#option-greeks&quot;&gt;&lt;em&gt;Delta&lt;/em&gt;&lt;/a&gt; in brief: if the delta is 0.5, that means if the stock price
+increases by 1$, the call option price will increase by 0.5$.&lt;/p&gt;
+&lt;p&gt;So delta is the derivate (in the mathematical sense) of the price of the option
+with respect to the price of the underlying stock — just like speed is the
+derivative of the distance with respect to the elapsed time: at 10km/h the
+travelled distance increases by 10km for every hour travelled.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Gamma&lt;/em&gt; then, is the second derivative of option price with respect to the stock
+price. Gamma tell you how much &lt;em&gt;delta&lt;/em&gt; varies when the underlying stock price
+increases by 1$ — just like acceleration is the second derivate of the distance
+with respect to elapsed time: a 10 km/s^2 acceleration means that your speed
+increases by 10 km/s every second!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What&amp;#39;s a gamma squeeze, then?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Most options are sold by market makers, which are large institutions such as
+investment banks, and they hedge the options they sell by purchasing (or
+selling) stock in order to be &amp;quot;delta neutral&amp;quot;.&lt;/p&gt;
+&lt;p&gt;So for instance, if they sell a call option at the money (&amp;quot;ATM&amp;quot;, strike price =
+current price), the delta is 0.5, and they will also purchase 50 shares of the
+underlying to hedge the option. Now if the price increases by 1$, they are up
+50$ on the stock, down 50$ on the call, and they can profit by pocketing the
+premium.&lt;/p&gt;
+&lt;p&gt;Because delta changes as the price changes, the market maker needs to manage its
+stock position to keep its hedge. As an option gets in the money (strike price &amp;lt;
+current stock price), its delta increases, meaning the market maker must
+increase the number of stock it purchases to continue being delta-neutral on the
+call option it sold.&lt;/p&gt;
+&lt;p&gt;In the GME case, what what happened is that redditors purchased a lot of cheap
+out of the money call options (these have a low delta), and as the stock price
+rose and rose, these ended up far in the money, meaning the market makers had to
+ultimately purchase many shares for each of these calls, driving the stock price
+higher, and pushing all calls farther in the money.&lt;/p&gt;
+&lt;p&gt;As an aside, why did they purchase out of the money calls? Because they were
+cheap, and a rising share price would increase their price too. Slowly at first
+(delta is low), but increasingly so as the price increases. If you believe the
+price will increase a lot (which people on WallStreetBets obviously did), this
+is the best kind of option to be holding (if you believe the price will increase
+only moderately, you should hold ATM options instead).&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s circle back — why is this called a &lt;em&gt;gamma&lt;/em&gt; squeeze? Because it&amp;#39;s caused by
+the delta increase in the ATM options, which causes market makers to increase
+their purchases to preserve their delta hedge. The rate at which delta increases
+as the price rises is given by gamma, the derivative of gamma with regard to
+price. (Note that gamma is not itself a constant but a function!)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;gamma.svg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;How much of the squeeze vas due to shorts being squeezed vs gamma?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s hard to say, and I don&amp;#39;t know. Obviously the whole thing was started as a
+short squeeze, and then gamma amplified the movement.&lt;/p&gt;
+&lt;p&gt;There was also a ton of capital that piled on once the GME price anomaly caught
+everyone&amp;#39;s attention. More on this in a bit.&lt;/p&gt;
+&lt;p&gt;Why is it so hard to say? Let&amp;#39;s take the short part of the equation. Large
+enough funds have to report positions (including shorts) to the SEC, but such
+fillings are only made quarterly. The short ratio for a stock (the percentage of
+outstanding shares that have been sold short) is published by the exchange at
+the end of each month. The end result is that on any given day, we don&amp;#39;t really
+know the short situation in a volatile environment.&lt;/p&gt;
+&lt;p&gt;Even if we had daily numbers, we still would be ignorant of the short turnover.
+For instance, a constant short ratio might mean that new short sales were made
+as prevous short positions were covered.&lt;/p&gt;
+&lt;p&gt;On the gamma side of things, we have more information, but only slightly. For
+each contract, we know the &amp;quot;open interest&amp;quot;, which is the number of open
+contracts at the end of the previous day. We also know the number of
+transactions involving the contract made so far during the current day. So we
+could in theory scrape that data, assume that the counterparty for every call
+purchased was a market maker (an approximation which I believe to be close
+enough to the truth) and come up with a guesstimate of how much buying resulted
+from hedging the positions. There is a lot of imprecision and unknowns there,
+and buy volume does not give you, by itself, price impact.&lt;/p&gt;
+&lt;h2 id=&quot;a-retail-frenzy&quot;&gt;A Retail Frenzy?&lt;/h2&gt;
+&lt;p&gt;The widely reported narrative was that GME was mostly traded by retail traders
+(normal people, not institutions). This was certainly true at first. Retail
+involvement caused the stock to rise, which in turns caused the short and gamma
+squeezes.&lt;/p&gt;
+&lt;p&gt;However, once the event made headlines, a lot of people poured in — both retail
+and institutional. But institutions (hedge funds, quant shops, etc) have a lot
+more money.&lt;/p&gt;
+&lt;p&gt;The fact that retail traders didn&amp;#39;t drive all the momentum is easy to see when
+you realize that after many brokers, including Robinhood, temporary banned or
+severely limited trading on the stock, there was still high volumes of trading
+occuring. Interestingly, it seems like retail traders, on aggregate, sold as
+much as they bought on the week of 25 Jan.&lt;/p&gt;
+&lt;p&gt;I won&amp;#39;t say more about this, because Matt Levine did so better than I could &lt;a href=&quot;https://www.bloomberg.com/opinion/articles/2021-01-29/reddit-traders-on-robinhood-are-on-both-sides-of-gamestop&quot;&gt;in
+his Money Stuff column&lt;/a&gt;, including supporting evidence for the points I
+make above.&lt;/p&gt;
+&lt;h2 id=&quot;thats-it-folks&quot;&gt;That&amp;#39;s it folks!&lt;/h2&gt;
+&lt;p&gt;In conclusion, &lt;strike&gt;gamble&lt;/strike&gt; invest responsibly, and don&amp;#39;t believe
+everything you&amp;#39;re told. Do your own research!&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Read more things I&amp;#39;ve written on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+      </description>
+      <pubDate>2021-04-13T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/gamestop</link>
+      <guid isPermaLink="true">http://norswap.com/gamestop</guid>
+    </item>
+    <item>
       <title>My Favourite Quotes from &quot;Your Music and Your People&quot;</title>
       <description>
 &lt;ul&gt;
@@ -1731,172 +1971,6 @@ or a return to some golden age.&lt;/p&gt;
       <pubDate>2021-01-04T23:00:00.000Z</pubDate>
       <link>http://norswap.com/chosen-tidbits-7</link>
       <guid isPermaLink="true">http://norswap.com/chosen-tidbits-7</guid>
-    </item>
-    <item>
-      <title>Stock Market Adventures: Introduction</title>
-      <description>
-&lt;p&gt;Part of a series on &lt;a href=&quot;/finance&quot;&gt;Finance&lt;/a&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;In recent months, I&amp;#39;ve taken an interest in the stock market, and started
-trading. Now that I&amp;#39;ve figured a few things about it, I want to share a bit of
-information about how I trade.&lt;/p&gt;
-&lt;p&gt;But before I get there, I want to give you the backstory of how I came to trade.
-It involves many details that I find interesting &amp;amp; relevant, like index funds
-and market cycles.&lt;/p&gt;
-&lt;h1 id=&quot;invest-in-etfs&quot;&gt;Invest in ETFs?&lt;/h1&gt;
-&lt;p&gt;My interest in the stock market started very pragmatic. I had some money set
-aside, and it was gathering dust. My bank&amp;#39;s savings account nets me a 0.10%
-interest, which is both a joke in poor taste, and a competitive market rate. I
-needed better yield.&lt;/p&gt;
-&lt;p&gt;I actually already knew the answer: invest in &lt;a href=&quot;https://en.wikipedia.org/wiki/Exchange-traded_fund&quot;&gt;ETFs&lt;/a&gt; (Exchange Traded Funds), in
-particular funds tracking a broad market index (&lt;a href=&quot;https://en.wikipedia.org/wiki/Index_fund&quot;&gt;&amp;quot;index funds&amp;quot;&lt;/a&gt;). The target
-index could be the ever-popular &lt;a href=&quot;https://en.wikipedia.org/wiki/S%26P_500_Index&quot;&gt;S&amp;amp;P 500&lt;/a&gt; (indexing the 500 biggest US
-companies), or if I wanted to be more diversified than just the US, the &lt;a href=&quot;https://en.wikipedia.org/wiki/MSCI_World&quot;&gt;MSCI
-World index&lt;/a&gt;, which tries to be representative of the world&amp;#39;s economy.&lt;/p&gt;
-&lt;p&gt;This is the boring-as-it-gets investment strategy. It&amp;#39;s quite safe too. Sure,
-there are recessions. But the S&amp;amp;P 500 has grown historically at &amp;gt; 5% on average.&lt;/p&gt;
-&lt;p&gt;How safe is it? Pretty safe, barring a zombie apocalypse or a nuclear holocaust.
-All thanks to &lt;a href=&quot;https://www.investopedia.com/terms/c/compounding.asp&quot;&gt;compounding&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I stumbled on an interesting &lt;a href=&quot;https://www.youtube.com/watch?v=pFgPNVytlwA&quot;&gt;what-if video&lt;/a&gt; the other day: &amp;quot;What if you
-invested only at market peaks?&amp;quot;&lt;/p&gt;
-&lt;p&gt;In fact, even if you had invested a sum of 230k$ (2k$ annual payment, increased
-by 2k$ every decade) &lt;strong&gt;only&lt;/strong&gt; at the peak that preceded each recession for the
-period starting in 1977, you&amp;#39;d still end up with 1M$ by retirement. It bears
-repeating this is the absolute worst-case scenario. If instead, you&amp;#39;d just
-invested every year, you&amp;#39;d end up with 2.5M$ instead.&lt;/p&gt;
-&lt;p&gt;This was a simple solution to my problem. But at the time, I had some
-misgivings. First, the market was at an all-time high, and there was a lot of
-&lt;a href=&quot;https://letstalklovetoday.wordpress.com/2017/04/01/the-definite-indefinite-optimist-and-pessimist/&quot;&gt;indefinite&lt;/a&gt; unease floating around.&lt;/p&gt;
-&lt;p&gt;In fact, since the Coronavirus crisis, more definite criticism has emerged.
-Legendary investor Charlie Munger &lt;a href=&quot;https://www.youtube.com/watch?v=tO5kr0r9g58&quot;&gt;is afraid&lt;/a&gt; about record-like valuations and
-inflation by means of &lt;a href=&quot;https://en.wikipedia.org/wiki/Quantitative_easing&quot;&gt;quantitative easing&lt;/a&gt;. Other people worry about many
-companies (and in particular tech companies) being valued at historically high
-&lt;a href=&quot;https://www.investopedia.com/terms/e/earningsmultiplier.asp&quot;&gt;P/E multipliers&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;(By the way, I&amp;#39;ve written &lt;a href=&quot;/munger/&quot;&gt;about Charlie Munger&amp;#39;s philosophy&lt;/a&gt; before.)&lt;/p&gt;
-&lt;p&gt;So there was a possibility that market would take a hit for ~10 years. If you
-look at the S&amp;amp;P 500 chart, this is what happened after 2000. The index only
-recovered in 2008, then plunged again to only recover in 2012. 0% profit over 12
-years is a long time with no returns, even if the market growth has since made
-up for that slump.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;sp500.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;By the way, if you look at the slope of that graph in recent years, you can
-understand why people are uneasy about us being at the peak of a bubble.&lt;/p&gt;
-&lt;p&gt;Now there was, maybe, a way out: you could time the market. One option is wait
-for the crash to get in. The only issue is that it might be in 1 years or in 10,
-and your fear of losses could end up costing you more in lost profits. Another
-strategy is to sell at the start of the crash and buy back at the bottom. But
-that&amp;#39;s hard to distinguish a normal retracement from a temporary panic, and from
-the start of a crash. Timing the bottom is similarly not so easy.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s also common wisdom that &lt;a href=&quot;https://www.youtube.com/watch?v=w_aOERmUWdA&quot;&gt;timing the market is typically a bad
-idea&lt;/a&gt;. (Just like it is it &amp;quot;common wisdom&amp;quot; that trading is ruinous.
-Yet some people do both consistently and successfully. We&amp;#39;ll get back to that later.)&lt;/p&gt;
-&lt;p&gt;At this stage, only one thing was clear: I had to learn more before I came out
-with a plan.&lt;/p&gt;
-&lt;h1 id=&quot;getting-the-ball-rolling&quot;&gt;Getting the Ball Rolling&lt;/h1&gt;
-&lt;p&gt;Everything I&amp;#39;ve laid out so far had mostly been background thinking, but I&amp;#39;d
-been busy with other things.&lt;/p&gt;
-&lt;p&gt;I finally decided to give myself a shove and start doing something. An extra
-motivation here was that a family member had made quite a bit of money investing
-in Tesla options. Him and my brother were very bullish on the company and
-claimed of a ton of upside. I found myself agreeing about that for the
-short-term.&lt;/p&gt;
-&lt;p&gt;And so I decided to get my feet wet with brokers, and to buy a Tesla share (1.6k$
-at the time) as well as investing very small amounts in ETFs.&lt;/p&gt;
-&lt;p&gt;There is a lot to be said for getting the ball rolling like this. This was a
-small enough amount of money that I could afford to lose it all (and obviously,
-that was almost impossible anyway), but more than enough for me to care. I
-started having questions and googling around for answers, and found quite a
-treasure trove of information online, in particular on YouTube.&lt;/p&gt;
-&lt;p&gt;Some on these videos were on active investing, and some were on trading. I
-started entertaining the notion that I could make some money in this way, and I
-began running some small experiments.&lt;/p&gt;
-&lt;h1 id=&quot;penny-stocks&quot;&gt;Penny Stocks&lt;/h1&gt;
-&lt;p&gt;I started buying some stocks, for no more than 200€. Because that&amp;#39;s quite a low
-amount, I was driven to buy &lt;a href=&quot;https://en.wikipedia.org/wiki/Penny_stock&quot;&gt;penny stocks&lt;/a&gt;. Those are also often volatile —
-very risky, but potentially profitable.&lt;/p&gt;
-&lt;p&gt;It didn&amp;#39;t go incredibly well, but that wasn&amp;#39;t particularly unexpected. If common
-wisdom treats trading like gambling, penny stocks are treated like Russian
-roulette.&lt;/p&gt;
-&lt;p&gt;I lost some money (not too much, less than I&amp;#39;d made on my Tesla trade and on a
-couple other &lt;a href=&quot;https://www.investopedia.com/terms/b/bluechipstock.asp&quot;&gt;blue-chip stock&lt;/a&gt; trades). But I did learn a lot.&lt;/p&gt;
-&lt;p&gt;In fact I think&amp;#39;s it&amp;#39;s very hard to learn to trade penny stocks other than by
-trading them. You can&amp;#39;t really learn anything by looking at past scenarios:
-you&amp;#39;ll get a full dose of &lt;a href=&quot;https://en.wikipedia.org/wiki/Hindsight_bias&quot;&gt;hindsight bias&lt;/a&gt;. And penny stock trading is all about
-timing entries (buying) and exits (selling).&lt;/p&gt;
-&lt;p&gt;You could potentially learn by &lt;a href=&quot;https://www.investopedia.com/terms/p/papertrade.asp&quot;&gt;paper trading&lt;/a&gt;, but you need to be very
-disciplined and not make any excuses like &amp;quot;I was busy with X so this trade
-doesn&amp;#39;t count&amp;quot;. You&amp;#39;re still going to be busy with X when you trade your own
-money — even if X is an emergency.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s also a dearth of literature on the topic of penny trading. The topic is
-not very conducive to theorization, but rather to some sort of
-&lt;a href=&quot;https://en.wikipedia.org/wiki/Fingerspitzengef%C3%BChl&quot;&gt;fingerspitzgefühl&lt;/a&gt; intuition. Basically, you learn to be more paranoid, and
-understand the (many) ways in which a penny stock trade can go south, or at
-least no go how you predicted. You also learn to manage your emotions, and cut
-your losses early.&lt;/p&gt;
-&lt;p&gt;This is not facilitated by the fact that penny stock trading is extremely
-speculative. To give you a very simple explanation, it&amp;#39;s often based around
-&amp;quot;catalysts&amp;quot; that are expected to move the stock price. For instance: a drug
-being approved for a pharma company. This causes the price to run up in
-anticipation of the decision, and then to crash right before, or right after the
-decision, as people sell to secure profits. Even if the drug was approved!&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s sometimes even worse than this — there are a number of stock market pundits
-running &lt;a href=&quot;https://en.wikipedia.org/wiki/Pump_and_dump&quot;&gt;pump and dump&lt;/a&gt; schemes. It&amp;#39;s sometimes hard to tell apart from &amp;quot;regular
-speculation&amp;quot;. When a pundit with many followers hypes a stock due for a
-catalyst, you get a de facto, quite unintentional, pump-and-dump. A whole new way
-to &amp;quot;monetize your audience&amp;quot;.&lt;/p&gt;
-&lt;p&gt;I didn&amp;#39;t find trading penny stocks to be the most pleasant activities, but I
-don&amp;#39;t begrudge it either. I think it&amp;#39;s quite possible to make a consistent
-profit doing so — if one is willing to be careful and learn from mistakes.&lt;/p&gt;
-&lt;h1 id=&quot;irrational-fears&quot;&gt;Irrational Fears&lt;/h1&gt;
-&lt;p&gt;This brings us to an important sidebar.&lt;/p&gt;
-&lt;p&gt;I said before that the &amp;quot;common sense&amp;quot; opinion was that trading was ruinous.&lt;/p&gt;
-&lt;p&gt;And to be sure, I think that for most people, dissuading them from trading is
-the correct position.&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s because most people are dumb. It&amp;#39;s not a nice thing to say, and it isn&amp;#39;t
-to say they&amp;#39;re not also nice and valuable people. But it&amp;#39;s true.&lt;/p&gt;
-&lt;p&gt;In fact, trading tends to attract particularly dumb people. Just have a look at
-&lt;a href=&quot;https://old.reddit.com/r/pennystocks/&quot;&gt;r/pennystocks&lt;/a&gt; and &lt;a href=&quot;https://old.reddit.com/r/wallstreetbets/&quot;&gt;r/wallstreetbets&lt;/a&gt;, and you&amp;#39;ll see off-the-charts stupidity.&lt;/p&gt;
-&lt;p&gt;Trading requires you to plan, think things through, manage risk/exposure, and,
-most of all, manage your own emotions. It&amp;#39;s hard. Too hard for people that
-haven&amp;#39;t developed these skills and virtues.&lt;/p&gt;
-&lt;p&gt;The flip side is that if you are able to do all that, trading can be a viable
-avenue to generating extra money.&lt;/p&gt;
-&lt;p&gt;Anybody that says that &amp;quot;trading is ruinous&amp;quot; or &amp;quot;trading is too risky&amp;quot; should
-feel the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cognitive_dissonance&quot;&gt;cognitive dissonance&lt;/a&gt; with the fact that they are quite a lot of people
-who make a consistent profit or even a living trading.&lt;/p&gt;
-&lt;p&gt;At least, there should be nuance. &amp;quot;Trading is too risky for most people&amp;quot;. I
-agree with that. This leads to an interesting question: what sets the successful
-traders apart from the rest of us?&lt;/p&gt;
-&lt;p&gt;This led to me to this interesting thought: Imagine someone that has praised you
-for being smart and level-headed. But when you tell them you&amp;#39;re going to trade;
-they try to dissuade you out of it. Either they&amp;#39;re thoroughly confused in the
-sense outlined above, or their real opinion of you is that you&amp;#39;re not, in fact,
-smart and level-headed enough to take on this endeavour. (Fortunately this
-remains a hypothetical scenario for me. Nobody has thrown shade on my trading so
-far).&lt;/p&gt;
-&lt;h1 id=&quot;finally-options&quot;&gt;Finally, Options&lt;/h1&gt;
-&lt;p&gt;Trading penny stocks could have been profitable, but it wasn&amp;#39;t my favourite
-thing. For one, the activity has inherent uncertainty. I once saw a stock trader
-that made hundreds of thousands of dollars in profit a year run the numbers on
-his trading, and his trade win rate was &amp;quot;only&amp;quot; 68%. The average profit was only
-~20% higher than the average loss. Considering that these wins and losses are
-not distributed uniformly, it does take some mental fortitude to ride through
-the highs and lows. I&amp;#39;m really risk-averse, and even though I think I can muster
-the mental fortitude, I&amp;#39;d rather not deal with the stress if I don&amp;#39;t have to.&lt;/p&gt;
-&lt;p&gt;Fortunately, I found a method much better suited to my taste. And it involves
-dealing in &lt;a href=&quot;https://www.investopedia.com/terms/s/stockoption.asp&quot;&gt;stock options&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Options are incredibly more flexible than stock, which you can merely buy and
-sell. Options enable very safe plays (though with lower payout), but also
-getting more &lt;a href=&quot;https://www.investopedia.com/terms/l/leverage.asp&quot;&gt;leverage&lt;/a&gt; when you want to make aggressive moves. They can also be
-used to manage/lower your losses.&lt;/p&gt;
-&lt;p&gt;This increased flexibility also makes options much more interesting — and
-frankly more fun to work with.&lt;/p&gt;
-&lt;p&gt;In future articles, I will explain various kinds of trades I undertake using
-options. Stay tuned!&lt;/p&gt;
-      </description>
-      <pubDate>2020-12-26T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/stock-market-intro</link>
-      <guid isPermaLink="true">http://norswap.com/stock-market-intro</guid>
     </item>
   </channel>
 </rss>

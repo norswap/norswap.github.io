@@ -33,6 +33,7 @@ insightful:
 
 - [Patterns of Software: Highlights](/patterns-of-software)
 - [My Favorite Quotes from "Hell Yeah Or No"](/hell-yeah)
+- [My Favorite Quotes from "Your Music and Your People"](/your-music)
 
 I occassionally like to read book summaries instead of the book itself, when I
 have doubts about it being worth my time. I wrote about [where to find these

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Bonds Bonanza 1: Bonds Basics
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Bonds Bonanza 1: Bonds Basics</h1>
+      <span class="post-date">30 Apr 2021</span>
+<p>This is part of a series of posts on <a href="/finance">finance</a>.</p>
+<hr>
+<p>During the second part of February, US treasury bonds yields rose sharply, from
+1.13% to more than 1.6%. (If you have no idea what that means, everything will
+become clear after reading this article.) While these levels are historically
+very low, the move was quite sudden, and this had big repercussions in the stock
+market.</p>
+<p>In particular, it triggered (or accelerated) a <em>rotation into value</em> where
+<a href="https://www.investopedia.com/terms/g/growthstock.asp">growth stocks</a> got beat down, while <a href="https://en.wikipedia.org/wiki/Value_investing">value stocks</a> soared.</p>
+<p>As previously <a href="/heat">reported</a>, the change caught me by surprise and wiped out
+the investment gains I made over the past three months. I didn&#39;t understand —
+and to be honest, still don&#39;t really — how these movements in the bond market
+could affect the stock market so much. It did cause me to read a lot about the
+bond market however, and today I&#39;m sharing what I learned.</p>
+<p>In this article I&#39;ll cover the basics of bonds and the bond market. In a
+subsequent article, I&#39;ll look at some explanations for the sudden surge of bonds
+yield, and finish with some clues about how such bond market moves can impact
+the stock market.</p>
+<h1 id="what-are-bonds-and-how-do-they-work">What are bonds, and how do they work?</h1>
+<p>The clearest explanation of the bond market I&#39;ve found is the <a href="https://en.wikipedia.org/wiki/United_States_Treasury_security#Marketable_securities"><em>Marketable
+Securities</em> section of the wikipedia page on US bonds</a>. I encourage
+you to read it.</p>
+<p>To summarize, the US government (like all governments) is partly financed via
+debt. The treasury emits <em>treasury securities</em> of various maturities — from 4
+weeks to 30 years. <em>Treasury bonds</em> are theoretically 30-years securities, but
+the terms &quot;treasury bond&quot; is frequently used to refer to all treasury
+securities. The most watched security is the 10-years bond — the 1.13% and 1.6%
+yield rate mentionned in the intro are 10-years yield rates.</p>
+<p>Bonds have a <em>face value</em> (e.g. 100$) and a <em>coupon rate</em>, for instance 2%,
+meaning the bond holder is entitled to a 2% payment every year (e.g. 2$ for a
+100$ bond). In practice, these payments are made every 6 months, but that&#39;s not
+super important. At the end of its maturity period, the bond &quot;matures&quot; and the
+<em>principal</em> (face value) is paid back. Shorter-term bonds (less than 2 years)
+have no coupon payments and the coupon is paid in full when the bond matures.</p>
+<p>More interestingly, you can&#39;t purchase bonds at their face value. In fact, you
+can&#39;t purchase bonds directly from the treasury at all — only select
+institutional investors (pension funds, banks, etc) can, and they take part in
+an auction. This is because the &quot;real&quot; (or rather, estimated) value of a bond
+with 100$ face value is not 100$ — it&#39;s 100$ + the present discounted value of
+the coupon payments.</p>
+<p>What&#39;s that discounted value? Well 1$ in a year is worth less than 1$ now —
+because if you had this dollar now you could invest it and maybe have 1.10$ in a
+year or something. So the present value of 1$ in one year is the sum that, if
+invested today, would grow to 1$ in a year&#39;s time. So for a 100$ bond with 2%
+coupon rate, we know it is worth more than 100$, but less than 120$. (*)</p>
+<p>After being purchased by an institution, the bond can be traded on the open
+market, where its price fluctuates. The price of the bond determines the <em>yield
+rate</em>, which is the rate you can effectively earn by purchasing the bond at the
+market price. So for instance, our 100$/2% bond is worth 120$ in 10 years. If
+its market price rises to 110$, the effective yearly rate (the yield rate) is
+now (120$-110$)/110$ = 0.9%.</p>
+<p>The somewhat unintuitive effect of this is that the yield goes up when people
+sell bonds (and the bond price goes down), and the yield goes down when people
+buy bonds (and the bond price goes up).</p>
+<p>(*) It&#39;s possible for a 100$ 2% coupon bond to be worth more than 120$, if the
+bond has negative yield (negative real returns). While this means that you lose
+money holding the bond compared to holding cash, it can happen because
+institutional investors may be forced to hold bonds regardless of price. In the
+long term, some countries&#39; treasury bonds are also regarded safer than the banks
+holding your cash, which may default (this is mostly an issue for institutions,
+which manage a boatload of money).</p>
+<h2 id="the-yield-curve">The Yield Curve</h2>
+<p>There&#39;s one detail left to clarify. So far we&#39;ve been talking about bonds as
+though they&#39;re a singular security with a single price. In reality, there are
+thousands of types of bonds in circulation! The bonds may have different coupon
+rates and different maturities: not only are there 5-years bonds and 10-years
+bonds, but a 10-years bond emitted 6 months ago does not trade at the same price
+as a 10-years bond emitted today!</p>
+<p>How do we abstract all this mess? And how are we able to quote a single 10-years
+yield rate, when there are many 10-years maturity bonds (emitted in 2019, 2020,
+2021, ...) and many bonds with 10 years left on the clocks (newly minted
+10-years bonds, 20-years bonds from 2011, 30-years bonds from 2001, ...).</p>
+<p>The answer is elegant: <strong><a href="https://en.wikipedia.org/wiki/Yield_curve">the yield curve</a></strong>. This curve gives the yield for a
+given maturity. Here <em>maturity</em> is to be understood not as the maturity at the
+time when the bond was emitted, but as the remaining time until the bond matures
+and the principal is paid back.</p>
+<p><img src="yieldcurve.png" alt="yield curve now, one and two years ago"></p>
+<p>First, you have to recognize that any bond with the same time left until
+maturation has the same yield — no matter what the original maturity and coupon
+rates were! If that wasn&#39;t the case, anyone who owns the lower-yield bond would
+sell it to buy the higher-yield bond. This very process pushes the lower-yield
+bond price down (and therefor its yield up) and the higher-yield bond price up
+(and therefore its yield down) — until the two bonds have the same yield.</p>
+<p>However, bonds with different time left until maturation do have different
+yield rates. Typically (but not always, see below), higher remaining maturity
+bonds have higher yield.</p>
+<p>This is due to risk. Imagine inflation rises to 5% per year. Suddenly, earning
+2% yearly does not seem so good anymore, as the return in inflation-adjusted
+terms is now about -3%.</p>
+<p>If you just bought a 1-year bond for 103$ at 2% yield, and the yield rises to 5%,
+it means the bond price must decrease to 100$. A ~3% loss.</p>
+<p>However, if you just bought a 10-years bond for 130$ with 2% yield (given a
+fixed yield, a longer term bond is necessarily more expensive given, because it
+pays coupons for longer), and the yield rises to 5%, the bond price must
+decrease to 100$ — a ~23% loss!</p>
+<p>So longer-term bonds are riskier in case inflation flares up. For this reason,
+they tend to command a higher yield.</p>
+<p>Nevertheless, it is occasionally possible for shorter-term bonds to command a
+higher yield rate than long-term bond, leading to <em>an inverted yield curve</em>.
+This happens when people expect deflation (money increasing in purchasing power,
+a negative inflation rate) or desinflation (a lowering of the (still positive)
+inflation rate), in which case purchasing long-term bonds allows you to &quot;lock
+in&quot; the current yield rate. Other <a href="https://en.wikipedia.org/wiki/Yield_curve#Normal_yield_curve">unusual scenarios</a> are possible.</p>
+<p>An inverted yield curve is often treated as a sign announciating a recession,
+and did for instance happen in 2006, more than a year before the start of the
+great financial crisis. That being said, I feel like an inverted yield curve is
+unlikely to recur any time soon. The US government just injected trillions into
+its economy, so inflation, not deflation, is on all the lips.</p>
+<p>You can consult the official yield rates <a href="https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/textview.aspx?data=yield">on the US treasury
+website</a> and you can visualize the curve <a href="https://www.gurufocus.com/yield_curve.php">on gurufocus</a>.</p>
+<hr>
+<p>That&#39;s it for today! Next time we&#39;ll look at what might have caused the surge in
+bond yields in February. We&#39;ll also look at some hypothesis explaining why this
+affected the stock market.</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/bonds";
+        this.page.identifier = "bonds";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

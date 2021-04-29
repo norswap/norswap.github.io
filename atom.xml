@@ -6,6 +6,128 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Bonds Bonanza 1: Bonds Basics</title>
+      <description>
+&lt;p&gt;This is part of a series of posts on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;During the second part of February, US treasury bonds yields rose sharply, from
+1.13% to more than 1.6%. (If you have no idea what that means, everything will
+become clear after reading this article.) While these levels are historically
+very low, the move was quite sudden, and this had big repercussions in the stock
+market.&lt;/p&gt;
+&lt;p&gt;In particular, it triggered (or accelerated) a &lt;em&gt;rotation into value&lt;/em&gt; where
+&lt;a href=&quot;https://www.investopedia.com/terms/g/growthstock.asp&quot;&gt;growth stocks&lt;/a&gt; got beat down, while &lt;a href=&quot;https://en.wikipedia.org/wiki/Value_investing&quot;&gt;value stocks&lt;/a&gt; soared.&lt;/p&gt;
+&lt;p&gt;As previously &lt;a href=&quot;/heat&quot;&gt;reported&lt;/a&gt;, the change caught me by surprise and wiped out
+the investment gains I made over the past three months. I didn&amp;#39;t understand —
+and to be honest, still don&amp;#39;t really — how these movements in the bond market
+could affect the stock market so much. It did cause me to read a lot about the
+bond market however, and today I&amp;#39;m sharing what I learned.&lt;/p&gt;
+&lt;p&gt;In this article I&amp;#39;ll cover the basics of bonds and the bond market. In a
+subsequent article, I&amp;#39;ll look at some explanations for the sudden surge of bonds
+yield, and finish with some clues about how such bond market moves can impact
+the stock market.&lt;/p&gt;
+&lt;h1 id=&quot;what-are-bonds-and-how-do-they-work&quot;&gt;What are bonds, and how do they work?&lt;/h1&gt;
+&lt;p&gt;The clearest explanation of the bond market I&amp;#39;ve found is the &lt;a href=&quot;https://en.wikipedia.org/wiki/United_States_Treasury_security#Marketable_securities&quot;&gt;&lt;em&gt;Marketable
+Securities&lt;/em&gt; section of the wikipedia page on US bonds&lt;/a&gt;. I encourage
+you to read it.&lt;/p&gt;
+&lt;p&gt;To summarize, the US government (like all governments) is partly financed via
+debt. The treasury emits &lt;em&gt;treasury securities&lt;/em&gt; of various maturities — from 4
+weeks to 30 years. &lt;em&gt;Treasury bonds&lt;/em&gt; are theoretically 30-years securities, but
+the terms &amp;quot;treasury bond&amp;quot; is frequently used to refer to all treasury
+securities. The most watched security is the 10-years bond — the 1.13% and 1.6%
+yield rate mentionned in the intro are 10-years yield rates.&lt;/p&gt;
+&lt;p&gt;Bonds have a &lt;em&gt;face value&lt;/em&gt; (e.g. 100$) and a &lt;em&gt;coupon rate&lt;/em&gt;, for instance 2%,
+meaning the bond holder is entitled to a 2% payment every year (e.g. 2$ for a
+100$ bond). In practice, these payments are made every 6 months, but that&amp;#39;s not
+super important. At the end of its maturity period, the bond &amp;quot;matures&amp;quot; and the
+&lt;em&gt;principal&lt;/em&gt; (face value) is paid back. Shorter-term bonds (less than 2 years)
+have no coupon payments and the coupon is paid in full when the bond matures.&lt;/p&gt;
+&lt;p&gt;More interestingly, you can&amp;#39;t purchase bonds at their face value. In fact, you
+can&amp;#39;t purchase bonds directly from the treasury at all — only select
+institutional investors (pension funds, banks, etc) can, and they take part in
+an auction. This is because the &amp;quot;real&amp;quot; (or rather, estimated) value of a bond
+with 100$ face value is not 100$ — it&amp;#39;s 100$ + the present discounted value of
+the coupon payments.&lt;/p&gt;
+&lt;p&gt;What&amp;#39;s that discounted value? Well 1$ in a year is worth less than 1$ now —
+because if you had this dollar now you could invest it and maybe have 1.10$ in a
+year or something. So the present value of 1$ in one year is the sum that, if
+invested today, would grow to 1$ in a year&amp;#39;s time. So for a 100$ bond with 2%
+coupon rate, we know it is worth more than 100$, but less than 120$. (*)&lt;/p&gt;
+&lt;p&gt;After being purchased by an institution, the bond can be traded on the open
+market, where its price fluctuates. The price of the bond determines the &lt;em&gt;yield
+rate&lt;/em&gt;, which is the rate you can effectively earn by purchasing the bond at the
+market price. So for instance, our 100$/2% bond is worth 120$ in 10 years. If
+its market price rises to 110$, the effective yearly rate (the yield rate) is
+now (120$-110$)/110$ = 0.9%.&lt;/p&gt;
+&lt;p&gt;The somewhat unintuitive effect of this is that the yield goes up when people
+sell bonds (and the bond price goes down), and the yield goes down when people
+buy bonds (and the bond price goes up).&lt;/p&gt;
+&lt;p&gt;(*) It&amp;#39;s possible for a 100$ 2% coupon bond to be worth more than 120$, if the
+bond has negative yield (negative real returns). While this means that you lose
+money holding the bond compared to holding cash, it can happen because
+institutional investors may be forced to hold bonds regardless of price. In the
+long term, some countries&amp;#39; treasury bonds are also regarded safer than the banks
+holding your cash, which may default (this is mostly an issue for institutions,
+which manage a boatload of money).&lt;/p&gt;
+&lt;h2 id=&quot;the-yield-curve&quot;&gt;The Yield Curve&lt;/h2&gt;
+&lt;p&gt;There&amp;#39;s one detail left to clarify. So far we&amp;#39;ve been talking about bonds as
+though they&amp;#39;re a singular security with a single price. In reality, there are
+thousands of types of bonds in circulation! The bonds may have different coupon
+rates and different maturities: not only are there 5-years bonds and 10-years
+bonds, but a 10-years bond emitted 6 months ago does not trade at the same price
+as a 10-years bond emitted today!&lt;/p&gt;
+&lt;p&gt;How do we abstract all this mess? And how are we able to quote a single 10-years
+yield rate, when there are many 10-years maturity bonds (emitted in 2019, 2020,
+2021, ...) and many bonds with 10 years left on the clocks (newly minted
+10-years bonds, 20-years bonds from 2011, 30-years bonds from 2001, ...).&lt;/p&gt;
+&lt;p&gt;The answer is elegant: &lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Yield_curve&quot;&gt;the yield curve&lt;/a&gt;&lt;/strong&gt;. This curve gives the yield for a
+given maturity. Here &lt;em&gt;maturity&lt;/em&gt; is to be understood not as the maturity at the
+time when the bond was emitted, but as the remaining time until the bond matures
+and the principal is paid back.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;yieldcurve.png&quot; alt=&quot;yield curve now, one and two years ago&quot;&gt;&lt;/p&gt;
+&lt;p&gt;First, you have to recognize that any bond with the same time left until
+maturation has the same yield — no matter what the original maturity and coupon
+rates were! If that wasn&amp;#39;t the case, anyone who owns the lower-yield bond would
+sell it to buy the higher-yield bond. This very process pushes the lower-yield
+bond price down (and therefor its yield up) and the higher-yield bond price up
+(and therefore its yield down) — until the two bonds have the same yield.&lt;/p&gt;
+&lt;p&gt;However, bonds with different time left until maturation do have different
+yield rates. Typically (but not always, see below), higher remaining maturity
+bonds have higher yield.&lt;/p&gt;
+&lt;p&gt;This is due to risk. Imagine inflation rises to 5% per year. Suddenly, earning
+2% yearly does not seem so good anymore, as the return in inflation-adjusted
+terms is now about -3%.&lt;/p&gt;
+&lt;p&gt;If you just bought a 1-year bond for 103$ at 2% yield, and the yield rises to 5%,
+it means the bond price must decrease to 100$. A ~3% loss.&lt;/p&gt;
+&lt;p&gt;However, if you just bought a 10-years bond for 130$ with 2% yield (given a
+fixed yield, a longer term bond is necessarily more expensive given, because it
+pays coupons for longer), and the yield rises to 5%, the bond price must
+decrease to 100$ — a ~23% loss!&lt;/p&gt;
+&lt;p&gt;So longer-term bonds are riskier in case inflation flares up. For this reason,
+they tend to command a higher yield.&lt;/p&gt;
+&lt;p&gt;Nevertheless, it is occasionally possible for shorter-term bonds to command a
+higher yield rate than long-term bond, leading to &lt;em&gt;an inverted yield curve&lt;/em&gt;.
+This happens when people expect deflation (money increasing in purchasing power,
+a negative inflation rate) or desinflation (a lowering of the (still positive)
+inflation rate), in which case purchasing long-term bonds allows you to &amp;quot;lock
+in&amp;quot; the current yield rate. Other &lt;a href=&quot;https://en.wikipedia.org/wiki/Yield_curve#Normal_yield_curve&quot;&gt;unusual scenarios&lt;/a&gt; are possible.&lt;/p&gt;
+&lt;p&gt;An inverted yield curve is often treated as a sign announciating a recession,
+and did for instance happen in 2006, more than a year before the start of the
+great financial crisis. That being said, I feel like an inverted yield curve is
+unlikely to recur any time soon. The US government just injected trillions into
+its economy, so inflation, not deflation, is on all the lips.&lt;/p&gt;
+&lt;p&gt;You can consult the official yield rates &lt;a href=&quot;https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/textview.aspx?data=yield&quot;&gt;on the US treasury
+website&lt;/a&gt; and you can visualize the curve &lt;a href=&quot;https://www.gurufocus.com/yield_curve.php&quot;&gt;on gurufocus&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;That&amp;#39;s it for today! Next time we&amp;#39;ll look at what might have caused the surge in
+bond yields in February. We&amp;#39;ll also look at some hypothesis explaining why this
+affected the stock market.&lt;/p&gt;
+      </description>
+      <pubDate>2021-04-29T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/bonds</link>
+      <guid isPermaLink="true">http://norswap.com/bonds</guid>
+    </item>
+    <item>
       <title>GameStop: Anatomy of a Short &amp; Gamma Squeeze</title>
       <description>
 &lt;p&gt;Part of a series of posts on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
@@ -1799,178 +1921,6 @@ informations about the course.&lt;/p&gt;
       <pubDate>2021-02-06T23:00:00.000Z</pubDate>
       <link>http://norswap.com/compiler-class-2021</link>
       <guid isPermaLink="true">http://norswap.com/compiler-class-2021</guid>
-    </item>
-    <item>
-      <title>Chosen Tidbits 7</title>
-      <description>
-&lt;p&gt;Part of the &lt;a href=&quot;/chosen-tidbits&quot;&gt;Chosen Tidbits&lt;/a&gt; series.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;http://habitatchronicles.com/2004/04/you-cant-tell-people-anything/&quot;&gt;You Can&amp;#39;t Tell People Anything&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;What’s going on is that without some kind of direct experience to use as a
-touchstone, people don’t have the context that gives them a place in their
-minds to put the things you are telling them.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The things you say often don&amp;#39;t stick, and the few things that do stick are often
-distorted.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Also, most people aren&amp;#39;t very good at visualizaing hypothetitcals, at imagining
-what something they haven&amp;#39;t experienced might be like if it were somewhat
-different.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Drawing might help.&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If you create things that you can keep on the market at a very low cost
-(including your time), you almost cannot fail. Worst case scenario is a slow
-success.&lt;/p&gt;
-&lt;p&gt;When your running costs are high, time becomes your enemy. Your profits must
-beat the clock, or you go bust.&lt;/p&gt;
-&lt;p&gt;When your running costs are negligible, time becomes your friend. You cannot go
-bust, and the passage of time exposes you to luck 24/7.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;— &lt;a href=&quot;https://twitter.com/dvassallo/status/1278563747435446273&quot;&gt;Daniel Vassallo&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;http://siderea.dreamwidth.org/1209794.html&quot;&gt;The Asshole Filter&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If you find yourself wondering, or just feeling, &amp;quot;Why is everyone I wind up
-dealing with an asshole?&amp;quot; you might want to consider the possibility that you
-have set up an asshole filter. Asshole filters are an extremely common
-phenomenon, and an extremely common problem.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;An asshole filter happens when you publicly promulgate a straitened contact
-boundary and then don&amp;#39;t enforce it; or worse, reward the people who transgress
-it.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Example: promulgate that mails mails must go through team mail, but still answer
-your private emails or even &lt;em&gt;expedite&lt;/em&gt; the requests your receive there, thereby
-rewarding transgressors.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://putanumonit.com/2020/07/04/kelly-bet-on-everything/&quot;&gt;Kelly Bet on Everything&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;I wrote this post because of my endless frustration with my friends who have
-the most slack in life also being the most risk averse. They have plenty of
-savings but stay in soul-sucking jobs for years. They complain about the
-monotony of social life but refuse to instigate a change. They don’t travel,
-don’t do drugs, don’t pick fights, don’t flirt, don’t express themselves. They
-don’t want to think about kids because their lives are just so comfortable and
-why would you mess with that?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://devonzuegel.com/post/the-silence-is-deafening&quot;&gt;The Silence is Deafening&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;When Angry Alice tweets something obnoxious or unproductive, reasonable people
-just scroll past it. If Alice develops a pattern of bad behavior, reasonable
-people will just unfollow, mute, or block her. The result is that it&amp;#39;s hard for
-Alice to notice the silent majority of people who saw the trash fire and walked
-away when they recognized that engaging would only fuel its flames.&lt;/p&gt;
-&lt;p&gt;It gets worse—Angry Alice only sees feedback from extremists, so she doesn&amp;#39;t
-receive more nuanced signals that might actually cause her to reflect on her
-behavior. If no reasonable people give feedback, only the unreasonable people
-are left. From Alice&amp;#39;s perspective, the only people who disagree with her are
-jerks.&lt;/p&gt;
-&lt;p&gt;This is a coordination problem. Reasonable people understand that if they join
-the fray alone, they&amp;#39;ll most likely be drowned out by the yelling, or worse
-they&amp;#39;ll get dragged deeper into it. As a result, they choose stay out of it.&lt;/p&gt;
-&lt;p&gt;A huge part of the problem is that digital spaces generally have no equivalent
-of a disapproving glare. You&amp;#39;re stuck choosing between staying silent and
-entering the fray, with few options in between. If you have little reason to
-believe that other reasonable people will back you up, you&amp;#39;re going to stick
-with the default: silence.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://extranewsfeed.com/tolerance-is-not-a-moral-precept-1af7007d6376&quot;&gt;Tolerance is Not A Moral Precept&lt;/a&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Tolerance is not a moral precept, it&amp;#39;s a peace treaty (or at least non-agression).&lt;/li&gt;
-&lt;li&gt;One can&amp;#39;t tolerate the intolerant, that would be a suicide pact.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/sonyasupposedly/status/1280903954872676352&quot;&gt;lisatomic5 on Children&amp;#39;s Rights&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;This thread illustrates that telling your children the functional lie that they
-have bodily autonomy is exhausting to stick to.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/yashkaf/status/1281406459855634437&quot;&gt;Fuck Victimhood Identity&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The reality is that long ago I noticed that the less I saw and presented
-myself as a victim, the less I was victimized. This kicked off a virtuous
-cycle that I’m not going to jeopardize. Now my life is much improved, and I’ve
-developed a very strong allergy to victim identity.&lt;/p&gt;
-&lt;p&gt;The spiral of victim identity is incredibly seductive. Once you step in it
-your identity will be reinforced by everyone around you and your own
-confirmation bias. I’ve seen this spiral claim people, groups, nations. It
-didn’t make them better off, and it didn’t make them better.&lt;/p&gt;
-&lt;p&gt;Victimhood blinds you to the suffering of others. My dating life improved when
-I stopped thinking about how women malign me and became able to understand
-their own fears and frustrations with guys. Before, I literally couldn’t
-fathom that dating can be hard for hot young women&lt;/p&gt;
-&lt;p&gt;Victimhood blinds you to your own mistakes, the only part you can change.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Everyone wants their suffering validated, but you will never get this
-validation from those who hurt you if that’s what you seek. If you let go of
-this doomed desire, you may eventually find the validation you crave among
-friends.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;You shouldn’t have to argue about &lt;em&gt;how&lt;/em&gt; you’re fighting, &lt;em&gt;while&lt;/em&gt; you’re fighting.&lt;/p&gt;
-&lt;p&gt;Trying to do both at once is a quick way to compound your frustration with each
-other and make things worse for everybody.&lt;/p&gt;
-&lt;p&gt;The smart thing to do is to schedule relationship maintenance in advance.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;— &lt;a href=&quot;https://twitter.com/visakanv/status/1168145452379729921&quot;&gt;Visa&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://nabeelqu.co/understanding&quot;&gt;How to Understand Things&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;My father has zero intellectual insecurities... It has never crossed his mind
-to be concerned that the world thinks he’s an idiot. He’s not in that game. So
-if he doesn’t understand something, he just asks you. He doesn’t care if he
-sounds foolish. He will ask the most obvious question without any sort of
-concern about it...&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Most people are not willing to do this — looking stupid takes courage, and
-sometimes it’s easier to just let things slide.&lt;/p&gt;
-&lt;p&gt;It is striking how many situations I am in where I start asking basic
-questions, feel guilty for slowing the group down, and it turns out that
-nobody understood what was going on to begin with (often people message me
-privately saying that they’re relieved I asked), but I was the only one who
-actually spoke up and asked about it.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://garybasin.com/one-week-project-management/&quot;&gt;One Week Project Management&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Starting a big project is tricky. I usually have some sense of what needs to
-be done, but my time estimates tend to be… a little off. There’s one thing
-worse than underestimating the time it’ll take: doing unnecessary work. I hate
-getting traction on a project only to realize that a bunch of work was wasted.&lt;/p&gt;
-&lt;p&gt;There’s a trick that often works for me: Rescope the project to complete it
-within the next week. Even when unrealistic, trying to apply that tight
-constraint can get you to notice things you wouldn’t otherwise. It forces me
-to consider what is absolutely necessary and what can be skipped. It forces me
-to spend one of my days planning so I know exactly what I need to execute.&lt;/p&gt;
-&lt;p&gt;[Parkinson’s Law] states that a project takes as much time as you allow it.
-Once in a while, try allowing much less time than you think is necessary.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;My cynical view of humanity at large informs my sympathetic view of actual
-humans. By the standards of horny status-obsessed murder monkeys, even my
-outgroup enemies are often doing the best they can consider the fears and
-insecurities that plague them.&lt;/p&gt;
-&lt;p&gt;On the other hand, if you believe that humans are by nature benign and kind and
-are only &amp;quot;corrupted&amp;quot; by culture, you will have a very negative view of the
-prevailing culture and most people. This will tempt you to dream of revolutions
-or a return to some golden age.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;— &lt;a href=&quot;https://twitter.com/yashkaf/status/1284244774199988227&quot;&gt;Jacob&lt;/a&gt;&lt;/p&gt;
-      </description>
-      <pubDate>2021-01-04T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/chosen-tidbits-7</link>
-      <guid isPermaLink="true">http://norswap.com/chosen-tidbits-7</guid>
     </item>
   </channel>
 </rss>

@@ -6,6 +6,106 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Fun With Incentives</title>
+      <description>
+&lt;blockquote&gt;
+&lt;p&gt;Never, ever, think about something else when you should be thinking about the
+power of incentives.&lt;br&gt;— &lt;a href=&quot;https://norswap.com/munger-psychology/&quot;&gt;Charlie Munger&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;During this past month, I had a lot of fun with &lt;a href=&quot;https://1729.com&quot;&gt;1729.com&lt;/a&gt;, a
+newsletter that pays its members in Bitcoins for performing tasks — which are
+typically interesting and will teach you something useful.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s the main things I did so far:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/proof-of-workout/&quot;&gt;Worked out&lt;/a&gt; (didn&amp;#39;t need them for that,
+but it was nice getting 10$ for it!)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/learn-basic-elixir-with-exercism/&quot;&gt;Learned some Elixir&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/decentralized-task-creation/&quot;&gt;Wrote a task for the newsletter to
+reuse&lt;/a&gt; — &lt;a href=&quot;https://ghost.norswap.com/paving-the-titans-way/&quot;&gt;here&amp;#39;s my
+task&lt;/a&gt;. The useful thing in
+this one was actually to setup &lt;a href=&quot;https://www.cloudron.io/&quot;&gt;cloudron&lt;/a&gt; on &lt;a href=&quot;https://www.oracle.com/be/cloud/&quot;&gt;the
+oracle cloud&lt;/a&gt; (not shilling this because I&amp;#39;m
+an Oracle employeed, but because I&amp;#39;m cheap and it&amp;#39;s the only one that has a
+permanent free tier). Cloudron is a cool service manager that lets you install
+a bunch of server apps (including the &lt;a href=&quot;https://ghost.org/&quot;&gt;ghost&lt;/a&gt; blog
+platform). Don&amp;#39;t worry, I still like my &lt;a href=&quot;https://github.com/norswap/norswap.github.io/tree/master/_factory&quot;&gt;homegrown website
+generator&lt;/a&gt;
+better :)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/refer-task-sponsors/&quot;&gt;Cold-emailed some rich people to ask for
+money&lt;/a&gt; — not something I&amp;#39;d normally
+feel very comfortable doing.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/how-to-start-a-new-country/&quot;&gt;Wrote an article expanding on the idea of building a new digital-first
+country&lt;/a&gt; — &lt;a href=&quot;https://ghost.norswap.com/new-country/&quot;&gt;here&amp;#39;s my
+article&lt;/a&gt;. I must admit I feel a bit
+shy about this one, because it&amp;#39;s such an optimistic view — which is not really
+my usual personality. But that&amp;#39;s also why it was a useful exercise to get into
+a different perspective. It did get me thinking about blockchain technologies
+and their potential — expect a more nuanced article on that soon.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/quantum-computing-and-proof-of-memory/&quot;&gt;Learned about quantum
+computing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://1729.com/video-memes-on-indian-crypto/&quot;&gt;Made a video meme about India&amp;#39;s crypto
+ban&lt;/a&gt; — I went for the &lt;a href=&quot;https://www.youtube.com/watch?v=Ecnei9vtLyU&quot;&gt;Hitler
+reacts&lt;/a&gt; classic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;My submissions got selected on some of these tasks and I got ~220$ out of those
+that have been awarded so far. That&amp;#39;s less that I could have earned otherwise in
+the same timespan if I was hell-bent on earning money. But as we&amp;#39;ll see below,
+that&amp;#39;s not why I did it.&lt;/p&gt;
+&lt;p&gt;There are now new tasks to learn about crypto technologies (the &lt;a href=&quot;https://ens.domains/&quot;&gt;Ethereum Name
+Service&lt;/a&gt; and &lt;a href=&quot;https://1729.com/learn-solidity-with-cryptozombies/&quot;&gt;learning the solidity smart contract
+langauge&lt;/a&gt;. I&amp;#39;m excited to
+do these too.&lt;/p&gt;
+&lt;p&gt;But I&amp;#39;m actually not writing this to shill 1729. Rather, it&amp;#39;s to marvel about
+the power of incentives.&lt;/p&gt;
+&lt;p&gt;See — most of these things I enjoyed doing and might have done without the
+possibility of a monetary compensation. But living is prioritizing (if you&amp;#39;re
+doing it right at least) and besides working out, none of these things were
+high-priority enough.&lt;/p&gt;
+&lt;p&gt;But 1729 offered me a collection of incentives to complete the tasks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I may earn some money!&lt;/li&gt;
+&lt;li&gt;There&amp;#39;s a deadline.&lt;/li&gt;
+&lt;li&gt;I&amp;#39;ve attempted all tasks so far, so I&amp;#39;m strongly motivated to attempt new
+tasks, for the sake of completion (gamification!)&lt;/li&gt;
+&lt;li&gt;These tasks have generally taught me something, or reinforced some good habit
+or useful behaviour.&lt;/li&gt;
+&lt;li&gt;The tasks have been devised to be doable in a reasonable timeframe — no need
+to worry about biting off more than one can chew.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To be fair, there was a reason that most of these things were not on my todo
+list. But the added incentives were enough to put them past the hump. And the
+way I use my time is far from optimal. Had I not, say, written an article, I
+might have watched an interesting youtube video instead with no relevance to my
+daily life. The incentives stir you towards spending your time smarter.&lt;/p&gt;
+&lt;p&gt;It also got me thinking. If 1729 can incentivize me in this way, can&amp;#39;t I do the
+same to me? I can certainly chunk task in manageable bits, and set deadlines. I
+can also use &lt;a href=&quot;https://jamesclear.com/stop-procrastinating-seinfeld-strategy&quot;&gt;the seinfeld
+method&lt;/a&gt; and build
+on top of a series of small wins. Paying yourself gets more tricky, however. I
+think I know how to make it work.&lt;/p&gt;
+&lt;p&gt;The key is that I&amp;#39;m cheap. So there are a few not-so-unresonable expenses that I
+don&amp;#39;t make because they are not strictly necessary or an improvement to my
+day-to-day life. Now say there&amp;#39;s something I want to get done, or a behaviour I
+want to promote. If I care enough about that, I can justify paying to speed it
+up. On the other end, I get the reward if I complete the task within the
+deadline. It&amp;#39;s a smart way to get in alignment with yourself.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s a snag though — what if you don&amp;#39;t make the deadline? Do you just put the
+reward back in play? As the payer this makes sense — you want the thing done
+after all. But on the other end, this is the wrong lesson: you can slip the
+deadline but still get the reward (albeit later). I think the key here is to
+reward yourself for consistency. So if you slip, the previous reward might be
+out of play for the next task, which will grant a smaller (or more generic)
+reward. But if you succeed at that one, &lt;em&gt;and&lt;/em&gt; at the next one, then you get the
+original reward. That way, you get the nice rewards only if you keep succeeding
+consistently.&lt;/p&gt;
+&lt;p&gt;I will try to experiment with these micro-incentive structures in the near
+future.&lt;/p&gt;
+      </description>
+      <pubDate>2021-04-29T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/incentives</link>
+      <guid isPermaLink="true">http://norswap.com/incentives</guid>
+    </item>
+    <item>
       <title>Bonds Bonanza 1: Bonds Basics</title>
       <description>
 &lt;p&gt;This is part of a series of posts on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
@@ -1908,19 +2008,6 @@ rally&lt;/a&gt;.&lt;/p&gt;
       <pubDate>2021-02-18T23:00:00.000Z</pubDate>
       <link>http://norswap.com/options</link>
       <guid isPermaLink="true">http://norswap.com/options</guid>
-    </item>
-    <item>
-      <title>2021 Compiler Class Live</title>
-      <description>
-&lt;p&gt;This year, I&amp;#39;m teaching a master-level compiler class at &lt;a href=&quot;https://uclouvain.be/&quot;&gt;Université catholique
-de Louvain&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The course is now live &lt;a href=&quot;https://www.youtube.com/playlist?list=PLOech0kWpH8-njQpmSNGSiQBPUvl8v3IM&quot;&gt;on YouTube&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve also created &lt;a href=&quot;/compilers&quot;&gt;a new page&lt;/a&gt; on this website intended to collect all
-informations about the course.&lt;/p&gt;
-      </description>
-      <pubDate>2021-02-06T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/compiler-class-2021</link>
-      <guid isPermaLink="true">http://norswap.com/compiler-class-2021</guid>
     </item>
   </channel>
 </rss>

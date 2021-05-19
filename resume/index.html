@@ -2,8 +2,6 @@
 <html>
   <head>
     <title>Nicolas Laurent's Resume</title>
-    <link href='/feed' rel='alternate' title='Atom' type='application/atom+xml'>
-    <link href='/style.css' rel='stylesheet'>
     <meta charset='utf-8'>
   </head>
   <body>
@@ -14,8 +12,8 @@
 <head>
   <meta charset="utf-8">
   <title>Nicolas Laurent - Resume</title>
-  <link rel="icon" type="image/ico" href="favicon.ico"/>
-  <link href="http://fonts.googleapis.com/css?family=Open+Sans:600,400,700"
+  <link rel="icon" type="image/ico" href="https://norswap.com/favicon.ico"/>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,400,700"
     rel="stylesheet" type="text/css">
   <style type="text/css">
 
@@ -180,14 +178,19 @@ body {
 .item {
   clear: both;
   font-family: Open Sans;
+}
+.separated .item {
   padding: 0 10px;
+  border-top: solid 1px #CCC;
+}
+.separated .item:first-child {
+    border-top: 0;
 }
 .item .title {
   color: #333;
   font-size: 20px;
   font-weight: bold;
-  margin: 7px 0;
-  margin-top: 20px;
+  margin: 15px 0 7px;
 }
 .item .where {
   color: #555;
@@ -209,7 +212,12 @@ body {
   color: #555;
   float: right;
   font-weight: bold;
-  width: 400px;
+}
+.separated .item .when {
+  margin-top: 20px;
+}
+.separated .item:first-child .when {
+  margin-top: 0;
 }
 .item .grade {
   color: #444;
@@ -303,10 +311,19 @@ strong {
 p+p {
     margin-top: 20px;
 }
-
+hr {
+    border: none;
+    height: 1px;
+    background-color: #CCC;
+    margin: 20px 0;
+}
 @media print {
     .pgbreak {
         page-break-after: always;
+    }
+    a, a:visited {
+        color: blue;
+        text-decoration: none;
     }
 }
 
@@ -338,122 +355,121 @@ body > div[style] {
     <li>+32 497/39.83.74</li>
     <li>Rue Chapelle Emmanuel, 8<br/>1435, Mont-Saint-Guibert, Belgium</li>
     <li>Driving License: ✔ / Remote: ✔ / Relocate: ✔</li>
-    <!-- <li>Driving License: ✔</li> -->
   </ul>
   <ul>
     <li>norswap@gmail.com</li>
-    <li><a href="http://norswap.com">http://norswap.com</a><br/>
-      <a href="http://github.com/norswap">http://github.com/norswap</a></li>
-    <li><a href="/resume.pdf">PDF version</a></li>
-    <!-- <li>Remote: ✔ / Relocate: ✔</li> -->
+    <li><a href="https://norswap.com">norswap.com</a><br/>
+      <a href="https://github.com/norswap">github.com/norswap</a></li>
+    <!-- <li>web version: <a href="https://norswap.com/resume">norswap.com/resume</a></li> -->
+    <li><a href="https://norswap.com/resume.pdf">PDF version</a></li>
   </ul>
   <div class="clear"></div>
   </div>
 
-  <div class="section-title">Education & Experience</div>
-  <div class="section">
+  <div class="section-title">Experience & Education</div>
+  <div class="section separated">
     <div class="item">
+      <div class="when">2019 - Current</div>
+      <div class="title">
+        <a href="https://www.graalvm.org/"></a>
+        R&amp;D Compiler Engineer
+      </div>
+      <div class="where">Oracle Labs, Remote</div>
+      <div class="descr">
+        <p>I am working on the GraalVM project, and in particular the implementation
+          of TruffleRuby.</p>
+        <p>My work has contributed to improve TruffleRuby's peak performance (it
+        is the fastest Ruby implementation on a wide range of benchmarks) and
+        reduce its warmup time. I have also collaborated closely with our
+          customers at Shopify.</p>
+        <p>Much of my work at Oracle is publicly visible
+        at <a href="https://github.com/oracle/truffleruby/commits?author=norswap">github.com/oracle/truffleruby/commits?author=norswap</a></p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="when">2021</div>
+      <div class="title">
+        <a href="https://uclouvain.be/en-cours-2020-lingi2132"></a>
+        Invited Professor
+      </div>
+      <div class="where">Université Catholique de Louvain, Belgium</div>
+      <div class="descr">
+        <p>During the winter 2021 semester, I gave the <em>"Languages &
+        Translators"</em> compiler course to a class of about 100 computer
+        science & master students. Students had to implement their own
+        programming language for the course's project. I will probably teach
+        again in 2022.</p>
+        <p>The class lectures &amp; materials are freely available
+        at <a href="https://norswap.com/compilers">norswap.com/compilers</a></p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="when">2014 - 2019</div>
       <div class="title">
         <a href="http://www.uclouvain.be/en-prog-2012-lsinf2m"></a>
         PhD in Computer Science
       </div>
-      <div class="when">February 2014 - September 2019 (Prevision)</div>
       <div class="where">Université Catholique de Louvain, Belgium</div>
       <div class="descr">
         <p>My thesis, <em>"Principled Stateful Parsing"</em> explores how adding custom
            code to parser specifications enables overcoming many practical
            challenges in the field, and how to mitigate the downsides.</p>
-        <p>Teaching assistant in <em>"Cloud Computing"</em>, <em>"Project 4 in
-           Computer Science"</em> (Android programming) and <em>"Programming
-           Paradigms".</em></p>
+        <p>Teaching assistant in the cloud computing, agile programming, and
+           programming paradigms classes.</p>
       </div>
     </div>
     <div class="item">
+      <div class="when">2013 - 2014</div>
       <div class="title">iOS Developer</div>
-      <div class="when">September 2013 - February 2014</div>
       <div class="where">Famest, Louvain-La-Neuve, Belgium</div>
       <div class="descr">
-      <p>I overhauled the Famest iPhone app in order to improve reliability and
-        maintanably, <br/>and transitionned it towards iOS 7.</p>
+      <p>Famest was a fashion-centric social network that let users showcase
+        their outfits and connect with brands. <br/>I rewrote the hastily-writen
+        Famest iPhone app (which would routinely crash after any quick
+        succession of user inputs) in order to make it realiable and
+        maintainable.</p>
       </div>
     </div>
-    <div class="item">
+    <div class="item pagebreak">
+      <div class="when">2008 - 2013</div>
       <div class="title">
         <a href="http://www.uclouvain.be/en-prog-2012-lsinf1ba.html"></a>
         Bachelor &amp; Master in Computer Science
       </div>
-      <div class="when">September 2008 - September 2013</div>
       <div class="where">Université Catholique de Louvain, Belgium</div>
       <div class="grade"><span class="bef">Grade: </span>Magna Cum Laude</div>
       <div class="descr">
-        <p>Double major in networking & security and software engineering.</p>
-        <p>Teaching assistant in <em>"Computer Science II"</em> (functional programming)
-        and <em>"Computer Systems I"</em>.</p>
+        <p>Double major in networking/security and software engineering.</p>
+        <p>Teaching assistant in the functional programming and computer systems
+        classes.</p>
       </div>
     </div>
   </div>
 
-  <div class="pgbreak"></div>
-  
   <div class="section-title">Technologies</div>
   <div class="section">
-  <div class="item">
-    <div class="title">Core</div>
-   <div class="descr"></div>
-    <ul class="techs">
-      <li>Java</li>
-      <li>Kotlin</li>
-      <li>C</li>
-      <li>Ruby</li>
-      <li>Javascript</li>
-      <li>Git</li>
-      <li>HTML &amp; CSS</li>
-    </ul>
-  </div>
-  <div class="item">
-    <div class="title">Experienced</div>
-    <div class="descr"></div>
-    <ul class="techs">
-      <li>C#</li>
-      <li>C++</li>
-      <li>Python</li>
-      <li>Lua</li>
-      <li>Bash</li>
-      <li>SQL</li>
-      <li>Build Systems: Make, CMake, Maven, ...</li>      
-    </ul>
-  </div>
-  <div class="item">
-    <div class="descr">
-      Of course, I'm willing and able to learn more!
+    <div class="item">
+      <div class="descr">
+      <p>If you absolutely need to see a keyword in this section, we might not
+      be a good fit. Having at this point implemented multiple languages and
+      frameworks, I like to think I'm able to learn anything that is required in
+      a reasonable amount of time.</p>
+      <p>That being said, I have experience in Java, C, C++, Objective-C,
+      Kotlin, Ruby, Javascript, Python, Prolog, Lua, Bash, SQL, Git, Make,
+      CMake, Maven, Gradle, and more.</p>
+    </div>
     </div>
   </div>
   </div></div>
-      
-  <!-- <div class="section-title">Expertise</div> -->
-  <!-- <div class="section"> -->
-  <!-- <div class="item"> -->
-  <!--   <div class="title">Programming Languages</div> -->
-  <!--   <div class="descr"> -->
-  <!--       I am interested in many areas related to programming languages, both in -->
-  <!--       design and implementation: parsing, code generation, statical code -->
-  <!--       analysis, and more. This interest is reflected in my PhD and Master -->
-  <!--       theses. -->
-  <!--   </div> -->
-  <!-- </div> -->
-  <!-- </div> -->
-  
-  <div class="section-title">Publications</div>
+
+  <div class="section-title">Selected Publications</div>
   <div class="section">
   <div class="item">
   <div class="descr">
     <p>
-      <strong>Red Shift: Procedural Shift-Reduce Parsing</strong>
+      <strong>Principled Procedural Parsing</strong>
       <br>Nicolas Laurent
-      <br><em>ACM SIGPLAN Conference on Software Language Engineering (SLE) 2017; Vancouver, Canada</em>
-      <!-- <br><em>Software Language Engineering (SLE) 2017</em> -->
-      <!-- <br><em>Vancouver, Canada, October 23 2017</em> -->
-      <!-- <br><a href="/pubs/sle2017.pdf">[PDF]</a> -->
+      <br><em>PhD Thesis (2019); Louvain-La-Neuve, Belgium</em>
     </p>
     <p>
       <strong>Taming Context-Sensitive Languages with Principled Stateful Parsing</strong>
@@ -485,10 +501,17 @@ body > div[style] {
     <p>
       <strong>A PEG-Based Macro System for Java</strong>
       <br>Nicolas Laurent
-      <br><em>Master Thesis</em>
+      <br><em>Master Thesis (2013); Louvain-La-Neuve, Belgium</em>
       <!-- <br><em>September 2013</em> -->
       <!-- <br><a href="/pubs/master.pdf">[PDF]</a> -->
     </p>
+
+    <hr/>
+
+    <p>A full list of publications, with download links, is available
+      at <a href="https://norswap.com/publications">norswap.com/publications</a></p>
+    <p>I also blog at <a href="https://norswap.com/sitemap">norswap.com/sitemap</a>
+    on programming, finance, exercise, and pop culture.</p>
   </div>
   </div>
   </div>
@@ -508,6 +531,6 @@ body > div[style] {
       <div class="title">Dutch</div>
     </div>
   </div>
-  
+
 </body>
 </html>

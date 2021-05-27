@@ -6,6 +6,296 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Freaking blockchains: How do they work?</title>
+      <description>
+&lt;p&gt;Cryptocurrency hype is at its peak, blockchains are on every lips. Since I
+started writing this, Bitcoin &amp;amp; assorted cryptocurriencies hit multiple all-time
+highs then crashed 50%.&lt;/p&gt;
+&lt;p&gt;Besides all the sound and fury, I think I have something interesting and nuanced
+to say about blockchains and cryptocurrencies.&lt;/p&gt;
+&lt;p&gt;I also believe that to understand the topic, one has to understand the basics of
+the technology, more precisely than most articles make allowance for.&lt;/p&gt;
+&lt;p&gt;Contrary to popular belief, blockchain technology is not that complicated. I
+dare say it&amp;#39;s even quite simple.&lt;/p&gt;
+&lt;p&gt;So, in this article I explain the technology. I will tell you what it does, but
+not what the practical applications are, nor whether I think the technology has
+a future, whether it&amp;#39;s a scam, or whether cryptocurrency prices are justified. I
+will, however, tackle all these topics in a follow-up article.&lt;/p&gt;
+&lt;h2 id=&quot;whats-a-blockchain&quot;&gt;What&amp;#39;s a blockchain?&lt;/h2&gt;
+&lt;p&gt;A blockchain is a decentralized ledger of transactions. It&amp;#39;s a sort of permanent
+log: once a transaction makes it into the log, it will remain there forever.
+Note that the concept can be extended to log more than financial transactions,
+but we&amp;#39;ll use transactions as an example in this write-up.&lt;/p&gt;
+&lt;p&gt;What makes blockchains special is that they are truly decentralized in the sense
+that anybody can join &lt;em&gt;the network&lt;/em&gt; that monitors and mirrors the state of the
+blockchain — such participants are called &lt;em&gt;nodes&lt;/em&gt;. Some nodes additionally
+participate in the consensus process to verify the transactions that make it
+onto the ledger. In the &lt;em&gt;proof-of-work&lt;/em&gt; scheme used by Bitcoin, such nodes are
+called &lt;em&gt;miners&lt;/em&gt;. And again, everybody can become a miner. We&amp;#39;ll also tackle the
+main alternative, &lt;em&gt;proof-of-stake&lt;/em&gt; later in this article.&lt;/p&gt;
+&lt;p&gt;A &amp;quot;blockchain&amp;quot; is called so because the ledger is composed of a chain of
+&amp;quot;blocks&amp;quot;, each of which encodes many transactions. Miners in the network collect
+transactions, verify their validity, pack them in a block, then try to validate
+this block. In proof-of-work, this is calling &lt;em&gt;mining&lt;/em&gt; the block (in
+proof-of-stake, it&amp;#39;s simply called &lt;em&gt;validating&lt;/em&gt;). Whenever a node
+mines/validates a block, it receives a reward. We&amp;#39;ll explain this in detail
+later.&lt;/p&gt;
+&lt;p&gt;To mine/validate a block, it is not sufficient to create and verify the block —
+it must also be accepted as part of the blockchain. This is achieved through a
+consensus protocol.&lt;/p&gt;
+&lt;p&gt;In computer science, we call a &lt;a href=&quot;https://en.wikipedia.org/wiki/Consensus_(computer_science)&quot;&gt;consensus protocol&lt;/a&gt; a protocol that lets a set
+of nodes make a decision that is eventually accepted by the whole network. This
+is typically based on some form of majority voting. We also know, to some
+extent, how to guard against malicious nodes who lie to try to get their own
+choice selected.&lt;/p&gt;
+&lt;p&gt;However, this only works if the network participants are pre-established. In an
+open network, a malicious actor could just create a huge amount of nodes to get
+a de facto majority — this is called a &lt;a href=&quot;https://en.wikipedia.org/wiki/Sybil_attack&quot;&gt;sibyl attack&lt;/a&gt;. To tackle this issue,
+blockchains must make it &amp;quot;expensive&amp;quot; to validate blocks. In reality, validation
+must be profitable: that&amp;#39;s the incentive for miners/validators to participate in
+securing the network. But when we say that validation should be &amp;quot;expensive&amp;quot;, we
+mean it must be &lt;em&gt;capital-intensive&lt;/em&gt;. Because it costs money to validate blocks,
+it becomes much more difficult to assemble enough mining or validating power to
+mount a sibyl attack.&lt;/p&gt;
+&lt;p&gt;In proof-of-work blockchains, miners compete against each other to be the first
+to validate a block. There is a sort of number-guessing contest going on, based
+on expensive computations, and the winner gets to mine the block and collect a
+reward. Miners buy specialized mining devices to be able to run the expensive
+computations as fast as possible. Statistically speaking, if you control X% of
+the mining power, you&amp;#39;ll get 10% of the mining rewards.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;By the way, the &amp;quot;number guesing game&amp;quot; in question is made computationally
+expensive through the use of &lt;em&gt;cryptographic hash functions&lt;/em&gt; (details will
+follow). To the best of my knowledge, this is the reason for the &lt;em&gt;crypto&lt;/em&gt; in
+&lt;em&gt;cryptocurrencies&lt;/em&gt;. It could also refer to the use of cryptographic keys to
+sign transactions, but this is a fairly old technology whose use was already
+pervasive when blockchains were introduced.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In proof-of-stake, validators must lock some amount of on-chain currency (their
+&lt;em&gt;stake&lt;/em&gt;). The protocol then selects which validator gets to validate the next
+block. If you control X% of the total stake, you&amp;#39;ll be select with X%
+probability. Note that this is note the only way to implement proof-of-stake,
+but it is the simplest to understand, and it gives the right idea.&lt;/p&gt;
+&lt;p&gt;Currently, most blockchains use proof-of-work, including #1 and #2
+cryptocurrencies Bitcoin and Ethereum. A few minor blockchains use
+proof-of-stake, and Ethereum has planned to transition to proof-of-stake. We
+will now give more details about them, starting with proof-of-work.&lt;/p&gt;
+&lt;p&gt;TODO outline of the rest&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ll be particularly interested in the security model these schemes, since they
+inform a lot of the design and implementation choices.&lt;/p&gt;
+&lt;h2 id=&quot;proof-of-work---hashing&quot;&gt;Proof of Work - Hashing&lt;/h2&gt;
+&lt;p&gt;In proof-of-work, mining is done by solving a cryptographic problem. In
+particular, miners have to calculate a valid hash for the block. You can think
+of a hash as a fingerprint for the block. More precisely, a hash is the result
+of applying a hash function to some data (here, the block). Such a fingerprint
+is really nothing else than a (potentially very large) number, encoded on 256
+bits (which allows to represent 2^256 values, which is 1 followed by 77 zeroes).&lt;/p&gt;
+&lt;p&gt;For blockchains, we use a &lt;em&gt;cryptographic hash function&lt;/em&gt;. Those have the
+requirement that they should be irreversible (it is impossible to guess the
+block content from the hash), and in general &amp;quot;look random&amp;quot; — it&amp;#39;s very important
+that knowing the hash for a block does not give us any advantage in finding the
+hash for a very slightly different block. Finally, a cryptographic function
+should also be somewhat expensive to compute, so that it is difficult to guess
+the data (e.g. the block, or the password) that generated the hash.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Crypto Trivia 1&lt;/strong&gt;: Did you know that most websites do not store your password?
+Instead they store a hash of your password. When you login, they hash the
+password you submit, and compare it to the hash they stored. That way, if the
+website is compromised, the attacker only gets the hash of your password.
+Since he can&amp;#39;t invert the hash, your password is safe and the attacker can&amp;#39;t
+use the hash to log on other websites. ... Or at least that&amp;#39;s what we&amp;#39;d hope.
+In reality, getting the hash makes it easier to guess a password through the
+use of &lt;a href=&quot;https://en.wikipedia.org/wiki/Rainbow_table&quot;&gt;rainbow tables&lt;/a&gt;, which is why the website should hash your password
+along with a &lt;a href=&quot;https://en.wikipedia.org/wiki/Salt_(cryptography)&quot;&gt;salt&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Crypto Trivia 2&lt;/strong&gt;: Since the block is much bigger than the hash (in
+Bitcoin&amp;#39;s case, most blocks are 1MB and a hash is 256 bits), it means that
+there can exist many more different blocks than different hashes. This means
+that, by &lt;a href=&quot;https://en.wikipedia.org/wiki/Pigeonhole_principle&quot;&gt;the pigeonhole principle&lt;/a&gt; it is possible for two blocks to hash to
+the same value. This is fine here, and is fine for most uses of hash. Just
+note that our &amp;quot;fingerprints&amp;quot; are not necessarily unique. However such a
+collision has a probability of 1/(2 followed by 59 zeros). It&amp;#39;s pretty rare.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So proof-of-work consists of finding the hash of the block. Normally this is an
+easy task. But in blockchains it involves a guessing component. The block&amp;#39;s data
+contains all the transactions, but also a reference to the previous block
+(actually, the &lt;strong&gt;hash&lt;/strong&gt; of the previous block) and a random number called
+&lt;em&gt;nonce&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;problem&lt;/em&gt; proof-of-work has to solve is as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nonce = random 32 bit number
+h1 = hash(block including nonce)
+h2 = hash(h1 concatenated with nonce)
+... such that h2 &amp;gt; difficulty
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So we pick a nonce and hash the block which contains this nonce. Then we append
+the nonce to this first hash, and hash that to get a second hash. The problem is
+solved only this second hash is higher than a set number, called &lt;em&gt;the
+difficulty&lt;/em&gt;. If the condition is not fullfilled, the process starts again with
+another nonce, until the problem is solved or someone else mined a block — in
+which case we need to update the previous block&amp;#39;s hash, as well as the list of
+transactions.&lt;/p&gt;
+&lt;p&gt;The difficulty is set by the protocol, and determines how difficult it is to
+solve the problem. For instance, Bitcoin adjusts it so that the average time
+between each mined block remains around 10 minutes. Because a hash is a 256-bit
+string, it can be interpreted as a number between 0 and 2^256. So if the
+difficulty was 3/4 * 2^256 and hashes are uniformly distributed (which a
+cryptographic hash function should ensure), this would exclude 3/4 of the valid
+hashes. In reality, the difficulty is much much higher than that. A &lt;a href=&quot;https://news.bitcoin.com/clocking-terahash-three-next-generation-bitcoin-mining-rigs-launched-during-the-last-quarter/&quot;&gt;bitcoin
+mining machine&lt;/a&gt; that can perform about 100 tera-hash per second (*) costs about
+4000$!&lt;/p&gt;
+&lt;p&gt;(*) That&amp;#39;s 100 trillion — or about 2^47 — hashes per second. I&amp;#39;m not sure if
+that number designates actual hash function calls or attempted nonces however.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Math Trivia&lt;/strong&gt;: Assuming the difficult is indeed 3/4 * 2^256, how many
+nonce would we have to try to find a valid hash, on average?&lt;/p&gt;
+&lt;p&gt;I found this difficult to answer, made some hand calculation, and found the
+numbers I came up with (between 1 and 2) difficult to believe. But in fact,
+&lt;a href=&quot;https://math.stackexchange.com/questions/206798/&quot;&gt;here&amp;#39;s the answer to a similar problem&lt;/a&gt; that gives a formula. The
+answer is 1.66. Unintuitively, you still have one chance out of three not to
+have found a valid hash after four tries! Math, man.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So proof-of-work mining takes a lot of computational power to perform all these
+hashes. This costs a lot of money, both as upfront machine costs and as energy
+costs. This is all by design.&lt;/p&gt;
+&lt;p&gt;Now, consuming a lot of energy is not ideal in a world where we&amp;#39;re trying to
+stop global warming. &lt;a href=&quot;https://cbeci.org/cbeci/comparisons&quot;&gt;At the time of writing&lt;/a&gt;, the energy expended
+annually on mining bitcoin is greater than the annual energy expenditure of
+Sweden, and account for 0.6% of the globe&amp;#39;s total energy production.&lt;/p&gt;
+&lt;p&gt;This can be caveated a little bit by saying that miners are after cheap energy,
+and excess energy is the cheapest energy. It&amp;#39;s also possible for miners to
+custom build renewable energy plants to power their mining rigs — though this
+also comes with an environmental cost.&lt;/p&gt;
+&lt;p&gt;The energy consumption &lt;em&gt;might&lt;/em&gt; not turn out to be a deal-breaker, but it&amp;#39;s far
+from ideal. That&amp;#39;s one of the issue adressed by &lt;em&gt;proof-of-stake&lt;/em&gt;. But first,
+let&amp;#39;s talk about consensus.&lt;/p&gt;
+&lt;h2 id=&quot;proof-of-work---consensus&quot;&gt;Proof of Work - Consensus&lt;/h2&gt;
+&lt;p&gt;Okay, so miners compete in a hashing contest and, generally speaking, the first
+miner to find a valid nonce for his block &amp;quot;wins&amp;quot;. Now we need to explain how
+that happen, i.e. how this valid block is disseminated and eventually accepted
+on the network.&lt;/p&gt;
+&lt;p&gt;In a simple scenario, the winning miner sends the block to all the other nodes
+he know. These will verify that the block is valid: all the transaction have
+valid signatures, there are no double-spends (we&amp;#39;ll explain this later), and the
+hash of the block satisfies the difficulty requirement. Once this is done, they
+further desseminate the block, and they append it at the end of their local
+chain. If the node is a miner, he will also restart its mining efforts by
+creating a new candidate block — the block he is currently attempting to mine
+does include the hash of a block that is no longer the last in the chain, as
+well as transactions that might have already been included in the block
+submitted by the winning miner.&lt;/p&gt;
+&lt;p&gt;At this point, one could have a security question: what prevents miners from
+completely ignoring blocks from their competitors in a attempt to mine their own
+block? There is a neat game-theoretic incentive not to do this: If you assume
+everyone else is honest, they will append this competitor block to their chain.
+That means that even if you manage to mine your alternative block, other nodes
+will reject it because it does not contain the hash of what they consider to be
+the latest block in the chain (the block submitted by your competitor). What if
+everyone cheats? We&amp;#39;ll explain later, but there is no incentive to do this, as
+that makes all the profits go to the biggest miner.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s tackle the hard case: what if two miners mine a valid block at more or
+less the same time? Only one of the two blocks can win, since they include the
+hash of the same previous block, and their set of transactions might overlap.&lt;/p&gt;
+&lt;p&gt;In this case, the heuristic used by nodes is to always favor the longest chain.
+Of course, initially, the two blocks create two competing chains of equal
+length. Miners will have to decide which block to use as base for the next block
+they will mine (most likely they will select the block they saw first, reasoning
+that other miners are more likely to also have seen this block first — though
+that might not be the case because of network delays). Once a miner comes up
+with a valid block on one of the two chains, that chain gains the upper hand and
+everyone converges on the same chain. Of course, it&amp;#39;s possible for the scenario
+to repeat and the two chains to grow at about the same time, but this is very
+unlikely and grows more unlikely as the competing chains grow. Remember that the
+Bitcoin protocol adapts so that a new block is mined on average every 10
+minutes: it should be rare for two blocks to be mined mere seconds away from one
+another, and it will be exponentially rarer for that to happen multiple times in
+a row.&lt;/p&gt;
+&lt;p&gt;This longest-chain heuristic is also why it is irrational for miners to just
+ignore other blocks: if everybody mined their own chain, the largest miner would
+always be able to overtake the others with a longer chain, and so all the
+non-mining nodes would converge on that chain.&lt;/p&gt;
+&lt;h2 id=&quot;proof-of-stake&quot;&gt;Proof of Stake&lt;/h2&gt;
+&lt;p&gt;As we said earlier, proof-of-stake is a scheme to make validating blocks
+capital-intensive enough so that it&amp;#39;s impractical for any single actor to
+dominate the network, and impossible to mount a &lt;a href=&quot;https://en.wikipedia.org/wiki/Sybil_attack&quot;&gt;sibyl attack&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In proof-of-work, the hardware and energy costs make mining capital intensive.
+In proof-of-stake, we simply have validators put money on the line directly. And
+because cryptocurrencies are essentially money, that&amp;#39;s rather simple.&lt;/p&gt;
+&lt;p&gt;In proof-of-stake, validators engage a certain amount of currency, their
+&lt;em&gt;stake&lt;/em&gt;, which becomes locked for as long as they participate in the
+proof-of-stake mechanism.&lt;/p&gt;
+&lt;p&gt;The incentive structure is identical to proof-of-work. If you control 10% of the
+mining power, you should validate 10% of the blocks and get 10% of the mining
+rewards. Similarly, if you control 10% of the total stake, you should do 10% of
+the verification work and you should get 10% of the validation rewards. The
+difference is that instead of using a hashing contest, the protocol must
+determine how to distribute rewards to validators according to this
+distribution.&lt;/p&gt;
+&lt;p&gt;There are multiple ways to go about this, but the simplest is to use a
+pseudo-random scheme to select the next validator that will create a block. As
+an illustration, imagine that we filled an urn with 100 balls. On each ball the
+name of a validator is written, and each validator gets as many balls as his
+percentage of the total stake (of course in reality we need to accomodate many
+more validators and very fine grained fractions). Then we use some data from the
+block (we need to make sure validators can&amp;#39;t easily manipulate it), run it
+through a cryptographic hash function, and use the resulting hash to select a
+ball from the urn. The validator whose name is written on the ball gets to
+create the next block, and get the validation reward.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s not quite enough. Other validators need to cosign on the block, otherwise
+the block&amp;#39;s creator could double-spend, or even include transactions without a
+valid signature. The simplest scheme here is to have all validators verify each
+block, and to require a quorum of agreement (e.g. a simple majority, or a 2/3
+majority) to validate the block. We can&amp;#39;t require consensus, because that would
+open the protocol to Denial-of-Service (DoS) attacks, and some validators might
+have temporary availability issues. If having every validator vote for every
+block is impractical, we can also form &lt;em&gt;committees&lt;/em&gt; to validate individual
+blocks. Care must be taken that the validators are randomized properly and that
+committees are large enough to minimize the probability that all validators in
+the committee are controlled by the same entity. It is commonly required that
+the probability should be infinitesimal for validators controlling about 30% of
+the stake, and ideally up to 50%.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s another issue: what if the validator designated to create the block
+doesn&amp;#39;t answer? We must avoid stalling the chain in that case. One solution is
+to assign blocks to time slots. If the designated validator does not propose a
+block during its timeslot, the opportunity is lost and another validator gets to
+propose a block that will follow the previous valid block.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Distributed System Trivia&lt;/strong&gt;: The above is not as easy as it sounds, even if
+we assume that nodes are able to get highly accurate time information outside
+of the blockchain (for instance using the &lt;a href=&quot;https://en.wikipedia.org/wiki/Network_Time_Protocol&quot;&gt;NTP&lt;/a&gt; protocol). This is due to
+network delays, which makes the timeslot boundaries blurry. Some nodes may
+consider a proposed block to be within its timeslot while others may not.
+Therefore, the protocol must to take care to handle these boundary conditions
+so that the network always converges. It must also avoid unduly penalizing
+honest actors because of network latency.&lt;/p&gt;
+&lt;p&gt;If you want to avoid relying on out-of-chain time information, &lt;a href=&quot;https://ethresear.ch/t/network-adjusted-timestamps/4187&quot;&gt;things get
+even more difficult&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Nevertheless, we&amp;#39;d like to avoid the scenario where a block is skipped, if only
+for reasons of throughput (how many transactions get validated each second).
+Ethereum proof-of-stake incentivizes validators to be responsive by imposing a
+fine on the stake of absentee validators.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s more or less how proof-of-stake works. Unlike proof-of-work, there is a
+lot of disparity between the various proposed proof-of-stake designs. This blog
+posts offers only a high-level overview, and elides a lot of the details. For
+instance, we didn&amp;#39;t even talk about how stakes can slashed when a validator is
+caught attempting to cheat.&lt;/p&gt;
+&lt;p&gt;These missing details are best examined in the light of potential attacks
+against the protocol, which we will examine in a subsequent blog post.&lt;/p&gt;
+&lt;h2 id=&quot;coda&quot;&gt;Coda&lt;/h2&gt;
+&lt;p&gt;In this article, I presented an incomplete yet detailed technical overview of
+the proof-of-work and proof-of-stake protocols used to implement most
+blockchains, including the Bitcoin and Ethereum blockchains.&lt;/p&gt;
+&lt;p&gt;Stay tuned for futher posts. Next post will take a step back and look at the
+potential and applications of blockchain technologies. A subsequent post will
+take a look at the security model and potential attacks against proof-of-work
+and proof-of-stake. See you next time!&lt;/p&gt;
+      </description>
+      <pubDate>2021-05-24T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/blockchain-how</link>
+      <guid isPermaLink="true">http://norswap.com/blockchain-how</guid>
+    </item>
+    <item>
       <title>Fun With Incentives</title>
       <description>
 &lt;blockquote&gt;
@@ -1560,454 +1850,6 @@ folder and pick one to make real.&lt;/p&gt;
       <pubDate>2021-03-08T23:00:00.000Z</pubDate>
       <link>http://norswap.com/hell-yeah</link>
       <guid isPermaLink="true">http://norswap.com/hell-yeah</guid>
-    </item>
-    <item>
-      <title>Stock Market Adventures: Options &amp; The Wheel</title>
-      <description>
-&lt;p&gt;Part of a series on &lt;a href=&quot;/finance&quot;&gt;Finance&lt;/a&gt;.&lt;br&gt;Previously: &lt;a href=&quot;/stock-market-intro/&quot;&gt;Intro&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;I said last time I mostly trade using options. In this article I will explain my
-main strategy, known as &lt;em&gt;the wheel&lt;/em&gt;. But first, I&amp;#39;ll have to give you a bit of
-backgrounds on options. I&amp;#39;ll finish by a more technical explanation of option
-pricing and linking to a few other intersting option strategies - in case you&amp;#39;re
-interested.&lt;/p&gt;
-&lt;p&gt;This is going to be a long post, with a lot of words (and a few numbers). If
-you&amp;#39;d rather watch videos instead, I strongly recommend &lt;a href=&quot;https://www.youtube.com/playlist?list=PLI2eVMd1wtdGwFXMFya1jHpWLvWw6a07X&quot;&gt;Growing Wealth&amp;#39;s
-Options Trading Course&lt;/a&gt;. It will teach you option fundamentals, the
-wheel strategy, and a few others beside. Also no one says you can&amp;#39;t read the
-post &lt;strong&gt;and&lt;/strong&gt; watch the videos ;)&lt;/p&gt;
-&lt;h2 id=&quot;option-basics&quot;&gt;Option Basics&lt;/h2&gt;
-&lt;p&gt;A &lt;em&gt;call option&lt;/em&gt; is a contract that allows (but does not force) you to buy 100
-shares of a stock at a pre-determined price (the &lt;em&gt;strike price&lt;/em&gt;) until some
-point in the future (the &lt;em&gt;expiration date&lt;/em&gt;).&lt;/p&gt;
-&lt;p&gt;Conversely, a &lt;em&gt;put option&lt;/em&gt; allows you to sell 100 shares at a pre-determined
-strike price until the expiration date.&lt;/p&gt;
-&lt;p&gt;Actually buying or selling is called &amp;quot;exercising&amp;quot; the option. Options can be
-American-style — exercisable at any time until expiration, or European-style —
-exercisable only at expiration. In practice this does not make much of a
-difference because, excepted in two specific cases, it is always more profitable
-to sell an option than to exercise it before the expiration date.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;(Exceptions explained. Feel free to skip!)&lt;/p&gt;
-&lt;p&gt;The first exception are that when the stock is going to pay a dividend, the
-holder of an option may wish to exercise the option to benefit from the
-dividend.&lt;/p&gt;
-&lt;p&gt;The second exception is when the option is not very liquid, meaning there is no
-one interested in buying it at a greater price than the profit you would make by
-exercising the option. This should be extremely rare, as I expect these market
-inefficiencies to be &lt;a href=&quot;https://www.investopedia.com/terms/a/arbitrage.asp&quot;&gt;arbitraged&lt;/a&gt; away.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Options must be purchased for a price which is called &lt;em&gt;the premium&lt;/em&gt;. This
-premium is usually lower than the stock price.&lt;/p&gt;
-&lt;p&gt;In a simple scenario, if you buy a call option and hold it until expiration, you
-will profit if the price of the stock ends up being superior to the sum of the
-strike price and the premium.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;call_profit_or_loss = stock_price - (strike_price + premium_paid)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For put options, the logic is reversed, you profit if the stock price goes down
-enough:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;put_profit_or_loss = strike_price - (stock_price + premium_paid)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Try to understand these formulas. The key idea for a call option is that it
-allows you to purchase the stock at the strike price. If the current stock price
-is above the strike price, you can buy the stock (through the call option) and
-sell it for an instant markup.&lt;/p&gt;
-&lt;p&gt;For a put option, you can sell stock at the strike price. If the stock price is
-under the strike price, you can buy the stock and sell it (through the put
-option) for an instant markup.&lt;/p&gt;
-&lt;p&gt;Who do you buy these options from? Well, anyone really. Anyone that can buy
-options can also sell options. An option is a contracts formed between two
-parties, one that &amp;quot;buys&amp;quot; the option, and one that &amp;quot;sells&amp;quot; (or &amp;quot;writes&amp;quot;) it.&lt;/p&gt;
-&lt;p&gt;The person selling the option is making a different bet than the buyer. She is
-betting that the stock price will not be high enough for a call option to be
-profitable, or that the stock price will not be low enough for a put option to
-be profitable.&lt;/p&gt;
-&lt;p&gt;If that turns out true, the option is said to expire worthless. The buyer does
-not execute the option (as that would be a money-losing move) and so lost the
-premium he paid in the trade. The seller, on the other hand, profits by
-pocketing the premium.&lt;/p&gt;
-&lt;p&gt;Options are characterized by the triplet [underlying stock, strike price,
-expiration date], so there a lot of possible combinations.&lt;/p&gt;
-&lt;p&gt;Three useful abbreviations are used to talk about strike prices: an option can
-be &lt;em&gt;at the money&lt;/em&gt; (ATM) when the strike price is more or less equal to the
-current stock price, &lt;em&gt;out of the money&lt;/em&gt; (OTM) when the strike price is
-over/under (call/put) the stock price, and &lt;em&gt;in the money&lt;/em&gt; (ITM) when the strike
-price is under/over (call/put) the stock price. When an option expires ITM, you
-profit, if it expires OTM, you made a loss.&lt;/p&gt;
-&lt;p&gt;Note that OTM options are not worthless (before expiring) — they represent the
-potential for the stock price to move in desired direction until the expiration
-date. It&amp;#39;s even possible to make money by trading OTM options that have never
-been ITM: it suffices to buy an OTM option, and sell it when the stock price has
-moved in the right direction (up for call, down for put) - so when the option is
-&amp;quot;less OTM&amp;quot;.&lt;/p&gt;
-&lt;h2 id=&quot;why-use-options&quot;&gt;Why Use Options&lt;/h2&gt;
-&lt;p&gt;Why use options rather than buy and sell shares? There are multiple reasons.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;On the buy side&lt;/strong&gt;, options offer &lt;em&gt;leverage&lt;/em&gt;. We said option premiums are much
-cheaper than stocks. To give you an idea, let&amp;#39;s consider ATM options on
-Microsoft stock.&lt;/p&gt;
-&lt;p&gt;Such an option expiring in 20 days currently sells for ~3% of the stock price
-(in reality, 300% of the stock price, since an option commands 100 shares, but
-to make things convenient, option prices are usually denominated relative to a
-single share). For an option expiring in 50 days, the price is ~4.5%. And for
-January next year, it is ~13%.&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s quite a discount! Of course, it comes at a price. First - there is an
-expiration. If the option expires worthless, you lose the premium, whereas you
-can hold stock indefinitely.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;msft-header.png&quot;&gt;&lt;/a&gt;
-&lt;a href=&quot;msft-28-01.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Second, your profit margin on the 100 shares commanded by the option is reduced
-by the premium you paid. It is always more profitable to buy 100 shares than a
-call, in absolute terms (absolute meaning &amp;quot;if you ignore the amount that you
-need to invest&amp;quot;).&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s where leverage comes in: because options are much cheaper, you can buy
-more of them compared to the stock - and so if you profit, the profit typically
-ends up much higher for the same amount of money invested.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;The sell side&lt;/strong&gt; is where, according to me, options really shine.&lt;/p&gt;
-&lt;p&gt;While buying options (or shares) lets you make money by betting whether the
-stock will go up or down, selling options lets you make money by betting that
-the stock price will not fall below a certain price, or rise above a certain
-price.&lt;/p&gt;
-&lt;p&gt;To me at least, that&amp;#39;s a much easier bet. Stock prices are swingy and hard to
-predict, but I find it much easier to find conservative bounds for the price
-movement (especially on the down side).&lt;/p&gt;
-&lt;p&gt;Even better, this has the magical property of letting you profit &lt;em&gt;after&lt;/em&gt; a stock
-has run up in price. For instance, say a stock flies up from 10$ to 20$. You
-think it won&amp;#39;t go back under 13$, and/or you wouldn&amp;#39;t mind owning it as that
-price (as it is likely to go flying back up at some point in the future). Then
-you can sell a put with a 13$ strike price expiring in a few feeks. The best
-thing is, because of the recent price spike, there will be high demand
-(&lt;em&gt;volatility&lt;/em&gt;) for the options and you&amp;#39;re likely to sell it a a higher price
-compared to a similarly-priced, but stable stock. Of course, selling the put
-when the stock was worth 10$ or 13$ would have been even more profitable, but
-back then it was much more risky (as its upside was still uncertain).&lt;/p&gt;
-&lt;p&gt;Finally, selling option lets you do all kind of fancy &lt;a href=&quot;https://www.theoptionsguide.com/option-trading-strategies.aspx&quot;&gt;options combo
-strategies&lt;/a&gt;. I will list a few at the end of the article.&lt;/p&gt;
-&lt;h2 id=&quot;the-wheel&quot;&gt;The Wheel&lt;/h2&gt;
-&lt;p&gt;At this point, I&amp;#39;m dying to tell you more about option pricing. Because I&amp;#39;m
-apparently a finance nerd now, and I find this super cool, but also because it
-enables very interesting trading strategies.&lt;/p&gt;
-&lt;p&gt;However, that wasn&amp;#39;t quite the premise of this article, which was to describe a
-fairly conservative strategy using options. I still think you should understand
-option pricing if you&amp;#39;re going to use them, but you don&amp;#39;t need to understand all
-the intricacies to understand the strategy. So here it is.&lt;/p&gt;
-&lt;p&gt;The strategy is called &lt;strong&gt;the wheel&lt;/strong&gt;. It proceeds as follow:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;You pick a series of stock you like. These stock should be stable (mostly:
-very unlikely to go down a lot). They don&amp;#39;t need to be very volatile, but they
-do need to be just volatile enough that the whole thing is worth your risk
-(I&amp;#39;ll discuss numbers later). I wouldn&amp;#39;t recommend running this on market-wide
-&lt;a href=&quot;/stock-market-intro/&quot;&gt;ETFs&lt;/a&gt; for instance.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You sell cash-secured puts on the stocks you identified. A cash-secured put is
-just a put where you own the cash to buy the shares should you get assigned.
-You should pick a strike where you feel the stock is fairly- or under-valued.
-The expiration should in ~30 days (after that, the price of options start
-declining faster towards expiration, see section on option pricing).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You wait 30 days, and one of two things happen:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;The stock is over the strike at expiration. You get to keep the premium.
-You can re-start the process and again sell some puts on the stock (or on
-another stock if you prefer).&lt;/li&gt;
-&lt;li&gt;The stock did go down, you get assigned, and you now own 100 shares of
-the stock. The next phase of the strategy begins here.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;You now sell covered calls on the stock. A covered call is when you sell a
-call where you own the underlying stock. This is very safe since, should you
-get assigned, you can sell the stock you already own. The downside is that if
-the stock skyrockets, you will lose the upside, since the call you sold forces
-you to sell at the specified price. The game here is to select a strike that
-is a bit above where you think the stock could reach. If you think the stock
-could skyrocket, then just don&amp;#39;t sell the covered call - that&amp;#39;s fine (and
-smart) too. Like before, pick a ~30 days expiration.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Like before, after 30 days, either the call expired worthless, and you can
-sell another covered call — or you&amp;#39;ve been assigned. In that case you make a
-double profit: the premium which is yours no matter what, plus the difference
-between the price at which you bought the shares and the strike price. Your
-capital is now freed to start another wheel cycle.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;At this point, I should really give you an example trade. I&amp;#39;m lazy, so I will
-simply redirect you to the &lt;a href=&quot;https://www.youtube.com/watch?v=IFYrFeAygfc&amp;amp;list=PLI2eVMd1wtdGwFXMFya1jHpWLvWw6a07X&quot;&gt;appropriate video&lt;/a&gt; from the &lt;a href=&quot;https://www.youtube.com/playlist?list=PLI2eVMd1wtdGwFXMFya1jHpWLvWw6a07X&quot;&gt;course&lt;/a&gt; I linked
-earlier.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s talk numbers. You should aim for the premium collect when selling the
-options to be high enough. Jun Hao from the videos I linked before recommends a
-minimum of 2%. That comes up to a 24% of profit a year, which is fairly
-reasonable.&lt;/p&gt;
-&lt;p&gt;Now in pratice, you&amp;#39;ll often achieve much better returns than 24%. That&amp;#39;s
-because at some point your covered calls get assigned, you you get the pocket
-the increase in the stock price. Even for a stock that isn&amp;#39;t too volatile, that
-could be a ~10% increase (it is &lt;em&gt;possible&lt;/em&gt; for it be much more, if the stock
-price increases consistently but never reaches the strike of the calls that
-you&amp;#39;re selling month after month).&lt;/p&gt;
-&lt;p&gt;What about the downside? Well the downside is the downside of the stock. You can
-only lose money in this strategy if the stock loses value. That&amp;#39;s why picking
-good stocks is important. There is a lot to be written about stock picking and
-fundamental analysis, but that won&amp;#39;t be in this blog post.&lt;/p&gt;
-&lt;p&gt;In fact I&amp;#39;m not currently very inclined to write about valuation - I don&amp;#39;t feel
-like I could tell you much more than a few good youtube channels. In fact here
-are three recommendations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/c/GrowingWealth/playlists&quot;&gt;Growing Wealth&lt;/a&gt; - the source of the videos linked before. Solid
-advice, nothing super exciting, but this is what I would recommend to most people.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/c/AdamKhoo/playlists&quot;&gt;Adam Khoo&lt;/a&gt; - fairly basic and repetitive, but basic is what you want to
-start at. He&amp;#39;s a fairly entertaining speaker, so maybe this could go down
-better for you.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/c/AswathDamodaranonValuation/playlists&quot;&gt;Aswath Damodaran&lt;/a&gt; - a NY Stern professor no less, who shares his
-valuation and corporate finance classes online. I intend to follow the 2021
-class as it is being posted. From what I&amp;#39;ve seen so far, it&amp;#39;s top-notch, but
-slightly technical. Maybe not for complete beginners, unless you&amp;#39;re quite
-curious. Otherwise, follow some lighter content (podcasts etc) on the market first.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Back to the downside of the strategy. The downside is strictly less than owning
-stock. Think about it: not only do you enter at an advantageous point (low
-price), but you get paid a premium monthly before and after holding. Even in
-case of loss, you will lose as much as the stock lost, minus all the premium you
-collected.&lt;/p&gt;
-&lt;p&gt;The real price of the strategy is missing out on profits. If you really believe
-in a stock, don&amp;#39;t wait until you puts are called, just buy out, or you could
-miss out. Similarly, if a stock is really poised for growth, selling covered
-call could amount to selling away most of your profits.&lt;/p&gt;
-&lt;p&gt;Like I said, this strategy pays on stable stocks where you like the fundamentals
-and/or the prospects, but where you also don&amp;#39;t that the stock is currently
-selling at a bargain.&lt;/p&gt;
-&lt;h2 id=&quot;honestly-what-ive-been-doing&quot;&gt;Honestly, What I&amp;#39;ve Been Doing&lt;/h2&gt;
-&lt;p&gt;So the wheel strategy is sort of my base plan. However, in practice, I&amp;#39;ve
-deviated from it significantly.&lt;/p&gt;
-&lt;p&gt;In particular, I mostly sell puts, and I rarely get assigned. And second, I
-mostly sell puts on relatively hyped stocks, and consequently collect more
-premium.&lt;/p&gt;
-&lt;p&gt;This seems relatively contradictory, but in fact isn&amp;#39;t necessarily. Because the
-stocks are popular, they have high volatility, meaning the premiums are higher.
-Because of that, I can afford to pick a lower strike price (hence also a lower
-premium) and still make a respectable profit.&lt;/p&gt;
-&lt;p&gt;Now, it must be said that the market right now is an euphoric bull market. I
-would be foolish, I feel, to assume that this will last forever.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;stonks.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Another difference from the wheel strategy is that my puts are not all
-cash-secured (this is only possible if you trade &lt;a href=&quot;https://www.investopedia.com/terms/m/margin.asp&quot;&gt;on margin&lt;/a&gt;). Since my puts
-mostly don&amp;#39;t get called, this is fine.&lt;/p&gt;
-&lt;p&gt;However, I must be wary of a particular risk: if the market &lt;em&gt;turns&lt;/em&gt; and goes
-into a downtrend, I could potential be facing assignment on many/most of my
-puts, which would &amp;quot;blow my account&amp;quot; (since this is more money than I have
-because the puts are not cash-secured). I&amp;#39;m actively monitoring for such a
-risk - it can be avoided by buying back the puts while there is still time
-(which isn&amp;#39;t necessarily easy to do — trading psychology is fascinating and
-would probably deserve a blog post, a book review, or both).&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve also been relatively bummed by my experiences with selling cash-covered
-calls. There were a few stocks I really liked, that I acquired by selling puts
-very close to the money (I didn&amp;#39;t mind getting called since I liked the stock).
-I wanted to follow the strategy and sold the puts, but ultimately I would have
-done better to just let them ride - I was cut out of a major part of the gains
-that the stocks made immediately after I was assigned.&lt;/p&gt;
-&lt;p&gt;Another experience was a much more stable stock, where I felt like the amount of
-premium collected didn&amp;#39;t justify the risk taken by the stock going down (and it
-was going down).&lt;/p&gt;
-&lt;p&gt;Interestingly, this is also due to the market being so hyper recently. If things
-tend to go up, selling covered calls is probably not the best move. I expect
-this leg of the strategy will make more sense in boring times.&lt;/p&gt;
-&lt;h2 id=&quot;option-pricing&quot;&gt;Option Pricing&lt;/h2&gt;
-&lt;p&gt;I think a key thing to be able to trade effectively with options is to
-understand what influences the price of options (the premium).&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s very important to understand that the price of the options, just like the
-price of the underlying stock, is set by the market. i.e. the price is what
-someone is willing to pay for it.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;In reality, though this is not super important here, there are two components
-to the price: the bid (what someone is willing to pay) and the ask (what
-someone is willing to sell for). When the two component meet, an option is
-sold. The different between the bid and the ask is called &amp;quot;the spread&amp;quot;. In a
-liquid market with a lot of transaction volume, the spread is small. In an
-illiquid market where not much is happening, the spread is wide.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;However, the price of options is influenced by four key factors:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;the price of the underlying stock (obviously)&lt;/li&gt;
-&lt;li&gt;the time remaining until expiration&lt;/li&gt;
-&lt;li&gt;the risk-free rate&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;In fact, the price of options can be modelled using these factors, plus a fourth
-one (&lt;em&gt;volatility&lt;/em&gt;). The most popular model is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model&quot;&gt;Black-Scholes model&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&quot;volatility&quot;&gt;Volatility&lt;/h3&gt;
-&lt;p&gt;Volatility is the last factor that helps to fit the model to the market price.
-You can think of volatility as &amp;quot;demand&amp;quot;: when volatility is high there is a lot
-of trading activity, hence demand for options, meaning the premium rises.&lt;/p&gt;
-&lt;p&gt;Volatility is typically correlated with sudden changes or swings in the
-underlyings stock price.&lt;/p&gt;
-&lt;p&gt;Because volatility helps the model fit to reality, it is called &lt;em&gt;implied
-volatility&lt;/em&gt;, or &lt;strong&gt;IV&lt;/strong&gt; for short. External conditions influence the demand for
-options, which is reflected in the price, and then we use the Black-Scholes
-model to extract a quantified measure of &amp;quot;volatility&amp;quot; from the price.&lt;/p&gt;
-&lt;p&gt;Each stock has its own implied volatility. What qualifies as &amp;quot;high&amp;quot; IV varies
-from stock to stock. Some stocks are inherently more stable than other.
-Volatility can also be measured at the level of the market — this is notably
-done through &lt;a href=&quot;https://en.wikipedia.org/wiki/VIX&quot;&gt;the VIX index&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s also theoretically possible to have a stock that has high IV without
-exhibiting erratic price movements in the underlying stock.&lt;/p&gt;
-&lt;p&gt;Implied volatility is expressed in percentage. This percentage represents the
-predicted standard deviation range for the price of the underlying in the next
-year. So a 100$ stock with an IV of 25% is expected to end within the 75-125$
-price range after a year, with 68% probability (one standard deviation).&lt;/p&gt;
-&lt;p&gt;How does the implied volatility predicts the expected price? Essentially, the
-higher market participants are willing to bid on an option, the higher the
-expected price movement — traders are willing to pay more because they expect a
-big move.&lt;/p&gt;
-&lt;p&gt;An open question (that I can&amp;#39;t answer): why is the range traditionally centered
-on the current stock price? This is obviously wrong for many stocks.&lt;/p&gt;
-&lt;h3 id=&quot;the-risk-free-rate&quot;&gt;The Risk-Free Rate&lt;/h3&gt;
-&lt;p&gt;Okay, before we dive in the really important stuff, let&amp;#39;s evacuate something
-that is (currently) not very important: the risk-free rate.&lt;/p&gt;
-&lt;p&gt;The risk-free rate represents the rate of return of a risk-free investment. It&amp;#39;s
-typically embodied by the yield of &lt;a href=&quot;https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/textview.aspx?data=yield&quot;&gt;US treasury bonds&lt;/a&gt; — which can&amp;#39;t default
-unless the US government defaults, at which point we&amp;#39;d all have other worries
-than the marginal return rates of our options.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s mostly a non-factor because this rate is at the moment relatively stable,
-and relatively low. The American federal reserved has vowed to keep this rate
-low for at least the next two years. I&amp;#39;m a bit in over my head here, but from
-what I understand, it is widely considered that letting the interest rate
-increase would do bad things to do economy, and nobody seems particularly eager
-to do it.&lt;/p&gt;
-&lt;p&gt;The &lt;em&gt;idea&lt;/em&gt; of the risk-free rate as a factor in option price is simple: when the
-risk-free rate of return increase, you will demande increased returns for the
-risk that you actually take — which in this case takes the form of decreased
-premiums. It&amp;#39;s also interesting to note that since the option seller pockets the
-premium up front (and not at expiration), an increased risk-free rate implies a
-greater ability for him to compound the premium until expiration.&lt;/p&gt;
-&lt;h3 id=&quot;option-greeks&quot;&gt;Option Greeks&lt;/h3&gt;
-&lt;p&gt;The most commonly used tool to analyze option prices are the &lt;a href=&quot;https://en.wikipedia.org/wiki/Greeks_(finance)&quot;&gt;option greeks&lt;/a&gt;.
-The option greeks represent the variation of the option price relative to the
-factor we listed before (so they are derivatives).&lt;/p&gt;
-&lt;p&gt;Here are the first-order greeks:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Delta&lt;/strong&gt; (Δ): the most important one, how much does the price of the option increase
-(or decrease) when the price of the underlying stock moves by 1$ (like most
-numbers used with options, you actually need to multiply the quoted number by
-100 to obtain the correct figure).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Theta&lt;/strong&gt; (Θ): represents how the price of the option drops as time passes. It
-is expressed as a drop per year, but that number is actually meaningless,
-because theta increases constantly (and predictably) until expiration (more
-about this in a bit). To get a more useful figure, you should divide the
-quoted number by 365 (or by 3.65, remember the 100 factor) to get a daily
-drop. Note that options drop in value (all else being equal) even during the
-weekend.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Vega&lt;/strong&gt; (𝑉): represents how the price of the option increases/decreases when
-the implied volatility increases/decreases 1%.&lt;/p&gt;
-&lt;p&gt;Now this may sound a bit weird, because we said earlier that IV is computed
-from the option price and not the other way round. Indeed, getting the value
-of vega is as simple as plugging the a reduced IV value in the Black-Scholes
-model and getting out the new price.&lt;/p&gt;
-&lt;p&gt;This is nevertheless useful, because it helps us visualize how the option
-price would move if demand for the option were to increase/decrease (which in
-everyday talk will often be said as &amp;quot;if volatility were to increase&amp;quot;)&lt;/p&gt;
-&lt;p&gt;Interesting anecdote: vega is not a greek letter. It is typically represent by
-a variant uppercase representation of the greek nu (ν) which doesn&amp;#39;t even have
-a dedicated unicode character (I used the best approximation &amp;quot;mathematic
-italic capital V&amp;quot;).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Rho&lt;/strong&gt; (ρ): the least used one, representing how much the price
-increases/decreases if the risk-free rate increases/decreases by 1%.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;A key considerations when dealing with greeks is that they all represent a rate
-of change relative to a given variable (price, time, volatility, risk-free rate)
-&lt;strong&gt;when all else stays equal&lt;/strong&gt;. Said otherwise, the value of every greek depends
-on every variable. This is why not every option with 30 days until expiration
-has the same theta - of course the option price for a 10$ stock isn&amp;#39;t going to
-drop as much over time as the option price for a 1000$ stock! The same goes for
-every other variable. Let us now go over some of these interesting correlations.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s start with delta. Delta is about 0.5 when the option is at the money. The
-more the option gets in the money, the more delta increases, and the more it
-gets out of the money, the more it decreases.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;delta-vs-price.gif&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Why? If you own a 10$ call on a 1000$ stock, there is almost no option-specific
-risk involved in holding the option, so every extra dollar in the underlying
-price will translate to extra dollar in the option price.&lt;/p&gt;
-&lt;p&gt;In fact, we can show that the price of an ITM call option must exceed
-&lt;code&gt;stock_price - strike_price&lt;/code&gt;. It that weren&amp;#39;t the case, you could exercise the
-option and immediately make a profit by selling the shares (in reality you would
-need for the &lt;a href=&quot;https://www.optionstrading.org/introduction/how-options-really-work/settlement/&quot;&gt;settlement&lt;/a&gt; of the shares after exercising the option). A similar
-logic applies for put option, where the intrinsic value is &lt;code&gt;strike_price - stock_price&lt;/code&gt; instead.&lt;/p&gt;
-&lt;p&gt;The price of options can be divided into two parts. First, the &lt;strong&gt;intrinsic
-value&lt;/strong&gt;, which is the aforementiond &lt;code&gt;stock_price - strike_price&lt;/code&gt; factor (or
-vice-versa for puts). This factor is capped at 0, however: ATM and OTM shares
-have a 0 intrinsic value, not a negative one. Second, the &lt;strong&gt;time value&lt;/strong&gt; which
-represents the potential for the option to appreciate and potentially get in the
-money (or further in the money).&lt;/p&gt;
-&lt;p&gt;For call options, the intrinsic value is maximal at the 0 strike price, a point
-where the time value is also minimal. For puts, it&amp;#39;s a bit more complicated, but
-if far enough strikes are available (*), you will also find put options where the
-option price is roughly equal to the intrinsic value.&lt;/p&gt;
-&lt;p&gt;(*) The exchange decides how far the available strikes go, as well as the
-increment between two available strike prices!&lt;/p&gt;
-&lt;p&gt;The time value is maximal at the money, and decreases the further out in the
-money or at the money the option goes. We said the time value represent the
-potential for appreciation of the option. It does make sense that an option far
-out of the money is unlikely to ever go into the money, while an option far in
-the money will more or less move in lockstep with the underlying stock.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s tackle this from another angle. Buying a deeply ITM option is like holding
-stock: there is not much more risk than holding the stock. For this reason, the
-time value is small — the price of the option will move in lockstep with the
-underlying. But because the option is far in the money, the intrinsic value is
-large, and the option is pricey compared to an ATM option.&lt;/p&gt;
-&lt;p&gt;Buying a deeply OTM option, on the other hand, is more like buying a lottery
-ticket. It&amp;#39;s very likely it will expire worthless. Even if the underlying moves
-in the right direction and you sell before expiration, the price increase will
-be small because the further OTM an option is, the smaller delta is. This is
-therefore mostly a bet on an explosive change in the underlying price. For such
-a bet to make sense, the option price has to be very low. The intrinsic value is
-zero, and the time value is low, since the bet is very unlikely to succeed.&lt;/p&gt;
-&lt;p&gt;Somewhere in the middle, ATM options have 0 intrinsic value, but maximal time
-value. That&amp;#39;s because they are the most &lt;em&gt;swingy&lt;/em&gt; of options. Since delta is also
-maximal (0.5) at the money, the price of ATM options will respond the fastest to
-changes in the price of the underlying. If your option is ATM a few days before
-expiration, even a 3% price move is often the difference between a 100% loss and
-100% profit at expiration. This potential for a quick profit is what makes the
-time value high at the money.&lt;/p&gt;
-&lt;p&gt;Finally, we should mention that, just like time value, theta (the time decay) is
-greatest at the money. This is because an option has 0 time value at expiration,
-so the time value must tend to zero over time. When there is more time value
-(because the option is ATM), it therefore has to decrease faster over time.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;theta-vs-price.gif&quot; alt=&quot;Theta vs Price&quot;&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;In the chart above, the options are ATM and the underlying price is 6. Notice
-how the curve flattens when the remaining time diminishes — because the time
-value does too.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;As we mentionned somewhere above, the time values decays increasingly fast as
-expiration nears, and so does theta accelarate:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;theta-vs-time.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;price-vs-time.gif&quot; alt=&quot;Time Value vs Time&quot;&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;In the chart above &amp;quot;option value&amp;quot; should really be &amp;quot;time value&amp;quot;. The option
-may still have intrinsic value at expiration.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;In passing, note that delta also varies with time. At expiration, ITM options
-(no matter how far) have a delta of 1 (intrinsic value == price), while OTM
-options have a delta of 0.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;delta-vs-time.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Sources for the charts: &lt;a href=&quot;https://options-knowledge.com/the-greeks/&quot;&gt;1&lt;/a&gt;, &lt;a href=&quot;http://smart-options.blogspot.com/2007/11/option-delta.html&quot;&gt;2&lt;/a&gt;, &lt;a href=&quot;https://www.stockinvestor.com/36959/definition-greek-letter-theta-options-trading/&quot;&gt;3&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;And with this, I conclude my rather long exposition on options pricing. The
-topic is even broader than this. For instance, we didn&amp;#39;t talk about the
-second-order greek gamma (Γ) which played a major role in the recent &lt;a href=&quot;https://en.wikipedia.org/wiki/GameStop_short_squeeze&quot;&gt;GameStop
-rally&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I hope this article has been useful. See you next time!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;PS: Some Simple Option Strategies&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.theoptionsguide.com/bull-put-spread.aspx&quot;&gt;Bull Put Spread&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.theoptionsguide.com/bull-call-spread.aspx&quot;&gt;Bull Call Spread&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.theoptionsguide.com/diagonal-bull-call-spread.aspx&quot;&gt;Diagonal Bull Call Spread&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.theoptionsguide.com/iron-condor.aspx&quot;&gt;Iron Condor&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-      </description>
-      <pubDate>2021-02-18T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/options</link>
-      <guid isPermaLink="true">http://norswap.com/options</guid>
     </item>
   </channel>
 </rss>

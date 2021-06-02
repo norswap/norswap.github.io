@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>norswap</title>
-    <description></description>      
+    <description></description>
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Freaking blockchains: How do they work?</title>
       <description>
 &lt;p&gt;Cryptocurrency hype is at its peak, blockchains are on every lips. Since I
-started writing this, Bitcoin &amp;amp; assorted cryptocurriencies hit multiple all-time
+started writing this, Bitcoin &amp;amp; assorted cryptocurrencies hit multiple all-time
 highs then crashed 50%.&lt;/p&gt;
 &lt;p&gt;Besides all the sound and fury, I think I have something interesting and nuanced
 to say about blockchains and cryptocurrencies.&lt;/p&gt;
@@ -22,24 +22,41 @@ not what the practical applications are, nor whether I think the technology has
 a future, whether it&amp;#39;s a scam, or whether cryptocurrency prices are justified. I
 will, however, tackle all these topics in a follow-up article.&lt;/p&gt;
 &lt;h2 id=&quot;whats-a-blockchain&quot;&gt;What&amp;#39;s a blockchain?&lt;/h2&gt;
-&lt;p&gt;A blockchain is a decentralized ledger of transactions. It&amp;#39;s a sort of permanent
+&lt;p&gt;A blockchain is a decentralized ledger of transactions. It&amp;#39;s a kind of permanent
 log: once a transaction makes it into the log, it will remain there forever.
 Note that the concept can be extended to log more than financial transactions,
-but we&amp;#39;ll use transactions as an example in this write-up.&lt;/p&gt;
+but we&amp;#39;ll use transactions as an example in this write-up, where users can
+transfer digital coin currency, also called &lt;em&gt;tokens&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;What makes blockchains special is that they are truly decentralized in the sense
 that anybody can join &lt;em&gt;the network&lt;/em&gt; that monitors and mirrors the state of the
 blockchain — such participants are called &lt;em&gt;nodes&lt;/em&gt;. Some nodes additionally
 participate in the consensus process to verify the transactions that make it
 onto the ledger. In the &lt;em&gt;proof-of-work&lt;/em&gt; scheme used by Bitcoin, such nodes are
 called &lt;em&gt;miners&lt;/em&gt;. And again, everybody can become a miner. We&amp;#39;ll also tackle the
-main alternative, &lt;em&gt;proof-of-stake&lt;/em&gt; later in this article.&lt;/p&gt;
+main alternative, &lt;em&gt;proof-of-stake&lt;/em&gt;, later in this article.&lt;/p&gt;
 &lt;p&gt;A &amp;quot;blockchain&amp;quot; is called so because the ledger is composed of a chain of
 &amp;quot;blocks&amp;quot;, each of which encodes many transactions. Miners in the network collect
 transactions, verify their validity, pack them in a block, then try to validate
 this block. In proof-of-work, this is calling &lt;em&gt;mining&lt;/em&gt; the block (in
-proof-of-stake, it&amp;#39;s simply called &lt;em&gt;validating&lt;/em&gt;). Whenever a node
-mines/validates a block, it receives a reward. We&amp;#39;ll explain this in detail
-later.&lt;/p&gt;
+proof-of-stake, it&amp;#39;s simply called &lt;em&gt;proposing&lt;/em&gt; or &lt;em&gt;creating&lt;/em&gt; the block).
+Whenever a node mines/proposes a block that is accepted by the network, it
+receives a reward.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;blockchain.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;blockchain.png&quot; alt=&quot;proof-of-work overview&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;(Click to open bigger version in a new page. Image source:
+&lt;a href=&quot;https://www.bitpanda.com/academy/fr/lecons/comment-fonctionne-une-blockchain/&quot;&gt;Bitpanda&lt;/a&gt;)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As an aside, a transaction is considered valid if it is signed by the
+cryptographic key associated with the source&amp;#39;s address (a crypto address is a
+little bit like a bank account number), if it&amp;#39;s legal with respect to the
+address&amp;#39; token balance, and if the transaction did not previously appear in
+another block.&lt;/p&gt;
+&lt;p&gt;Cases where an address spends the same tokens twice is called a
+&lt;em&gt;double-spend&lt;/em&gt;. As we&amp;#39;ll see in a subsequent article, this is the principal
+attack vector against blockchains. This is distinct from duplicating a
+transaction, which might still be legal with respect to balances, but if
+allowed, would allow miners to siphon off the funds from an address that
+previously sent them tokens.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;To mine/validate a block, it is not sufficient to create and verify the block —
 it must also be accepted as part of the blockchain. This is achieved through a
 consensus protocol.&lt;/p&gt;
@@ -49,24 +66,25 @@ is typically based on some form of majority voting. We also know, to some
 extent, how to guard against malicious nodes who lie to try to get their own
 choice selected.&lt;/p&gt;
 &lt;p&gt;However, this only works if the network participants are pre-established. In an
-open network, a malicious actor could just create a huge amount of nodes to get
+open network, a malicious actor could just create a huge number of nodes to get
 a de facto majority — this is called a &lt;a href=&quot;https://en.wikipedia.org/wiki/Sybil_attack&quot;&gt;sibyl attack&lt;/a&gt;. To tackle this issue,
 blockchains must make it &amp;quot;expensive&amp;quot; to validate blocks. In reality, validation
 must be profitable: that&amp;#39;s the incentive for miners/validators to participate in
 securing the network. But when we say that validation should be &amp;quot;expensive&amp;quot;, we
 mean it must be &lt;em&gt;capital-intensive&lt;/em&gt;. Because it costs money to validate blocks,
-it becomes much more difficult to assemble enough mining or validating power to
+it becomes much more difficult to assemble enough mining or staking power to
 mount a sibyl attack.&lt;/p&gt;
 &lt;p&gt;In proof-of-work blockchains, miners compete against each other to be the first
-to validate a block. There is a sort of number-guessing contest going on, based
-on expensive computations, and the winner gets to mine the block and collect a
-reward. Miners buy specialized mining devices to be able to run the expensive
-computations as fast as possible. Statistically speaking, if you control X% of
-the mining power, you&amp;#39;ll get 10% of the mining rewards.&lt;/p&gt;
+to validate a block. There is a sort of number-guessing contest going on based
+on expensive computations (we&amp;#39;ll explain it shortly), and the winner gets to
+mine the block and collect a reward. Miners buy specialized mining devices to be
+able to run the expensive computations as fast as possible. Statistically
+speaking, if you control X% of the mining power, you&amp;#39;ll get X% of the mining
+rewards.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;By the way, the &amp;quot;number guesing game&amp;quot; in question is made computationally
-expensive through the use of &lt;em&gt;cryptographic hash functions&lt;/em&gt; (details will
-follow). To the best of my knowledge, this is the reason for the &lt;em&gt;crypto&lt;/em&gt; in
+&lt;p&gt;The &amp;quot;number guessing game&amp;quot; in question is made computationally expensive
+through the use of &lt;em&gt;cryptographic hash functions&lt;/em&gt; (details will follow). To
+the best of my knowledge, this is the reason for the &lt;em&gt;crypto&lt;/em&gt; in
 &lt;em&gt;cryptocurrencies&lt;/em&gt;. It could also refer to the use of cryptographic keys to
 sign transactions, but this is a fairly old technology whose use was already
 pervasive when blockchains were introduced.&lt;/p&gt;
@@ -74,15 +92,17 @@ pervasive when blockchains were introduced.&lt;/p&gt;
 &lt;p&gt;In proof-of-stake, validators must lock some amount of on-chain currency (their
 &lt;em&gt;stake&lt;/em&gt;). The protocol then selects which validator gets to validate the next
 block. If you control X% of the total stake, you&amp;#39;ll be select with X%
-probability. Note that this is note the only way to implement proof-of-stake,
-but it is the simplest to understand, and it gives the right idea.&lt;/p&gt;
+probability. Note that this is not the only way to implement proof-of-stake, but
+it is the simplest to understand, and it gives the right idea.&lt;/p&gt;
+&lt;p&gt;I haven&amp;#39;t mentionned where these rewards come from. In both cases, they&amp;#39;re a
+combination of both currency creation where the miner/validator might be granted
+some amount of newly minted tokens, and transactions fees paid by the users
+whose transactions end up on the block. Bitcoin famously has a supply limit,
+where eventually only transactions fees will remain.&lt;/p&gt;
 &lt;p&gt;Currently, most blockchains use proof-of-work, including #1 and #2
 cryptocurrencies Bitcoin and Ethereum. A few minor blockchains use
 proof-of-stake, and Ethereum has planned to transition to proof-of-stake. We
 will now give more details about them, starting with proof-of-work.&lt;/p&gt;
-&lt;p&gt;TODO outline of the rest&lt;/p&gt;
-&lt;p&gt;We&amp;#39;ll be particularly interested in the security model these schemes, since they
-inform a lot of the design and implementation choices.&lt;/p&gt;
 &lt;h2 id=&quot;proof-of-work---hashing&quot;&gt;Proof of Work - Hashing&lt;/h2&gt;
 &lt;p&gt;In proof-of-work, mining is done by solving a cryptographic problem. In
 particular, miners have to calculate a valid hash for the block. You can think
@@ -102,7 +122,7 @@ the data (e.g. the block, or the password) that generated the hash.&lt;/p&gt;
 Instead they store a hash of your password. When you login, they hash the
 password you submit, and compare it to the hash they stored. That way, if the
 website is compromised, the attacker only gets the hash of your password.
-Since he can&amp;#39;t invert the hash, your password is safe and the attacker can&amp;#39;t
+Since he can&amp;#39;t invert the hash, your password is safe, and the attacker can&amp;#39;t
 use the hash to log on other websites. ... Or at least that&amp;#39;s what we&amp;#39;d hope.
 In reality, getting the hash makes it easier to guess a password through the
 use of &lt;a href=&quot;https://en.wikipedia.org/wiki/Rainbow_table&quot;&gt;rainbow tables&lt;/a&gt;, which is why the website should hash your password
@@ -112,8 +132,8 @@ along with a &lt;a href=&quot;https://en.wikipedia.org/wiki/Salt_(cryptography)&
 &lt;p&gt;&lt;strong&gt;Crypto Trivia 2&lt;/strong&gt;: Since the block is much bigger than the hash (in
 Bitcoin&amp;#39;s case, most blocks are 1MB and a hash is 256 bits), it means that
 there can exist many more different blocks than different hashes. This means
-that, by &lt;a href=&quot;https://en.wikipedia.org/wiki/Pigeonhole_principle&quot;&gt;the pigeonhole principle&lt;/a&gt; it is possible for two blocks to hash to
-the same value. This is fine here, and is fine for most uses of hash. Just
+that, by &lt;a href=&quot;https://en.wikipedia.org/wiki/Pigeonhole_principle&quot;&gt;the pigeonhole principle&lt;/a&gt;, it is possible for two blocks to hash to
+the same value. This is fine here, and is fine for most uses of hashing. Just
 note that our &amp;quot;fingerprints&amp;quot; are not necessarily unique. However such a
 collision has a probability of 1/(2 followed by 59 zeros). It&amp;#39;s pretty rare.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -122,6 +142,8 @@ easy task. But in blockchains it involves a guessing component. The block&amp;#3
 contains all the transactions, but also a reference to the previous block
 (actually, the &lt;strong&gt;hash&lt;/strong&gt; of the previous block) and a random number called
 &lt;em&gt;nonce&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;block-format.png&quot; alt=&quot;Bitcoin block format&quot;&gt;&lt;/p&gt;
+&lt;p&gt;(Image source: &lt;a href=&quot;https://blog.scottlogic.com/2016/04/04/jenny-from-the-blockchain.html&quot;&gt;Scott Logic&lt;/a&gt;)&lt;/p&gt;
 &lt;p&gt;The &lt;em&gt;problem&lt;/em&gt; proof-of-work has to solve is as follows:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;nonce = random 32 bit number
 h1 = hash(block including nonce)
@@ -131,7 +153,7 @@ h2 = hash(h1 concatenated with nonce)
 &lt;p&gt;So we pick a nonce and hash the block which contains this nonce. Then we append
 the nonce to this first hash, and hash that to get a second hash. The problem is
 solved only this second hash is higher than a set number, called &lt;em&gt;the
-difficulty&lt;/em&gt;. If the condition is not fullfilled, the process starts again with
+difficulty&lt;/em&gt;. If the condition is not fulfilled, the process starts again with
 another nonce, until the problem is solved or someone else mined a block — in
 which case we need to update the previous block&amp;#39;s hash, as well as the list of
 transactions.&lt;/p&gt;
@@ -145,7 +167,7 @@ hashes. In reality, the difficulty is much much higher than that. A &lt;a href=&
 mining machine&lt;/a&gt; that can perform about 100 tera-hash per second (*) costs about
 4000$!&lt;/p&gt;
 &lt;p&gt;(*) That&amp;#39;s 100 trillion — or about 2^47 — hashes per second. I&amp;#39;m not sure if
-that number designates actual hash function calls or attempted nonces however.&lt;/p&gt;
+that number designates actual hash function calls or attempted nonces.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Math Trivia&lt;/strong&gt;: Assuming the difficult is indeed 3/4 * 2^256, how many
 nonce would we have to try to find a valid hash, on average?&lt;/p&gt;
@@ -161,13 +183,15 @@ costs. This is all by design.&lt;/p&gt;
 &lt;p&gt;Now, consuming a lot of energy is not ideal in a world where we&amp;#39;re trying to
 stop global warming. &lt;a href=&quot;https://cbeci.org/cbeci/comparisons&quot;&gt;At the time of writing&lt;/a&gt;, the energy expended
 annually on mining bitcoin is greater than the annual energy expenditure of
-Sweden, and account for 0.6% of the globe&amp;#39;s total energy production.&lt;/p&gt;
+Sweden, and account for 0.6% of the globe&amp;#39;s total energy production. I&amp;#39;ve also
+read that every Ethereum transaction currently consumes enough energy to power
+an average household for 24 hours.&lt;/p&gt;
 &lt;p&gt;This can be caveated a little bit by saying that miners are after cheap energy,
-and excess energy is the cheapest energy. It&amp;#39;s also possible for miners to
-custom build renewable energy plants to power their mining rigs — though this
-also comes with an environmental cost.&lt;/p&gt;
+and excess energy is the cheapest energy. It&amp;#39;s also possible for miners to build
+renewable energy plants to power their mining rigs — though this also comes with
+an environmental cost.&lt;/p&gt;
 &lt;p&gt;The energy consumption &lt;em&gt;might&lt;/em&gt; not turn out to be a deal-breaker, but it&amp;#39;s far
-from ideal. That&amp;#39;s one of the issue adressed by &lt;em&gt;proof-of-stake&lt;/em&gt;. But first,
+from ideal. That&amp;#39;s one of the issues addressed by &lt;em&gt;proof-of-stake&lt;/em&gt;. But first,
 let&amp;#39;s talk about consensus.&lt;/p&gt;
 &lt;h2 id=&quot;proof-of-work---consensus&quot;&gt;Proof of Work - Consensus&lt;/h2&gt;
 &lt;p&gt;Okay, so miners compete in a hashing contest and, generally speaking, the first
@@ -175,17 +199,17 @@ miner to find a valid nonce for his block &amp;quot;wins&amp;quot;. Now we need 
 that happen, i.e. how this valid block is disseminated and eventually accepted
 on the network.&lt;/p&gt;
 &lt;p&gt;In a simple scenario, the winning miner sends the block to all the other nodes
-he know. These will verify that the block is valid: all the transaction have
-valid signatures, there are no double-spends (we&amp;#39;ll explain this later), and the
-hash of the block satisfies the difficulty requirement. Once this is done, they
-further desseminate the block, and they append it at the end of their local
-chain. If the node is a miner, he will also restart its mining efforts by
-creating a new candidate block — the block he is currently attempting to mine
-does include the hash of a block that is no longer the last in the chain, as
-well as transactions that might have already been included in the block
-submitted by the winning miner.&lt;/p&gt;
+he knows. These will verify that the block is valid: all the transactions have
+valid signatures, there are no double-spends, and the hash of the block
+satisfies the difficulty requirement. Once this is done, they further
+disseminate the block, and they append it at the end of their local chain. If
+the node is a miner, he will also restart its mining efforts by creating a new
+candidate block — the block he is currently attempting to mine does include the
+hash of a block that is no longer the last in the chain, as well as transactions
+that might have already been included in the block submitted by the winning
+miner.&lt;/p&gt;
 &lt;p&gt;At this point, one could have a security question: what prevents miners from
-completely ignoring blocks from their competitors in a attempt to mine their own
+completely ignoring blocks from their competitors in an attempt to mine their own
 block? There is a neat game-theoretic incentive not to do this: If you assume
 everyone else is honest, they will append this competitor block to their chain.
 That means that even if you manage to mine your alternative block, other nodes
@@ -196,26 +220,36 @@ that makes all the profits go to the biggest miner.&lt;/p&gt;
 &lt;p&gt;Let&amp;#39;s tackle the hard case: what if two miners mine a valid block at more or
 less the same time? Only one of the two blocks can win, since they include the
 hash of the same previous block, and their set of transactions might overlap.&lt;/p&gt;
-&lt;p&gt;In this case, the heuristic used by nodes is to always favor the longest chain.
-Of course, initially, the two blocks create two competing chains of equal
-length. Miners will have to decide which block to use as base for the next block
-they will mine (most likely they will select the block they saw first, reasoning
-that other miners are more likely to also have seen this block first — though
-that might not be the case because of network delays). Once a miner comes up
-with a valid block on one of the two chains, that chain gains the upper hand and
-everyone converges on the same chain. Of course, it&amp;#39;s possible for the scenario
-to repeat and the two chains to grow at about the same time, but this is very
-unlikely and grows more unlikely as the competing chains grow. Remember that the
-Bitcoin protocol adapts so that a new block is mined on average every 10
-minutes: it should be rare for two blocks to be mined mere seconds away from one
-another, and it will be exponentially rarer for that to happen multiple times in
-a row.&lt;/p&gt;
-&lt;p&gt;This longest-chain heuristic is also why it is irrational for miners to just
+&lt;p&gt;In this case, the rule used by nodes is to always favor the longest chain. Of
+course, initially, the two blocks create two competing chains of equal length.
+Miners will have to decide which block to use as base for the next block they
+will attempt to mine (most likely they will select the block they saw first,
+reasoning that other miners are more likely to also have seen this block first —
+though that might not be the case because of network delays). Once a miner comes
+up with a valid block on one of the two chains, that chain gains the upper hand,
+and everyone converges on the same chain. Of course, it&amp;#39;s possible for the
+scenario to repeat and the two chains to grow at about the same time, but this
+is very unlikely and grows more unlikely as the competing chains grow. Remember
+that the Bitcoin protocol adapts so that a new block is mined on average every
+10 minutes: it should be rare for two blocks to be mined mere seconds away from
+one another, and it will be exponentially rarer for that to happen multiple
+times in a row.&lt;/p&gt;
+&lt;p&gt;This longest-chain rule is also why it is irrational for miners to just
 ignore other blocks: if everybody mined their own chain, the largest miner would
 always be able to overtake the others with a longer chain, and so all the
 non-mining nodes would converge on that chain.&lt;/p&gt;
+&lt;p&gt;The longest-chain rule is not infaillible: if an entity can get control of 51%
+of the mining power, they&amp;#39;re able to mount a &lt;em&gt;51% attack&lt;/em&gt; which allows them to
+double spend. We&amp;#39;ll talk about those in details in a subsequent article. Note
+that 51% attacks are at least fairly easy to spot on non-anonymized blockchains
+(which is most of them).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;51attack.png&quot; alt=&quot;A 51% attack&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Above, a schematic representation of a 51% attack, where the attacker conceals
+his mining and then release his blocks all at once to overtake the main chain.
+(source: &lt;a href=&quot;https://ethresear.ch/t/timeliness-detectors-and-51-attack-recovery-in-blockchains/6925&quot;&gt;Vitalik
+Buterin&lt;/a&gt;)&lt;/p&gt;
 &lt;h2 id=&quot;proof-of-stake&quot;&gt;Proof of Stake&lt;/h2&gt;
-&lt;p&gt;As we said earlier, proof-of-stake is a scheme to make validating blocks
+&lt;p&gt;As we said earlier, proof-of-stake is another scheme to make validating blocks
 capital-intensive enough so that it&amp;#39;s impractical for any single actor to
 dominate the network, and impossible to mount a &lt;a href=&quot;https://en.wikipedia.org/wiki/Sybil_attack&quot;&gt;sibyl attack&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In proof-of-work, the hardware and energy costs make mining capital intensive.
@@ -235,39 +269,42 @@ distribution.&lt;/p&gt;
 pseudo-random scheme to select the next validator that will create a block. As
 an illustration, imagine that we filled an urn with 100 balls. On each ball the
 name of a validator is written, and each validator gets as many balls as his
-percentage of the total stake (of course in reality we need to accomodate many
-more validators and very fine grained fractions). Then we use some data from the
+percentage of the total stake (of course in reality we need to accommodate many
+more validators and very fine-grained fractions). Then we use some data from the
 block (we need to make sure validators can&amp;#39;t easily manipulate it), run it
 through a cryptographic hash function, and use the resulting hash to select a
 ball from the urn. The validator whose name is written on the ball gets to
-create the next block, and get the validation reward.&lt;/p&gt;
+create the next block, and gets the validation reward.&lt;/p&gt;
 &lt;p&gt;That&amp;#39;s not quite enough. Other validators need to cosign on the block, otherwise
 the block&amp;#39;s creator could double-spend, or even include transactions without a
 valid signature. The simplest scheme here is to have all validators verify each
 block, and to require a quorum of agreement (e.g. a simple majority, or a 2/3
 majority) to validate the block. We can&amp;#39;t require consensus, because that would
-open the protocol to Denial-of-Service (DoS) attacks, and some validators might
+open the protocol to &lt;a href=&quot;https://en.wikipedia.org/wiki/Denial-of-service_attack&quot;&gt;Denial-of-Service (DoS)&lt;/a&gt; attacks, and some validators might
 have temporary availability issues. If having every validator vote for every
 block is impractical, we can also form &lt;em&gt;committees&lt;/em&gt; to validate individual
 blocks. Care must be taken that the validators are randomized properly and that
 committees are large enough to minimize the probability that all validators in
 the committee are controlled by the same entity. It is commonly required that
-the probability should be infinitesimal for validators controlling about 30% of
+this probability should be infinitesimal for validators controlling about 30% of
 the stake, and ideally up to 50%.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;committees.png&quot; alt=&quot;Committees in the Ethereum Beacon Chain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Pictured above: committees in the Ethereum beacon chain. Image source:
+&lt;a href=&quot;https://ethos.dev/beacon-chain/&quot;&gt;ethos.dev&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;There&amp;#39;s another issue: what if the validator designated to create the block
 doesn&amp;#39;t answer? We must avoid stalling the chain in that case. One solution is
 to assign blocks to time slots. If the designated validator does not propose a
 block during its timeslot, the opportunity is lost and another validator gets to
 propose a block that will follow the previous valid block.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Distributed System Trivia&lt;/strong&gt;: The above is not as easy as it sounds, even if
+&lt;p&gt;&lt;strong&gt;Distributed Systems Trivia&lt;/strong&gt;: The above is not as easy as it sounds, even if
 we assume that nodes are able to get highly accurate time information outside
 of the blockchain (for instance using the &lt;a href=&quot;https://en.wikipedia.org/wiki/Network_Time_Protocol&quot;&gt;NTP&lt;/a&gt; protocol). This is due to
 network delays, which makes the timeslot boundaries blurry. Some nodes may
 consider a proposed block to be within its timeslot while others may not.
-Therefore, the protocol must to take care to handle these boundary conditions
-so that the network always converges. It must also avoid unduly penalizing
-honest actors because of network latency.&lt;/p&gt;
+Therefore, the protocol must take care to handle these boundary conditions so
+that the network always converges. It must also avoid unduly penalizing honest
+actors because of network latency.&lt;/p&gt;
 &lt;p&gt;If you want to avoid relying on out-of-chain time information, &lt;a href=&quot;https://ethresear.ch/t/network-adjusted-timestamps/4187&quot;&gt;things get
 even more difficult&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -276,22 +313,31 @@ for reasons of throughput (how many transactions get validated each second).
 Ethereum proof-of-stake incentivizes validators to be responsive by imposing a
 fine on the stake of absentee validators.&lt;/p&gt;
 &lt;p&gt;That&amp;#39;s more or less how proof-of-stake works. Unlike proof-of-work, there is a
-lot of disparity between the various proposed proof-of-stake designs. This blog
-posts offers only a high-level overview, and elides a lot of the details. For
-instance, we didn&amp;#39;t even talk about how stakes can slashed when a validator is
-caught attempting to cheat.&lt;/p&gt;
+lot of disparity between the various proposed proof-of-stake designs. This
+article offers only a high-level overview, and elides a lot of the details. For
+instance, we didn&amp;#39;t even talk about how stakes can be confiscated (&amp;quot;slashed&amp;quot;)
+when a validator is caught attempting to cheat.&lt;/p&gt;
 &lt;p&gt;These missing details are best examined in the light of potential attacks
 against the protocol, which we will examine in a subsequent blog post.&lt;/p&gt;
 &lt;h2 id=&quot;coda&quot;&gt;Coda&lt;/h2&gt;
 &lt;p&gt;In this article, I presented an incomplete yet detailed technical overview of
 the proof-of-work and proof-of-stake protocols used to implement most
 blockchains, including the Bitcoin and Ethereum blockchains.&lt;/p&gt;
-&lt;p&gt;Stay tuned for futher posts. Next post will take a step back and look at the
+&lt;p&gt;The most important take-away is that blockchains are distributed ledgers built
+on top of a network that is open to everyone — this is their main selling point.
+Because of this, they must guard against &lt;a href=&quot;https://en.wikipedia.org/wiki/Sybil_attack&quot;&gt;sibyl attacks&lt;/a&gt; by making validation
+capital-intensive so that any single actor is unlikely to control a majority of
+the validation capacity. Proof-of-work makes mining capital-intensive by making
+validation computationally expensive, while proof-of-stake has validators put
+money (in the form of crypto tokens) on the line directly. Both methods must
+contend with a series of challenges that involve concerns from distributed
+systems, security, and game theory.&lt;/p&gt;
+&lt;p&gt;Stay tuned for further posts. Next post will take a step back and look at the
 potential and applications of blockchain technologies. A subsequent post will
 take a look at the security model and potential attacks against proof-of-work
 and proof-of-stake. See you next time!&lt;/p&gt;
       </description>
-      <pubDate>2021-05-24T22:00:00.000Z</pubDate>
+      <pubDate>2021-05-26T22:00:00.000Z</pubDate>
       <link>http://norswap.com/blockchain-how</link>
       <guid isPermaLink="true">http://norswap.com/blockchain-how</guid>
     </item>
@@ -398,7 +444,7 @@ future.&lt;/p&gt;
     <item>
       <title>Bonds Bonanza 1: Bonds Basics</title>
       <description>
-&lt;p&gt;This is part of a series of posts on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is part of a series of posts on &lt;a href=&quot;https://norswap.com/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;During the second part of February, US treasury bonds yields rose sharply, from
 1.13% to more than 1.6%. (If you have no idea what that means, everything will
@@ -407,7 +453,7 @@ very low, the move was quite sudden, and this had big repercussions in the stock
 market.&lt;/p&gt;
 &lt;p&gt;In particular, it triggered (or accelerated) a &lt;em&gt;rotation into value&lt;/em&gt; where
 &lt;a href=&quot;https://www.investopedia.com/terms/g/growthstock.asp&quot;&gt;growth stocks&lt;/a&gt; got beat down, while &lt;a href=&quot;https://en.wikipedia.org/wiki/Value_investing&quot;&gt;value stocks&lt;/a&gt; soared.&lt;/p&gt;
-&lt;p&gt;As previously &lt;a href=&quot;/heat&quot;&gt;reported&lt;/a&gt;, the change caught me by surprise and wiped out
+&lt;p&gt;As previously &lt;a href=&quot;https://norswap.com/heat&quot;&gt;reported&lt;/a&gt;, the change caught me by surprise and wiped out
 the investment gains I made over the past three months. I didn&amp;#39;t understand —
 and to be honest, still don&amp;#39;t really — how these movements in the bond market
 could affect the stock market so much. It did cause me to read a lot about the
@@ -520,7 +566,7 @@ affected the stock market.&lt;/p&gt;
     <item>
       <title>GameStop: Anatomy of a Short &amp; Gamma Squeeze</title>
       <description>
-&lt;p&gt;Part of a series of posts on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Part of a series of posts on &lt;a href=&quot;https://norswap.com/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;Towards the end of January the stock price of GameStop (GME), a brick-and-mortar
 video game retailer, went completely crazy. This has been chronicled in a lot of
@@ -563,7 +609,7 @@ squeeze (which was part of the explicit plan of at least some redditors).
 This did in turn trigger a gamma squeeze.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;A gamma squeeze is an increase in the stock price driven by market makers
-(who sell options) &lt;a href=&quot;/options/#option-greeks&quot;&gt;delta&lt;/a&gt;-hedging their option contracts. This makes them
+(who sell options) &lt;a href=&quot;https://norswap.com/options/#option-greeks&quot;&gt;delta&lt;/a&gt;-hedging their option contracts. This makes them
 insensitive to change in the stock price and lets them pocket the option
 premium. Having sold call options, the increase in stock price caused them to
 purchase more stock to maintain the hedge, further driving the price up.&lt;/p&gt;
@@ -664,9 +710,9 @@ almost 500$.&lt;/p&gt;
 &lt;p&gt;There was at least one other major component to the price action, and that was a
 &lt;em&gt;gamma squeeze&lt;/em&gt; (also known as &lt;em&gt;gamma trap&lt;/em&gt;).&lt;/p&gt;
 &lt;p&gt;Gamma is a second-order stock option greek. If you don&amp;#39;t know anything about
-stock options, I wrote &lt;a href=&quot;/options&quot;&gt;a primer here&lt;/a&gt;. The primer covers first-order
+stock options, I wrote &lt;a href=&quot;https://norswap.com/options&quot;&gt;a primer here&lt;/a&gt;. The primer covers first-order
 options greeks, including &lt;em&gt;delta&lt;/em&gt;, but not the second-order &lt;em&gt;gamma&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;/options/#option-greeks&quot;&gt;&lt;em&gt;Delta&lt;/em&gt;&lt;/a&gt; in brief: if the delta is 0.5, that means if the stock price
+&lt;p&gt;&lt;a href=&quot;https://norswap.com/options/#option-greeks&quot;&gt;&lt;em&gt;Delta&lt;/em&gt;&lt;/a&gt; in brief: if the delta is 0.5, that means if the stock price
 increases by 1$, the call option price will increase by 0.5$.&lt;/p&gt;
 &lt;p&gt;So delta is the derivate (in the mathematical sense) of the price of the option
 with respect to the price of the underlying stock — just like speed is the
@@ -751,7 +797,7 @@ make above.&lt;/p&gt;
 &lt;p&gt;In conclusion, &lt;strike&gt;gamble&lt;/strike&gt; invest responsibly, and don&amp;#39;t believe
 everything you&amp;#39;re told. Do your own research!&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;Read more things I&amp;#39;ve written on &lt;a href=&quot;/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Read more things I&amp;#39;ve written on &lt;a href=&quot;https://norswap.com/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
       </description>
       <pubDate>2021-04-13T22:00:00.000Z</pubDate>
       <link>http://norswap.com/gamestop</link>
@@ -762,11 +808,11 @@ everything you&amp;#39;re told. Do your own research!&lt;/p&gt;
       <description>
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://sive.rs/m&quot;&gt;Official Book Homepage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;/reviews&quot;&gt;More Reviews Written by Me&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;/hell-yeah&quot;&gt;My Favourite Quotes from &amp;quot;Hell Yeah, or No&amp;quot; (same author)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/reviews&quot;&gt;More Reviews Written by Me&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/hell-yeah&quot;&gt;My Favourite Quotes from &amp;quot;Hell Yeah, or No&amp;quot; (same author)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;I got so much enjoyment out of &lt;a href=&quot;/hell-yeah&quot;&gt;&amp;quot;Hell Yeah Or No&amp;quot;&lt;/a&gt; that I decided to
+&lt;p&gt;I got so much enjoyment out of &lt;a href=&quot;https://norswap.com/hell-yeah&quot;&gt;&amp;quot;Hell Yeah Or No&amp;quot;&lt;/a&gt; that I decided to
 read Derek Sivers&amp;#39; other book &amp;quot;Your Music and Your People&amp;quot;.&lt;/p&gt;
 &lt;p&gt;At first glance, the book isn&amp;#39;t really for me: it&amp;#39;s a treatise on how to market
 yourself in the music business. However it&amp;#39;s written in this terse and
@@ -946,7 +992,7 @@ Whatever drains you, stop doing it.&lt;/p&gt;
     <item>
       <title>Reviews 10</title>
       <description>
-&lt;p&gt;Part of the &lt;a href=&quot;/reviews&quot;&gt;Reviews Series&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Part of the &lt;a href=&quot;https://norswap.com/reviews&quot;&gt;Reviews Series&lt;/a&gt;.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&quot;overgeared&quot;&gt;Overgeared&lt;/h2&gt;
 &lt;ul&gt;
@@ -1003,7 +1049,7 @@ at some point, magical nuclear weapons are being fired.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Book, by Nick Winter&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;I read this book because it was quoted extensively from &lt;a href=&quot;/reviews-9/#gateless&quot;&gt;Gateless&lt;/a&gt;, and those
+&lt;p&gt;I read this book because it was quoted extensively from &lt;a href=&quot;https://norswap.com/reviews-9/#gateless&quot;&gt;Gateless&lt;/a&gt;, and those
 quotes were some of the most interesting parts of that book.&lt;/p&gt;
 &lt;p&gt;It was honestly a bit of a letdown. Not that the book is bad. In fact, I&amp;#39;m glad
 I read it, and found it generally interesting and relevant. But it wasn&amp;#39;t what I
@@ -1133,7 +1179,7 @@ offering zero insights to me.&lt;/p&gt;
 &lt;p&gt;If you&amp;#39;re looking for books on mindfulness, I&amp;#39;d recommend &lt;a href=&quot;https://www.goodreads.com/book/show/6708.The_Power_of_Now&quot;&gt;The Power of Now&lt;/a&gt; and
 &lt;a href=&quot;https://www.goodreads.com/book/show/22878980-you-are-here&quot;&gt;You Are Here&lt;/a&gt;. The first one is more &amp;quot;mystical&amp;quot;, but quite interersting, while
 the second one is a down to earth guide to more mental calm.&lt;/p&gt;
-&lt;p&gt;Some quotes of the &lt;em&gt;The Power of Now&lt;/em&gt; made it into my &lt;a href=&quot;/unconstraining&quot;&gt;Unconstraining&lt;/a&gt; post from
+&lt;p&gt;Some quotes of the &lt;em&gt;The Power of Now&lt;/em&gt; made it into my &lt;a href=&quot;https://norswap.com/unconstraining&quot;&gt;Unconstraining&lt;/a&gt; post from
 way back.&lt;/p&gt;
 &lt;h2 id=&quot;beastars&quot;&gt;Beastars&lt;/h2&gt;
 &lt;ul&gt;
@@ -1286,9 +1332,9 @@ agree with.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 2, pt. 2&lt;/li&gt;
-&lt;li&gt;previously: &lt;a href=&quot;/even-more-anime/#rezero&quot;&gt;S1&lt;/a&gt;, &lt;a href=&quot;/reviews-8/#rezero-season-2-part-1&quot;&gt;S1, pt. 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;previously: &lt;a href=&quot;https://norswap.com/even-more-anime/#rezero&quot;&gt;S1&lt;/a&gt;, &lt;a href=&quot;https://norswap.com/reviews-8/#rezero-season-2-part-1&quot;&gt;S1, pt. 1&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;In my review of &lt;a href=&quot;/reviews-8/#rezero-season-2-part-1&quot;&gt;part 1&lt;/a&gt;, I said I was unsure what to make of this
+&lt;p&gt;In my review of &lt;a href=&quot;https://norswap.com/reviews-8/#rezero-season-2-part-1&quot;&gt;part 1&lt;/a&gt;, I said I was unsure what to make of this
 season, that it would entirely depend on how part 2 delivers on the setup from
 part 1.&lt;/p&gt;
 &lt;p&gt;Well folks, I&amp;#39;m disappointed.&lt;/p&gt;
@@ -1318,7 +1364,7 @@ development. The ending does feel satisfying.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 3&lt;/li&gt;
-&lt;li&gt;previously: &lt;a href=&quot;/every-anime/#log-horizon&quot;&gt;S1 &amp;amp; S2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;previously: &lt;a href=&quot;https://norswap.com/every-anime/#log-horizon&quot;&gt;S1 &amp;amp; S2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;I&amp;#39;m not even disappointed, I&amp;#39;m devastated.&lt;/p&gt;
 &lt;p&gt;I&amp;#39;ve told many people that Log Horizon is one of my favourite anime. I evend
@@ -1343,7 +1389,7 @@ excellent episodes, but it&amp;#39;s been like 6 years at this point.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 2&lt;/li&gt;
-&lt;li&gt;previously: &lt;a href=&quot;/even-more-anime/#that-time-i-got-reincarnated-as-a-slime&quot;&gt;S1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;previously: &lt;a href=&quot;https://norswap.com/even-more-anime/#that-time-i-got-reincarnated-as-a-slime&quot;&gt;S1&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Slime is just being slime: a zero-calories snack, entertaining but not
 particularly impactful.&lt;/p&gt;
@@ -1361,7 +1407,7 @@ ever-growing, ever-more-powerful alliance of Rimuru&amp;#39;s band of nice monst
 &lt;ul&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 2&lt;/li&gt;
-&lt;li&gt;previously: &lt;a href=&quot;/even-more-anime/#the-promised-neverland&quot;&gt;S1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;previously: &lt;a href=&quot;https://norswap.com/even-more-anime/#the-promised-neverland&quot;&gt;S1&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Season 2 cuts on the three-level deep plots, and adds some action/adventure. It
 was generally solid, ... but something felt missing.&lt;/p&gt;
@@ -1377,20 +1423,20 @@ show&amp;#39;s screenwriters seem unsatisfied with the show&amp;#39;s direction.
 &lt;ul&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 2&lt;/li&gt;
-&lt;li&gt;previously: &lt;a href=&quot;/reviews-5/#dr-stone&quot;&gt;S1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;previously: &lt;a href=&quot;https://norswap.com/reviews-5/#dr-stone&quot;&gt;S1&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;I continue to very much like Dr Stone. The second season is a continuation of
 the story of the first season, and the themes and vibes are similar.&lt;/p&gt;
-&lt;p&gt;I stand by what I said in &lt;a href=&quot;/reviews-5/#dr-stone&quot;&gt;my season 1 review&lt;/a&gt;, so you can
+&lt;p&gt;I stand by what I said in &lt;a href=&quot;https://norswap.com/reviews-5/#dr-stone&quot;&gt;my season 1 review&lt;/a&gt;, so you can
 go read that if you&amp;#39;re interested.&lt;/p&gt;
 &lt;h2 id=&quot;attack-on-titans&quot;&gt;Attack on Titans&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 4, part 1&lt;/li&gt;
-&lt;li&gt;previously: &lt;a href=&quot;/every-anime/#attack-on-titan&quot;&gt;S1&lt;/a&gt;,
-&lt;a href=&quot;/more-anime/#attack-on-titan-season-2&quot;&gt;S2&lt;/a&gt;, &lt;a href=&quot;/even-more-anime/#attack-on-titans-season-3-part-1&quot;&gt;S3
+&lt;li&gt;previously: &lt;a href=&quot;https://norswap.com/every-anime/#attack-on-titan&quot;&gt;S1&lt;/a&gt;,
+&lt;a href=&quot;https://norswap.com/more-anime/#attack-on-titan-season-2&quot;&gt;S2&lt;/a&gt;, &lt;a href=&quot;https://norswap.com/even-more-anime/#attack-on-titans-season-3-part-1&quot;&gt;S3
 pt. 1&lt;/a&gt;,
-&lt;a href=&quot;/reviews-4/#attack-on-titans-season-3-part-2&quot;&gt;S3 pt. 2&lt;/a&gt;&lt;/li&gt;
+&lt;a href=&quot;https://norswap.com/reviews-4/#attack-on-titans-season-3-part-2&quot;&gt;S3 pt. 2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&quot;attack-on-titans.webp&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Season 3 felt like a lull, but season 4 delivers an electroshock. Holy shit! I
@@ -1479,8 +1525,8 @@ gracefully.&lt;/p&gt;
 far as I ever came close to something maybe remotely resembling burn out, that
 time is now.&lt;/p&gt;
 &lt;p&gt;This was due to a combination of factors. Mostly it was the added workload of
-&lt;a href=&quot;/compilers&quot;&gt;teaching a class&lt;/a&gt; on top of main job (and doing it in my own effort-intensive
-way), and picking up a hobby of very (and not entirely intentionally) &lt;a href=&quot;/heat&quot;&gt;stressful
+&lt;a href=&quot;https://norswap.com/compilers&quot;&gt;teaching a class&lt;/a&gt; on top of main job (and doing it in my own effort-intensive
+way), and picking up a hobby of very (and not entirely intentionally) &lt;a href=&quot;https://norswap.com/heat&quot;&gt;stressful
 trading&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Still, for all the unpleasantness, I think there is a silver lining too.&lt;/p&gt;
 &lt;p&gt;For one, it feels like my work capacity has permanently increased. I feel much
@@ -1492,7 +1538,7 @@ did previously.&lt;/p&gt;
 improve &lt;a href=&quot;https://github.com/norswap/autumn&quot;&gt;existing software projects&lt;/a&gt; and even create new ones (&lt;a href=&quot;https://github.com/norswap/uranium&quot;&gt;one&lt;/a&gt;,
 &lt;a href=&quot;https://github.com/norswap/sigh&quot;&gt;two&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;These benefits did come at the cost of running too close to the red line, for
-too long. I think a &lt;a href=&quot;/training&quot;&gt;lifting&lt;/a&gt; metaphor is in order. If you want to get stronger
+too long. I think a &lt;a href=&quot;https://norswap.com/training&quot;&gt;lifting&lt;/a&gt; metaphor is in order. If you want to get stronger
 or bigger, you need to train hard. But if you push yourself &lt;em&gt;too&lt;/em&gt; hard or for
 too long, you indulge in &lt;em&gt;overtraining&lt;/em&gt;, which is detrimental to your goals.&lt;/p&gt;
 &lt;p&gt;So another lessons from all this is that I might push myself hard in the future,
@@ -1516,7 +1562,7 @@ easily to other people in other situations.&lt;/p&gt;
 felt momentous enough that it deserved a mention.&lt;/p&gt;
 &lt;p&gt;Second, I&amp;#39;ve read similar things form other people in the past. Not only do I
 remember them, but they have helped shape how I think about such things (in
-particular, Sebastian Marshall&amp;#39;s &lt;a href=&quot;/celerity/#06-pace-maximum-vs-maximum-sustainable-speed&quot;&gt;writings on Celerity&lt;/a&gt; and &lt;a href=&quot;https://podbay.fm/p/the-ultraworking-podcast/e/1571375400&quot;&gt;his
+particular, Sebastian Marshall&amp;#39;s &lt;a href=&quot;https://norswap.com/celerity/#06-pace-maximum-vs-maximum-sustainable-speed&quot;&gt;writings on Celerity&lt;/a&gt; and &lt;a href=&quot;https://podbay.fm/p/the-ultraworking-podcast/e/1571375400&quot;&gt;his
 personal account on pushing himself too far&lt;/a&gt;). So maybe it&amp;#39;s not that
 useless.&lt;/p&gt;
       </description>
@@ -1527,13 +1573,13 @@ useless.&lt;/p&gt;
     <item>
       <title>Stock Market Adventures: Heat</title>
       <description>
-&lt;p&gt;Part of a series on &lt;a href=&quot;/finance&quot;&gt;Finance&lt;/a&gt;.&lt;br&gt;Previously: &lt;a href=&quot;/options&quot;&gt;Stock Market Adventures: Options &amp;amp; The Wheel&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Part of a series on &lt;a href=&quot;https://norswap.com/finance&quot;&gt;Finance&lt;/a&gt;.&lt;br&gt;Previously: &lt;a href=&quot;https://norswap.com/options&quot;&gt;Stock Market Adventures: Options &amp;amp; The Wheel&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;/options&quot;&gt;Last time&lt;/a&gt;, I presented the wheel option strategy (and gave a whole
+&lt;p&gt;&lt;a href=&quot;https://norswap.com/options&quot;&gt;Last time&lt;/a&gt;, I presented the wheel option strategy (and gave a whole
 bunch of background on options).&lt;/p&gt;
 &lt;p&gt;I also said that personally, I was mostly selling puts on growth stocks, using a
 wide margin of safety afforded by their high implied volatility. (You do not
-know what any of these words mean? Go read &lt;a href=&quot;/options&quot;&gt;the last article&lt;/a&gt;.)&lt;/p&gt;
+know what any of these words mean? Go read &lt;a href=&quot;https://norswap.com/options&quot;&gt;the last article&lt;/a&gt;.)&lt;/p&gt;
 &lt;p&gt;This did not work out too well. Or rather, it worked fantastically well, but I
 failed to execute a proper pivot.&lt;/p&gt;
 &lt;p&gt;Don&amp;#39;t worry, I&amp;#39;m not ruined. In fact, I haven&amp;#39;t even lost money compared to when
@@ -1616,12 +1662,12 @@ system will prove superior in the current market conditions.&lt;/p&gt;
     <item>
       <title>Cardio Training</title>
       <description>
-&lt;p&gt;This post is part of the &lt;a href=&quot;/training/&quot;&gt;Training Series&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This post is part of the &lt;a href=&quot;https://norswap.com/training/&quot;&gt;Training Series&lt;/a&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;/weight-training-8/&quot;&gt;Last time&lt;/a&gt;, the gyms had just closed again and I was looking at bodyweight
+&lt;p&gt;&lt;a href=&quot;https://norswap.com/weight-training-8/&quot;&gt;Last time&lt;/a&gt;, the gyms had just closed again and I was looking at bodyweight
 movements.&lt;/p&gt;
 &lt;p&gt;I ended up training my handstand for a few weeks (complemented by a rather usual
-set of home exercises - see &lt;a href=&quot;/training/&quot;&gt;previous posts&lt;/a&gt; for flavour), but
+set of home exercises - see &lt;a href=&quot;https://norswap.com/training/&quot;&gt;previous posts&lt;/a&gt; for flavour), but
 I&amp;#39;m ashamed to report that while I improved, I&amp;#39;m still incapable of a
 free-standing handstand.&lt;/p&gt;
 &lt;p&gt;Something I failed to appreciate is how much strength a handstand actually
@@ -1637,7 +1683,7 @@ quite a bit. Try squatting your maximum weight, then see how winded you get!&lt;
 of effort (more akin to sprinting) rather than steady over a long period of
 time. (Note that &lt;em&gt;cardio&lt;/em&gt; does not imply long session, that&amp;#39;s more specifically
 &lt;em&gt;steady-state cardio&lt;/em&gt;.)&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve recently read &lt;a href=&quot;/reviews-9/#tactical-barbell&quot;&gt;Tactical Barbell&lt;/a&gt; and &lt;a href=&quot;/reviews-9/#tactical-barbell-2-conditioning&quot;&gt;Tactical Barbell 2:
+&lt;p&gt;I&amp;#39;ve recently read &lt;a href=&quot;https://norswap.com/reviews-9/#tactical-barbell&quot;&gt;Tactical Barbell&lt;/a&gt; and &lt;a href=&quot;https://norswap.com/reviews-9/#tactical-barbell-2-conditioning&quot;&gt;Tactical Barbell 2:
 Conditioning&lt;/a&gt; (links are to my short reviews of them). The first didn&amp;#39;t
 teach me much, but the second was intriguing, and so I decided to follow its
 &amp;quot;base-building&amp;quot; 8-weeks program.&lt;/p&gt;
@@ -1691,7 +1737,7 @@ romanian deadlifts, squats, floor presses, overhead presses, trap shrugs and
 rows. I used 10kg barbells. Not all of those were equally easy. Doing 50 floor
 presses was easy enough for me (especially given the ramp-up in the number of
 sets), but for overhead presses, I had to take two short breaks in the middle.&lt;/p&gt;
-&lt;p&gt;For max strength, I went fairly classic. See &lt;a href=&quot;/weight-training-6&quot;&gt;my July post&lt;/a&gt; if you need some exercise
+&lt;p&gt;For max strength, I went fairly classic. See &lt;a href=&quot;https://norswap.com/weight-training-6&quot;&gt;my July post&lt;/a&gt; if you need some exercise
 ideas, but I did actually include less variety than back then.&lt;/p&gt;
 &lt;p&gt;One thing I introduced was the single-arm pushed. I&amp;#39;m quite proud to finally
 have gotten the hang of it. Doing handstand practice and archer pushups in the
@@ -1722,7 +1768,7 @@ skipping can ultimately benefit leg hypertrophy, if you can accept to take easy
 on your squat for a little while.&lt;/p&gt;
 &lt;h2 id=&quot;next&quot;&gt;Next&lt;/h2&gt;
 &lt;p&gt;What&amp;#39;s next? I yearn for the gym to reopen, but in the meantime I&amp;#39;m programming
-something that looks like a &lt;a href=&quot;/weight-training-7&quot;&gt;DUP&lt;/a&gt; at home. It&amp;#39;s more difficult to vary intensity
+something that looks like a &lt;a href=&quot;https://norswap.com/weight-training-7&quot;&gt;DUP&lt;/a&gt; at home. It&amp;#39;s more difficult to vary intensity
 for the same exercise at home, so I&amp;#39;m mostly varying the exercises. Here&amp;#39;s a
 copy of the listing of what I&amp;#39;ve planned:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-org&quot;&gt;* One
@@ -1778,7 +1824,7 @@ other bodyweight exercises too?&lt;/p&gt;
       <description>
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://sive.rs/n&quot;&gt;Official Book Homepage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;/reviews&quot;&gt;More Reviews Written by Me&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/reviews&quot;&gt;More Reviews Written by Me&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;p&gt;Derek Sivers&amp;#39; writing style is incredibly terse and pithy. And frankly, it&amp;#39;s a

@@ -230,6 +230,10 @@ async function generate_index_pages_and_atom ()
     if (lowest_post_change < atom_posts) {
 .       /!output('../atom.xml')
 .       /!include('atom.dna')
+.       /!stdout() // flush
+        let atom = await fsp.readFile('../atom.xml');
+        atom = atom.toString().replace(/=&quot;\//g, '=&quot;https://norswap.com/');
+        await fsp.writeFile('../atom.xml', atom);
         console.log('Created ../atom.xml')
     }
 }

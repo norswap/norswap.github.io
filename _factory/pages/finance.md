@@ -10,6 +10,7 @@ Generally informative posts.
 - [Stock Market Adventures: Options & The Wheel](/options)
 - [GameStop: Anatomy of a Short & Gamma Squeeze](/gamestop)
 - [Bonds Bonanza 1: Bonds Basics](/bonds)
+- [Freaking blockchains: How do they work?](/blockchain-how)
 
 ## Personal
 

@@ -3,6 +3,10 @@ title: "Freaking blockchains: How do they work?"
 layout: post
 ---
 
+in: [Finance](/finance)
+
+---
+
 Cryptocurrency hype is at its peak, blockchains are on every lips. Since I
 started writing this, Bitcoin & assorted cryptocurrencies hit multiple all-time
 highs then crashed 50%.
@@ -408,3 +412,7 @@ Stay tuned for further posts. Next post will take a step back and look at the
 potential and applications of blockchain technologies. A subsequent post will
 take a look at the security model and potential attacks against proof-of-work
 and proof-of-stake. See you next time!
+
+---
+
+Enjoyed this? Check out [more finance articles](/finance).

@@ -82,7 +82,7 @@ this block. In proof-of-work, this is calling <em>mining</em> the block (in
 proof-of-stake, it&#39;s simply called <em>proposing</em> or <em>creating</em> the block).
 Whenever a node mines/proposes a block that is accepted by the network, it
 receives a reward.</p>
-<p><a href="blockchain.png" target="_blank"><img src="blockchain.png" alt="proof-of-work overview" /></a></p>
+<p><a href="/blockchain-how/blockchain.png" target="_blank"><img src="/blockchain-how/blockchain.png" alt="proof-of-work overview" /></a></p>
 <p>(Click to open bigger version in a new page. Image source:
 <a href="https://www.bitpanda.com/academy/fr/lecons/comment-fonctionne-une-blockchain/">Bitpanda</a>)</p>
 <blockquote>
@@ -183,7 +183,7 @@ easy task. But in blockchains it involves a guessing component. The block&#39;s 
 contains all the transactions, but also a reference to the previous block
 (actually, the <strong>hash</strong> of the previous block) and a random number called
 <em>nonce</em>.</p>
-<p><img src="block-format.png" alt="Bitcoin block format"></p>
+<p><img src="/blockchain-how/block-format.png" alt="Bitcoin block format"></p>
 <p>(Image source: <a href="https://blog.scottlogic.com/2016/04/04/jenny-from-the-blockchain.html">Scott Logic</a>)</p>
 <p>The <em>problem</em> proof-of-work has to solve is as follows:</p>
 <pre><code>nonce = random 32 bit number
@@ -284,7 +284,7 @@ of the mining power, they&#39;re able to mount a <em>51% attack</em> which allow
 double spend. We&#39;ll talk about those in details in a subsequent article. Note
 that 51% attacks are at least fairly easy to spot on non-anonymized blockchains
 (which is most of them).</p>
-<p><img src="51attack.png" alt="A 51% attack"></p>
+<p><img src="/blockchain-how/51attack.png" alt="A 51% attack"></p>
 <p>Above, a schematic representation of a 51% attack, where the attacker conceals
 his mining and then release his blocks all at once to overtake the main chain.
 (source: <a href="https://ethresear.ch/t/timeliness-detectors-and-51-attack-recovery-in-blockchains/6925">Vitalik
@@ -329,7 +329,7 @@ committees are large enough to minimize the probability that all validators in
 the committee are controlled by the same entity. It is commonly required that
 this probability should be infinitesimal for validators controlling about 30% of
 the stake, and ideally up to 50%.</p>
-<p><img src="committees.png" alt="Committees in the Ethereum Beacon Chain"></p>
+<p><img src="/blockchain-how/committees.png" alt="Committees in the Ethereum Beacon Chain"></p>
 <p>Pictured above: committees in the Ethereum beacon chain. Image source:
 <a href="https://ethos.dev/beacon-chain/">ethos.dev</a>.</p>
 <p>There&#39;s another issue: what if the validator designated to create the block

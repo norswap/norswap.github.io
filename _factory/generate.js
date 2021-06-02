@@ -162,7 +162,8 @@ async function generate_page (type, filename, incremental) // relative filename
     const obj = matter(await fsp.readFile(src_loc, {encoding: 'utf-8'}))
     const meta = obj.data
     if (meta.title) meta.title = escape_html(meta.title)
-    const content = marked(obj.content)
+    let content = marked(obj.content)
+    content = content.replace(/(href|src)="(?!([^"]*?:\/\/|_blank))/g, `$1="/${plink}/`);
     await fse.mkdirp('../' + plink)
 .   /!output(dst_loc)
 .   /!include('page.dna')
@@ -232,7 +233,7 @@ async function generate_index_pages_and_atom ()
 .       /!include('atom.dna')
 .       /!stdout() // flush
         let atom = await fsp.readFile('../atom.xml');
-        atom = atom.toString().replace(/=&quot;\//g, '=&quot;https://norswap.com/');
+        atom = atom.toString().replace(/(src|href)=&quot;\//g, '$1=&quot;https://norswap.com/');
         await fsp.writeFile('../atom.xml', atom);
         console.log('Created ../atom.xml')
     }

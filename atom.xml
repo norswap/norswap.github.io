@@ -41,7 +41,7 @@ this block. In proof-of-work, this is calling &lt;em&gt;mining&lt;/em&gt; the bl
 proof-of-stake, it&amp;#39;s simply called &lt;em&gt;proposing&lt;/em&gt; or &lt;em&gt;creating&lt;/em&gt; the block).
 Whenever a node mines/proposes a block that is accepted by the network, it
 receives a reward.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;blockchain.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;blockchain.png&quot; alt=&quot;proof-of-work overview&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://norswap.com/blockchain-how/blockchain.png&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://norswap.com/blockchain-how/blockchain.png&quot; alt=&quot;proof-of-work overview&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;(Click to open bigger version in a new page. Image source:
 &lt;a href=&quot;https://www.bitpanda.com/academy/fr/lecons/comment-fonctionne-une-blockchain/&quot;&gt;Bitpanda&lt;/a&gt;)&lt;/p&gt;
 &lt;blockquote&gt;
@@ -142,7 +142,7 @@ easy task. But in blockchains it involves a guessing component. The block&amp;#3
 contains all the transactions, but also a reference to the previous block
 (actually, the &lt;strong&gt;hash&lt;/strong&gt; of the previous block) and a random number called
 &lt;em&gt;nonce&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;block-format.png&quot; alt=&quot;Bitcoin block format&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/blockchain-how/block-format.png&quot; alt=&quot;Bitcoin block format&quot;&gt;&lt;/p&gt;
 &lt;p&gt;(Image source: &lt;a href=&quot;https://blog.scottlogic.com/2016/04/04/jenny-from-the-blockchain.html&quot;&gt;Scott Logic&lt;/a&gt;)&lt;/p&gt;
 &lt;p&gt;The &lt;em&gt;problem&lt;/em&gt; proof-of-work has to solve is as follows:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;nonce = random 32 bit number
@@ -243,7 +243,7 @@ of the mining power, they&amp;#39;re able to mount a &lt;em&gt;51% attack&lt;/em
 double spend. We&amp;#39;ll talk about those in details in a subsequent article. Note
 that 51% attacks are at least fairly easy to spot on non-anonymized blockchains
 (which is most of them).&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;51attack.png&quot; alt=&quot;A 51% attack&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/blockchain-how/51attack.png&quot; alt=&quot;A 51% attack&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Above, a schematic representation of a 51% attack, where the attacker conceals
 his mining and then release his blocks all at once to overtake the main chain.
 (source: &lt;a href=&quot;https://ethresear.ch/t/timeliness-detectors-and-51-attack-recovery-in-blockchains/6925&quot;&gt;Vitalik
@@ -288,7 +288,7 @@ committees are large enough to minimize the probability that all validators in
 the committee are controlled by the same entity. It is commonly required that
 this probability should be infinitesimal for validators controlling about 30% of
 the stake, and ideally up to 50%.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;committees.png&quot; alt=&quot;Committees in the Ethereum Beacon Chain&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/blockchain-how/committees.png&quot; alt=&quot;Committees in the Ethereum Beacon Chain&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Pictured above: committees in the Ethereum beacon chain. Image source:
 &lt;a href=&quot;https://ethos.dev/beacon-chain/&quot;&gt;ethos.dev&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;There&amp;#39;s another issue: what if the validator designated to create the block

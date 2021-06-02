@@ -211,7 +211,7 @@ classes. The code that create data strutures needs to be parameterized.</p>
 <em>option 1</em> is stated briefly.</p>
 <p>First, in order to make the solution type-safe, it is necessary to know which
 operations the nodes in the expression tree implement. This means there needs to
-be someway to &quot;carry the type&quot; to the nodes that are down in the tree. </p>
+be someway to &quot;carry the type&quot; to the nodes that are down in the tree.</p>
 <p>In this solution, this is done via generics, and in particular the use of a
 F-bound: <code>C extends Exp&lt;C&gt;</code>. F-bounds are a crude way to encode &quot;self-types&quot; in
 Java. Basically it lets us use <code>C</code> as though it meant &quot;the type of this class&quot;
@@ -280,7 +280,7 @@ classes, just change the node&#39;s children type to <code>Exp&lt;? super V&gt;<
 entering into the details, this means that <code>Add&lt;NegVisitor&gt;</code> may have children
 that with type <code>Exp&lt;Visitor&gt;</code> or <code>Exp&lt;NegVisitor&gt;</code>. On the other hand
 <code>Add&lt;Visitor&gt;</code> may not have a child of type <code>Exp&lt;NegVisitor&gt;</code></p>
-<p>This effectively enables reusing old trees in newer trees. </p>
+<p>This effectively enables reusing old trees in newer trees.</p>
 <p>There is only one catch: your ability to rewrite the trees becomes limited.
 Since <code>Add&lt;Visitor&gt;</code> may not have children of type <code>Exp&lt;NegVisitor&gt;</code> this may
 hamper your ability to write involved tree rewrite logic that would need to
@@ -394,8 +394,7 @@ pitfall is that the whole construction logic needs to be re-run each time we
 want to run an operation of our data. If the construction logic is expensive,
 this can be a problem. Fortunately there is a solution: simply return a function
 object that encodes the expression:</p>
-<pre><code class="language-java">
-public E expr1 (NegAlgebra&lt;E&gt; a) {
+<pre><code class="language-java">public E expr1 (NegAlgebra&lt;E&gt; a) {
     return expensive_predicate()
         ? a.add(a.lit(1), a.lit(2))
         : a.add(a.lit(1), a.neg(a.lit(2)));

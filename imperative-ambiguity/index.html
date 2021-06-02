@@ -119,11 +119,11 @@ is being <em>piped out</em> of the callee.</p>
 <li><p><strong>Sync</strong>: the callee may read or write the list and retain a reference that
 outlives the function&#39;s execution. The caller may still read and write the
 list.</p>
+</li>
+</ul>
 <p>Since things are complex enough as it is, we omit discussing whether the
 returned list is an alias or the argument list, as well as considerations
 relating to concurrent execution.</p>
-</li>
-</ul>
 <h2 id="in-practice">In Practice</h2>
 <p>Is it possible to disambiguate all these scenarios in a way that can be enforced
 by a compiler?</p>

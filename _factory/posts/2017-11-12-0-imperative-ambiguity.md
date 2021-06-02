@@ -23,7 +23,7 @@ things better.
 Consider the following function signature:
 
     List<T> process(List<T> list);
-    
+
 In a purely functional language, you know that `list` cannot be modified, and
 the returned list will depend only on `list` and whatever data was captured via
 [closure] at the function definition point (data which, of course, does not
@@ -68,29 +68,29 @@ Let's consider a few possible interpretations of the function:
 
 - **Immutable**: no one can modify the argument list: not the caller, not the
   callee, nor anyone else.
-  
+
 - **Read Loan**: the callee is allowed to read the list, but not write to it nor
   create a reference that outlives the function's execution.
-  
+
 - **Write Loan**: the callee is allowed to read and write the list, but not
   create a reference that outlives the function's execution.
-  
+
 - **Transfer**: the callee may do whatever it wants with the list, the caller may
   not retain a reference to the list that outlives its execution; or, even more
   stringently, may not access the list at all after the call to `process`.
-  
+
 - **Pipe In**: the callee may read the list and retain a read-only reference that
   outlives the function's execution. The caller may still read and write the
   list. Data is being *piped in* the callee.
-  
+
 - **Pipe Out**: the callee may read or write the list and retain a reference that
   outlives the functions's execution. The caller may still read the list. Data
   is being *piped out* of the callee.
-  
+
 - **Sync**: the callee may read or write the list and retain a reference that
   outlives the function's execution. The caller may still read and write the
   list.
-  
+
 Since things are complex enough as it is, we omit discussing whether the
 returned list is an alias or the argument list, as well as considerations
 relating to concurrent execution.

@@ -46,7 +46,7 @@ which I think covers the space of interesting solutions:
 
 - **The Expression Problem Revisited: Four new solutions using generics**, Mads
   Torgersen, *ECOOP 2004* [\[link with pdf\]][mads]
-  
+
 - **Extensibility for the Masses: Practical Extensibility with Object
   Algebras**, Bruno C. d. S. Oliveira & William R. Cook, *ECOOP 2012* [\[link with pdf\]][algebra]
 
@@ -225,7 +225,7 @@ There are two difficulties in this solution that not readily apparent when
 
 First, in order to make the solution type-safe, it is necessary to know which
 operations the nodes in the expression tree implement. This means there needs to
-be someway to "carry the type" to the nodes that are down in the tree. 
+be someway to "carry the type" to the nodes that are down in the tree.
 
 In this solution, this is done via generics, and in particular the use of a
 F-bound: `C extends Exp<C>`. F-bounds are a crude way to encode "self-types" in
@@ -319,7 +319,7 @@ entering into the details, this means that `Add<NegVisitor>` may have children
 that with type `Exp<Visitor>` or `Exp<NegVisitor>`. On the other hand
 `Add<Visitor>` may not have a child of type `Exp<NegVisitor>`
 
-This effectively enables reusing old trees in newer trees. 
+This effectively enables reusing old trees in newer trees.
 
 There is only one catch: your ability to rewrite the trees becomes limited.
 Since `Add<Visitor>` may not have children of type `Exp<NegVisitor>` this may
@@ -472,7 +472,6 @@ this can be a problem. Fortunately there is a solution: simply return a function
 object that encodes the expression:
 
 ```java
-
 public E expr1 (NegAlgebra<E> a) {
     return expensive_predicate()
         ? a.add(a.lit(1), a.lit(2))
@@ -490,7 +489,6 @@ public E Function<NegAlgebra<E>, E> expr2() {
 
 // use: expr2.apply(my_algebra);
 // fast!
-
 ```
 
 When we pass an algebra to `expr2`, `expensive_predicate()` is not run — it is

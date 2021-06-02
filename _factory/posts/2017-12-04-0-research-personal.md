@@ -104,14 +104,14 @@ The paper basically has three contributions:
 
 1. It presents a general algorithm to allow left-recursion in PEG grammars,
    something that the formalism doesn't normally allow.
-  
+
 2. It presents a modification of that algorithm that enables to handle
    precedence and associativity, given that grammar rules have been properly
    annotated.
-   
+
 3. It shows how to customize different aspects of the parse process with
    arbitrary code.
-   
+
 Contribution 1, arguably the most intersting to someone reading the paper, is
 actually 95% work from Chris Seaton in his master thesis (something I made
 super clear in the paper). But burried in his master thesis, the technique had
@@ -226,12 +226,12 @@ Here are some difficulties I ran into:
   and could react to updated information. This added a lot of complexity while I
   was still early in the design stage. I ended up getting rid of that
   requirement.
-  
+
 - I had to take care of location and loading Java classes: I did not just look
   at source files and assume the program did not use any standard library. While
   I think it is miles easier in Java than in, say, C or C++, it still was a
   non-trivial implementation effort.
-  
+
 - It's hard to resolve identifier chains. First, you have to disambiguate what
   is a value, what is a class, and what is a package. For instance, let's assume
   we have determined that `java.util.List` refers to a type; `java` could be
@@ -240,7 +240,7 @@ Here are some difficulties I ran into:
   potentially fail). In order to know whether `java` is a class, you need to
   know all the classes in the current package, the local classes, as well as all
   the system classes that are available by default.
-  
+
 - In addition to their inherent ambiguity, identifier chains also posed problems
   in their interactions with the framework. The right way to model identifier
   chains is to make the resolution of each element in the chain dependent on the
@@ -265,10 +265,10 @@ To give you, an idea, in addition to just the rules, the Java system needed:
   resolution). These models needed to come in three flavours, because there are
   three ways to acquire the information of a class: through a source file,
   through a bytecode class, or through reflection.
-  
+
 - Building a scope tree to represent lexical scoping and determine which
   declarations where visible where.
-  
+
 - Fairly precise typing hierarchies and sub/supertyping algorithms.
 
 - The class location and loading mechanism already discussed before.
@@ -340,7 +340,7 @@ Namely, in the approach I envisionned, there were two big benefits:
    presence of errors. The trick is that the parser recognizes low-level
    structures first, and builds them up into higher-level structures (e.g. from
    literals to expressions to statements to functions).
-   
+
 2. It would enable better error reporting, as the partial structures we build up
    during the parse could be used to provide context.
 
@@ -355,7 +355,7 @@ The last paper was the inflexion point I needed to pivot away from the Uranium
 project. Instead, I launched into what I'm currently doing, which is build up
 this idea into a proper framework.
 
-My handmade bottom-up parsers made use of *reducers*: bits of code that look 
+My handmade bottom-up parsers made use of *reducers*: bits of code that look
 at the parse stack and perform a reduction if some condition holds.
 
 I realized that said conditions were almost always equivalent to performing a

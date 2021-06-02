@@ -129,12 +129,12 @@ annotated.</p>
 </li>
 <li><p>It shows how to customize different aspects of the parse process with
 arbitrary code.</p>
+</li>
+</ol>
 <p>Contribution 1, arguably the most intersting to someone reading the paper, is
 actually 95% work from Chris Seaton in his master thesis (something I made
 super clear in the paper). But burried in his master thesis, the technique had
 never received the exposure it deserved.</p>
-</li>
-</ol>
 <p>Contribution 3 is the start of a theme that would continue throughout my thesis:
 the fact that if the execution model is defined precisely enough, it becomes
 easier to extend with new features.</p>
@@ -333,7 +333,7 @@ years happen.&quot;</p>
 <p>The last paper was the inflexion point I needed to pivot away from the Uranium
 project. Instead, I launched into what I&#39;m currently doing, which is build up
 this idea into a proper framework.</p>
-<p>My handmade bottom-up parsers made use of <em>reducers</em>: bits of code that look 
+<p>My handmade bottom-up parsers made use of <em>reducers</em>: bits of code that look
 at the parse stack and perform a reduction if some condition holds.</p>
 <p>I realized that said conditions were almost always equivalent to performing a
 regular expression match over the tokens and AST nodes on the parse stack.

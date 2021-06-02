@@ -18,20 +18,20 @@ The explanations you produce are classified along the following axis:
 <dl>
 
   <dt>Personal vs Impersonal</dt>
-  
+
   <dd>Whether the explanation makes you responsible for the thing that happened
   (personal) or not (impersonal).</dd>
-  
+
   <dt>Specific vs General</dt>
-  
+
   <dd>Is the explanation about the thing that happened (specific), or are they
   about you, your beliefs, your methods, ... (general).</dd>
-  
+
   <dt>Temporary vs Permanent</dt>
-  
+
   <dd>Is the thing that happened temporary? Or is it permanent? Did it happen
   just one time, or is it a pattern that will repeat itself?</dd>
-  
+
 </dl>
 
 Seligman research showed that explanations differ depending on whether the
@@ -40,22 +40,22 @@ good or bad.
 
 <dl>
     <dt>Optimists</dt>
-    
-    <dd>
-    <ul>
-    <li>Good things are personal, general, and permanent.</li>
-    <li>Bad things are impersonal, specific, and temporary.</li>
-    </ul>
-    </dd>
-    
-    <dt>Pessimists</dt>
-    
-    <dd>
-    <ul>
-    <li>Good things are impersonal, specific, and temporary.</li>
-    <li>Bad things are personal, general, and permanent.</li>
-    </ul>
-    </dd>
+
+  <dd>
+  <ul>
+  <li>Good things are personal, general, and permanent.</li>
+  <li>Bad things are impersonal, specific, and temporary.</li>
+  </ul>
+  </dd>
+
+  <dt>Pessimists</dt>
+
+  <dd>
+  <ul>
+  <li>Good things are impersonal, specific, and temporary.</li>
+  <li>Bad things are personal, general, and permanent.</li>
+  </ul>
+  </dd>
 </dl>
 
 Both optimists are pessimists are inconsistent in their explanations, but in a

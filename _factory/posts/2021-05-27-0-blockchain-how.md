@@ -3,7 +3,7 @@ title: "Freaking blockchains: How do they work?"
 layout: post
 ---
 
-in: [Finance](/finance)
+in [Finance](/finance)
 
 ---
 

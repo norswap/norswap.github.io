@@ -8,26 +8,26 @@
     <item>
       <title>Bonds Bonanza 2: Bonds Go Banana</title>
       <description>
-&lt;p&gt;in: &lt;a href=&quot;https://norswap.com/bonds-2//finance&quot;&gt;Finance&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;in &lt;a href=&quot;https://norswap.com/finance&quot;&gt;Finance&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;In the &lt;a href=&quot;https://norswap.com/bonds-2//bonds&quot;&gt;last post&lt;/a&gt; I explained the basics of the bonds market, the
+&lt;p&gt;In the &lt;a href=&quot;https://norswap.com/bonds&quot;&gt;last post&lt;/a&gt; I explained the basics of the bonds market, the
 difference the interest rate and the yield, etc.&lt;/p&gt;
-&lt;p&gt;I also mentionned that in February, yields soared from 1.13% to 1.6%, causing a
+&lt;p&gt;I also mentioned that in February, yields soared from 1.13% to 1.6%, causing a
 large upset in the stock market as well. In this post, I want to look at why
 this happens, and how the effect spilled over to the stock market.&lt;/p&gt;
 &lt;p&gt;Be warned that this post is a bit more about figuring things out than presenting
 orderly facts. I&amp;#39;m far from mastering all the variables here, so take everything
 with a grain of salt.&lt;/p&gt;
 &lt;h2 id=&quot;the-fundamentals&quot;&gt;The Fundamentals&lt;/h2&gt;
-&lt;p&gt;The basic explanation of why the bonds price dropped precipitously and the yield
+&lt;p&gt;The basic explanation of why the bond prices dropped precipitously and the yield
 soared is pretty simple: people expect US dollar inflation, meaning rising
 prices, hence a currency with less purchasing power. Inflation does all kinds of
 bad things to the economy (which we will examine shortly) and so the federal
 reserve tries to keep it subdued. It does this mostly by increasing the interest
-rates it pays on newly-emitted bonds. This decreases bond prices and increases
+rates it pays on newly emitted bonds. This decreases bond prices and increases
 bond yield.&lt;/p&gt;
 &lt;p&gt;If it&amp;#39;s not clear to you why the federal reserve increasing the interest rate on
-bonds leads to falling bonds price and thus higher yields, see &lt;a href=&quot;https://norswap.com/bonds-2//bonds&quot;&gt;the previous
+bonds leads to falling bonds price and thus higher yields, see &lt;a href=&quot;https://norswap.com/bonds&quot;&gt;the previous
 article&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Remember that government bonds are the ultimate safe investment. Raising the
 interest rate leads to a bunch of other interest rates in the economy to
@@ -37,7 +37,7 @@ uses the &lt;a href=&quot;https://www.investopedia.com/terms/f/federalfundsrate.
 very precise. I wish I had a better understanding of the mechanics here.)&lt;/p&gt;
 &lt;p&gt;Reducing the amount of money circulating is important, because inflation is
 caused by a changing balance between demand and supply. When there is a lot of
-money chasing few goods, prices increase and you have inflation. You reduce
+money chasing few goods, prices increase, and you have inflation. You reduce
 inflation by decreasing the amount of money in circulation, or by increasing the
 amount of good produced.&lt;/p&gt;
 &lt;p&gt;People expect inflation, of course, because Joe Biden signed a stimulus bill
@@ -45,7 +45,7 @@ where the government would spend 1.9T$ (that&amp;#39;s trillion). For reference,
 total market capitalization (summing the value of every share) of the S&amp;amp;P 500 is
 about 30T$. Then there is a 2T$ infrastructure bill being debated right now, and
 there might some more down the line. When you inject so much money in the
-economy, inflation is not exactly unexpected. There is hoewver much debate about
+economy, inflation is not exactly unexpected. There is however much debate about
 how high inflation will go, and how transitory or persistent the increase will
 be. The federal reserve currently maintains that the inflation rate might rise
 over 2%, but that this should only be temporary.&lt;/p&gt;
@@ -79,7 +79,7 @@ to get back in cash and satisfy the re-tightened rules.&lt;/p&gt;
 &lt;h2 id=&quot;bonds-butterfly&quot;&gt;Bonds Butterfly&lt;/h2&gt;
 &lt;p&gt;With all these bearish expectations towards bonds, the market just needed
 something to light the fuse. The catalyst was probably an auction of 7-year
-bonds seeing record low demand. Remember from &lt;a href=&quot;https://norswap.com/bonds-2//bonds&quot;&gt;last time&lt;/a&gt; that bonds are
+bonds seeing record low demand. Remember from &lt;a href=&quot;https://norswap.com/bonds&quot;&gt;last time&lt;/a&gt; that bonds are
 initially auctioned by the fed, so low demand would have caused these bonds have
 a low price and a high yield. This in turn caused the associated but more common
 5-year bonds to drop a whopping 0.75%.&lt;/p&gt;
@@ -99,7 +99,7 @@ five-year treasuries and buys two- and ten-year bonds with the money that he
 receives in a proportion that makes the average life of the portfolio equal to
 five years. To do this, the portfolio would be slightly more heavily weighted
 towards the two-year bond. To begin with, the idea is for the blended yield of
-the two- and ten-year bonds to be higher than the five year bond&amp;#39;s yield. The
+the two- and ten-year bonds to be higher than the five-year bond&amp;#39;s yield. The
 other advantage of the butterfly is that if the relationship in yields
 changes, it could increase returns.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -117,12 +117,12 @@ capitalize on this sudden dip in the 5-years price. Since they were long
 &lt;p&gt;It&amp;#39;s hard — if not impossible — to tell, but this might have been the initial
 shock that set the yield surge in motion.&lt;/p&gt;
 &lt;h2 id=&quot;shorting&quot;&gt;Shorting&lt;/h2&gt;
-&lt;p&gt;Another straightforwards force multiplier to the move was short-selling. I
-talked about short-selling in &lt;a href=&quot;https://norswap.com/bonds-2//gamestop&quot;&gt;my article on Gamestop&lt;/a&gt;, but basically
+&lt;p&gt;Another straightforward force multiplier to the move was short selling. I
+talked about short selling in &lt;a href=&quot;https://norswap.com/gamestop&quot;&gt;my article on Gamestop&lt;/a&gt;, but basically
 bond short-sellers borrow bonds, sell them, wait for the price to drop to buy
 them back and return them to the original owner, pocketing the difference as
 profit.&lt;/p&gt;
-&lt;p&gt;There was ample evidence of short-selling in the bonds market. In particular,
+&lt;p&gt;There was ample evidence of short selling in the bonds market. In particular,
 the repo market rate for the 10-years bond went to -4% at some point... The what
 now?&lt;/p&gt;
 &lt;p&gt;The repo or &amp;quot;repurchase agreement&amp;quot; market is where one party sells a security to
@@ -145,7 +145,7 @@ federal funds rate at which banks lend reserves to each other overnight.&lt;/p&g
 &lt;p&gt;The fact it went to -4% means that people were willing to pay up to 4% interest
 for the privilege to borrow 10 years bonds, with the intention to short them and
 turn a profit. In that market, 4% is a lot, meaning there was a lot of
-competitive pressure, hence a lot of short-selling.&lt;/p&gt;
+competitive pressure, hence a lot of short selling.&lt;/p&gt;
 &lt;p&gt;But wait! That&amp;#39;s not all. We have another villain in our story in the form of
 &lt;em&gt;convexity hedging&lt;/em&gt;.&lt;/p&gt;
 &lt;h2 id=&quot;duration-convexity--convexity-hedging&quot;&gt;Duration, Convexity &amp;amp; Convexity Hedging&lt;/h2&gt;
@@ -153,15 +153,15 @@ competitive pressure, hence a lot of short-selling.&lt;/p&gt;
 the great financial crisis and gave us the delightful movie &lt;a href=&quot;https://www.youtube.com/watch?v=vgqG3ITMv1Q&quot;&gt;The Big Short&lt;/a&gt;
 — check &lt;a href=&quot;https://www.youtube.com/watch?v=xbiDrzTd8fE&quot;&gt;this excerpt&lt;/a&gt; if you want Ryan Gosling to explain bad
 mortgage-backed securities to you. What a time to be alive.&lt;/p&gt;
-&lt;p&gt;Anyway, when interest rates decrease, homeowners can refinance their mortagages
+&lt;p&gt;Anyway, when interest rates decrease, homeowners can refinance their mortgages
 to lock in a lower rate. This involves paying off part of the remaining loan
-immediately (hence it is called &lt;em&gt;prepaying&lt;/em&gt;). This shortens the mortages, and as
-a result the average length of mortgages in the MBS decreases. This causes the
-&lt;em&gt;duration&lt;/em&gt; — the weighted average of the times until when cash flows (loan
+immediately (hence it is called &lt;em&gt;prepaying&lt;/em&gt;). This shortens the mortgages, and
+as a result the average length of mortgages in the MBS decreases. This causes
+the &lt;em&gt;duration&lt;/em&gt; — the weighted average of the times until when cash flows (loan
 repayments) are received — to go down. The opposite is also true: when interest
 rates increase, people don&amp;#39;t refinance, and so the average length of mortgages
 goes up.&lt;/p&gt;
-&lt;p&gt;To explain how that impacts the bond market, we need to lay some ground work.
+&lt;p&gt;To explain how that impacts the bond market, we need to lay some groundwork.
 Bonds have a property called &lt;em&gt;convexity&lt;/em&gt; — when the interest rate decreases, the
 price increases more than proportionally, and vice-versa.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://norswap.com/bonds-2/convexity.png&quot; alt=&quot;picture: Illustration of convexity in bond prices&quot;&gt;&lt;/p&gt;
@@ -169,8 +169,8 @@ price increases more than proportionally, and vice-versa.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Reminder:&lt;/strong&gt; It&amp;#39;s always been unintuitive to me that bond price should rise
 when interest fall (shouldn&amp;#39;t it be the opposite?). So let&amp;#39;s tackle that
 first, then we can tackle the question of proportionality.&lt;/p&gt;
-&lt;p&gt;To key is that the rate increase will only affect newly-emitted bonds. The
-yield must be constant accross all bonds with the same maturity (otherwise
+&lt;p&gt;To key is that the rate increase will only affect newly emitted bonds. The
+yield must be constant across all bonds with the same maturity (otherwise
 it&amp;#39;s an &lt;a href=&quot;https://www.investopedia.com/terms/a/arbitrage.asp&quot;&gt;arbitrage&lt;/a&gt; opportunity). Adding new bonds with lower interest rates
 tends to push the yield down, hence the price of existing bonds up!&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s not obvious that it would push the yield down. After all, a lackluster
@@ -191,10 +191,10 @@ launch in a long, fascinating (uhm) mathematical digression on yields,
 &lt;a href=&quot;https://en.wikipedia.org/wiki/Bond_duration&quot;&gt;duration&lt;/a&gt;, compounding and [present value calculations], but this isn&amp;#39;t really
 the point of this piece. Maybe another time?&lt;/p&gt;
 &lt;p&gt;So bonds have &lt;em&gt;convexity&lt;/em&gt;. Mortgage-backed securities, on the other hand, have
-&lt;em&gt;negative convexity&lt;/em&gt; (not sure why they didn&amp;#39;t called this &amp;quot;concavity&amp;quot;, but
+&lt;em&gt;negative convexity&lt;/em&gt; (not sure why they didn&amp;#39;t call this &amp;quot;concavity&amp;quot;, but
 whatever). This means that as the interest rates fall, the price increase less
-than proporitionally, or even fall!&lt;/p&gt;
-&lt;p&gt;First, why would the prices go up? Same reason as the bond yields go up (see
+than proportionally, or even fall!&lt;/p&gt;
+&lt;p&gt;First, why would the prices go up? Same reason that the bond yields go up (see
 above). Since government bonds are the ultimate risk-free security, most other
 rates in the market depend on them, and will be higher. The difference between
 the yield for a financial product and the risk-free rate (the bond yield) is
@@ -203,12 +203,12 @@ follow suit (at least if we assume that the reason that the yields went up has
 no material impact on the mortgage market and the default rate).&lt;/p&gt;
 &lt;p&gt;The reason MBS prices go up less than proportionally (and in any case, less than
 bond prices) is that, as we said at the start of this section, decreased rates
-increase mortgage refinancement, which decreases MBS duration — the weighted (by
+increase mortgage refinancing, which decreases MBS duration — the weighted (by
 monetary amount) average time of received cashflows (loan repayments). More
 refinancing and prepaying means less interest payments, though we will recover a
 larger part of the principal earlier. What the MBS did offer us however was a
 certain yield (based on the mortgage rate). When the duration decrease, we lose
-on that yield, and must reinvest the prepayed sums elsewhere — right after the
+on that yield, and must reinvest the prepaid sums elsewhere — right after the
 interest rates went down! This loss in compound interest is what causes MBS
 prices to rise less than expected.&lt;/p&gt;
 &lt;p&gt;So, bonds have convexity, mortgage-backed securities have negative convexity.
@@ -223,7 +223,7 @@ decreases, and funds reinvest prepayments into long-term bonds.&lt;/p&gt;
 &lt;p&gt;Back to our initial topic, the net effect is that when interest rates increase,
 MBS duration increases, which leads to funds selling off bonds to hedge
 duration. The opposite happens when interest rates decrease. This naturally
-amplifies the movement of bonds in either directions (as the bond price is
+amplifies the movement of bonds in either direction (as the bond price is
 already on the upswing when interest rates decrease).&lt;/p&gt;
 &lt;p&gt;And with that, we completed our tour of the plausible reasons for the February
 bond yield surge! Now we need to briefly examinate how this impacted the stock
@@ -253,15 +253,15 @@ price, you might still not want to do so, because your competitors might not
 have done so yet, and you&amp;#39;ll lose customers to them. Of course, they&amp;#39;ll have to
 raise prices too eventually, but these effects slow down the price cascade —
 it&amp;#39;s a coordination problem. Where commodities are concerned, there&amp;#39;s also
-uncertainty as though whether a price increase is just a spike (possibly fuelled
+uncertainty as though whether a price increase is just a spike (possibly fueled
 by speculation (*1)), or a more permanent shift.&lt;/p&gt;
 &lt;p&gt;At the end of the supply chain lies the final customer, the individual.
 Unfortunately, wages are typically the last thing to increase in the inflation
 process. This is because the price increase takes quite some time to reach final
-consumers, and because the profits of a company must increase must increase
-(after it can reflect inflation in the price it charges) before it starts paying
-employees more. And companies will tend to increase pay, if only to get a
-competitive advantage by poaching promising talent.&lt;/p&gt;
+consumers, and because the profits of a company must increase (after it can
+reflect inflation in the price it charges) before it starts paying employees
+more. And companies will tend to increase pay, if only to get a competitive
+advantage by poaching promising talent.&lt;/p&gt;
 &lt;p&gt;(*1) This kind of speculation has, of course, unpleasant side-effects, such as
 making lumber more expensive for those that have a genuine use for it. However,
 I want to emphasize that this is the cost you pay for having an efficient
@@ -275,13 +275,13 @@ value of the currency. Inflation occurs when the balance of money and goods
 shifts in the direction of there being more money and/or less goods. In the
 current situation, there is more money in circulation due to stimulus and
 massive public spending (*2), and a modest deficit for goods whose supply
-chains where shut down during the Covid pandemic.&lt;/p&gt;
+chains were shut down during the Covid pandemic.&lt;/p&gt;
 &lt;p&gt;(*2) At least in the United States, though it seems likely that other parts of
 the world will suffer from, at least, a milder version of the same problem.&lt;/p&gt;
 &lt;p&gt;The consequence of this on companies is that they will go through a transition
 period where their expenses will increase, but their revenues do not increase in
 kind.&lt;/p&gt;
-&lt;p&gt;What, then, does inflation do to the valuation of companies? We mentionned two
+&lt;p&gt;What, then, does inflation do to the valuation of companies? We mentioned two
 things already. First, there is an impact on the balance sheet: cash loses
 value, but so do debts. Second, there is a loss of profit due to price lag. In
 some cases, those are straightforward to compute. In some cases not so much. On
@@ -291,7 +291,7 @@ worst case, be forced to liquidate.&lt;/p&gt;
 &lt;p&gt;So inflation is bad for everyone; but depending on balance sheet composition,
 position within the supply chain and general financial health, it is worse for
 some companies than for other. But wait — hasn&amp;#39;t the S&amp;amp;P 500 has been making
-consistent all-time hights since the events of February?!&lt;/p&gt;
+consistent all-time highs since the events of February?!&lt;/p&gt;
 &lt;p&gt;Clearly, to understand why growth stock got hammered in February, we need to
 look beyond just the fundamental prices in the growth, and into the theory of
 stock valuation.&lt;/p&gt;
@@ -301,9 +301,9 @@ constantly be swinging around even when absolutely nothing of substance
 happens). Nevertheless, many theoretical frameworks have been proposed to try to
 explain the factors that underly stock prices, and to try to estimate what a
 &amp;quot;reasonable&amp;quot; stock price may be.&lt;/p&gt;
-&lt;p&gt;This is quite the rabbithole, and if you&amp;#39;re interested, the best place to start
+&lt;p&gt;This is quite the rabbit hole, and if you&amp;#39;re interested, the best place to start
 is Aswath Damodaran&amp;#39;s &lt;a href=&quot;https://www.youtube.com/playlist?list=PLUkh9m2BorqlJsEfix7R9jtSXClFZhGvC&quot;&gt;valuation course&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Two concepts that are particularly useful in analysing the price of stocks are
+&lt;p&gt;Two concepts that are particularly useful in analyzing the price of stocks are
 the notion of &lt;em&gt;equity risk premium&lt;/em&gt; and that of &lt;em&gt;hurdle rate&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;The equity risk premium is the (expected or actual) return on equities in excess
 to that of the risk-free alternatives. Typically, treasury bonds are used as the
@@ -328,8 +328,8 @@ lot (or are deemed to be poised to grow a lot), but who may not yet be
 profitable. The valuation is based on future expectations of growth — which
 may not come to pass and can sometimes be a bit too optimistic.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;As the name implies, risk premiums are rewards for risk. Growth stocks are more
-risky than value stocks, and so should command a higher risk premium. But what
+&lt;p&gt;As the name implies, risk premiums are rewards for risk. Growth stocks are
+riskier than value stocks, and so should command a higher risk premium. But what
 is this &amp;quot;risk&amp;quot; we talk about? Consider that a risk premium is an average
 computed on a basket of stock (or on an index) over a certain period of time.
 Risk can be seen as the variance between the stocks in the basket, and the
@@ -351,63 +351,65 @@ hurdle rate, you invest, otherwise you don&amp;#39;t.&lt;/p&gt;
 I recommend &lt;a href=&quot;http://aswathdamodaran.blogspot.com/2021/03/rates-growth-and-value-investment.html&quot;&gt;this article&lt;/a&gt; by Aswath Damodaran. I don&amp;#39;t
 pretend to understand all of it, but it makes very interesting points.&lt;/p&gt;
 &lt;h2 id=&quot;so-what-happened-to-growth-stocks&quot;&gt;So what happened to growth stocks?&lt;/h2&gt;
-&lt;p&gt;It would be a stretch to say that, as bond yields rose, investor recomputed
+&lt;p&gt;It would be a stretch to say that, as bond yields rose, investors recomputed
 their hurdle rate up (because the risk-free rate was up) and their expected risk
 premium down (because inflation was likely, cutting into profits).&lt;/p&gt;
 &lt;p&gt;But on the other hand... Everyone knew that valuations in the growth segment
 were historically high on any metric that you cared to consider. This meant the
 category was particularly risky. Inflation comes in and maybe the risk is now
-too high given the potential rewards. Better to lock in some gains. This is
+too high given the potential rewards. Better to lock in some profit. This is
 essentially the hurdle/premium process, but perceived intuitively.&lt;/p&gt;
-&lt;p&gt;At this point, we also have to mention that inflation might be paticularly bad
-for the usually non-profitable growth companies, as it impedes their ability to
-raise money. Not only does inflation expectation increase the interest rate on
-debt, but it means that the money you borrow has lost value by the time you
-spend it. Inflation also negatively affect the ability to finance via stock
+&lt;p&gt;At this point, we also have to mention that inflation might be particularly bad
+for the typically non-profitable growth companies, as it impedes their ability
+to raise money. Not only does inflation expectation increase the interest rate
+on debt, but it means that the money you borrow has lost value by the time you
+spend it. Inflation also negatively affects the ability to raise cash via stock
 sales: reflectively from the above, we expect inflation to negatively impact the
 stock price, which mean that less money will be generated by selling (so you
 need to sell more of it, which negatively impacts the stock price, ...).&lt;/p&gt;
 &lt;p&gt;As always whenever we talk markets, we have to consider force multipliers and
 momentum. As growth stocks sold off in February, it became clear this that this
-was not a mere fluctuation but a full-blown correction. This causes
-stock-holders that had not reacted to the bond market to start selling too, in
-reaction to the price movement, but for the same reasons: the upside of
-continuing to hold longer is limited compared to the immediate risk embedded in
-the downward trend.&lt;/p&gt;
+was not a mere fluctuation but a full-blown correction. This causes stockholders
+that had not reacted to the bond market to start selling too, in reaction to the
+price movement, but for the same reasons: the upside of continuing to hold
+longer is limited compared to the immediate risk embedded in the downward trend.&lt;/p&gt;
 &lt;p&gt;Big moves in the stock market are also driven by de-leveraging: if you purchased
 stock &lt;a href=&quot;https://en.wikipedia.org/wiki/Margin_(finance)&quot;&gt;on margin&lt;/a&gt;, a sudden price drop forces you to sell stock to maintain your
 &lt;a href=&quot;https://www.firstrade.com/content/en-us/education/margin/marginrequirements/&quot;&gt;margin requirements&lt;/a&gt; and avoid &lt;a href=&quot;https://en.wikipedia.org/wiki/Margin_(finance)#Margin_call&quot;&gt;margin calls&lt;/a&gt;. This is especially relevant
 since margin debt levels are historically high.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://norswap.com/bonds-2/margin-debt.png&quot; alt=&quot;picture: Margin debt chart&quot;&gt;&lt;/p&gt;
 &lt;p&gt;The margin debt level may be in line with the S&amp;amp;P 500 price, but note that you
-would expect debt to decrease as stock prices go up. If you buy 5k$ worth of
-stock at 5:1 leverage (so fronting 1k$ of your own cash, taking a 4k$ margin
-debt), and the stock goes up 20%, your stock is now worth 6k$ and your margin
-debt decreases to 3k$. One &lt;em&gt;possible&lt;/em&gt; interpretation of the chart is that as
-stock prices go up investors reinvesting the profits with leverage (i.e. they
-maintain a constant leverage ratio). Note that the chart also does not say where
-the leverage is employed (accross the stock market? or is it concentrated in
-certain stocks?). In the end, it seems that leverage will accentuate any
-&amp;quot;natural&amp;quot; price move, both in the up and down directions.&lt;/p&gt;
+would expect the debt ratio to decrease as stock prices go up. If you buy 5k$
+worth of stock at 5:1 leverage (so fronting 1k$ of your own cash, taking a 4k$
+margin debt), and the stock goes up 20%, your stock is now worth 6k$ and your
+leverage ratio is now 3:1 (stock worth 6k$, of which 2k$ is not debt). One
+&lt;em&gt;possible&lt;/em&gt; interpretation of the chart is that as stock prices go up investors
+reinvesting the profits with leverage (i.e. they maintain a constant leverage
+ratio). Note that the chart also does not say where the leverage is deployed
+(across the stock market? or is it concentrated in certain stocks?). In the end,
+it seems that leverage will accentuate any &amp;quot;natural&amp;quot; price move, both in the up
+and down directions.&lt;/p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 &lt;p&gt;So, what happened? What have we learned?&lt;/p&gt;
 &lt;p&gt;Bond prices decreases and the yield rose, driven by inflation expectations. A
-series of events catalysed (the 7-year bond auction) and amplified (the
+series of events catalyzed (the 7-year bond auction) and amplified (the
 butterfly trade, convexity hedging) this change.&lt;/p&gt;
 &lt;p&gt;The effect spilled over to the stock market, where it was mostly driven by
 &lt;a href=&quot;https://www.investopedia.com/terms/m/marketsentiment.asp&quot;&gt;sentiment&lt;/a&gt;, reflecting both the increased risk-free rate and the lowered return
 expectations due to inflation. Because growth stocks&amp;#39; valuations were stretched,
 that was all it took to tip this segment of the market into a correction.&lt;/p&gt;
 &lt;p&gt;When these events transpired, I did not get how inflation and the bond market
-could influence stock valuation to this extent. In fact, some of my intutitions
+could influence stock valuation to this extent. In fact, some of my intuitions
 were to the opposite. For instance, since companies will keep making money in
 the future, shouldn&amp;#39;t inflation push the stock price up to reflect the future
 revenue increase due to higher prices?&lt;/p&gt;
 &lt;p&gt;I was also looking for a technical explanation (based on some mechanics of the
 financial markets), whereas the move seems to have mostly been driven by
 &lt;a href=&quot;https://www.investopedia.com/terms/m/marketsentiment.asp&quot;&gt;sentiment&lt;/a&gt; and risk-reward considerations. This happened on the heels of the
-&lt;a href=&quot;https://norswap.com/bonds-2//gamestop&quot;&gt;Gamestop gamma squeeze&lt;/a&gt;, which had a straightforward technical explanation, so
+&lt;a href=&quot;https://norswap.com/gamestop&quot;&gt;Gamestop gamma squeeze&lt;/a&gt;, which had a straightforward technical explanation, so
 there might be some &lt;a href=&quot;https://en.wikipedia.org/wiki/Availability_heuristic&quot;&gt;availability bias&lt;/a&gt; there.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;If you enjoyed this article, you might enjoy other articles about &lt;a href=&quot;https://norswap.com/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
       </description>
       <pubDate>2021-06-05T22:00:00.000Z</pubDate>
       <link>http://norswap.com/bonds-2</link>
@@ -416,7 +418,7 @@ there might be some &lt;a href=&quot;https://en.wikipedia.org/wiki/Availability_
     <item>
       <title>Freaking blockchains: How do they work?</title>
       <description>
-&lt;p&gt;in: &lt;a href=&quot;https://norswap.com/blockchain-how//finance&quot;&gt;Finance&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;in &lt;a href=&quot;https://norswap.com/finance&quot;&gt;Finance&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;Cryptocurrency hype is at its peak, blockchains are on every lips. Since I
 started writing this, Bitcoin &amp;amp; assorted cryptocurrencies hit multiple all-time
@@ -747,7 +749,7 @@ potential and applications of blockchain technologies. A subsequent post will
 take a look at the security model and potential attacks against proof-of-work
 and proof-of-stake. See you next time!&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;Enjoyed this? Check out &lt;a href=&quot;https://norswap.com/blockchain-how//finance&quot;&gt;more finance articles&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Enjoyed this? Check out &lt;a href=&quot;https://norswap.com/finance&quot;&gt;more finance articles&lt;/a&gt;.&lt;/p&gt;
       </description>
       <pubDate>2021-05-26T22:00:00.000Z</pubDate>
       <link>http://norswap.com/blockchain-how</link>
@@ -856,7 +858,7 @@ future.&lt;/p&gt;
     <item>
       <title>Bonds Bonanza 1: Bonds Basics</title>
       <description>
-&lt;p&gt;This is part of a series of posts on &lt;a href=&quot;https://norswap.com/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;in &lt;a href=&quot;https://norswap.com/finance&quot;&gt;Finance&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;During the second part of February, US treasury bonds yields rose sharply, from
 1.13% to more than 1.6%. (If you have no idea what that means, everything will
@@ -932,7 +934,7 @@ yield rate, when there are many 10-years maturity bonds (emitted in 2019, 2020,
 given maturity. Here &lt;em&gt;maturity&lt;/em&gt; is to be understood not as the maturity at the
 time when the bond was emitted, but as the remaining time until the bond matures
 and the principal is paid back.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;yieldcurve.png&quot; alt=&quot;yield curve now, one and two years ago&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/bonds/yieldcurve.png&quot; alt=&quot;yield curve now, one and two years ago&quot;&gt;&lt;/p&gt;
 &lt;p&gt;First, you have to recognize that any bond with the same time left until
 maturation has the same yield — no matter what the original maturity and coupon
 rates were! If that wasn&amp;#39;t the case, anyone who owns the lower-yield bond would
@@ -967,9 +969,10 @@ its economy, so inflation, not deflation, is on all the lips.&lt;/p&gt;
 &lt;p&gt;You can consult the official yield rates &lt;a href=&quot;https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/textview.aspx?data=yield&quot;&gt;on the US treasury
 website&lt;/a&gt; and you can visualize the curve &lt;a href=&quot;https://www.gurufocus.com/yield_curve.php&quot;&gt;on gurufocus&lt;/a&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;p&gt;That&amp;#39;s it for today! Next time we&amp;#39;ll look at what might have caused the surge in
-bond yields in February. We&amp;#39;ll also look at some hypothesis explaining why this
-affected the stock market.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s it for today! &lt;a href=&quot;https://norswap.com/bonds-2&quot;&gt;The next article&lt;/a&gt; looks at what might have
+caused the surge in bond yields in February. We&amp;#39;ll also look at some hypothesis
+explaining why this affected the stock market.&lt;/p&gt;
+&lt;p&gt;If you enjoyed this article, you might enjoy other articles about &lt;a href=&quot;https://norswap.com/finance&quot;&gt;finance&lt;/a&gt;.&lt;/p&gt;
       </description>
       <pubDate>2021-04-29T22:00:00.000Z</pubDate>
       <link>http://norswap.com/bonds</link>
@@ -992,7 +995,7 @@ again took advantage of the little folks. Me? I believe all of the above. It&amp
 complicated.&lt;/p&gt;
 &lt;p&gt;First of all, the year-to-date chart of the GME stock price (click the picture
 for a bigger version):&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;gme.png&quot;&gt;&lt;img src=&quot;gme.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://norswap.com/gamestop/gme.png&quot;&gt;&lt;img src=&quot;https://norswap.com/gamestop/gme.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;I&amp;#39;m not going to write a summary of the events, you can find that online, &lt;a href=&quot;https://en.wikipedia.org/wiki/GameStop_short_squeeze&quot;&gt;on
 wikipedia&lt;/a&gt; or &lt;a href=&quot;https://archive.is/02nxI&quot;&gt;here&lt;/a&gt; (warning for that second link: lots
 of unreasonable speculation). If you&amp;#39;re not familiar with the matter, I highly
@@ -1165,7 +1168,7 @@ the delta increase in the ATM options, which causes market makers to increase
 their purchases to preserve their delta hedge. The rate at which delta increases
 as the price rises is given by gamma, the derivative of gamma with regard to
 price. (Note that gamma is not itself a constant but a function!)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;gamma.svg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/gamestop/gamma.svg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;How much of the squeeze vas due to shorts being squeezed vs gamma?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s hard to say, and I don&amp;#39;t know. Obviously the whole thing was started as a
 short squeeze, and then gamma amplified the movement.&lt;/p&gt;
@@ -1411,7 +1414,7 @@ Whatever drains you, stop doing it.&lt;/p&gt;
 &lt;li&gt;Webtoon&lt;/li&gt;
 &lt;li&gt;Up to chapter 57&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;overgeared.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/overgeared.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Bunch of new webtoons this time around, still in the same &amp;quot;leveling&amp;quot; genre. It&amp;#39;s
 crazy that there does not seem to be a name for those, even though they&amp;#39;re all
 build around the same mold. It&amp;#39;s crazy to me how they seemingly &lt;em&gt;all&lt;/em&gt; seem to
@@ -1551,7 +1554,7 @@ true, and often about simple ideas that are often misunderstood.&lt;/p&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Seasons 1 &amp;amp; 2&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;great-pretender.webp&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/great-pretender.webp&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Wow! Here&amp;#39;s an anime that felt different. From the international setting and
 bright pastel color palette to the amazing story-telling — there were so much
 that was unique about this one.&lt;/p&gt;
@@ -1598,7 +1601,7 @@ way back.&lt;/p&gt;
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 1 &amp;amp; 2&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;beastars.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/beastars.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;In a world of anthropomorphized animals, a socially awkward wolf falls in love
 with a spunky rabbit.&lt;/p&gt;
 &lt;p&gt;The animals are ostensibly vegetarian (interestingly - not vegan), but the
@@ -1618,7 +1621,7 @@ conclusion to the storyline.&lt;/p&gt;
 &lt;li&gt;TV&lt;/li&gt;
 &lt;li&gt;Season 5&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;better-call-saul.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/better-call-saul.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Better Call Saul is as good as ever. I haven&amp;#39;t written about the show before,
 but I&amp;#39;ve been a fan of the first four seasons.&lt;/p&gt;
 &lt;p&gt;One thing I love about BCS is how, on the surface, not much is happening, but
@@ -1664,7 +1667,7 @@ are ... unexpected, but not in a particularly good way. This is no Westworld.&lt
 &lt;li&gt;TV&lt;/li&gt;
 &lt;li&gt;Season 1 &amp;amp; 2&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;cobra-kai.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/cobra-kai.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Cobra Kai is absolutely delightful. This 34-years-after sequel of &lt;em&gt;The Karate
 Kid&lt;/em&gt; offers to follow Johnny Lawrence — the main antagonist of the movie, and
 rival of hero Daniel LaRusso — as he picks back Karate and resumes his rivarly
@@ -1728,7 +1731,7 @@ sometimes feel a bit weird. Curious to see what season 3 does with them.&lt;/p&g
 &lt;li&gt;Anime&lt;/li&gt;
 &lt;li&gt;Season 1&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;mushoku-tensei.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/mushoku-tensei.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Easily one of my favourite anime of the winter season (a tie with Attack on
 Titans, probably). It&amp;#39;s not exactly surprising, it&amp;#39;s about a loser who dies and
 gets revived in a fantasy world as a fully-intelligent toddler. That just sound
@@ -1850,7 +1853,7 @@ go read that if you&amp;#39;re interested.&lt;/p&gt;
 pt. 1&lt;/a&gt;,
 &lt;a href=&quot;https://norswap.com/reviews-4/#attack-on-titans-season-3-part-2&quot;&gt;S3 pt. 2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;attack-on-titans.webp&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://norswap.com/reviews-10/attack-on-titans.webp&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Season 3 felt like a lull, but season 4 delivers an electroshock. Holy shit! I
 didn&amp;#39;t expect this final season to be one of the best of the winter season, but
 it was, and easily at that.&lt;/p&gt;

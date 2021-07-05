@@ -122,7 +122,7 @@ class Orderable $X $Y
         return EQUAL
 </code></pre>
 <h2 id="instances-names">Instances Names</h2>
-<p>Every instance must have a name. A subsequent section (<a href="#picking-instances">Picking
+<p>Every instance must have a name. A subsequent section (<a href="/typeclass-scheme/#picking-instances">Picking
 Instances</a>) will explain why names are needed, but for the
 moment bear with me.</p>
 <p>If a name is not given explicitly, it will be generated automatically. For
@@ -161,7 +161,7 @@ from a specific source instance is simply known as a <em>derived instance</em>.<
 <p>Instance selection will always prefer an explicit instance rather than a derived
 instance when both are in the same scope. So our derived <code>Orderable</code> instance
 does not cause issues when <code>$X</code> and <code>$Y</code> are the same type. We&#39;ll talk about
-this more in the <a href="#type-derivations-and-instance-selection">Type Derivations and Instance
+this more in the <a href="/typeclass-scheme/#type-derivations-and-instance-selection">Type Derivations and Instance
 Selection</a> section.</p>
 <p>Just like instances, instance derivations have names. Similarly, they can have
 explicit names:</p>
@@ -251,14 +251,14 @@ derivation, especially when the typeclass defines default implementations for
 all its functions. The big difference is that a class must still be implemented
 explicitly — an implementation has to be requested even if no functions have to
 be implemented. A derivation, on the other hand, is always &quot;active&quot;.</p>
-<p>Just like for source instances in type derivations (cf. the <a href="#deriving-typeclasses-automatically">Deriving
+<p>Just like for source instances in type derivations (cf. the <a href="/typeclass-scheme/#deriving-typeclasses-automatically">Deriving
 Typeclasses Automatically</a> section), the
 required instances may be named and have otherwise an automatically generated
 name. This is not the &quot;true&quot; instance name, but a local alias that may shadow
 previous declarations.</p>
 <p>The other big difference between typeclass declarations with type constraints
 and type derivations is <strong>when</strong> instance selection occurs. We&#39;ll come back to
-it in the <a href="#type-constraints-vs-type-derivations">Type Constraints vs Type
+it in the <a href="/typeclass-scheme/#type-constraints-vs-type-derivations">Type Constraints vs Type
 Derivations</a> section.</p>
 <h2 id="picking-instances">Picking Instances</h2>
 <p>During the execution of our program, there are a couple times when instances
@@ -318,7 +318,7 @@ as well.</p>
 <p>When your two instances have automatically generated names which therefore clash
 (i.e. both are named <code>Serializable_Point</code>), you can prefix with module names to
 disambiguate them (e.g. <code>self.Serializable_Point</code> or
-<code>my_module.Serializable_Point</code>) — see the <a href="#importing-typeclasses-and-instances">Importing Typeclasses and
+<code>my_module.Serializable_Point</code>) — see the <a href="/typeclass-scheme/#importing-typeclasses-and-instances">Importing Typeclasses and
 Instances</a> section.</p>
 <p>Regarding <code>use</code>, the current plan is that it will be possible to override an
 <code>use</code> declaration with another, even in the same scope. For instance:</p>
@@ -435,7 +435,7 @@ fun foo2 (it: $T) where Serializable $T
 </code></pre>
 <p>The same principle applies for typeclass&#39; constraints.</p>
 <h2 id="type-constraints-vs-type-derivations">Type Constraints vs Type Derivations</h2>
-<p>When we introduced typeclass&#39; constraints in the <a href="#typeclass-constraints">Typeclass
+<p>When we introduced typeclass&#39; constraints in the <a href="/typeclass-scheme/#typeclass-constraints">Typeclass
 Constraints</a> section, we said that a big difference
 between typeclasses with constraints on the one hand, and type derivations on
 the other hand, was that one must always request a typeclass instances, whereas

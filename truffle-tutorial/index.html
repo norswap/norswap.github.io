@@ -259,7 +259,7 @@ default, these have the type of the superclass (<code>ExniNode</code> in this ca
 it&#39;s also possible to specify the type explicitly with the <code>type</code> annotation
 element.</p>
 <p>This class is abstract, but Truffle will generate a concrete implementation for
-us, named <code>AddNodeGen</code>. If you load <a href="exni-github">the project</a> in your IDE, you
+us, named <code>AddNodeGen</code>. If you load <a href="/truffle-tutorial/exni-github">the project</a> in your IDE, you
 can navigate there easily (import the Maven project and build first). We will
 examine this class shortly.</p>
 <p>The logic of the class is implemented using the <em>specialization system</em>. Instead
@@ -598,11 +598,11 @@ to optimize? You will now see it&#39;s true: calling inside a loop causes the
 counter to cross the threshold for compilation.</p>
 </blockquote>
 <p>Run it, you should now see something like this in IGV:</p>
-<img class="centered" src="left_sidebar.png" width="400rem" />
+<img class="centered" src="/truffle-tutorial/left_sidebar.png" width="400rem" />
 
 <p>If you select the AST graph, you&#39;ll see this, which is exactly the node hiearchy
 we build in our main class:</p>
-<img class="centered" src="ast_sum.png" width="300rem" />
+<img class="centered" src="/truffle-tutorial/ast_sum.png" width="300rem" />
 
 <p>The &quot;call tree&quot; graph is not interesting because our nodes do not contain a
 guest language function call (our language doesn&#39;t even have those).</p>
@@ -611,14 +611,14 @@ process. We&#39;ll be particularly interested in &quot;Before phase Lowering&quo
 contains the graphs obtained after all of Truffle&#39;s optimizations have been run
 (GraalMV still run generic optimizations after this however). In this case,
 you&#39;ll see this:</p>
-<img class="centered" src="graph_sum_truffle.png" width="500rem" />
+<img class="centered" src="/truffle-tutorial/graph_sum_truffle.png" width="500rem" />
 
 <p>Which is to say, almost nothing! The compiler was smart and the addition of two
 constants was completely optimized away. Do you see that small <code>62</code> node? <code>C(3)</code>
 means &quot;constant with value 3&quot; and that&#39;s the result of our addition. At this
 stage, it still needs to <a href="https://docs.oracle.com/javase/tutorial/java/data/autoboxing.html">box</a> that value though. But if you look to any further
 graph, you&#39;ll see:</p>
-<img class="centered" src="graph_sum_further.png" width="400rem" />
+<img class="centered" src="/truffle-tutorial/graph_sum_further.png" width="400rem" />
 
 <p>The result of the boxing operation is a constant instance of <code>Long</code>, so we can
 eliminate the boxing operation.</p>
@@ -629,7 +629,7 @@ away. You can actually get to see the graph for that by replacing the
 <code>-Dgraal.Dump=Truffle</code> flag by <code>-Dgraal.Dump=:1</code> and looking for the code of the
 main method (<code>exni.ExniMain.main</code>). You can also move the loop to another method
 if you want to get rid of the part of the graph that corresponds to the
-construction of the AST. It looks <a href="graph_main.png">something like this</a>.</p>
+construction of the AST. It looks <a href="/truffle-tutorial/graph_main.png">something like this</a>.</p>
 <p>So we can note that calling the call target within a loop is not a great idea.
 We could probably see that our <code>AddNode</code> gets optimized away completely if we
 implemented a loop in the guest language itself.</p>
@@ -654,8 +654,8 @@ public final class CountNode extends ExniNode {
 cannot prove that it won&#39;t be read, so it has to be dutifully incremented.</p>
 <p>If you modify the main method to run this node instead, and go to the graphs
 (still &quot;Before phase Lowering&quot;) — click for full size version:</p>
-<a href="graph_counter_full.png">
-<img class="centered" src="graph_counter_full.png" />
+<a href="/truffle-tutorial/graph_counter_full.png">
+<img class="centered" src="/truffle-tutorial/graph_counter_full.png" />
 </a>
 
 <p>First off, all the green stuff is &quot;state&quot;. I&#39;ll be honest: I&#39;m not too sure what
@@ -668,7 +668,7 @@ the <code>VirtualArray</code> nodes to the right of that are its fields.</p>
 could also hit &quot;Remove floating&quot; to get rid of the grey boxes, but I want to
 keep node 44 (+). Instead I&#39;ve hidden the other grey boxes manually, and we&#39;re
 left with this:</p>
-<img class="centered" src="graph_counter_simple.png" width="550rem" />
+<img class="centered" src="/truffle-tutorial/graph_counter_simple.png" width="550rem" />
 
 <p>This is fairly simple to understand: our node loads the <code>counter</code> field in node
 41, and adds 1 to it in node 44. Notice how one operand comes from the blue

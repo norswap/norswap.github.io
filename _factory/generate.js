@@ -163,11 +163,14 @@ async function generate_page (type, filename, incremental) // relative filename
     const meta = obj.data
     if (meta.title) meta.title = escape_html(meta.title)
     let content = marked(obj.content)
-    content = content.replace(/(href|src)="(?!([^"]*?:\/\/|_blank))/g, `$1="/${plink}/`);
+    // Make relative URLs relative to the root.
+    // These are any URs not starting with a protocol, not _blank, and not
+    // starting with a slash.
+    content = content.replace(/(href|src)="(?!([^"]*?:\/\/|_blank|\/))/g, `$1="/${plink}/`);
     await fse.mkdirp('../' + plink)
+    console.log(`${dst_loc}: ${meta.title}`)
 .   /!output(dst_loc)
 .   /!include('page.dna')
-    console.log(`Created ${dst_loc}`)
     if (type == 'post')
         insert_post(new Post(date, filename, plink, meta, content))
 }

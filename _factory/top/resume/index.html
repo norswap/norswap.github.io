@@ -319,7 +319,8 @@ hr {
 }
 @media print {
     .pgbreak {
-        page-break-after: always;
+        page-break-before: always;
+        height: 10px;
     }
     a, a:visited {
         color: blue;
@@ -352,9 +353,9 @@ body > div[style] {
   <div class="section-title">Contact</div>
   <div id="contact">
   <ul>
-    <li>+32 497/39.83.74</li>
-    <li>Rue Chapelle Emmanuel, 8<br/>1435, Mont-Saint-Guibert, Belgium</li>
-    <li>Driving License: ✔ / Remote: ✔ / Relocate: ✔</li>
+    <li>Linkedin, Telegram, Twitter: @norswap</li>
+    <li>Address &amp; phone number available on demand<br/>&nbsp;</li>
+    <li>Remote: ✔ / Relocate: ✔</li>
   </ul>
   <ul>
     <li>norswap@gmail.com</li>
@@ -368,6 +369,25 @@ body > div[style] {
 
   <div class="section-title">Experience & Education</div>
   <div class="section separated">
+    <div class="item">
+      <div class="when">June-October 2021</div>
+      <div class="title">
+        <a href="https://blog.ethereum.org/2021/05/13/core-dev-apprenticeship/">
+          Core Developer Apprenticeship</a>
+      </div>
+      <div class="where">Ethereum Foundation, Remote</div>
+      <div class="descr">
+        <p>I was selected as one of about ten grant recipients for the core developer
+        apprenticeship, in a pool of more than 400 applicants.</p>
+        <p>As part of the (still ongoing) apprenticeship, I went from barely
+        knowing what a blockchain was to understanding Ethereum in depth, wrote
+        a state-of-the-art reviews on blockchain state expiry and a research
+        proposal on miner extracted value. I also wrote my own implementation of
+        a large chunk of Ethereum's execution layer for education purposes.</p>
+        <p>All the work I did during my apprenticeship is available
+        at <a href="https://norswap.com/cdap">norswap.com/cdap</a></p>
+      </div>
+    </div>
     <div class="item">
       <div class="when">2019 - Current</div>
       <div class="title">
@@ -387,22 +407,22 @@ body > div[style] {
       </div>
     </div>
     <div class="item">
-      <div class="when">2021</div>
+      <div class="when">2021 - Current</div>
       <div class="title">
         <a href="https://uclouvain.be/en-cours-2020-lingi2132"></a>
         Invited Professor
       </div>
       <div class="where">Université Catholique de Louvain, Belgium</div>
       <div class="descr">
-        <p>During the winter 2021 semester, I gave the <em>"Languages &
-        Translators"</em> compiler course to a class of about 100 computer
-        science & master students. Students had to implement their own
-        programming language for the course's project. I will probably teach
-        again in 2022.</p>
+        <p>I am teaching the <em>"Languages & Translators"</em> compiler course
+        to a class of about 100 computer science & master students. Students had
+        to implement their own programming language for the course's
+        project.</p>
         <p>The class lectures &amp; materials are freely available
         at <a href="https://norswap.com/compilers">norswap.com/compilers</a></p>
       </div>
     </div>
+    <div class="pgbreak"></div>
     <div class="item">
       <div class="when">2014 - 2019</div>
       <div class="title">
@@ -430,7 +450,7 @@ body > div[style] {
         maintainable.</p>
       </div>
     </div>
-    <div class="item pagebreak">
+    <div class="item">
       <div class="when">2008 - 2013</div>
       <div class="title">
         <a href="http://www.uclouvain.be/en-prog-2012-lsinf1ba.html"></a>
@@ -456,7 +476,7 @@ body > div[style] {
       a reasonable amount of time.</p>
       <p>That being said, I have experience in Java, C, C++, Objective-C,
       Kotlin, Ruby, Javascript, Python, Prolog, Lua, Bash, SQL, Git, Make,
-      CMake, Maven, Gradle, and more.</p>
+      CMake, Maven, Gradle, Solidity, and more.</p>
     </div>
     </div>
   </div>
@@ -499,6 +519,7 @@ body > div[style] {
       <!-- <br><a href="/pubs/hotsdn2014.pdf">[PDF]</a> -->
     </p>
     <p>
+      <div class="pgbreak"></div>
       <strong>A PEG-Based Macro System for Java</strong>
       <br>Nicolas Laurent
       <br><em>Master Thesis (2013); Louvain-La-Neuve, Belgium</em>

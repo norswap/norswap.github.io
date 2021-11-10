@@ -208,11 +208,10 @@ that number designates actual hash function calls or attempted nonces.
 > **Math Trivia**: Assuming the difficult is indeed 3/4 \* 2^256, how many
 > nonce would we have to try to find a valid hash, on average?
 >
-> I found this difficult to answer, made some hand calculation, and found the
-> numbers I came up with (between 1 and 2) difficult to believe. But in fact,
-> [here's the answer to a similar problem][mathstack] that gives a formula. The
-> answer is 1.66. Unintuitively, you still have one chance out of three not to
-> have found a valid hash after four tries! Math, man.
+> You can use [this formula][mathstack] to answer the question, and the answer
+> hapapens to be approximately 4.
+>
+> (Thanks Andrew Gord Stewart for catching a mistake in this section!)
 
 [mathstack]: https://math.stackexchange.com/questions/206798/
 

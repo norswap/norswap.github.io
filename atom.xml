@@ -1237,11 +1237,9 @@ that number designates actual hash function calls or attempted nonces.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Math Trivia&lt;/strong&gt;: Assuming the difficult is indeed 3/4 * 2^256, how many
 nonce would we have to try to find a valid hash, on average?&lt;/p&gt;
-&lt;p&gt;I found this difficult to answer, made some hand calculation, and found the
-numbers I came up with (between 1 and 2) difficult to believe. But in fact,
-&lt;a href=&quot;https://math.stackexchange.com/questions/206798/&quot;&gt;here&amp;#39;s the answer to a similar problem&lt;/a&gt; that gives a formula. The
-answer is 1.66. Unintuitively, you still have one chance out of three not to
-have found a valid hash after four tries! Math, man.&lt;/p&gt;
+&lt;p&gt;You can use &lt;a href=&quot;https://math.stackexchange.com/questions/206798/&quot;&gt;this formula&lt;/a&gt; to answer the question, and the answer
+hapapens to be approximately 4.&lt;/p&gt;
+&lt;p&gt;(Thanks Andrew Gord Stewart for catching a mistake in this section!)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;So proof-of-work mining takes a lot of computational power to perform all these
 hashes. This costs a lot of money, both as upfront machine costs and as energy

@@ -209,7 +209,7 @@ that number designates actual hash function calls or attempted nonces.
 > nonce would we have to try to find a valid hash, on average?
 >
 > You can use [this formula][mathstack] to answer the question, and the answer
-> hapapens to be approximately 4.
+> happens to be approximately 4.
 >
 > (Thanks Andrew Gord Stewart for catching a mistake in this section!)
 

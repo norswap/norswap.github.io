@@ -1238,7 +1238,7 @@ that number designates actual hash function calls or attempted nonces.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Math Trivia&lt;/strong&gt;: Assuming the difficult is indeed 3/4 * 2^256, how many
 nonce would we have to try to find a valid hash, on average?&lt;/p&gt;
 &lt;p&gt;You can use &lt;a href=&quot;https://math.stackexchange.com/questions/206798/&quot;&gt;this formula&lt;/a&gt; to answer the question, and the answer
-hapapens to be approximately 4.&lt;/p&gt;
+happens to be approximately 4.&lt;/p&gt;
 &lt;p&gt;(Thanks Andrew Gord Stewart for catching a mistake in this section!)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;So proof-of-work mining takes a lot of computational power to perform all these
@@ -1403,7 +1403,7 @@ and proof-of-stake. See you next time!&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;Enjoyed this? Check out &lt;a href=&quot;https://norswap.com/finance&quot;&gt;more finance articles&lt;/a&gt;.&lt;/p&gt;
       </description>
-      <pubDate>2021-05-26T22:00:00.000Z</pubDate>
+      <pubDate>2021-05-27T05:00:00.000Z</pubDate>
       <link>http://norswap.com/blockchain-how</link>
       <guid isPermaLink="true">http://norswap.com/blockchain-how</guid>
     </item>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; How rollups scale Ethereum
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">How rollups scale Ethereum</h1>
+      <span class="post-date">04 Dec 2021</span>
+<p>From the <a href="https://hackmd.io/ZJR05zr-SP-tm1D9aqKJaA">overview</a>:</p>
+<blockquote>
+<p>Ethereum&#39;s limited resources, specifically bandwidth, computation, and
+storage, constrain the number of transactions which can be processed on the
+network, leading to extremely high fees. Scaling Ethereum means increasing the
+number of useful transactions the Ethereum network can process, by increasing
+the supply of these limited resources.</p>
+</blockquote>
+<p>But how do rollups increase these resources? To understand this, we first need
+to give some details about layer-1 (L1) Ethereum.</p>
+<h2 id="state-in-l1-ethereum">State in L1 Ethereum</h2>
+<p>The size of the L1 state <a href="https://youtu.be/LjGPCX2V1qk?t=267">as per summer 2021</a> was around 35GB.
+However, during execution, the state needs to be stored in a <a href="https://github.com/norswap/nanoeth/tree/master/src/com/norswap/nanoeth/trees/patricia#readme">Merkle Patricia
+Tree</a> (MPT), which takes the effective stored size to 100GB. This size is
+expected to grow by 50GB per year, assuming the Ethereum <a href="https://ethereum.org/en/developers/docs/gas/#what-is-gas-limit">gas limit</a> stays
+constant. These amounts does not even include historical state, some of which
+<strong>must</strong> be kept to be able to process <a href="https://www.paradigm.xyz/2021/07/ethereum-reorgs-after-the-merge/">chain reorganizations</a>. A node
+must also keep at least some recent block header data.</p>
+<p>Currently, core developers are not increasing the gas limit because we expect
+higher throughput to cause faster state growth.</p>
+<p>Still these numbers are manageable. 4TB SSD drives can be purchased for 400$ or
+less. So why don&#39;t we just increase the gas limit?</p>
+<h2 id="why-not-increase-the-gas-limit">Why not increase the gas limit?</h2>
+<p>There are two reasons. The first is a commitment to keep Ethereum as
+decentralized as possible, which includes making it possible for as many people
+as possible to validate the network. We could increase the gas limit and require
+every validator to spend a few thousand dollars to participate and this wouldn&#39;t
+really decrease the security of the network. However, the same kind of reasoning
+could be repeatedly applied to take us to a situation where you&#39;d need to rent
+in a data center to validate the network. This is extremely undesirable, because
+it would let a small number of majority actors (e.g. staking pools) collude with
+very few people noticing.</p>
+<p>Let me give just one possible scenario. A majority cabal of staking pools could
+claim to run a jointly-developed custom client, which so happened to have a
+&quot;subtle bug&quot; that associates of the pools are able to exploit for profit. The
+few remaining honest actors need to detect and then identify the problem — are
+the pools or the other validators correct? The pools could make this
+investigation difficult, and by the time the &quot;bug&quot; surfaces, the chain has moved
+on so far that a fork becomes unthinkable. The pools can maintain plausible
+deniability by claiming this was an innocent bug.</p>
+<p>Like a lot of things in the blockchain space, this is a social problem as much
+as a technical one. One reason more eyes on the chain is better is because it
+can cause more outcry in case of fraud, and give legitimacy to the correct fork.</p>
+<p>The second reason we don&#39;t want to increase the gas limit is <a href="https://www.parity.io/blog/what-is-a-light-client/">light clients</a>.
+Light clients are clients that can validate the network but are not required to
+store the state. Instead they can request the state from the network and
+validate it against state roots stored in recent block headers. Light clients
+allow reducing the reliance on centralized state providers like Infura.</p>
+<blockquote>
+<p><strong>Aside: how light clients work</strong></p>
+<p>A light client needs to start with a trusted block header (either coming from
+an initial sync or trusted source). Let&#39;s assume that this hash is a
+semi-recent block hash, updated each time you use your light-client-enabled
+wallet. Then, the next time you use your wallet, you need to get all the block
+headers between that trusted header and the current head of the chain. There
+are solutions to validate these headers in both proof-of-work and
+proof-of-stake, but let&#39;s focus on the latter, as it is Ethereum&#39;s future.</p>
+<p>To verify a block header, you&#39;ll need to determine that the block was indeed
+signed by known Ethereum validators (stakers). The validator data is small
+enough that it could be kept locally, or you can request it from the network
+and validate it against the trusted block header.</p>
+<p>Once you&#39;re caught up with the chain (which should be fast unless you haven&#39;t
+opened your wallet in months/years), you can speculatively execute
+transactions locally, or even execute whole new blocks yourself. During these
+executions, you&#39;ll need to request the state from the network, which you can
+again validate against the state Merkle root in the most recent block header.</p>
+<p>This state can even be obtained from a centralized provider. The difference is
+that you do not need to trust him anymore: now you can verify the state
+against block headers, and you run the computations yourself.</p>
+</blockquote>
+<p>Light clients are expected to run on user&#39;s machines (laptops, cell phones) and
+only sporadically (e.g. when using a wallet). Clearly this puts a limit on
+storage, computation and bandwidth. The storage is solved by getting the state
+from the network, but this further constrains bandwidth.</p>
+<p>Increasing the gas limit too much would overwhelm light-client&#39;s ability to
+catch up and keep up with the chain, in terms of bandwidth and computation.</p>
+<p>Finally, light clients help keep Ethereum decentralized by creating more
+validators. Light clients associated with wallets are a formidable deterrent
+because it means these wallets won&#39;t transact on fraudulent chains, even if they
+are supported by a majority of miners/stakers. Vitalik Buterin makes this point
+<a href="https://vitalik.ca/general/2021/05/23/scaling.html#its-crucial-for-blockchain-decentralization-for-regular-users-to-be-able-to-run-a-node">here</a>.</p>
+<h2 id="enter-rollups">Enter Rollups</h2>
+<p>I first want to acknowledge the fact that how rollups scale Ethereum — while
+preserving its security guarantees — is not as straightforward as it is often
+made out to be.</p>
+<p>The scaling property of rollups falls out from two facts:</p>
+<ol>
+<li>A rollup needs orders of magnitude less validators than L1 to maintain its
+security. As long as a single honest validator does its job, the network will
+remain secure.</li>
+<li>State growth can be spread between multiple independent rollups.</li>
+</ol>
+<p>Let&#39;s look at (1) first. In an <a href="https://vitalik.ca/general/2021/01/05/rollup.html">optimistic rollup</a>, the rollup will be secure if
+there is always a validator that can submit a fraud proof for every detected
+sequencer fraud. Therefore, it is okay to increase the requirements needed to
+run these validators, as long as motivated entities and individuals are able to
+run them. Note also that many entities have a vested interest in running these
+validators, because they derive value from the rollup: data and insight
+providers like Infura, The Graph, Dune Analytics; as well as projects building
+on top of the rollup. Unlike in my &quot;evil staking pools&quot; scenario, a majority of
+bad actors is no longer able to get away with fraud!</p>
+<p>In a <a href="https://vitalik.ca/general/2021/01/05/rollup.html">zk rollup</a>, you do not need validators at all for security (you might need
+them for data availability however, depending on the architecture of the
+rollup), but you need to trust the code of the zk verifier smart contract. While
+no external validators are needed, the requirements on the prover (the zk
+pendant of the sequencer) are extreme, as building the zk proofs is very costly.</p>
+<p>Regarding (2), this lets different validators verify different parts of the
+state, hence not imposing the burden of the extra state of every rollup on every
+validator. Because of (1), we know that it&#39;s okay for each rollup to have many
+less validators than L1. This is also the insight behind <a href="https://ethereum.org/en/eth2/shard-chains/">sharding</a> — though in
+this case the reduced validator requirement does not apply and is solved with
+<a href="https://vitalik.ca/general/2021/04/07/sharding.html">random committee selection</a> instead.</p>
+<h2 id="in-summary">In Summary</h2>
+<p>We can&#39;t just raise the gas limit to scale Ethereum, because that would raise
+hardware requirements for validators, and the chain needs to be validated as
+broadly as possible to avoid a collusion of majority actors. It would also
+preclude the introduction of light clients to break our reliance on centralized
+data providers.</p>
+<p>Rollups help scale Ethereum because they require order of magnitude less
+validators than L1 to stay secure (via the use of fraud proofs or zero-knowledge
+proofs), hence the requirements for validators can be increased. Additionally,
+the state growth between multiple rollups that can be validated separately.</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/rollups-scale";
+        this.page.identifier = "rollups-scale";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

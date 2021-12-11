@@ -3,7 +3,7 @@ layout: brief
 title: "Life Updates"
 ---
 
-It's been a crazy year. I was already crazy [back in March](/ragged), but
+It's been a crazy year. It was already crazy [back in March](/ragged), but
 against my better judgement, I (thankfully!) doubled down.
 
 In June, I took a leave from my Job at Oracle to take part in the [Ethereum Core

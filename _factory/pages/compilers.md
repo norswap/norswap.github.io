@@ -3,7 +3,8 @@ layout: page
 title: Compiler Class
 ---
 
-In 2021, I'm teaching a master-level compiler class at [Université catholique de
+Since 2021, I'm teaching a master-level compiler class (officially titled
+[*Language and translators*][course-page] at [Université catholique de
 Louvain][ucl].
 
 All the course materials are made available online, for anyone interested to
@@ -18,5 +19,6 @@ are supplied to assist in this task:
 - [Autumn](https://github.com/norswap/autumn) (parsing)
 - [Uranium](https://github.com/norswap/uranium/) (semantic analysis)
 
+[course-page]: https://uclouvain.be/en-cours-2021-linfo2132
 [ucl]: https://uclouvain.be/
 [answer]: mailto:norswap+compiler+q@gmail.com

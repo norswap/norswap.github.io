@@ -258,11 +258,11 @@ declaration with the <code>static</code> storage class specifier. This declarati
 happen before any <code>extern</code> declaration, and there cannot be any declaration
 without storage class specifier (or a compilation error ensues). Otherwise,
 they have external linkage.</p>
+</li>
+</ul>
 <p>Finally, for a variable to be defined there should be exactly one declaration
 with an initializer; or, failing that, at least one declaration without
 <code>extern</code>.</p>
-</li>
-</ul>
 <h1 id="if-we-could-do-it-over">If we could do it over...</h1>
 <p>Perhaps the most obvious flaw of the scheme is that <code>static</code> at file scope bears
 no relationship with <code>static</code> at block scope. One of the two should have a

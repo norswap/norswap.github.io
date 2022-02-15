@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Olympus DAO from Primary Sources
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Olympus DAO from Primary Sources</h1>
+      <span class="post-date">15 Feb 2022</span>
+<p>If you&#39;re following <a href="https://ethereum.org/en/defi/">decentralized finance (aka DeFi)</a>, you&#39;ve probably heard
+about <a href="https://www.olympusdao.finance/">OlympusDAO</a>.</p>
+<p>OlympusDAO describes itself as a &quot;decentralized reserve currency&quot;. In the
+non-crypto worlds, a <a href="https://en.wikipedia.org/wiki/Reserve_currency">reserve currency</a> is a foreign currency held by other
+governments to back and stabilized their own currency. Interestingly, OHM is
+itself a currency backed by a reserve (&quot;the treasury&quot;) of other assets (mostly
+stablecoin and OHM-stable <a href="https://www.google.com/search?hl=en&amp;q=lp%20tokens">LP tokens</a>, but also some ETH). I don&#39;t think Olympus
+works as a reserve currency at all, but I will defer this discussion to another
+article.</p>
+<p><strong>In this article, I want to look at what Olympus actually does, and I want to
+do so by digging straight into the code.</strong></p>
+<p>I&#39;m doing this because OlympusDAO has been the subject of a lot of talk over its
+short history, but I never really manage to understand how it works. There is a
+lot of narrative to be found, but very little mechanistic explanations — at
+least not enough to answer most of my question. What I read about it also didn&#39;t
+seem to make sense from an economic standpoint, but this was impossible to
+determine without establish ground truth on OlympusDAO&#39;s inner workings.</p>
+<p>So why were people talking about Olympus you ask? First, look at this chart:</p>
+<p><img src="/olympus/ohm-price.png" alt="OHM price chart"></p>
+<p>Quite volatile (up 4x, down 6x, up 6x, down 12x), but nothing extraordinary for
+crypto. No, what is incredible is that this is while OlympusDAO was offering
+<a href="https://hackernoon.com/earning-passive-income-with-defi-staking-an-overview-4a1y3720">stakers</a> interest rates (aka <a href="https://www.investopedia.com/terms/a/apy.asp">APY</a>) of thousands of percents (&gt; 1700% as we
+speak). These interest rates are, importantly, denominated in OHM. Who wouldn&#39;t
+be enticed?</p>
+<p>However, all of this comes with a caveat, in a word: inflation.</p>
+<p>Over the last week, OlympusDAO (and its forks, most notably <a href="https://www.wonderland.money/">Wonderland</a>) have
+come under fire for the massive drop in prices they have experienced, putting
+the market cap of OHM very close to the value of its treasury (which logically
+is the smallest possible price, just how a company should at least be worth at
+least at much as its assets minus its debts). Wonderland even periodically
+dipped under its treasury value.</p>
+<p>The market capitalization chart (which is in many ways much more relevant than
+the price charts, because of inflation) for OHM tells of its meteoric rise, and
+recent fall:</p>
+<p><img src="/olympus/ohm-market-cap.png" alt="OHM market capitalization chart"></p>
+<p><strong>In a subsequent article, I will dive deep into the economics of OlympusDAO and
+how the current situation is not all that surprising.</strong> I will say right now
+that I do not think Olympus is a scam or a ponzi scheme (which many people
+accuse it of being). I do think the communication about the project has been
+somewhat deceitful. At the very least, impressive elements — like the
+OHM-denominated APY — have been emphasized, while immense caveats have been
+ommitted from the discourse.</p>
+<h2 id="summary-of-findings">Summary of Findings</h2>
+<p>This is going to be a long and technical article. For those that are just
+interested in the take aways, here they are:</p>
+<ol>
+<li>The total supply of $OHM inflates at the <em>staking reward rate</em> every ~8
+hours. This inflation is redistributed among stakers. The inflation
+distribution event that happens every 8 hours is called <em>a rebase</em>.</li>
+<li>The staking reward rate is set by the OlympusDAO policy team. For the longest
+time, this reward rate was 0.35%. It is currently 0.2%, on its way down to a
+target of 0.16%. At 0.35%, this implies an inflation of 4487%. This is also
+the minimum staking APY in OHM (if 100% of the OHM is staked, otherwise it
+will be higher). At 0.16%, this implies a 475% inflation (yup — exponentials
+are weird).</li>
+<li>OlympusDAO has a treasury composed of stablecoins and OHM-stablecoin
+<a href="https://www.gemini.com/cryptopedia/what-is-a-liquidity-pool-crypto-market-liquidity">liquidity pool (LP) tokens</a>. The treasury is constituted by
+selling bonds (see below).</li>
+<li>A central concept is the &quot;risk-free value&quot; (RFV) of the treasury. This is simply
+1$ for stablecoin. For LP tokens, it is the price the token would take if the
+OHM price fell to 1$. Controversially, this means that part of the RFV of the
+treasury is made of OHM tokens (in the liquidity pools).</li>
+<li>Rebases can only go through if there is 1$ of risk-free value in the treasury
+for each OHM in existence including the newly-minted ones. This sets a
+soft-floor if 1$ on the OHM price, assuming that the OHM market cap should
+always be at least as large as the risk-free value of the OHM treasury.</li>
+<li>The protocol maintains a metric called &quot;the index&quot; which is how much OHM you
+would own if you staked a single OHM on the day the protocol launched
+(currenty 74). Recently, Olympus launched the gOHM (&quot;governance OHM&quot;) which
+&quot;wraps&quot; the indexed amount of staked OHM. The main avowed purpose was to
+enable the trading of staked OHM on other chains.</li>
+<li>Staking comes with an optional warm-up period (currently disabled) which
+forces people to wait a configurable amount of time before their OHM tokens
+are staked.</li>
+<li>At any time, people can purchase OHM bonds using various stablecoins and
+OHM-stablecoin <a href="https://www.google.com/search?hl=en&amp;q=lp%20tokens">LP tokens</a>. The policy team can add, remove or tweak these
+bond markets. The bonds are usually sold as a small discount to
+the OHM market price. The bonds grant newly minted OHM tokens to the buyer.
+These tokens vest over a configurable period, which has always been 5 days.</li>
+<li>The DAO takes a (configurable) fee over every bond sale, although this is
+currently set to 0, and it&#39;s rather hard to search historical state to see if
+it was ever set differently.</li>
+<li>Bond pricing uses a notion of risk-free value (RFV). The risk-free value of
+stablecoins is equivalent to their market value. For LP tokens however,
+Olympus assumes a worst-case scenario where OHM is worth 1$, and prices the
+LP tokens accordingly.</li>
+<li>Bonds are priced differently depending on the token used to purchase the
+bonds. The bond price is determined by the formula <code>bondPrice = min(BCV * debtRatio + 1, minimumPrice)</code>, where:</li>
+</ol>
+<ul>
+<li><p>One bond grants one OHM after the vesting period.</p>
+</li>
+<li><p>For simplicity, I ignore the decimals on <code>minimumPrice</code> and <code>bondPrice</code>
+(assume those are infinite precision numbers), and assume that <code>debtRatio</code>
+is a value between 0 and 1.</p>
+</li>
+<li><p><code>BCV</code> is the bond control variable, set by the policy team for each token</p>
+</li>
+<li><p><code>debtRatio</code> is a ratio between (a) the risk-free value of all tokens used for
+bond purchases (tallied at the moment of purchase) scaled by the remaining
+vesting time; and (b) the total OHM supply.</p>
+<p>Note that the numerator and the denominator have different units (risk-free
+USD and OHM), and consequently, the debt ratio rises faster when the OHM
+price is high.</p>
+</li>
+<li><p><code>minimumPrice</code> — as the name indicates. However, once a bond purchases occurs
+above the minimum price, it is then set to 0, allowing subsequent purchases
+to occur below the bond price.</p>
+</li>
+</ul>
+<p>   There is maximum amount of debt (denominated in risk-free value) allowed per
+   token, preventing the emission of too many bonds, and offering some
+   protection against attacks (e.g. if a stablecoin was to lose his peg).</p>
+<p>   Because the formula is not based on the market price of OHM, the bond price
+   can occasionally exceed the market price!</p>
+<p>I tried to explicitly stay away from the economical implications. As said
+before, these will be the subject of a subsequent article!</p>
+<p>In what follows, I will dive into the contracts themselves. Together, we&#39;ll
+learn where all of the above functionality is implemented, and how.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="/olympus/#">Top</a></li>
+<li><a href="/olympus/#summary-of-findings">Summary of Findings</a></li>
+<li><a href="/olympus/#olympus-v11-vs-olympus-v2">Olympus v1.1 vs Olympus v2</a></li>
+<li><a href="/olympus/#contracts">Contracts</a><ul>
+<li><a href="/olympus/#v11-contracts">v1.1 Contracts</a></li>
+<li><a href="/olympus/#v2-contracts">v2 Contracts</a></li>
+<li><a href="/olympus/#upgrade-paths">Upgrade Paths</a></li>
+</ul>
+</li>
+<li><a href="/olympus/#basics--staking">Basics &amp; Staking</a><ul>
+<li><a href="/olympus/#intro-to-rebases--sohm-balances">Intro to Rebases &amp; sOHM Balances</a></li>
+<li><a href="/olympus/#staking--unstaking">Staking &amp; Unstaking</a></li>
+<li><a href="/olympus/#rebases-in-depth">Rebases in Depth</a></li>
+<li><a href="/olympus/#locker">Locker</a></li>
+<li><a href="/olympus/#sohm-index">sOHM Index</a></li>
+</ul>
+</li>
+<li><a href="/olympus/#bonding">Bonding</a><ul>
+<li><a href="/olympus/#stablecoin-bond-pricing">Stablecoin Bond Pricing</a></li>
+<li><a href="/olympus/#liquidity-token-bond-pricing">Liquidity Token Bond Pricing</a><br>(This section explains the Risk-Free Value computation for bonds.)</li>
+<li><a href="/olympus/#bonding-in-depth">Bonding in Depth</a><ol>
+<li><a href="/olympus/#1-checking-against-the-maximum-debt">Checking against the maximum debt</a></li>
+<li><a href="/olympus/#2-calculate-the-bond-price">Calculate the bond price</a></li>
+<li><a href="/olympus/#3-calculate-the-market-value-USD-bond-price">Calculate the market-value USD bond price</a></li>
+<li><a href="/olympus/#4-calculate-the-payout-and-dao-fee">Calculate the payout and DAO fee</a></li>
+<li><a href="/olympus/#5-mint-ohm-for-payout-and-dao-fee">Mint OHM for payout and DAO fee</a></li>
+<li><a href="/olympus/#6-pay-the-dao-and-perform-book-keeping">Pay the DAO and perform book-keeping</a></li>
+</ol>
+</li>
+<li><a href="/olympus/#example">Example</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="olympus-v11-vs-olympus-v2">Olympus v1.1 vs Olympus v2</h2>
+<p>The present investigation was on conducted on the 1.1 version of the protocol.
+This is because I started this a long time ago in mid-December, and didn&#39;t
+realize that the <a href="https://olympusdao.medium.com/introducing-olympus-v2-c4ade14e9fe">v2 of the protocol</a> was already launched, <em>excepted</em> the v2
+bonds (which are now live too).</p>
+<p>Olympus v1.1 was apparently intended as an intermediary milestone to facilitate
+the deployment of v2.</p>
+<p>The particular code I investigated is <a href="https://github.com/OlympusDAO/olympus-contracts/tree/Version-1.1/">the 1.1 codebase</a> as can be
+found in the <code>Version-1.1</code> branch on Github.</p>
+<p>Annoyingly, it looks like not all the code of that repository was deployed as
+such. For instance, the OHM contract is not identical to <a href="https://etherscan.io/address/0x383518188c0c6d7730d91b2c03a03c837814a899#code">its first
+deployment</a> (verified in March 2021) nor to <a href="https://etherscan.io/address/0x64aa3364F17a4D01c6f1751Fd97C2BD3D7e7f1D5#code">its second
+deployment</a> (verified in December 2021 and matching the v2
+code).</p>
+<p>If you want to investigate the latest deployed v2 codebase, check out <a href="https://github.com/OlympusDAO/olympus-contracts/tree/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9">the tree
+at this commit</a>, which merges in the v2 bonds.</p>
+<p>That being said, as far as I was able to determine, <strong>the protocol did not change
+significantly between v1.1 and v2</strong>. The major change seems to be that bonds no
+longer vest linearly but immediately stake OHM which can be redeemed at expiry
+(this will be repeated below, in the appropriate context).</p>
+<p>The other change is the start of on-chain governance via the gOHM token
+(representing an indexed amount of sOHN, as mentionned in the take-aways). This
+doesn&#39;t affect the behaviour of contracts, however.</p>
+<p>If you follow throught this article, you&#39;ll have a thorough enough understanding
+that understanding the v2 contracts should be a breeze.</p>
+<p>The v2 codebase seems vastly improved, and most likely assuages some of the
+complaints I make below!</p>
+<p>You might also want to read <a href="https://blog.oighty.com/olympus-v2-bonds">this deep dive on Olympus v2 bonds</a>
+for an alternative analysis, focused on v2.</p>
+<h2 id="contracts">Contracts</h2>
+<p>Before we dig into the protocol&#39;s internals, let&#39;s inventorize the contracts,
+both for v1.1 and v2 deployments. In particular, <a href="https://docs.olympusdao.finance">the OlympusDAO
+documentation</a> is not yet updated to list the addresses of the v2
+contracts.</p>
+<p>If you consult the doc, you&#39;ll note that some contracts have many versions which
+are dubbed v1, v2, v3, v4, ... It goes without saying that these version bear no
+relationship to the protocol versions (v1.1, v2, ...).</p>
+<p>As said earlier, the v1.1 source does not always match the deployment (some
+contracts were tweaked that were not deployed), so it may happen that the source
+file I link does not match the deployed contract. You can check this by
+comparing the verified source code in the contract/code tab agains the GitHub
+source.</p>
+<h3 id="v11-contracts">v1.1 Contracts</h3>
+<ul>
+<li><a href="https://etherscan.io/address/0x383518188c0c6d7730d91b2c03a03c837814a899#code">OlympusERC20.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/Version-1.1/contracts/OlympusERC20.sol">source</a>)<ul>
+<li>Owned by <a href="https://etherscan.io/address/0x763a641383007870ae96067818f1649e5586f6de">this EOA address</a></li>
+</ul>
+</li>
+<li><a href="https://etherscan.io/address/0x04f2694c8fcee23e8fd0dfea1d4f5bb8c352111f#code">sOlympusERC20.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/Version-1.1/contracts/sOlympusERC20.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a#code">Staking.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/Version-1.1/contracts/Staking.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0xC8C436271f9A6F10a5B80c8b8eD7D0E8f37a612d#code">StakingHelper.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/Version-1.1/contracts/StakingHelper.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0x2882a5cd82ac49e06620382660f5ed932607c5f1#code">StakingWarmup.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/Version-1.1/contracts/StakingWarmup.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0xC58E923bf8A00E4361FE3f4275226a543D7D3ce6#code">StakingDistributor.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/Version-1.1/contracts/StakingDistributor.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">Treasury.sol</a></li>
+</ul>
+<p>In v1.1, there is one bonding contract per token that can be used to purchase
+bonds. I will only list the DAI and OHM-DAI contracts, to serve as examples:</p>
+<ul>
+<li><a href="https://archive.fo/KkeeN">List of Bond Contracts</a><ul>
+<li>e.g. <a href="https://etherscan.io/address/0x575409F8d77c12B05feD8B455815f0e54797381c#code">DAI Bond</a></li>
+<li>e.g. <a href="https://etherscan.io/address/0x956c43998316b6a2F21f89a1539f73fB5B78c151#code">OHM/DAI LP Bond</a></li>
+</ul>
+</li>
+<li>Bond Calculator Contract<ul>
+<li><a href="https://etherscan.io/address/0xcaaa6a2d4b26067a391e7b7d65c16bb2d5fa571a#code">older deployment used by the newest OHM/DAI LP bond</a></li>
+<li><a href="https://etherscan.io/address/0x7b1a5649145143f4fad8504712ca9c614c3da2ae#code">newer deployment used by the newest OHM/FRAX LP bond</a></li>
+<li>the code in those two are exactly identical!</li>
+</ul>
+</li>
+</ul>
+<p>There are also some contracts related to governance and operations:</p>
+<ul>
+<li><a href="https://etherscan.io/address/0x245cc372c84b3645bf0ffe6538620b04a217988b#code">DAO</a><ul>
+<li>Proxied to <a href="https://etherscan.io/address/0x34cfac646f301356faa8b21e94227e3583fe3f5f#code">Gnosis Safe</a> (<a href="https://github.com/gnosis/safe-contracts/blob/v1.1.1/contracts/GnosisSafe.sol">github source</a>)</li>
+<li><a href="https://docs.olympusdao.finance/main/contracts/dao">List of signers</a> (4 of 7)</li>
+</ul>
+</li>
+<li><a href="https://etherscan.io/address/0x0cf30dc0d48604a301df8010cdc028c055336b2e#code">Policy</a><ul>
+<li>Also proxied to <a href="https://etherscan.io/address/0x34cfac646f301356faa8b21e94227e3583fe3f5f#code">Gnosis Safe</a></li>
+<li><a href="https://docs.olympusdao.finance/main/contracts/policy">List of signers</a> (3 of 5)</li>
+</ul>
+</li>
+</ul>
+<h3 id="v2-contracts">v2 Contracts</h3>
+<ul>
+<li><a href="https://etherscan.io/address/0x1c21f8ea7e39e2ba00bc12d2968d63f4acb38b7a#code">OlympusAuthority.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/OlympusAuthority.sol">source</a>)<ul>
+<li>This replaces the &quot;Policy&quot; from v1.1 and also owns the ERC-20 contract.</li>
+</ul>
+</li>
+<li><a href="https://etherscan.io/address/0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5#code">OlympusERC20.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/OlympusERC20.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0x04906695D6D12CF5459975d7C3C03356E4Ccd460#code">sOlympusERC20.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/sOlympusERC20.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0xb63cac384247597756545b500253ff8e607a8020#code">Staking.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/Staking.sol">source</a>)<ul>
+<li>v2 does not have separate warmup &amp; helper contracts — instead the
+functionality is merged in <code>Staking.sol</code></li>
+</ul>
+</li>
+<li><a href="https://etherscan.io/address/0xeeeb97a127a342656191e0313df33d58d06b2e05#code">StakingDistributor.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/StakingDistributor.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0x9a315bdf513367c0377fb36545857d12e85813ef#code">Treasury.sol</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/Treasury.sol">source</a>)</li>
+<li><a href="https://etherscan.io/address/0x9025046c6fb25fb39e720d97a8fd881ed69a1ef6#code">BondingDepository.sol</a></li>
+<li><a href="https://etherscan.io/address/0x0ab87046fbb341d058f17cbc4c1133f25a20a52f#code">gOHM</a> (<a href="https://github.com/OlympusDAO/olympus-contracts/blob/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9/contracts/governance/gOHM.sol">source</a>)</li>
+<li>The DAO contract is the same as before.</li>
+</ul>
+<p>A big difference in v2 is that there is a single deployed bonding contract,
+which handles all tokens (unlike v1.1, which has one deployed contract per
+token).</p>
+<p>v2 has also other contracts, but I haven&#39;t reviewed those, so I&#39;ll limit myself
+to establish this mapping will the old contracts. Also note that the <a href="https://github.com/OlympusDAO/olympus-contracts/tree/542c215c57e213ed82a98ffc052ebaa9ee4f1ce9">v2
+codebase</a> splits interface and imports away from the main contract
+to be deployed, unlike 1.1.</p>
+<h3 id="upgrade-paths">Upgrade Paths</h3>
+<p>Olympus uses very few proxy (only for the DAO and the v1.1 policy contract). Yet
+they were able to deploy many new versions of contracts.</p>
+<p>These upgrade paths are not explicit in the code (which is a shame), but I do
+believe some thoughts went into them.</p>
+<p>Often, upgrades entails co-existence. For instance, the v1.1 staking contract
+still &quot;works&quot; if you staked your OHM in it and haven&#39;t migrated to v2. However,
+the old contract does not accept new stakers anymore (this can be achieved by
+setting some configurable values (e.g. addresses) so that new attempts to stake
+on the old contract revert).</p>
+<p>In the future, it&#39;s possible that Olympus might be able to &quot;disable&quot; some old
+contracts. For instance, it could suspend rebases in the old staking contract
+(by modifying the address of the distributor), forcing people to migrate if they
+want to keep earning yield.</p>
+<p>That being said, the lack of proxys does not mean that the protocol is
+&quot;decentralized&quot;. In fact, the policy/authority multisig has the ability to
+change a lot of variables, including contract addresses!</p>
+<h2 id="basics--staking">Basics &amp; Staking</h2>
+<p>Let&#39;s begin our dive into the contracts! First, let&#39;s get the easy stuff out of
+the way:</p>
+<ul>
+<li><p>The <a href="https://etherscan.io/address/0x383518188c0c6d7730d91b2c03a03c837814a899#code">OlympusERC20.sol</a> contract is a straightforward <a href="https://eips.ethereum.org/EIPS/eip-20">ERC-20</a> token
+contract implementation. It is owned by an <a href="https://etherscan.io/address/0x763a641383007870ae96067818f1649e5586f6de">EOA</a> (Externally Owned
+Account). This is not very secure, but is fixed in Olympus v2, where the owner
+is remplaced by the Olympus authority contract, which is in turn controlled by
+a <a href="https://help.gnosis-safe.io/en/articles/3876456-what-is-gnosis-safe">multisig Gnosis safe</a>.</p>
+<p>Minting privileges are given to the &quot;vault&quot; which is the
+<a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">Treasury.sol</a> contract.</p>
+</li>
+<li><p>The <a href="https://etherscan.io/address/0x245cc372c84b3645bf0ffe6538620b04a217988b#code">DAO</a> contract is simply a <a href="https://help.gnosis-safe.io/en/articles/3876456-what-is-gnosis-safe">Gnosis safe</a>, which lets a majority of
+<a href="https://docs.olympusdao.finance/main/contracts/dao">signers</a> do whatever with the funds held by the DAO contract.</p>
+</li>
+</ul>
+<h3 id="intro-to-rebases--sohm-balances">Intro to Rebases &amp; sOHM Balances</h3>
+<p>The <a href="https://etherscan.io/address/0x04f2694c8fcee23e8fd0dfea1d4f5bb8c352111f#code">sOlympusERC20.sol</a> contract is also an <a href="https://eips.ethereum.org/EIPS/eip-20">ERC-20</a> implementation, this
+time for the staked OHM token (<em>sOHM</em>, which you receive in exchange for your
+OHMs after you stake). However, the contract also implements part of the
+&quot;rebase&quot; logic.</p>
+<p>In Olympus parlance, a <em>rebase</em> is the thrice-daily inflation event. It used to
+be set at 0.35% for a long time, but is now <a href="https://dune.xyz/shadow/Olympus-Policy">sitting at 0.2%</a>,
+subject to changes by the Olympus policy team. During each rebase, the newly
+minted tokens are auto-staked and distributed to the stakers proportionally to
+their existing stake.</p>
+<p>Because of the frequent rebases, sOHM balances are constantly in flux. They
+change automatically, without users needed to submit transactions to claim.</p>
+<p>The way this is implemented is rather ingenious. The contract does not maintain
+sOHM balances: this would be too expensive, as every rebase would need to touch
+every single balance. Instead it maintains a balance of &quot;gons&quot; (I don&#39;t know
+where the term comes from). Whenever a rebase occur, the gon balance does not
+change — only the total pot of OHM owned by the <a href="https://etherscan.io/address/0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a#code">staking contract</a> is
+increased. A user&#39;s sOHM balance is the fraction of the OHM pot equal to its gon
+balance divided by the total gon supply. This is also the amount of OHM the user
+would receive if unstaking his whole sOHM balance (one sOHM always corresponds
+1-1 to one OHM in the staking contract).</p>
+<p>The sOHM contract itself defines only part of that logic. It has a
+<code>rebase(uint256 profit_, uint epoch_)</code> function, callable only by the staking
+contract. The <code>profit_</code> here is the amount of sOHM that is to be distributed in
+the rebase. The logic in that function ensures that the sum of the balances of
+all stakers is increased by this amount.</p>
+<p>Now we must tackle a peculiarity in the contract code I cannot quite explain.
+Instead of letting the staking contract mint the sOHM whenever it receives OHM,
+the sOHM contract allocates <code>5*10^15</code> (or 5 million billion) sOHM to the staking
+contract. Whenever the staking contract receives OHM, it sends a corresponding
+amount of sOHM from his own balance to the staker. I assume there must be a
+reason for this, but it is not obvious. The contract also calls sOHM
+&quot;fragments&quot;, though I&#39;m not quite sure why. (It could be to better differentiate
+them from gons, and avoid using ambiguous terms like <em>amount</em>, but the contract
+does that sometimes anyway.)</p>
+<p>This sOHM allocation to the staking contract also means that the sOHM contract
+must distinguish between the total supply and the <em>circulating supply</em> (which
+excludes the staking contract&#39;s balance), and that the <code>rebase</code> function must
+inflate the total supply by more than the <code>profit_</code> parameter, in order for the
+circulating supply to be inflated by <code>profit_</code> and be effectively accrued to the
+stakers. The staking contract balance inflation is irrelevant (since it&#39;s only
+ever exchange for OHM that was staked, or to reward lockers — see later).</p>
+<p>An interesting thing to note is that the staking contract&#39;s sOHM balance is not
+backed by underlying OHM. This is fine because (a) when staking, users exchange
+OHM for sOHM 1-1 with the staking contract and (b) when rebasing, the
+<a href="https://etherscan.io/address/0xC58E923bf8A00E4361FE3f4275226a543D7D3ce6#code">distributor contract</a> mints OHM for the staking contract 1-1 with
+the reward (see later).</p>
+<h3 id="staking--unstaking">Staking &amp; Unstaking</h3>
+<p>The abstract idea of staking is pretty easy: you send X OHM to the <a href="https://etherscan.io/address/0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a#code">staking
+contract</a>, and the staking contract sends you X sOHM in return.
+Unstaking is the same, but in reverse.</p>
+<p>In pratice, it&#39;s a bit more involved because the contracts introduce a notion of
+<em>warmup</em>, which is not currently used.</p>
+<p>To stake, you call the <code>stake(uint _amount, address _recipient)</code> function, which
+receives your OHM, and sends sOHM to the <a href="https://etherscan.io/address/0x2882a5cd82ac49e06620382660f5ed932607c5f1#code">StakingWarmup.sol</a> contract on
+your behalf. Then, after the warmup period (<code>warmupPeriod</code>, currently 0), you
+can call <code>claim (address _recipient)</code> to transfer the sOHM locked in the warmup
+contract to your own balance.</p>
+<p>Because the warmup period is currently 0, you could do both calls in a single
+transaction. For this purpose, Olympus has deployed the
+<a href="https://etherscan.io/address/0xC8C436271f9A6F10a5B80c8b8eD7D0E8f37a612d#code">StakingHelper.sol</a> contract whose <code>stake(uint _amount)</code> function
+does exactly this. Additionally, the recipient is implicitly the sender.</p>
+<p>You can cancel the warmup period and reclaim your OHM with the <code>forfeit()</code>
+function, and you can prevent other people from staking OHM for you using
+<code>toggleDepositLock()</code> (my best guess is that this is just for extra protection,
+so that a contract that you&#39;ve authorized to handle your OHM can&#39;t unstake your
+sOHM).</p>
+<h2 id="rebases-in-depth">Rebases in Depth</h2>
+<p>Rebases are initiated by calling the <code>rebase()</code> function of the <a href="https://etherscan.io/address/0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a#code">staking
+contract</a>. Anybody can call the function, as long as a rebase is due.
+The function is also automatically called when someone stakes some OHM!</p>
+<p><code>rebase()</code> does four things:</p>
+<ol>
+<li>Check if a rebase is due via the <em>current epoch</em> (see below), otherwise
+return.</li>
+<li>Call <code>sOHM.rebase(uint256 profit_, uint epoch_)</code></li>
+<li>Call <code>distributor.distribute()</code> (if <code>distributor</code> != 0)</li>
+<li>Update the current epoch.</li>
+</ol>
+<p>The <em>current epoch</em>, held in the <code>epoch</code> variable tracks the length of the
+epoch, its number, its deadline <code>endBlock</code> (indicating when <code>rebase()</code> can be
+called), and <code>distribute</code> (the amount of sOHM to be distributed during the
+rebase).</p>
+<p>In the first step, we simply check <code>epoch.endBlock &lt;= block.number</code>. If that&#39;s
+alright, we call <code>sOHM.rebase(epoch.distribute, epoch.number)</code>, which works as
+described above.</p>
+<p>Then we (possibly) call <code>distribute()</code> on the <a href="https://etherscan.io/address/0xC58E923bf8A00E4361FE3f4275226a543D7D3ce6#code">distributor
+contract</a>. Here is how the documentation misleadingly describes it:</p>
+<blockquote>
+<p>The distributor contract receives minted OHM from the treasury in order to
+drip-feed rewards to stakers. The reward rate target as of time of writing is
+set to 3500, which translates to 0.35% of total supply, since the reward rate
+is defined in tens of thousands. Note that the reward rate determines the
+rebase rate and that the rebase rate determines the APY. Below are listed
+distributor contracts by version, where the latest version represents the
+currently active contract.</p>
+</blockquote>
+<p>This makes it sound like the distributor is the one that gives out rebasing
+reward. As we&#39;ve seen before, this would be too expensive, and it&#39;s actually
+done by the sOHM contract.</p>
+<p>In reality, the role of the distributor is to send OHM to the staking contract
+in a way that is commensurate with the rebase amount (<code>profit_</code> from above).
+However this mechanism is fully generic and does not encode a direct dependency
+on the staking contract. Let&#39;s see how it works briefly.</p>
+<p>Skipping over the fine details, what <code>distribute()</code> does is distribute OHM
+rewards (minted from the <a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">Treasury contract</a> via its
+<code>mintRewards(address _recipient, uint _amount)</code> function) to &quot;recipients&quot; which
+are added/removed through the <code>addRecipient</code> and <code>removeRecipient</code> functions.
+These functions are only callable by the <a href="https://etherscan.io/address/0x0cf30dc0d48604a301df8010cdc028c055336b2e#code">policy</a> multisig (which is the current
+value of <code>_policy</code> in the distributor contract). <code>addRecipient</code> also takes an
+individualized reward rate for every recipient.</p>
+<p>If you query the <a href="https://etherscan.io/address/0xeeeb97a127a342656191e0313df33d58d06b2e05/advanced#readContract">latest version of the distributor contract on
+Etherscan</a>, you&#39;ll see that the (latest version of the) staking
+contract is currently the only recipient.</p>
+<p>An important detail about <code>mintRewards</code> is that it will refuse to mint OHM if
+the risk-free USD value of the reserves is inferior to the OHM supply
+(denominated in OHM), effectively setting a lower bound price of 1$ on OHM,
+fully backed by the treasury. Fun fact: <code>mintRewards</code> reverts in that case,
+which means any attempt to trigger further rebases or to stake more OHM will
+revert too. (This could be sidestepped by removing the staking contract as
+distribution recipient, but it would be useless to stake in the absence of
+rebases anyhow.)</p>
+<p>Is the staking <code>profit_</code> connected in any way with the treasury&#39;s reward?
+Actually yes. This is done during step 4 of the rebse, when updating the current
+epoch.</p>
+<p>The <code>distribute</code> field of the epoch is set to the OHM balance of the staking
+contract minus the circulating supply of sOHM (remember the circulating excludes
+the staking contract&#39;s own sOHM balance). This ensures that we can only
+distribute staking rewards if there is more OHM in the staking contract than
+owned by users, guaranteeing that every sOHM can be redeemed for an OHM.</p>
+<p>As a consequence of calling <code>distribute()</code> earlier, this OHM balance of the
+staking contract increased, <code>distribute</code> will be set to the the OHM reward from
+the distributor, and will be distributed as sOHM during the next epoch.</p>
+<p>The distributor contract also has logic handling what it calls &quot;adjustments&quot;
+which are a way to smooth a reward rate transition from the current rate to a
+target rate, with the reward rate being updated incrementally during each epoch
+(when <code>distribute()</code> is called) until the target rate is reached.</p>
+<h3 id="locker">Locker</h3>
+<p>A little mystery lives in the v2 staking contract (the one from Olympus v1.1
+that we are considering here): the notion of &quot;locker&quot;.</p>
+<p>The contract has a function <code>giveLockBonus(uint _amount)</code> which transfers a sOHM
+&quot;bonus&quot; to a &quot;locked staking contract&quot; (the <code>locker</code> contract variable). This
+function is only callable by the locker, which can also ostensibly return the
+bonus via <code>returnLockBonus(uint _amount)</code>.</p>
+<p>The locker does not appear in either the v1 or v3 contract, and is now set to
+the zero address in the v2 contract. My best guess is that it is a crutch used
+to upgrade the Olympus deployment, though I&#39;m not sure how and why.</p>
+<h3 id="sohm-index">sOHM Index</h3>
+<p>If you go to the <a href="https://app.olympusdao.finance">Olympus DAO App</a>, you can see it features the &quot;current
+index&quot; (74 at the time of writing), with the description:</p>
+<blockquote>
+<p>The current index tracks the amount of sOHM accumulated since the beginning of
+staking. Basically, how much sOHM one would have if they staked and held a
+single OHM from day 1.</p>
+</blockquote>
+<p>This notion also appears in the sOHM contract. The index is set once (via
+<code>setIndex(uint _INDEX)</code>), to an initial sOHM amount, which is converted to a gon
+balance and stored internaly as <code>INDEX</code>. (Remember, gon balances do not change
+when rebasing and are used to track fractional ownership of all the sOHM.)</p>
+<p>Calling <code>index()</code> returns the amount of sOHM now controlled by this initial sOHM
+amount, if it was staked at contract inception.</p>
+<p>During the first sOHM contract deployment, the initial <code>INDEX</code> was the gon value
+for 1 sOHM. Each time the sOHM contract is upgraded, the value returned by
+<code>index()</code> needs to carried over as the new <code>INDEX</code> value in the new contract.</p>
+<h2 id="bonding">Bonding</h2>
+<p>The goal of bonding is to sell OHM at a small discount (at least, usually) in
+the form of bonds that vests linearly over a small period of time (currently 5
+days).</p>
+<p>&quot;Linear vesting&quot; means that after one day you can already withdraw 1/5 of the
+OHM, etc (at the time resolution of blocks ~= 13s).</p>
+<p>The bond purchaser makes a small profit, but takes on price risk. More on the
+purpose of bonding in the economic analysis part.</p>
+<p>In &quot;bonds v2&quot;, there is no longer linear vesting. Instead the purchased OHM is
+staked and can be claimed at the end of the period. This increases risk for bond
+holder who can&#39;t dump at least part of their OHM before expiry, but solves the
+problem that the discount rate is actually misleading because the OHM supply
+inflates during the vesting period (by about 3% at the current rebase reward
+rate).</p>
+<p>Bonds are sold for various assets (called <code>principle</code> or sometimes <code>reserve</code> in
+the contracts), which are either stablecoin or OHM-stablecoin LP tokens. There
+is one contract for each asset, instantiated from the <code>BondDepository.sol</code> file.
+For instance:</p>
+<ul>
+<li><a href="https://etherscan.io/address/0x575409F8d77c12B05feD8B455815f0e54797381c#code">DAI Bond Contract</a></li>
+<li><a href="https://etherscan.io/address/0x956c43998316b6a2F21f89a1539f73fB5B78c151#code">OHM/DAI LP Bond Contract</a></li>
+</ul>
+<p>v2 only has a single contract to handle all bonds.</p>
+<p>We&#39;ll look at how bond prices are determined, starting with stablecoins, then
+moving on the more complex pricing of LP tokens, then looking at what the
+bonding process actually does (hint: more inflation!).</p>
+<p>For a given bonding contract, the bond price is computed by the view
+<code>bondPrice()</code> method. There is also the <code>_bondPrice()</code> method, which is the one
+actually called during bond purchases. The difference is that the <code>_bondPrice()</code>
+can modify the minimum bond price, as we&#39;ll see.</p>
+<h3 id="stablecoin-bond-pricing">Stablecoin Bond Pricing</h3>
+<p>First of all, bonds are fractional, i.e. you get a claim on OHM proportional to
+the value of the tokens you use to purchase bonds, without unit limitation.</p>
+<p>This means that &quot;one bond&quot; maps to 1 OHM. However, it can also appear that &quot;one
+bond&quot; maps to 100 OHM because bonds are represented with 2 extra digits of
+precision: the <code>payoutFor(uint _value)</code> function of the depository contract
+divides the value by the bond price, obtaining a number with 36 digits of
+precision, but dividing only by 10^16, hence 100 times more than the expected 18
+digits precision. The reason for the extra precision is that the bond price is
+expressed in risk-free USD with 2 digits precision (though it&#39;s not clear why
+that particular choice was made).</p>
+<p>I must say that dealing with significant digits was by FAR the most tricky and
+painful part of reading the contracts. It almost completly threw me for a loop
+multiple times, and the devs did an horrendous job at documenting the
+assumptions. In fact, I even found what I must assume is a mistake in one of the
+comments.</p>
+<p>The formula to determine the bond price (with two digits precision, so the
+obtained number will be 100x the price) is <code>bondPrice = min(BCV * debtRatio + 100, terms.minimumPrice)</code>, where:</p>
+<ul>
+<li><p><code>BCV</code> is the &quot;bond control variable&quot; (<code>terms.controlVariable</code> in the code).
+This value is tweaked for every principle by the Olympus DAO policy team, and
+can change over time.</p>
+</li>
+<li><p><code>debtRatio</code> is the ratio (in percent) of the total bond debt (the OHM to be
+paid out for bonds still have to vest) over the total OHM supply. It&#39;s a bit
+weird however, because it&#39;s actually a ratio between the &quot;risk-free&quot; value of
+the debt in USD (we&#39;ll explain this in the next section) and the supply in
+OHM! A consequence of this is that the debt ratio increases faster when the
+OHM price is high.</p>
+<p>The debt ratio can be obtained by calling <code>debtRatio()</code> which returns the
+ratio with 9 significant digits of precision (so 1B = 100%). This debt ratio
+is different for each bond contract (i.e. for each token).</p>
+</li>
+<li><p><code>terms.minimumPrice</code> is a minimum price for the bonds. This is useful as
+otherwise the first bond sales would be done at a very steep discount, as
+<code>debtRatio</code> is effectively 0. The minimum price is <strong>only</strong> intended for this
+ramp-up: the first time the price exceeds the minimum price in <code>_bondPrice</code>,
+<code>terms.minimumPrice</code> is set to 0.</p>
+</li>
+</ul>
+<p>As the debt ratio increases, so does the bond price, and vice-versa. This
+automatically throttles the rate of bond emission, and incentivizes bond
+purchase when few bonds are being sold.</p>
+<p>As a side-note, the Olympus DAO glossary defines BCV as follows:</p>
+<blockquote>
+<p>Bond Control Variable, is the scaling factor at which bond prices change. A
+higher BCV means a lower discount for bonders and higher inflation by the
+protocol. A lower BCV means a higher discount for bonders and lower inflation
+by the protocol.</p>
+</blockquote>
+<p>I find this statement frankly puzzling, since you would expect that when the
+discount is higher, more bonds are sold, and so inflation is higher. I think the
+explanation here is that &quot;inflation&quot; doesn&#39;t refer to the increase in supply,
+but to the loss of value: when more bonds are sold, each bond sale tends to
+increase the backing per OHM, which means that OHM will decrease in value more
+slowly. More on this in the economic analysis part.</p>
+<h3 id="liquidity-token-bond-pricing">Liquidity Token Bond Pricing</h3>
+<p>The formula for determining the bond price when purchasing using liquidity
+tokens (with two significant digits) is the same as before: <code>bondPrice = min(BCV * debtRatio + 100, terms.minimumPrice)</code> (see previous sections for
+important details). <strong>This expresses an amount of USD, not an amount of
+liquidity tokens.</strong></p>
+<p>But not so fast! When purchasing bonds using LP tokens, Olympus first converts
+bonds to their risk-free value (RFV) and then only uses this RFV to determine
+the number of bonds purchased.</p>
+<p>The RFV assumes a &quot;worst-case scenario&quot; where 1 OHM is worth 1$. This is a
+worst-case scenario because the <code>mintRewards</code> function of the <a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">treasury
+contract</a> ensures a minimum backing per OHM of 1$.</p>
+<p>(This computation is slightly sketchy because at 1$ it means OHM is partly
+backed LP tokens whose value is made up in half of OHM valued at 1$. Close
+enough.)</p>
+<p>The RFV is computed by the <code>valueOf(address _token, uint _amount )</code> method of
+the <a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">treasury contract</a>, both for stablecoins and LP token. For
+stablecoins the RFV value is trivially computed as the amount of stables. For LP
+tokens, the function defers the computation to the <code>valuation(address _pair, uint amount_)</code> function of an instance of the <code>StandardBondingCalculator.sol</code>
+contract (e.g. <a href="https://etherscan.io/address/0xcaaa6a2d4b26067a391e7b7d65c16bb2d5fa571a#code">the instance used by the OHM-DAI contract</a>).</p>
+<p>The formula to compute the RFV of the whole liquidity pool is <code>2 * sqrt(k)</code>,
+where <code>k = ohmInPool * stableInPool</code> (this is the classical <code>x * y = k</code>
+<a href="https://docs.uniswap.org/protocol/V2/concepts/protocol-overview/how-uniswap-works">equation of Uniswap v2 pools</a>).</p>
+<p>This makes sense: at 1$ = 1 OHM, <code>ohmInPool == stableInPool == sqrt(k)</code>, hence
+<code>ohmInPool + stableInPool == 2 * sqrt(k)</code>.</p>
+<p>To compute the RFV of any amount of LP tokens, you simply multiply the liquidity
+pool RFV by the fraction of the pool controlled by the tokens.</p>
+<p>The bonding calculator also has a <code>markdown</code> function which indicates how
+discounted the RFV is compared to the actual price. The actual price for the
+whole pool is the amounts of stable times 2 (since by definition the values of
+one side of the pool equals the value of the other side). Then to get the
+markdown, you divide this by the RFV value of the whole pool.</p>
+<h3 id="bonding-in-depth">Bonding in Depth</h3>
+<p>To purchase a bond, you call the <code>deposit(uint _amount, uint _maxPrice, address _depositor)</code> method of the <code>BondDepository.sol</code> instance of your choice (e.g.
+[the DAI bond contract][dai-bound]).</p>
+<ul>
+<li><code>_amount</code> is the amount of tokens (stable or LP) you&#39;re sending for your
+purchase</li>
+<li><code>maxPrice</code> is the maximum <strong>USD</strong> price (using the decimal precision of your
+stablecoin (*), usually 18) you&#39;re willing to pay per bond. This is intended to
+protect against <a href="https://www.investopedia.com/terms/s/slippage.asp">slippage</a>.</li>
+<li><code>_depositor</code> is the address of the depositor (this is useful in case a
+contract is calling this method on your behalf).</li>
+</ul>
+<p>(*) If purchasing a bond with LP tokens, this will be the precision of
+stablecoin in the pair.</p>
+<p>Here are the various steps taken by the function:</p>
+<ol>
+<li>Verify that the max &quot;debt&quot; is not exceeded, as set by <code>terms.maxDebt</code>.</li>
+<li>Calculate <code>nativePrice</code> — the bond price in &quot;risk-free USD&quot;, with two digits
+of precision.</li>
+<li>Calculate <code>priceInUSD</code> — the bond price in &quot;market-price USD&quot;, using the
+stablecoin&#39;s decimals.</li>
+<li>Calculate the payout (amount of OHM the bonds can be redeemed for) and the
+DAO fee.</li>
+<li>Call the <code>deposit(uint _amount, address _token, uint _profit)</code> function of
+the <a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">treasury contract</a> to mint the OHM for the payout and for the
+DAO fee.</li>
+<li>Pay the DAO fee, and perform book-keeping: update bond info, total debt and
+perform adjustments.</li>
+</ol>
+<p>Let&#39;s go over some  these things in more details.</p>
+<h4 id="1-checking-against-the-maximum-debt">1. Checking against the maximum debt</h4>
+<p>The variable <code>terms.maxDebt</code> indicates the maximum allowable debt for the
+contract. Intuitively, the debt is the amount of granted OHM yet to be vested.
+However, <code>terms.maxDebt</code> is denominated in risk-free USD (&quot;RFV USD&quot;) instead.</p>
+<p>First the total debt held in the variable <code>totalDebt</code> is decayed by calling
+<code>debtDecay()</code> removing the value of the tokens that have vested since the last
+time the debt was decayed.</p>
+<p>Decaying it is done on a proportional basis: for instance if 50% of the vesting
+period (so 2.5 days) have passed since the last decay, the <code>totalDebt</code> is split
+in half.</p>
+<p><code>totalDebt</code> is also denominated in RFV USD. As we&#39;ve already mentionned, this
+makes the <code>debtRatio</code> a ratio between a value in RFV USD and OHM, which is
+peculiar, but has the effect of increasing the debt ratio (and hence the bond
+price) faster when the OHM price is high.</p>
+<h4 id="2-calculate-the-bond-price">2. Calculate the bond price</h4>
+<p>As explained earlier, the bond price is computed by using the formula
+<code>rfvBondPrice = BCV * debtRatio + 100</code>, where <code>debtRatio</code> is a whole integer
+representing a percentage (so for 5%, we&#39;d multiply BCV by 5).</p>
+<p>The bond price, held in the variable <code>nativePrice</code> inside the function, is
+denominated in USD, but the RFV of the tokens will be used to &quot;pay&quot; for this
+price. Hence I will say it is denominated in &quot;risk-free USD&quot; or &quot;RFV USD&quot;.</p>
+<p>I will refer to this value as <code>rfvBondPrice</code> to be clearer.</p>
+<p>As we have said earlier, <code>rfvBondPrice</code> is a value with two significant digit
+(instead of the usual 18).</p>
+<h4 id="3-calculate-the-market-value-usd-bond-price">3. Calculate the market-value USD bond price</h4>
+<p>Since <code>rfvBondPrice</code> is a risk-free amount, the function also computes the
+market price of a bond. This will later (see section on boo-keeping) be recorded
+in the bond information.</p>
+<p>Since bond sales affect bond prices, this value — as well as the RFV bond price
+— will be recomputed later and included in an event called <code>BondPriceChanged</code>.</p>
+<p>For LP bonds, the value is computed as <code>rfvBondPrice * markdown / 100</code> (cf.
+section on LP token pricing for info on the markdown). Here, unlike in many
+other places, I&#39;ve included the <code>/ 100</code> which adjusts the digits. If you&#39;re
+thinking of amounts as real numbers, feel free to ignore it.</p>
+<h4 id="4-calculate-the-payout-and-dao-fee">4. Calculate the payout and DAO fee</h4>
+<p>First, the <code>deposit</code> function (of the bonding depository contract) computes the
+payout, the amount of OHM to grant. This is obtained by computing the RFV value
+of the amount deposited (using the <code>valueOf</code> of the <a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">treasury
+contract</a>) and dividing this by the bond price.</p>
+<p>The DAO receives an OHM-denominated payout equal to a percentage of the payout,
+set by <code>terms.fee</code>.</p>
+<h4 id="5-mint-ohm-for-payout-and-dao-fee">5. Mint OHM for payout and DAO fee</h4>
+<p>Next, the the <code>deposit(uint _amount, address _token, uint _profit)</code> function of
+the <a href="https://etherscan.io/address/0x31F8Cc382c9898b273eff4e0b7626a6987C846E8#code">treasury contract</a> is called. This function&#39;s purpose is to mint
+OHM for the payout and for the DAO fee.</p>
+<p>The function takes a <code>_profit</code> parameter, which is completely different from the
+rebase &quot;profit&quot; that we talked about before. In this case, the profit is
+computed as <code>profit = rfvValue - payout - fee</code>. The only purpose of this
+<code>_profit</code> is that the treasury <code>deposit</code> function will subtract it from the RFV
+values of the tokens to obtain a <code>_send</code> value: <code>_send = rfValue - profit = payout + fee</code>. This determines the amount of OHM minted to the bond depository
+contract, to be paid to the DAO and to be granted by the emitted bonds. If you
+think it would have been immensely simpler to sent something like <code>_mint = payout + fee</code>... you would be right. It makes very little sense, given for
+instance that <code>rfvValue</code> is denominated in USD while the payout and the fee are
+denominated in OHM.</p>
+<h4 id="6-pay-the-dao-and-perform-book-keeping">6. Pay the DAO and perform book-keeping</h4>
+<p>The book-keeping part is important: this is where we actually record that the
+user is entitled to redeem the payout!</p>
+<p>We also increase the total debt by the RFV value of the tokens supplied. This is
+necessary to check the maximum debt and compute the debt ratio.</p>
+<p>Finally, just like the distributor contract, bond depository contracts have some
+&quot;adjustment&quot; logic, used to smooth a transition in the value of the BCV. Unlike
+the distributor, which adjusts during each rebase epoch, a depository contract
+adjusts during every bond sale, which means changes can be relatively fast if
+many bond sales occur in rapid succession.</p>
+<h3 id="example">Example</h3>
+<p>To make things hopefully a little bit clearer, let&#39;s work through a bonding
+example.</p>
+<p>Let&#39;s assume that</p>
+<ul>
+<li>OHM is worth 70$ (as it was when I wrote this example)</li>
+<li>the OHM-DAI liquidity pool contains 100 OHM (and therefore
+7000 DAI, which we&#39;ll write 7000$ for convenience)</li>
+<li>the ownership of the pool is split accross 100 LP tokens, each of which is
+worth <code>0.01 * 2 * 7000 = 140</code> $</li>
+<li>the current debt ratio for the OHM-DAI bond depository contract is 5%</li>
+<li>the bond control variable (BCV) for the OHM-DAI contract is 207 (as it is at
+the time for writing)</li>
+<li>the (thrice-daily) rebase rate is 0.24% (as it was when I wrote this)</li>
+<li>the DAO fee is 1%. This is currently 0% in both v1 and v2 bonds, and it&#39;s
+particularly difficult to find historical values (you&#39;d have to run your own
+node and re-execute transactions, since value changes are not even logged).</li>
+<li>the RFV backing per OHM is about 26$ (as it was ...)</li>
+<li>the market-value backing per OHM is about 60$ (as it was ...)</li>
+</ul>
+<p>Under these condtions, the risk-free value (RFV) of such a DAI-OHM LP token is
+<code>0.01 * 2 * sqrt(100 * 7000) ~= 16.73</code> $.</p>
+<p>If a user uses a single LP token to purchase bonds, he would get back bonds that
+would grant <code>(16.73 * 100) / (100 + 5 * 207) == 2.32</code> OHM. This represents a
+&quot;premium&quot; of 0.73 OHM compared to the market price, which is equivalent of an
+effective OHM price of <code>140 / 2.32 = 60.34</code> $, or an effective discount rate of
+14% compared to the market price.</p>
+<p>A more realistic discount assessment would also consider that during the vesting
+period of 5 days, the OHM supply will inflate by around 3.7% (<code>1.0024^(3*5) ~= 1.037</code>), so the effective discount is closer to 10%, assuming the buyer redeems
+at the end of the vesting period (of course, Ethereum transaction prices makes
+the amounts we&#39;re discussing completely unreleastic, but whatever).</p>
+<p>We&#39;ll note that v2 bonds solve this issue by staking the granted amount
+immediately, and so there is no loss due to inflation.</p>
+<p>So in this example, 2.343 OHM are emitted (<code>1.01 * 2.32</code> to account for the DAO
+fee), backed by 140$ of market value and 16.73$ of risk-free value (7.14$ per
+OHM).</p>
+<p>In this case, the RFV backing per minted OHM (7.14$) is significantly less than
+the current RFV backing per OHM (which is 26$). This means that each OHM emitted
+in bonding decreases the backing per OHM.</p>
+<p>I&#39;ll discuss this more in the economic analysis part, but this is an inherent
+property of LP bond sales. Stablecoin bond sales, on the other hand, tend to
+increase the RFV backing per OHM.</p>
+<h2 id="coda">Coda</h2>
+<p>That&#39;s it! This ended up much longer than I expected, and also took longer to
+write, but I learned a lot doing the research. I hope you enjoyed the deep dive,
+and learned something!</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/olympus";
+        this.page.identifier = "olympus";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

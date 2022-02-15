@@ -305,14 +305,13 @@ for the type <code>Point</code>&quot; — but that&#39;s tedious. And what categ
     output(Serializable_Point.serialize(it))
 </code></pre>
 <ol start="2">
-<li><p>Specify the instance to use in a certain scope (e.g. file or function) with
-an <code>use</code> declaration.</p>
-<pre><code>fun foo (it: Point)
- use PointSlash
- output(serialize(it))
-</code></pre>
-</li>
+<li>Specify the instance to use in a certain scope (e.g. file or function) with
+an <code>use</code> declaration.</li>
 </ol>
+<pre><code>fun foo (it: Point)
+    use PointSlash
+    output(serialize(it))
+</code></pre>
 <p>Of course, you could do <code>PointSlash.serialize(it)</code> and <code>use Serializable_Point</code>
 as well.</p>
 <p>When your two instances have automatically generated names which therefore clash
@@ -371,19 +370,15 @@ type derivation, hence <code>foo</code> will use the <code>Stringifiable</code> 
 <p>Now we also need to specify which derivation we want. We can do this in a couple
 ways:</p>
 <ol>
-<li><p><code>use ThingNamed</code> — always use the <code>ThingNamed</code> derivation to supply a
-<code>Stringifiable</code> when a <code>Named</code> instance exists.</p>
-</li>
-<li><p><code>ThingNamed.to_string(usr)</code> — specifying the derivation to use explicitly at
-the use site.</p>
-</li>
-<li><p><code>use ThingNamed(UserLast)</code></p>
-</li>
-<li><p><code>ThingNamed(UserLast).to_string(usr)</code></p>
+<li><code>use ThingNamed</code> — always use the <code>ThingNamed</code> derivation to supply a
+<code>Stringifiable</code> when a <code>Named</code> instance exists.</li>
+<li><code>ThingNamed.to_string(usr)</code> — specifying the derivation to use explicitly at
+the use site.</li>
+<li><code>use ThingNamed(UserLast)</code></li>
+<li><code>ThingNamed(UserLast).to_string(usr)</code></li>
+</ol>
 <p>The first solution is a new form of <code>use</code> which does not specify an instance but
 an instance derivation!</p>
-</li>
-</ol>
 <p>The second solution is symmetric to the first, we use the derivation instead of
 an instance at the instance selection site.</p>
 <p>The third and fourth solution have nothing novel: we just specify the full

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="535.08002" height="278.22" viewBox="0 0 600 300" id="svg2" sodipodi:version="0.32" inkscape:version="0.45.1" sodipodi:docname="Square_root_0_25.svg" sodipodi:docbase="/home/aoleg/Desktop" inkscape:output_extension="org.inkscape.output.svg.inkscape" version="1.0">
+  <metadata id="metadata193">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview inkscape:window-height="587" inkscape:window-width="746" inkscape:pageshadow="2" inkscape:pageopacity="0.0" guidetolerance="10.0" gridtolerance="10.0" objecttolerance="10.0" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff" id="base" width="535.08px" height="278.22px" inkscape:zoom="1.1" inkscape:cx="278.62778" inkscape:cy="156.38085" inkscape:window-x="0" inkscape:window-y="0" inkscape:current-layer="g38"/>
+  <desc id="desc4">Produced by GNUPLOT 4.2 patchlevel 2  </desc>
+  <defs id="defs6">
+    <circle id="gpDot" r="1" cx="0" cy="0" sodipodi:cx="0" sodipodi:cy="0" sodipodi:rx="1" sodipodi:ry="1"/>
+    <path id="gpPt0" style="stroke-width:0.148" d="M -1,0 L 1,0 M 0,-1 L 0,1"/>
+    <path id="gpPt1" style="stroke-width:0.148" d="M -1,-1 L 1,1 M 1,-1 L -1,1"/>
+    <path id="gpPt2" style="stroke-width:0.148" d="M -1,0 L 1,0 M 0,-1 L 0,1 M -1,-1 L 1,1 M -1,1 L 1,-1"/>
+    <rect id="gpPt3" style="stroke-width:0.148" x="-1" y="-1" width="2" height="2"/>
+    <use xlink:href="#gpPt3" id="gpPt4" style="fill:currentColor;stroke:none" x="0" y="0" width="600" height="300"/>
+    <circle id="gpPt5" style="stroke-width:0.148" cx="0" cy="0" r="1" sodipodi:cx="0" sodipodi:cy="0" sodipodi:rx="1" sodipodi:ry="1"/>
+    <use xlink:href="#gpPt5" id="gpPt6" style="fill:currentColor;stroke:none" x="0" y="0" width="600" height="300"/>
+    <path id="gpPt7" style="stroke-width:0.148" d="M 0,-1.33 L -1.33,0.67 L 1.33,0.67 L 0,-1.33 z "/>
+    <use xlink:href="#gpPt7" id="gpPt8" style="fill:currentColor;stroke:none" x="0" y="0" width="600" height="300"/>
+    <use xlink:href="#gpPt7" id="gpPt9" transform="scale(-1,-1)" x="0" y="0" width="600" height="300"/>
+    <use xlink:href="#gpPt9" id="gpPt10" style="fill:currentColor;stroke:none" x="0" y="0" width="600" height="300"/>
+    <use xlink:href="#gpPt3" id="gpPt11" transform="matrix(0.7071068,0.7071068,-0.7071068,0.7071068,0,0)" x="0" y="0" width="600" height="300"/>
+    <use xlink:href="#gpPt11" id="gpPt12" style="fill:currentColor;stroke:none" x="0" y="0" width="600" height="300"/>
+  </defs>
+  <g style="color:#ffffff;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g22" transform="translate(-37.772461,-15.297412)"/>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g24" transform="translate(-37.772461,-15.297412)"/>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g26" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,246 L 561.5,246" id="path28"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g30" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,246 L 50,246" id="path32"/>
+    <g transform="translate(51,252.7)" style="font-size:22.5px;text-anchor:end;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g34">
+      <text id="text36">0</text>
+    </g>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g38" transform="translate(-37.772461,-15.297412)">
+    <path d="M 71.044036,217.64029 L 616.77973,217.64029" id="path40" style="stroke-width:1.09585476"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g42" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,201.8 L 50,201.8" id="path44"/>
+    <g transform="translate(51,208.5)" style="font-size:22.5px;text-anchor:end;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g46">
+      <text id="text48">1</text>
+    </g>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g50" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,157.6 L 561.5,157.6" id="path52"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g54" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,157.6 L 50,157.6" id="path56"/>
+    <g transform="translate(51,164.3)" style="font-size:22.5px;text-anchor:end;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g58">
+      <text id="text60">2</text>
+    </g>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g62" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,113.4 L 561.5,113.4" id="path64"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g66" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,113.4 L 50,113.4" id="path68"/>
+    <g transform="translate(51,120.1)" style="font-size:22.5px;text-anchor:end;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g70">
+      <text id="text72">3</text>
+    </g>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g74" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,69.2 L 561.5,69.2" id="path76"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g78" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,69.2 L 50,69.2" id="path80"/>
+    <g transform="translate(51,75.9)" style="font-size:22.5px;text-anchor:end;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g82">
+      <text id="text84">4</text>
+    </g>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g86" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,25 L 561.5,25" id="path88"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g90" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,25 L 50,25" id="path92"/>
+    <g transform="translate(51,31.7)" style="font-size:22.5px;text-anchor:end;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g94">
+      <text id="text96">5</text>
+    </g>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g98" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,246 L 63.5,25" id="path100"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g102" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 63.5,246 L 63.5,259.5" id="path104"/>
+    <g transform="translate(63.5,293.2)" style="font-size:22.5px;text-anchor:middle;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g106">
+      <text id="text108">0</text>
+    </g>
+    <path d="M 83.4,246 L 83.4,252.7 M 103.3,246 L 103.3,252.7 M 123.3,246 L 123.3,252.7 M 143.2,246 L 143.2,252.7" id="path110"/>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g112" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 163.1,246 L 163.1,25" id="path114"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g116" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 163.1,246 L 163.1,259.5" id="path118"/>
+    <g transform="translate(163.1,293.2)" style="font-size:22.5px;text-anchor:middle;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g120">
+      <text id="text122">5</text>
+    </g>
+    <path d="M 183,246 L 183,252.7 M 202.9,246 L 202.9,252.7 M 222.9,246 L 222.9,252.7 M 242.8,246 L 242.8,252.7" id="path124"/>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g126" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 262.7,246 L 262.7,25" id="path128"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g130" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 262.7,246 L 262.7,259.5" id="path132"/>
+    <g transform="translate(262.7,293.2)" style="font-size:22.5px;text-anchor:middle;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g134">
+      <text id="text136">10</text>
+    </g>
+    <path d="M 282.6,246 L 282.6,252.7 M 302.5,246 L 302.5,252.7 M 322.5,246 L 322.5,252.7 M 342.4,246 L 342.4,252.7" id="path138"/>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g140" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 362.3,246 L 362.3,25" id="path142"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g144" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 362.3,246 L 362.3,259.5" id="path146"/>
+    <g transform="translate(362.3,293.2)" style="font-size:22.5px;text-anchor:middle;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g148">
+      <text id="text150">15</text>
+    </g>
+    <path d="M 382.2,246 L 382.2,252.7 M 402.1,246 L 402.1,252.7 M 422.1,246 L 422.1,252.7 M 442,246 L 442,252.7" id="path152"/>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g154" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 461.9,246 L 461.9,25" id="path156"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g158" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 461.9,246 L 461.9,259.5" id="path160"/>
+    <g transform="translate(461.9,293.2)" style="font-size:22.5px;text-anchor:middle;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g162">
+      <text id="text164">20</text>
+    </g>
+    <path d="M 481.8,246 L 481.8,252.7 M 501.7,246 L 501.7,252.7 M 521.7,246 L 521.7,252.7 M 541.6,246 L 541.6,252.7" id="path166"/>
+  </g>
+  <g style="color:#808080;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g168" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 561.5,246 L 561.5,25" id="path170"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g172" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path d="M 561.5,246 L 561.5,259.5" id="path174"/>
+    <g transform="translate(561.5,293.2)" style="font-size:22.5px;text-anchor:middle;fill:#000000;stroke:none;font-family:Bitstream Vera Sans" id="g176">
+      <text id="text178">25</text>
+    </g>
+    <path d="M 63.5,246 L 561.5,246 M 63.5,246 L 63.5,25" id="path180"/>
+  </g>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter" id="g182" transform="translate(-37.772461,-15.297412)"/>
+  <g style="color:#ff0000;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter" id="g184" transform="matrix(1.0958548,0,0,1.0958548,-36.315204,-18.800618)">
+    <path style="stroke:#ff0000" d="M 63.5,246 L 64.7,234.9 L 66,230.4 L 67.2,226.8 L 68.5,223.9 L 69.7,221.3 L 71,218.9 L 72.2,216.7 L 73.5,214.7 L 74.7,212.8 L 76,211 L 77.2,209.3 L 78.5,207.7 L 79.7,206.1 L 81,204.6 L 82.2,203.1 L 83.5,201.7 L 84.7,200.4 L 86,199.1 L 87.2,197.8 L 88.5,196.5 L 89.7,195.3 L 91,194.1 L 92.2,192.9 L 93.5,191.8 L 94.7,190.7 L 96,189.6 L 97.2,188.5 L 98.4,187.5 L 99.7,186.4 L 100.9,185.4 L 102.2,184.4 L 103.4,183.4 L 104.7,182.4 L 105.9,181.5 L 107.2,180.5 L 108.4,179.6 L 109.7,178.7 L 110.9,177.8 L 112.2,176.9 L 113.4,176 L 114.7,175.2 L 115.9,174.3 L 117.2,173.4 L 118.4,172.6 L 119.7,171.8 L 120.9,171 L 122.2,170.2 L 123.4,169.3 L 124.7,168.6 L 125.9,167.8 L 127.2,167 L 128.4,166.2 L 129.7,165.5 L 130.9,164.7 L 132.1,163.9 L 133.4,163.2 L 134.6,162.5 L 135.9,161.7 L 137.1,161 L 138.4,160.3 L 139.6,159.6 L 140.9,158.9 L 142.1,158.2 L 143.4,157.5 L 144.6,156.8 L 145.9,156.1 L 147.1,155.4 L 148.4,154.8 L 149.6,154.1 L 150.9,153.4 L 152.1,152.8 L 153.4,152.1 L 154.6,151.5 L 155.9,150.8 L 157.1,150.2 L 158.4,149.5 L 159.6,148.9 L 160.9,148.3 L 162.1,147.7 L 163.3,147 L 164.6,146.4 L 165.8,145.8 L 167.1,145.2 L 168.3,144.6 L 169.6,144 L 170.8,143.4 L 172.1,142.8 L 173.3,142.2 L 174.6,141.6 L 175.8,141 L 177.1,140.5 L 178.3,139.9 L 179.6,139.3 L 180.8,138.7 L 182.1,138.2 L 183.3,137.6 L 184.6,137 L 185.8,136.5 L 187.1,135.9 L 188.3,135.4 L 189.6,134.8 L 190.8,134.3 L 192.1,133.7 L 193.3,133.2 L 194.6,132.6 L 195.8,132.1 L 197,131.6 L 198.3,131 L 199.5,130.5 L 200.8,130 L 202,129.4 L 203.3,128.9 L 204.5,128.4 L 205.8,127.9 L 207,127.4 L 208.3,126.8 L 209.5,126.3 L 210.8,125.8 L 212,125.3 L 213.3,124.8 L 214.5,124.3 L 215.8,123.8 L 217,123.3 L 218.3,122.8 L 219.5,122.3 L 220.8,121.8 L 222,121.3 L 223.3,120.8 L 224.5,120.3 L 225.8,119.9 L 227,119.4 L 228.3,118.9 L 229.5,118.4 L 230.7,117.9 L 232,117.4 L 233.2,117 L 234.5,116.5 L 235.7,116 L 237,115.6 L 238.2,115.1 L 239.5,114.6 L 240.7,114.2 L 242,113.7 L 243.2,113.2 L 244.5,112.8 L 245.7,112.3 L 247,111.9 L 248.2,111.4 L 249.5,110.9 L 250.7,110.5 L 252,110 L 253.2,109.6 L 254.5,109.1 L 255.7,108.7 L 257,108.3 L 258.2,107.8 L 259.5,107.4 L 260.7,106.9 L 262,106.5 L 263.2,106.1 L 264.4,105.6 L 265.7,105.2 L 266.9,104.7 L 268.2,104.3 L 269.4,103.9 L 270.7,103.5 L 271.9,103 L 273.2,102.6 L 274.4,102.2 L 275.7,101.7 L 276.9,101.3 L 278.2,100.9 L 279.4,100.5 L 280.7,100.1 L 281.9,99.6 L 283.2,99.2 L 284.4,98.8 L 285.7,98.4 L 286.9,98 L 288.2,97.6 L 289.4,97.2 L 290.7,96.7 L 291.9,96.3 L 293.2,95.9 L 294.4,95.5 L 295.7,95.1 L 296.9,94.7 L 298.1,94.3 L 299.4,93.9 L 300.6,93.5 L 301.9,93.1 L 303.1,92.7 L 304.4,92.3 L 305.6,91.9 L 306.9,91.5 L 308.1,91.1 L 309.4,90.7 L 310.6,90.3 L 311.9,89.9 L 313.1,89.5 L 314.4,89.1 L 315.6,88.8 L 316.9,88.4 L 318.1,88 L 319.4,87.6 L 320.6,87.2 L 321.9,86.8 L 323.1,86.4 L 324.4,86.1 L 325.6,85.7 L 326.9,85.3 L 328.1,84.9 L 329.3,84.5 L 330.6,84.1 L 331.8,83.8 L 333.1,83.4 L 334.3,83 L 335.6,82.6 L 336.8,82.3 L 338.1,81.9 L 339.3,81.5 L 340.6,81.2 L 341.8,80.8 L 343.1,80.4 L 344.3,80 L 345.6,79.7 L 346.8,79.3 L 348.1,78.9 L 349.3,78.6 L 350.6,78.2 L 351.8,77.8 L 353.1,77.5 L 354.3,77.1 L 355.6,76.8 L 356.8,76.4 L 358.1,76 L 359.3,75.7 L 360.6,75.3 L 361.8,75 L 363,74.6 L 364.3,74.2 L 365.5,73.9 L 366.8,73.5 L 368,73.2 L 369.3,72.8 L 370.5,72.5 L 371.8,72.1 L 373,71.8 L 374.3,71.4 L 375.5,71.1 L 376.8,70.7 L 378,70.4 L 379.3,70 L 380.5,69.7 L 381.8,69.3 L 383,69 L 384.3,68.6 L 385.5,68.3 L 386.8,67.9 L 388,67.6 L 389.3,67.3 L 390.5,66.9 L 391.8,66.6 L 393,66.2 L 394.3,65.9 L 395.5,65.6 L 396.7,65.2 L 398,64.9 L 399.2,64.5 L 400.5,64.2 L 401.7,63.9 L 403,63.5 L 404.2,63.2 L 405.5,62.9 L 406.7,62.5 L 408,62.2 L 409.2,61.9 L 410.5,61.5 L 411.7,61.2 L 413,60.9 L 414.2,60.5 L 415.5,60.2 L 416.7,59.9 L 418,59.5 L 419.2,59.2 L 420.5,58.9 L 421.7,58.6 L 423,58.2 L 424.2,57.9 L 425.5,57.6 L 426.7,57.3 L 428,56.9 L 429.2,56.6 L 430.4,56.3 L 431.7,56 L 432.9,55.7 L 434.2,55.3 L 435.4,55 L 436.7,54.7 L 437.9,54.4 L 439.2,54 L 440.4,53.7 L 441.7,53.4 L 442.9,53.1 L 444.2,52.8 L 445.4,52.5 L 446.7,52.1 L 447.9,51.8 L 449.2,51.5 L 450.4,51.2 L 451.7,50.9 L 452.9,50.6 L 454.2,50.3 L 455.4,49.9 L 456.7,49.6 L 457.9,49.3 L 459.2,49 L 460.4,48.7 L 461.7,48.4 L 462.9,48.1 L 464.1,47.8 L 465.4,47.5 L 466.6,47.2 L 467.9,46.9 L 469.1,46.5 L 470.4,46.2 L 471.6,45.9 L 472.9,45.6 L 474.1,45.3 L 475.4,45 L 476.6,44.7 L 477.9,44.4 L 479.1,44.1 L 480.4,43.8 L 481.6,43.5 L 482.9,43.2 L 484.1,42.9 L 485.4,42.6 L 486.6,42.3 L 487.9,42 L 489.1,41.7 L 490.4,41.4 L 491.6,41.1 L 492.9,40.8 L 494.1,40.5 L 495.3,40.2 L 496.6,39.9 L 497.8,39.6 L 499.1,39.3 L 500.3,39 L 501.6,38.7 L 502.8,38.4 L 504.1,38.1 L 505.3,37.8 L 506.6,37.5 L 507.8,37.2 L 509.1,37 L 510.3,36.7 L 511.6,36.4 L 512.8,36.1 L 514.1,35.8 L 515.3,35.5 L 516.6,35.2 L 517.8,34.9 L 519.1,34.6 L 520.3,34.3 L 521.6,34 L 522.8,33.8 L 524.1,33.5 L 525.3,33.2 L 526.6,32.9 L 527.8,32.6 L 529,32.3 L 530.3,32 L 531.5,31.7 L 532.8,31.5 L 534,31.2 L 535.3,30.9 L 536.5,30.6 L 537.8,30.3 L 539,30 L 540.3,29.8 L 541.5,29.5 L 542.8,29.2 L 544,28.9 L 545.3,28.6 L 546.5,28.3 L 547.8,28.1 L 549,27.8 L 550.3,27.5 L 551.5,27.2 L 552.8,26.9 L 554,26.7 L 555.3,26.4 L 556.5,26.1 L 557.8,25.8 L 559,25.6 L 560.3,25.3 L 561.5,25" id="path186"/>
+  </g>
+  <g style="color:#ff0000;fill:none;stroke:#ff0000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g188" transform="translate(-37.772461,-15.297412)"/>
+  <g style="color:#000000;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter" id="g190" transform="translate(-37.772461,-15.297412)"/>
+</svg>

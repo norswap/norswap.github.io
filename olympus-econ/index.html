@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Olympus DAO: An Economic Analysis
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Olympus DAO: An Economic Analysis</h1>
+      <span class="post-date">28 Feb 2022</span>
+<p>In my previous post — <a href="/olympus">Olympus DAO from Primary Sources</a> — we looked at
+exactly how <a href="https://www.olympusdao.finance/">OlympusDAO</a> worked by digging into the smart contracts implementing
+it.</p>
+<p>If you&#39;re jumping aboard this wagon, OlympusDAO is a decentralized app that
+turned quite a few heads due to the high promised APY, sharp price increase, and
+even sharper market cap increase.</p>
+<p>Last time we looked at what the protocol did mechanistically (the findings will
+be recapped shortly). This time, we&#39;re looking at the consequence of the
+mechanisms for price, market cap, valuation, etc.</p>
+<p>(It goes without saying that all of this is a fun educational analysis, and none
+of it is financial advice.)</p>
+<h2 id="the-bottom-line">The Bottom Line</h2>
+<p>I won&#39;t tease you further, here are the basic conclusions (presented
+out-of-order compared to the main text):</p>
+<ol>
+<li><p>OHM (Olympus&#39; token) has extremely high programmed inflation, but the staking
+product protects stakers against dilution.</p>
+</li>
+<li><p>At first look, it looks like staking also increases ownership over the total
+OHM supply when less than 100% of the supply is staked. In practice, it seems
+likely that most of the unstaked supply is made out of liquidity pool
+reserves owned by the protocol, meaning any increase in ownership is
+compensated by a dilution of the treasury (which underpins the value of
+owning the protocol!).</p>
+</li>
+<li><p>As a result staking is very much useless (economically neutral) as a
+mechanic, besides as a way to drive narrative and hype (high APYs!!).</p>
+</li>
+<li><p>As a first approximation, the treasury value offers a floor price on OHM&#39;s
+market cap — however this notion is thwarted by the fact that the OHM
+treasury contain OHM tokens (in the liquidity pools underlying the LP
+tokens). So when the price of OHM goes down, so the does the market value of
+the treasury.</p>
+</li>
+<li><p>In reality, there exists a price <code>&gt; 1$</code> such that the OHM market cap is equal
+to the market value of the treasury. Let&#39;s call the treasury value at that
+price the <em>sustainable value</em>.</p>
+</li>
+<li><p>The sustainable treasury value must exist becau</p>
+<ul>
+<li><p>The treasury value decreases slower than the market cap (notably because
+it contains stablecoins), so if the price keeps dipping, at some point the
+market cap &quot;catches up&quot; with the treasury value.</p>
+</li>
+<li><p>Part of the treasury is denominated in stablecoins, and these were
+collected when the OHM price was much higher than 1$. Meaning the
+equilibrium (sustainable) price is <code>&gt; 1$</code>.</p>
+</li>
+</ul>
+</li>
+<li><p>In any case, the &quot;backing per OHM&quot; advertised by Olympus and the &quot;treasury
+value&quot; advertised by Wonderland are misleading since these value go down when
+the price goes down.</p>
+</li>
+<li><p>If the high inflation (rebase) rate persists, OHM will eventually go down to
+1$, at which point a backstop in the inflation logic prevents further
+inflation until the price increases again.</p>
+</li>
+<li><p>Bond sales are the real interesting mechanism. They are a programmed way to
+raise funds for the treasury via further inflation. Wether this is inflation
+is dilutive to OHM stakers depends on whether the bond sales discount is
+lower or higher than the current price premium (see below).</p>
+</li>
+<li><p>When discussing Olympus valuation, it will be much more useful to use gOHM
+(indexed OHM — i.e. wrapped staked OHMs that do not dilute due to rebases)
+as a reference.</p>
+</li>
+<li><p>A useful model to value Olympus&#39; market cap is to assume it should trade at
+a premium to the sustainable treasury value. This premium is justified by
+the fact that gOHM is essentially (a) a voucher for ownership of part of the
+treasury + (b) a call option on the gOHM price. The call option part is the
+premium.</p>
+</li>
+<li><p>The premium essentially depends on the <em>sustainable</em> backing per gOHM + the
+expected future premium.</p>
+</li>
+<li><p>The backing could increase for multiple reasons: yield farming with the
+treasury, VC-like investments with the treasury, or new products that
+increase the treasury, like Olympus Pro.</p>
+</li>
+<li><p>The backing also naturally increases through bond sales, as long as the bond
+sales discount is lower than the current premium.</p>
+</li>
+<li><p>Because the current premium depends on the expected future premium, the
+process is reflexive (it&#39;s a &quot;Keynesian beauty context&quot; or &quot;a fixed-point
+calculation&quot;). Each participant must try to guess how every other
+participant will value OHM.</p>
+</li>
+<li><p>Ignoring this issue for now, what price should you be willing to purchase
+OHM at. i.e. what premium are you willing to accept?</p>
+</li>
+<li><p>I propose the formula: <code>maximum_purchase_price = expected_sustainable_treasury_backing * (1 + expected_premium) - current_price * (risk_free_rate + risk_premium)</code> (We already discussed all
+terms except the risk-free rate and the risk premium.)</p>
+</li>
+<li><p>The risk-free rate is the return rate you could get without taking risk. No
+such thing as &quot;risk-free&quot; in crypto, but you could set that to the lending
+rate on Aave or Compound for instance. (Or just use the US bonds rate!)</p>
+</li>
+<li><p>The risk premium is the return rate you demand to be compensated for the
+risk that you are taking.</p>
+</li>
+<li><p>See the article for an example of thow this computation can be borne out in
+practice.</p>
+</li>
+<li><p>I also briefly discuss the relationship between the premium and the treasury
+size. Mostly, as the treasury grows, it&#39;s natural to expect that the premium
+should decrease: the team doesn&#39;t scale linearly with capital, and
+investment opportunities become scarcer.</p>
+</li>
+<li><p>It&#39;s important to note that the Olympus team is aware of some of these
+issues. See this <a href="https://hackmd.io/@HMyg0dxkQ96YOMpI30o8PA/mbga">whitepaper</a> by Zeus and Indigo, which proposes
+&quot;an evolution from the existing staking-centric model in favor of a
+bond-centric model&quot;. The goal are to truly lock away part of the supply
+(which staking doesn&#39;t do) and enable selling &quot;internal&quot; OHM-OHM bonds (just
+like US treasury bonds but with OHM instead of USD) at high volume without
+adversely affecting the OHM price.</p>
+</li>
+<li><p>The team also came up with <a href="https://olympusdao.medium.com/olympus12-building-a-strong-ecosystem-around-a-web3-native-reserve-currency-416f58175e74">the Olympus12 roadmap</a>, which
+outlines a strong (imho) and extremely interesting action plan for
+bolstering the economics of OlympusDAO going forward. I do think the success
+of the plan hinges on whether they will manage to convince projects and
+people to effectively treat OHM (more like gOHM) as a token to put on the
+balance sheet / in their long-term portfolio, and not just speculation &amp;
+arbitrage. With the right mix of incentives and interesting use cases, they
+might be able to.</p>
+</li>
+</ol>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="/olympus-econ/#the-bottom-line">The Bottom Line</a></li>
+<li><a href="/olympus-econ/#how-olympus-works-recap">How Olympus Works: Recap</a></li>
+<li><a href="/olympus-econ/#example">Example</a></li>
+<li><a href="/olympus-econ/#olympusdao-valuation">OlympusDAO Valuation</a><ul>
+<li><a href="/olympus-econ/#olympus-assets">Olympus&#39; Assets</a></li>
+<li><a href="/olympus-econ/#treasury-as-market-cap-floor">Treasury as Market Cap Floor</a></li>
+<li><a href="/olympus-econ/#sustainable-value">Sustainable Value</a></li>
+<li><a href="/olympus-econ/#the-floor-in-practice">The Floor in Practice</a></li>
+<li><a href="/olympus-econ/#the-premium-risk-free-rate-and-riks-premium">The Premium, Risk-Free Rate and Risk Premium</a></li>
+<li><a href="/olympus-econ/#pricing-gohm">Pricing gOHM</a></li>
+<li><a href="/olympus-econ/#evolution-of-the-backing-per-gohm">Evolution of the backing per gOHM</a></li>
+<li><a href="/olympus-econ/#modelling-the-premium">Modelling the Premium</a></li>
+</ul>
+</li>
+<li><a href="/olympus-econ/#olympus-in-the-long-run">Olympus in the Long Run</a></li>
+<li><a href="/olympus-econ/#on-the-uselessness-of-staking">On the Uselessness of Staking</a></li>
+<li><a href="/olympus-econ/#on-the-usefulness-of-bonding">On the Usefulness of Bonding</a></li>
+<li><a href="/olympus-econ/#coda">Coda</a></li>
+</ul>
+<h2 id="how-olympus-works-recap">How Olympus Works: Recap</h2>
+<p>If you missed <a href="/olympus">the previous article</a>, here is a copy of my (fairly
+detailed) summary of OHM&#39;s mechanisms. This should be all you need to follow
+along!</p>
+<ol>
+<li><p>The total supply of $OHM inflates at the <em>staking reward rate</em> every ~8
+hours. This inflation is redistributed among stakers. The inflation
+distribution event that happens every 8 hours is called <em>a rebase</em>.</p>
+</li>
+<li><p>The staking reward rate is set by the OlympusDAO policy team. For the longest
+time, this reward rate was 0.35%. It is currently 0.2%, on its way down to a
+target of 0.16%. At 0.35%, this implies an inflation of 4487%. This is also
+the minimum staking APY in OHM (if 100% of the OHM is staked, otherwise it
+will be higher). At 0.16%, this implies a 475% inflation (yup — exponentials
+are weird).</p>
+</li>
+<li><p>OlympusDAO has a treasury composed of stablecoins and OHM-stablecoin
+[liquidity pool (LP) tokens][lp-tokens]. The treasury is constituted by
+selling bonds (see below).</p>
+</li>
+<li><p>A central concept is the &quot;risk-free value&quot; (RFV) of the treasury. This is simply
+1$ for stablecoin. For LP tokens, it is the price the token would take if the
+OHM price fell to 1$. Controversially, this means that part of the RFV of the
+treasury is made of OHM tokens (in the liquidity pools).</p>
+</li>
+<li><p>Rebases can only go through if there is 1$ of risk-free value in the treasury
+for each OHM in existence including the newly-minted ones. This sets a
+soft-floor if 1$ on the OHM price, assuming that the OHM market cap should
+always be at least as large as the risk-free value of the OHM treasury.</p>
+</li>
+<li><p>The protocol maintains a metric called &quot;the index&quot; which is how much OHM you
+would own if you staked a single OHM on the day the protocol launched
+(currenty 74). Recently, Olympus launched the gOHM (&quot;governance OHM&quot;) which
+&quot;wraps&quot; the indexed amount of staked OHM. The main avowed purpose was to
+enable the trading of staked OHM on other chains.</p>
+</li>
+<li><p>Staking comes with an optional warm-up period (currently disabled) which
+forces people to wait a configurable amount of time before their OHM tokens
+are staked.</p>
+</li>
+<li><p>At any time, people can purchase OHM bonds using various stablecoins and
+OHM-stablecoin <a href="https://www.google.com/search?hl=en&amp;q=lp%20tokens">LP tokens</a>. The policy team can add, remove or tweak these
+bond markets. The bonds are usually sold as a small discount to
+the OHM market price. The bonds grant newly minted OHM tokens to the buyer.
+These tokens vest over a configurable period, which has always been 5 days.</p>
+</li>
+<li><p>The DAO takes a (configurable) fee over every bond sale, although this is
+currently set to 0, and it&#39;s rather hard to search historical state to see if
+it was ever set differently.</p>
+</li>
+<li><p>Bond pricing uses a notion of risk-free value (RFV). The risk-free value of
+stablecoins is equivalent to their market value. For LP tokens however,
+Olympus assumes a worst-case scenario where OHM is worth 1$, and prices the
+LP tokens accordingly.</p>
+</li>
+<li><p>Bonds are priced differently depending on the token used to purchase the
+bonds. The bond price is determined by the formula <code>bondPrice = min(BCV * debtRatio + 1, minimumPrice)</code>, where:</p>
+<ul>
+<li><p>One bond grants one OHM after the vesting period.</p>
+</li>
+<li><p>For simplicity, I ignore the decimals on <code>minimumPrice</code> and <code>bondPrice</code>
+(assume those are infinite precision numbers), and assume that <code>debtRatio</code>
+is a value between 0 and 1.</p>
+</li>
+<li><p><code>BCV</code> is the bond control variable, set by the policy team for each token</p>
+</li>
+<li><p><code>debtRatio</code> is a ratio between (a) the risk-free value of all tokens used for
+bond purchases (tallied at the moment of purchase) scaled by the remaining
+vesting time; and (b) the total OHM supply.</p>
+<p>Note that the numerator and the denominator have different units (risk-free
+USD and OHM), and consequently, the debt ratio rises faster when the OHM
+price is high.</p>
+</li>
+<li><p><code>minimumPrice</code> — as the name indicates. However, once a bond purchases occurs
+above the minimum price, it is then set to 0, allowing subsequent purchases
+to occur below the bond price.</p>
+</li>
+</ul>
+<p> There is maximum amount of debt (denominated in risk-free value) allowed
+ per token, preventing the emission of too many bonds, and offering some
+ protection against attacks (e.g. if a stablecoin was to lose his peg).</p>
+<p> Because the formula is not based on the market price of OHM, the bond price
+ can occasionally exceed the market price!</p>
+</li>
+</ol>
+<h2 id="example">Example</h2>
+<p>To make things more concrete, I&#39;m also copying verbatim the example from last
+time in this section. This will help you have a better sense of the mechanisms
+that we are discussing.</p>
+<p>Let&#39;s assume that</p>
+<ul>
+<li>OHM is worth 70$ (as it was when I wrote this example)</li>
+<li>the OHM-DAI liquidity pool contains 100 OHM (and therefore
+7000 DAI, which we&#39;ll write 7000$ for convenience)</li>
+<li>the ownership of the pool is split accross 100 LP tokens, each of which is
+worth <code>0.01 * 2 * 7000 = 140</code> $</li>
+<li>the current debt ratio for the OHM-DAI bond depository contract is 5%</li>
+<li>the bond control variable (BCV) for the OHM-DAI contract is 207 (as it is at
+the time for writing)</li>
+<li>the (thrice-daily) rebase rate is 0.24% (as it was when I wrote this)</li>
+<li>the DAO fee is 1%. This is currently 0% in both v1 and v2 bonds, and it&#39;s
+particularly difficult to find historical values (you&#39;d have to run your own
+node and re-execute transactions, since value changes are not even logged).</li>
+<li>the RFV backing per OHM is about 26$ (as it was ...)</li>
+<li>the market-rate backing per OHM is about 60$ (as it was ...)</li>
+</ul>
+<p>Under these condtions, the risk-free value (RFV) of such a DAI-OHM LP token is
+<code>0.01 * 2 * sqrt(100 * 7000) ~= 16.73</code> $.</p>
+<p>If a user uses a single LP token to purchase bonds, he would get back bonds that
+would grant <code>(16.73 * 100) / (100 + 5 * 207) == 2.32</code> OHM. This represents a
+&quot;premium&quot; of 0.73 OHM compared to the market price, which is equivalent of an
+effective OHM price of <code>140 / 2.32 = 60.34</code> $, or an effective discount rate of
+14% compared to the market price.</p>
+<p>A more realistic discount assessment would also consider that during the vesting
+period of 5 days, the OHM supply will inflate by around 3.7% (<code>1.0024^(3*5) ~= 1.037</code>), so the effective discount is closer to 10%, assuming the buyer redeems
+at the end of the vesting period (of course, Ethereum transaction prices makes
+the amounts we&#39;re discussing completely unreleastic, but whatever).</p>
+<p>We&#39;ll note that <a href="https://olympusdao.medium.com/introducing-olympus-v2-c4ade14e9fe">v2 bonds</a> solve this issue by staking the granted amount
+immediately, and so there is no loss due to inflation.</p>
+<p>So in this example, 2.343 OHM are emitted (<code>1.01 * 2.32</code> to account for the DAO
+fee), backed by 140$ of market value and 16.73$ of risk-free value (7.14$ per
+OHM).</p>
+<p>In this case, the RFV backing per minted OHM (7.14$) is significantly less than
+the current RFV backing per OHM (which is 26$). This means that each OHM emitted
+in bonding decreases the backing per OHM.</p>
+<p>This is an inherent property of LP bond sales. Stablecoin bond sales, on the
+other hand, tend to increase the RFV backing per OHM.</p>
+<h2 id="olympusdao-valuation">OlympusDAO Valuation</h2>
+<p>The central question in our analysis is going to be &quot;how should OlympusDAO be
+valued?&quot;. Meaning: what should the market cap on the OHM supply be?</p>
+<p>As we shall see, this is not an easy question, given that on one hand the
+treasury value is in flux, and the highly dilutive nature of the token on the
+other hand.</p>
+<p>There is of course no definitive answer to that question, but we can give many
+clues as to what an answer can look like.</p>
+<p>A lot of the data I&#39;m going to use in this analysis, come from the excelent
+<a href="https://dune.xyz/shadow">Dune dashboards</a> by <a href="https://twitter.com/sh4dowlegend">shadow</a> (Olympus&#39; policy lead), in particular the
+<a href="https://dune.xyz/shadow/Olympus-(OHM)">Olympus dashboard</a> and the Olympus Policy dashboard.</p>
+<h3 id="olympus-assets">Olympus&#39; Assets</h3>
+<p>OlympusDAO has three &quot;assets&quot;:</p>
+<ul>
+<li>the treasury</li>
+<li>the DAO funds</li>
+<li>its &quot;team members&quot; (i.e. the people paid by the DAO to develop OlympusDAO, either by
+means of code, marketing, business development, ...)</li>
+</ul>
+<p>First, let&#39;s precise the difference between the treasury and the DAO funds.</p>
+<p>The treasury is by design a reserve that backs the value of OHM. There is no
+peg, and so this reserve is allowed to be less than the market cap of OHM (as it
+has been for most of its history), or even greater (though this should only be a
+temporary aberration, as we&#39;ll argue shortly).</p>
+<p>The DAO funds are accrued via the DAO fee perceived during a bond sale. They are
+managed by the DAO&#39;s <a href="https://docs.olympusdao.finance/main/contracts/dao">multisig signatories</a>, which used to be the de facto leaders
+of the project. With the introduction of the gOHM token, token governance now
+has a purview on how the DAO spends those funds.</p>
+<p>Although I haven&#39;t looked into it, DAO funds are traditionally used to pay the
+team and perform other interventions (e.g. usage incentives, strategic token
+acquisition, such as CRV or TOKE, etc...).</p>
+<p>However, if the DAO pulls in enough fees to properly fund development, it is
+perfectly possible that it could redistribute part of the fee cashflows to users
+in various ways (dividends, token buybacks, or a combination of both *).</p>
+<p>*) In Olympus&#39; case, there is an extremely elegant way to do this: use DAO
+funds to purchase bonds, then deposit the received OHM in the staking contract
+where it will automatically be distributed amongst all stakers (cf. <a href="/olympus">previous
+article</a> to see how this distribution works on a nuts-and-bolt level).</p>
+<p>The team members should only be considered an asset insofar that users are
+confident that they are working to accrue value to token holder, whether by
+growing the treasury, accruing DAO fees to be redistributed, or other mechanisms
+like airdrops.</p>
+<h3 id="treasury-as-market-cap-floor">Treasury as Market Cap Floor</h3>
+<p>So, how do we value this?</p>
+<p>Well, Olympus must at least be worth as much as the treasury + the portion of
+DAO funds that hasn&#39;t been yet earmarked for a specific use. The DAO fee percent
+is currently 0, and though I don&#39;t have the data, I don&#39;t believe it was ever
+very high. We&#39;ll thus make the simplifying assumption that its value is
+negligible compared to the treasury.</p>
+<p>The project must be worth at least as much as the treasury because, in the worst
+case, token holders can vote to dissolve the treasury and compensate OHM and
+sOHM holders in proportion of their holdings.</p>
+<p>However, things are not <em>entirely</em> as simple as this, because the treasury does
+contain OHM tokens (underlying half the value of the LP token). <strong>So when the
+price of OHM goes down, so the does the market value of the treasury.</strong></p>
+<p>The market value doesn&#39;t work as a price floor, but neither does the risk-free
+value (RFV, the value when OHM is priced at 1$). That price is actually too
+pessimistic.</p>
+<p><strong>In reality, there exists a price &gt; 1$ such that the OHM market cap is equal to
+the market value of the treasury.</strong> Let&#39;s call the treasury value at that price
+the <em>sustainable value</em>.</p>
+<h3 id="sustainable-value">Sustainable Value</h3>
+<p>In this section, I will show why the sustainable value exists. We&#39;ll illustrate
+how a decreasing OHM price decreases the market value of the treasury, then show
+that this decrease is less than the price decrease, meaning that at some point,
+the market cap falls below the market value of the treasury. The market value of
+the treasury at this point is what we call the sustainable value.</p>
+<p>(If you accept this premise and are not interested in getting more supporting
+intuition as to why it is true, feel free to skip this section.)</p>
+<p>The Olympus treasury comprises a lot of LP tokens. The market value of those is
+made by half by OHM tokens. This means that as the OHM price drops, so does the
+market treasury value.</p>
+<p>Even simple <code>x*y=k</code> AMMs are not intuitive, so I&#39;ll avoid off on giving a full
+exposition. However, to give some intutition, as the price falls and people sell
+OHM into the liquidity pool, these three things happen:</p>
+<ul>
+<li>The market value of the OHM reserve of the liquidity pool drops.</li>
+<li>The OHM reserves of the pool increase.</li>
+<li>The stablecoin reserves of the pool decrease, by the amount of OHM sold to the
+pool at some &quot;average&quot; price between the old OHM price and the new OHM price.</li>
+</ul>
+<p>So that&#39;s not great: not only does the value of the whole OHM part decrease, but
+the stable reserves also decreases, and decreases more than compensated by the
+increase in OHM reserves valued at the new market price.</p>
+<p>Let&#39;s do a simple example for illustration&#39;s sake.</p>
+<ul>
+<li>Assume a liquidity pool with 100 OHM valued at $69 each.</li>
+<li>The pool is thus worth (<code>2*100*69 == 13,800$</code>).</li>
+<li>Using the <code>x*y = k</code> AMM formula, we get <code>k == 690,000</code>.</li>
+</ul>
+<p>Now assume someone sells 10 OHM into the pool.</p>
+<ul>
+<li>We have 110 OHM, so to preserve the value of <code>k</code>, the new amount of
+stablecoin becomes <code>690,000 / 110 == 6,272,72</code>.</li>
+<li>The new value of the pool is the double of this, i.e 12,544.44.</li>
+<li>The new token price is <code>6,272,72 / 110 == 57.022</code>.</li>
+</ul>
+<p>Consequently:</p>
+<ul>
+<li>The token price dropped 17.36%</li>
+<li>The pool&#39;s total value dropped by 9%.</li>
+</ul>
+<p>Note that the relationship between those things is not linear and depends on the
+parameters (e.g. the impact of a 10 OHM sale would have been smaller on a bigger
+pool, although the impact of a sale 10% the size of the pool would have been the
+same).</p>
+<p>Using the <a href="https://dune.xyz/shadow/Olympus-(OHM)">Olympus Dune dashboard</a>, we can see that (at the time
+of writing) the treasury market value is $484,110,067, while the risk-free
+market value is $237,941,247.</p>
+<p>The dashboard does warn that the values might not be accurate because of
+the v2 migration. There is some discrepancy from the Olympus app. For
+instance, the market cap on dashboard is $710M while it is $680M on the app. The
+app seems to put the market value of the treasury (as determined form the
+backing per OHM seems a few 10s of % higher).</p>
+<p>So let&#39;s be conservative and say that the RFV of the treasury is 2-4x lower than
+its market value.</p>
+<p>So as the OHM price decreases so does the market value of the treasury, albeit
+potentially slower than the price.</p>
+<p>Also, the treasury also contains stablecoins in addition to LP tokens, which
+means it will fall even slower percentage-wise than the OHM price.</p>
+<p>Because this market value of the treasury decreases slower than the price, it
+means there must necessarily exist a price (the <em>sustainable price</em>) such that
+the OHM market cap is equal to the market value of the treasury.</p>
+<p>Because part of the treasury is denominated in stablecoins, and these were
+collected the OHM price was much higher than 1$, it does mean that the
+sustainable price is higher than 1$, and hence the sustainable value is higher
+than the RFV.</p>
+<p>As simple way to see that is that this is like solving the equation <code>100 + 10x = 100x</code> (e.g. imagine the treasury holds 100$ and 10 OHM and the market cap is 100
+OHM, and <code>x</code> is the OHM price). In this case <code>x = 100 / 90 &gt; 1</code>.</p>
+<p>What this analysis shows is that the &quot;backing per OHM&quot; advertised by Olympus (as
+well as the &quot;treasury value&quot; advertised by Wonderland) are misleading since
+these value go down when the price goes down. However, the RFV value of the
+treasury is too pessimistic as a floor price, since there exist an intermediate
+&quot;floor price&quot; where the market cap is equal to the market value of the treasury.</p>
+<h3 id="the-floor-in-practice">The Floor in Practice</h3>
+<p>Interestingly, the theory that the market cap should never dip below the market
+price (the point at which it dips below being the sustainable price) has been
+put to the test recently, as OlympusDAO and its forks experience an accelerating
+crash over the past few weeks.</p>
+<p>OlympusDAO is currently hovering at 25% over the market value of the treasury.
+<a href="https://www.wonderland.money/">Wonderland</a>, Olympus&#39; biggest and most famous fork, actually <a href="https://www.coindesk.com/markets/2022/01/18/defis-wonderland-is-buying-time/">dipped under the
+market value of its treasury</a> and <a href="https://archive.is/1Av9l">a vote was held to dissolve the
+treasury</a>, which failed narrowly, but with a majority of holders
+against dissolution.</p>
+<p>For context, in addition to the price crash, Wonderland was shaken by the
+revelation that &quot;Sifu&quot; — its treasury manager — was a former convicted scammer.</p>
+<p>(As an aside, I consider this vote rational and see it as mostly a vote of
+confidence. Since Sifu was removed, as long as you trust the rest of the team
+with the treasury, there is no reason to not wait to recapture a premium over
+the treasury value. Such rebounds are common in crypto if the project does not
+immediately implode. If things don&#39;t improve, the treasury can still be unwound
+later — there is a no-cost upside in waiting a little bit.)</p>
+<h3 id="the-premium-risk-free-rate-and-risk-premium">The Premium, Risk-Free Rate and Risk Premium</h3>
+<p>If the <em>sustainable value</em> of the treasury represents a floor for the market
+cap, what causes it to rise above that level? This is what we&#39;ll call <em>the
+premium</em>.</p>
+<p>Basically, in the case of OlympusDAO, a big part of the premium comes from the
+team and the possibility of future earnings. If team members roll out new
+features or new products that will accrue value to token holders, this
+possibility should be captured in the token price.</p>
+<p>The easiest way to think about the premium is that when you buy the token, you
+really buy two things: (a) a voucher for a slice of the treasury at its
+<strong>current</strong> (not sustainable) value; and (b) a call option representing the
+potential for the sustainable value of the treasury to increase. This call
+option part is the premium.</p>
+<p>In particular, the call option part represent the expectation that the treasury
+backing per inflation-indexed token (gOHM) will increase. It&#39;s important to only
+consider gOHM, not OHM, because there is no expected backing increase per OHM —
+since it inflates so much due to the rebases.</p>
+<p>There are a few ways the backing per gOHM could increase:</p>
+<ol>
+<li>new initiatives increase the value of the treasury without dilution</li>
+<li>yield farming with the treasury</li>
+<li>venture capital investments with the treasury</li>
+<li>bond sales, as long as the current premium is higher than the bond discount</li>
+</ol>
+<p>Olympus actually rolled out an initiative that increased the treasury value at
+no cost or dilution to token holders, in the form of <a href="https://www.olympusdao.finance/pro">OlympusPro</a>, a side
+product that allowed other protocols to conduct their own bond sales based on
+the Olympus model. The Olympus treasury captures a 3.3% fees on every bond sale
+conducted on Olympus Pro.</p>
+<p>Another potential source of premium is the utilization of treasury funds to
+generate yield.</p>
+<p>Here we need to be careful, because it wouldn&#39;t make sense to say that the
+treasury funds can be used for yield farming (e.g. lending on Aave for a 5% APY)
+and thus the premium should increase accordingly.</p>
+<p>The idea here is that the yield farming opportunity is also open to you. Say you
+have stablecoins sitting around, instead of buying gOHM (or equivalently, buying
+and staking OHM), you could yield farm yourself. <strong>The premium should only
+capture returns in excess of that yield.</strong></p>
+<p>In traditional finance, this notion is known as the &quot;risk-free rate&quot; and is
+typically given by the yield on AAA-rated treasury bonds, in particular the US
+treasury bonds.</p>
+<p>(If you&#39;re interested in treasury bonds and how they behave, see my previous
+article on the topic: <a href="https://norswap.com/bonds/">one</a>, <a href="https://norswap.com/bonds-2/">two</a>.)</p>
+<p>This is not to say Olympus shouldn&#39;t yield farm. Quite the opposite: it&#39;s much
+easier to produce excess return on the risk-free rate if you just happen to have
+funds that you can yield farm with to produce this rate in the first place.</p>
+<p>In fact, <a href="https://twitter.com/quasicypher1/status/1486737670088896517">Olympus <em>is</em> yield farming</a> (see also <a href="https://twitter.com/ohmzeus/status/1486744382825017349">this
+remark</a>).</p>
+<p>Now, there is nothing such as a <em>risk-free</em> return in crypto. You&#39;re always at
+least taking smart contract risk (bugs, hacks).</p>
+<p>However it&#39;s fair to consider that buying OHM high abvoe the sustainable rate is
+riskier than yield farming on Aave. If we consider that both projects have been
+extremely well audited, then OHM additionally exposes you to price (premium!)
+volatility. You need to be compensate for that risk, and that is the <em>risk
+premium</em> (not the same thing as the OHM price premium over the sustainable
+price!).</p>
+<p>Finally, another source of premium would be to conduct venture capital (VC)
+investments using the treasury. Here the premium stems from a few factor:</p>
+<ul>
+<li>The treasury is large, which makes OlympusDAO a privileged partner compared to
+poorer individual investors.</li>
+<li>The treasury is also large enough that it can diversify by betting on numerous
+projects, which is central to the sustainability of the venture capital model
+(where you only have a few winners that make up for all your losers).</li>
+<li>The OlympusDAO team is talented and probably better able to determine a
+project&#39;s odds of success than the average OHM holder.</li>
+</ul>
+<p>Though it has been discussed online, there is no indication at the moment that
+the Olympus team intends to engage in venture capital investments.</p>
+<p>Last, but not least, the sustainable backing per OHM increases naturally via
+bond sales, as long as the discount price is lower then the current premium,
+i.e. as long a bonds are sold for more than the sustainable backing per OHM.</p>
+<p>This mechanism is the main driver of treasury growth, and we will revisit it
+<a href="/olympus-econ/#evolution-of-the-backing-per-gohm">below</a>. Unlike the previous mechanisms, it
+is &quot;dilutive&quot; in the sense that it mints new tokens — although if the backing
+per gOHM increases, this is not really a problem.</p>
+<h3 id="pricing-gohm">Pricing gOHM</h3>
+<p>Let&#39;s put all the pieces from the last section (premium, risk-free rate and risk
+premium) together and attempt to see if we can come with a &quot;fair&quot; price for
+gOHM, given our assumptions as investors.</p>
+<p>Let&#39;s assume, for simplicity sake, that the sustainable price of gOHM is 100$ at
+present, and you expect the sustainable price to increase by 50$ over your
+investment horizon (say one year). How much should be willing to buy gOHM for?</p>
+<p>A naive (and wrong) answer to this would be to say that any price under 150$ is
+fine, as it will net you a you profit. This is wrong for a two reasons:</p>
+<ul>
+<li>At your point of reference in the future, gOHM should still trade at a
+premium, so if the sustainable value is 150$, the price of gOHM will be higher
+than that.</li>
+<li>If on the other hand, if we assume that the premium will be 0, it&#39;s still
+wrong to purchase at say 149$, because you&#39;re only making a <code>1/149 = 0.6%</code>
+return. This is much less than the risk-free rate (e.g. 5%).</li>
+<li>But buying so that you make exactly the risk-free rate is also wrong. You&#39;re
+taking significantly more risk by buying OHM, therefore you should expect
+higher returns to compensate you for that risk (the <em>risk premium</em>).</li>
+</ul>
+<p>Therefore your buy price should be any price under:</p>
+<p><code>expected_sustainable_treasury_backing * (1 + expected_premium) - current_price * (risk_free_rate + risk_premium)</code></p>
+<p>Where <code>expected_premium</code>, <code>risk_free_rate</code> and
+<code>risk_premium</code> are percentages (quantities between 0 and 1).</p>
+<p>Therefore, to value gOHM, you need to make the following predictions/decisions:</p>
+<ul>
+<li>How much will the (sustainable) treasury backing per gOHM increase?</li>
+<li>How will the premium change?</li>
+<li>What are my &quot;risk-free&quot; alternatives? i.e., what do I use as risk-free rate?</li>
+<li>How risky is the investment? i.e., what risk premium do I demand in order to
+feel like the potential upside is worth the risk?</li>
+</ul>
+<p>Let&#39;s plug in some numbers. Say the current premium is 25% (so the price is
+125$) and I expect this to remain stable. Say I consider 5% to be my risk-free
+rate, and I&#39;d like to be compensated at 10% for the risk I&#39;m taking. Then you
+get:</p>
+<p><code>150 * (1 + 0.25) - 125 * (0.05 + 0.1) = 168.75</code></p>
+<p>Since the current price (125$) is less than 168.75$, you should buy gOHM, and if
+all your predictions are uncannily accurate, the token will be worth <code>150 * 1.25 = 187.5$</code> in a year. You will sell for a 62.5$ profit, which is a 50% return
+rate — as expected since the backing increased 50% and the premium didn&#39;t
+change. This is higher than your desired 15% return rate (5% risk-free rate +
+10% risk premium).</p>
+<h3 id="evolution-of-the-backing-per-gohm">Evolution of the Backing per gOHM</h3>
+<p>The formula above asks you to predict the future sustainable backing per gOHM.
+Let&#39;s now look at how you could do that. The value actually depends on a couple
+of factors:</p>
+<ol>
+<li>The percentage of the OHM supply staked (this has been fairly stable at <a href="https://dune.xyz/shadow/Olympus-(OHM)">90%
+for most of of Olympus&#39; history</a>, though it has dipped to
+the low 80s over the last month. The lower the percentage of the supply
+staked, the faster stakers (hence gOHM holder) accrue ownership over the
+total supply at the expense of non-stakers. At 90%, the return rate is 6.6%.</li>
+<li>The dilution incurred by LP bond sales.</li>
+<li>The amount of bond token sales, and their discount rate.</li>
+</ol>
+<p>One big question to solve here is &quot;who are the non-stakers?&quot;. I actually expect
+that a significant part of the non-staked supply is made of the OHM token
+backing the LP tokens owned by the treasury!</p>
+<p>This explanation fits perfectly the fact that the staking percentage decreased
+over the last month: as OHM price decreased, the amount of OHM underlying the LP
+token naturally increased (as OHM was traded in in exchange for stablecoins)!</p>
+<p>This means that even the increased ownership for stakers comes at the expense of
+the treasury (whose OHM tokens keep diluting). I think it&#39;s fair to model the
+return on staking as essentially nil, but preventing rebase-induced dilution.</p>
+<p>So we&#39;re left with bonding.</p>
+<p>The sustainable backing by gOHM can either increase or decrease from bond sales,
+depending on whether the increase in the sustainable treasury value compensates
+the dilution incurred by the bond sale.</p>
+<p>It depends on the current premium and the bond discount: if the discount is
+smaller than the premium, then the backing per newly minted OHM is higher than
+the current sustainable backing per OHM (therefore very slightly increasing to
+total backing per OHM). If on the other hand the discount is higher than the
+discount, then the backing per OHM decreases.</p>
+<h3 id="modelling-the-premium">Modelling the Premium</h3>
+<p>There is one question that all of the above doesn&#39;t really answer directly — how
+large should the premium be?</p>
+<p>Well, imagine all investors run the above calculation. Each of them will come up
+with their own &quot;acceptable&quot; premium. In our example that would have been 68.5%
+(<code>(168.5 - 100) / 100</code>). The actual premium will be the premium such that no one
+will sell any investor OHM with a premium lower than their premium of choice.</p>
+<p>In (the messy and complex) reality, investors will need to try to anticipate
+what this premium will be in order to price their own premium of choice. This
+makes the whole market pricing affair a reflective process known as a <a href="https://en.wikipedia.org/wiki/Keynesian_beauty_contest">Keynesian
+beauty contest</a>. If you&#39;re more mathematically inclined, you could also
+say the market price is the result of a <a href="https://en.wikipedia.org/wiki/Fixed_point_(mathematics)">fixed-pointed computation</a>.</p>
+<hr>
+<p>Now, we could also look at the premium from another angle. And that is: how is
+the premium expected to change as the treasury increases or decreases?</p>
+<p>The key question is whether the premium should be flat (since the team&#39;s ability
+to deliver new successful projects is only very weakly correlated with the size
+of the treasury), or proportional to the treasury size (in the case of venture
+capital investments).</p>
+<p>Since both of these make sense, a simple model of the premium would be one where
+the premium decreases as the treasury grow. In this model, the excess value
+incurred by the premium (i.e. <code>premium * sustainable_treasury</code>) grows along with
+the treasury, but at a decreasing rate. Think of square-root like functions.</p>
+<p><img src="/olympus-econ/square_root.svg" alt="square root function"></p>
+<p>This decrease in growth represents the fact that the team&#39;s potential does not
+increase linearly with the treasury (you could hire more people, but it&#39;s well
+established that company productivity does not scale linearly with the number of
+hires). It also represents the fact that there are diminishing returns when you
+sling around a large amount of capital: the yield farming returns tend to be
+lower, which decreases your edge on the &quot;risk-free&quot; rate. Similarly, quality
+venture capital opportunities might dry up.</p>
+<p>A more complete model should probably take into account that if the treasury
+value is low, then the premium should grow faster than the treasury (as it
+enables new essential hires, new venture capital opportunities, etc). However,
+Olympus&#39; treasury is already large ($484M), so we&#39;ll eschew this part of the
+model.</p>
+<hr>
+<p>Ok. All good and fair, but concretely, what would a good premium be for Olympus
+today?</p>
+<p>One answer to that is that you just run the price calculation from above. But to
+do that, you need to estimate what the premium will be!</p>
+<p>Well, I&#39;m a bit of a loss here.</p>
+<p>First of all, investors are not rational, and I feel fairly confident to say
+many (most?) of them never really did understood how Olympus worked. The price
+is still a reflective process of investor&#39;s willingness to pay, but without
+common knowledge (such as this blogpost! though at this point I have to wonder
+how many investors will read this novel I have written), it&#39;s hard to know what
+investors will think — more likely their willingness to pay will be ruled by
+momentum, hype, FOMO and FUD.</p>
+<p>The current premium of 25% over the market rate doesn&#39;t feel particularly
+extreme to me, neither does it feel particularly low. Note that this is a
+premium over the <em>market value</em>, not the <em>sustainable value</em> (which I haven&#39;t
+computed — reach out if you feel like doing that!).</p>
+<p>Looking at Olympus Pro, it has so far yield about $2M in fees, or about 0.5% of
+the treasury size. Since it was introduced 4 months ago, we can extrapolate that
+it will yield about 1.5% of the treasury value over a year. If the Olympus team
+introduces some new products, these returns could start adding up.</p>
+<p>Additionally, one should look at the returns that OlympusDAO is getting on its
+<a href="https://twitter.com/quasicypher1/status/1486737670088896517">yield farming activities</a>.</p>
+<p>If you have opinions on this (backed with data) — I&#39;d be interested to talk to
+you!</p>
+<h2 id="olympus-in-the-long-run">Olympus in the Long Run</h2>
+<p>How can we expect Olympus to behave in the long run?</p>
+<p>Well, the fact of the matter is that OHM is designed to inflate until its price
+drops to 1$. This path could however be stretched indifinitely if the team
+decides to drastically lower the rebase rate. If they lower this rate enough,
+then the earnings from fees on bond sales (both from Olympus and Olympus Pro),
+the treasury value could increase faster than OHM dilutes.</p>
+<p>In the case where the rebase rate stays high, then OHM will decrease in price
+until it reaches 1$. This is not super relevant: as I&#39;ve argued before, it&#39;s the
+price of gOHM (indexed, inflation-protected OHM) that is relevant!</p>
+<p>When the price of OHM reaches 1$, a backstop prevents any further inflation,
+whether via discounted bounding or via rebasing. This would be rather crippling
+for the protocol so I would expect the team to take some measures before that
+happens (whether that&#39;s curbing the rebase rate, or something else).</p>
+<p>Other than that... it could continue chugging along and raising money via bond
+sales. At the end of the day, gOHM is a voucher to a portion of the underlying
+treasury and a call option to speculate on the fluctuation of the premium.</p>
+<p>The real question for Olympus and OHM holders is what the team is going to come
+out with next! The team has plans, see the <a href="/olympus-econ/#further-reading">Further Reading</a>
+section!</p>
+<p>As for questions of price, there are two questions of interest:</p>
+<ol>
+<li>How fast can the sustainable treasury value increase?</li>
+<li>How will the premium evolve?</li>
+</ol>
+<p>At present, the answer to (2) is purely a question of market psychology, meaning
+keeping a finger on the pulse of the hype. Crypto markets are not super mature
+yet, and Olympus is still relatively niche amongst crypto markets.</p>
+<p>More surprisingly, (1) similarly depends and on the premium, and thus on hype.
+When the premium is high, the sustainable treasury value increases rapidly.
+Similarly, I would expect more bonds to be sold when the hype is high and the
+price is on the uptrend.</p>
+<h2 id="on-the-uselessness-of-rebases">On the Uselessness of Rebases</h2>
+<p>At this point, I want to emphasize something that has been implied, but hasn&#39;t
+been made crystal clear at this point: staking and rebases are absolutely
+useless in Olympus, and serve no purpose besides creating hype and a narrative
+based on widespread misunderstanding of Olympus&#39; mechanics.</p>
+<p>As an Olympus dev <a href="https://twitter.com/_nd_go/status/1488060799096696833">says</a>: &quot;I think one of the biggest mistakes the
+DAO made was allowing the APY become the focus of anything.&quot;</p>
+<p>Basically, staking protects the inflation created by rebases. It&#39;s both the
+poison and the cure.</p>
+<p>Since not 100% of the supply is staked, staking does entail a transfer of
+ownership from non-stakers to stakers. But as mentionned before, it&#39;s likely
+that most of the unstaked supply lives in LP pools whose tokens are owned by the
+Olypus treasury. Which means the small ownership increase gets cancelled by a
+loss of value of the treasury.</p>
+<p>One thing this achieves, however is to disincentivize anyone but Olympus to
+provide liquidity. I&#39;m not sure how good or bad that is... On the one hand,
+Olympus can monopolize the transfer fees, on the other hand, that&#39;s just less
+liquidity period.</p>
+<p>This last point is also moot with the introduction of gOHM since you can now
+provide liquidity for gOHM which wraps staked OHM.</p>
+<p>In general, the whole existance of gOHM calls the usefulness of rebases into
+question, since it abstracts away the whole rebase/staking mechanic.</p>
+<p>I think rebases (inherited from <a href="https://www.ampleforth.org/">Ampleforth</a>) were included because OHM was
+envisioned as some kind of stablecoin. But at present, Olympus doesn&#39;t perform
+rebases that lower user balances (which would be necessary to let the price dip
+below 1$ and bring it back to that level).</p>
+<h2 id="on-the-usefulness-of-bonding">On The Usefulness of Bonding</h2>
+<p>We haven&#39;t talked about this much, but one of Olympus&#39; big idea was &quot;buy
+liquidity, don&#39;t rent it&quot;.</p>
+<p>This is based on the observation that liquidity providers can be quite
+mercenary, and will move their liquidity elsewhere once incentivization stops.
+Hence you&#39;re only ever &quot;renting liquidity&quot;. And as we all know, in the long
+term, renting is more expensive than buying outright.</p>
+<p>The idea makes a lot of sense, and for projects where you can expect a high
+enough premium, bonding can make a lot of sense.</p>
+<p>It solves two fundamental problems:</p>
+<ul>
+<li>Raising all the capital upfront means good project get a bad deal. Since your
+project is completely unproven, it will necessarily be valued with a lot of
+circonspection. (Although sometimes, the opposite is true, where project is
+overvalued on the basis of hype...) Raising money as you go with bonds, in a
+way that is not (or not very) dilutive to token holders can make a lot of
+sense for growth-oriented projects.</li>
+<li>It removes the problem of deciding when, how, how much, and from who to raise.
+(Olympus&#39; founder Zeus made <a href="https://twitter.com/ohmzeus/status/1479888653304303617">this very same point</a>). Instead, the
+decision is made by a pre-determined algorithm. An hybrid mode is possible,
+where a project decides on a number of bonds to be sold, and lets the
+algorithm figure out the execution.</li>
+</ul>
+<p>Now, some caveats.</p>
+<p>First of all, not every project is shaped as Olympus, i.e. as a big pot of
+money. Many project pass their revenues directly to the users, and only keep a
+small amount in the treasury (which are equivalent to the Olympus&#39;s DAO funds).
+The model can still work for these project, but the premium has to be modelled
+on the basis of return on capital instead.</p>
+<p>Second, it&#39;s not quite clear that the way Olympus does bond sales (on the basis
+of the bond control value and the debt ratio) is necessarily the best way. I can
+imagine much simpler mechanisms to achieve the same goals (e.g. a <a href="https://en.wikipedia.org/wiki/Dutch_auction">Dutch
+auction</a> where each successful purchase bumps the price back up). The model is
+not obviously wrong either, it&#39;s just not obvious (to me) that it is the best.</p>
+<p>I do expect that Olympus Pro offers more flexibility on this matter, but I
+haven&#39;t reviewed that codebase.</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><p><a href="https://fbifemboy.substack.com/p/a-correct-model-of-olympus-dao">A correct model of OlympusDAO</a>: A harsher (but oh so much
+terser) criticism of OlympusDAO than I make, to which I nevertheless subscribe
+excepted for valuation purposes. The memes criticized here are not dead
+though, as evidenced by <a href="https://twitter.com/ishaheen10/status/1495286382964576256">this presentation</a> of OHM (which isn&#39;t bad,
+but parrots the kool-aid a bit too much).</p>
+</li>
+<li><p><a href="https://twitter.com/ohmzeus/status/1486886116598890498">Zeus on Healthy Debt</a>: the cascading liquidations of loans
+secured against an OHM collateral was a big driver in the OHM price crash.</p>
+</li>
+<li><p><a href="https://hackmd.io/@HMyg0dxkQ96YOMpI30o8PA/mbga">Liquid Interest Rate Markets through Olympus Bonds</a> (+ <a href="https://forum.olympusdao.finance/d/1061-exploring-a-bond-centric-future">governance
+discussion</a>): A whitepaper by Zeus and Indigo from the Olympus team.
+It proposes &quot;an evolution from the existing staking-centric model in favor of
+a bond-centric model&quot;, showing that the OlympusDAO leadership is aware of the
+issues raised in this piece. I&#39;m under the impression they willingly downplay
+(or maybe are still deluded about) the uselessness of staking while at the
+same time phasing it out in favour of &quot;internal OHM bonds&quot; which are
+fixed-term bonds purchased in OHM that give a return in OHM (just like US
+treasury bonds, but using OHM instead of USD). The big advantage there is
+locking away the part of the supply used to purchase bonds (whereas staking if
+fully liquid — users can stake and unstake instantly). Another one is that you
+can emit many more bonds (and thus grow the treasury faster), because it turns
+out most bond purchasers unstake &amp; sell OHM to buy bonds (I had no idea!),
+essentially arbitraging bonding against staking. This whitepaper covers much
+more and honestly deserves its own article!</p>
+</li>
+<li><p><a href="https://olympusdao.medium.com/olympus12-building-a-strong-ecosystem-around-a-web3-native-reserve-currency-416f58175e74">Olympus12: Building a Strong Ecosystem Around a Web3-Native Reserve
+Currency</a>: outlines a strong (imho) and extremely interesting
+action plan for bolstering the economics of OlympusDAO going forward. I do
+think the success of the plan hinges on whether they will manage to convince
+projects and people to effectively treat OHM (more like gOHM) as a token to
+put on the balance sheet / in their long-term portfolio, and not just
+speculation &amp; arbitrage. With the right mix of incentives and interesting use
+cases, they might be able to.</p>
+</li>
+</ul>
+<h2 id="coda">Coda</h2>
+<p>And that&#39;s a wrap! Thanks for following this far! If you&#39;ve liked this, you
+might like some of my other <a href="/finance">finance writings</a>. If you want to keep up with my
+new stuff, subscribe to the RSS feed or <a href="https://twitter.com/norswap">follow me on Twitter</a>.</p>
+<p>I hope that after reading this, you&#39;ll understand a bit better how Olympus
+behaves economically and how it can be valued.</p>
+<p>To conclude with some more personal opinions, I think OlympusDAO was a project
+whose theory was pretty ill-conceived. You can tell by the confused discourse
+around it (including the official discourse), and the uselessness of staking as
+a mechanic. Ironically, this confusion and the high APY hype allowed it to be
+successful.</p>
+<p>Nevertheless, the bonding mechanism is pretty solid and interesting. And am I
+impressed by the humility of the team and the plan they are making to further
+improve the project. I would be surprised is this is the last we heard of
+OlympusDAO.</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/olympus-econ";
+        this.page.identifier = "olympus-econ";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

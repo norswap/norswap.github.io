@@ -189,7 +189,8 @@ learn where all of the above functionality is implemented, and how.</p>
 </li>
 <li><a href="/olympus/#bonding">Bonding</a><ul>
 <li><a href="/olympus/#stablecoin-bond-pricing">Stablecoin Bond Pricing</a></li>
-<li><a href="/olympus/#liquidity-token-bond-pricing">Liquidity Token Bond Pricing</a><br>(This section explains the Risk-Free Value computation for bonds.)</li>
+<li><a href="/olympus/#liquidity-token-bond-pricing">Liquidity Token Bond Pricing</a>
+(This section explains the Risk-Free Value computation for bonds.)</li>
 <li><a href="/olympus/#bonding-in-depth">Bonding in Depth</a><ol>
 <li><a href="/olympus/#1-checking-against-the-maximum-debt">Checking against the maximum debt</a></li>
 <li><a href="/olympus/#2-calculate-the-bond-price">Calculate the bond price</a></li>
@@ -380,6 +381,13 @@ reason for this, but it is not obvious. The contract also calls sOHM
 &quot;fragments&quot;, though I&#39;m not quite sure why. (It could be to better differentiate
 them from gons, and avoid using ambiguous terms like <em>amount</em>, but the contract
 does that sometimes anyway.)</p>
+<p>EDIT: <a href="https://twitter.com/_nd_go">iND1G0</a> points out the terminology is
+inherited from <a href="https://www.ampleforth.org/">Ampleforth</a>, an algorithm
+stablecoin. This explanation from the home page is pretty eloquent:</p>
+<blockquote>
+<p>When Price &gt; $1, wallet balances Increase proportionally
+When Price &lt; $1, wallet balances Decrease proportionally</p>
+</blockquote>
 <p>This sOHM allocation to the staking contract also means that the sOHM contract
 must distinguish between the total supply and the <em>circulating supply</em> (which
 excludes the staking contract&#39;s balance), and that the <code>rebase</code> function must

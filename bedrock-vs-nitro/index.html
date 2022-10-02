@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Optimism Bedrock vs Arbitrum Nitro
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Optimism Bedrock vs Arbitrum Nitro</h1>
+      <span class="post-date">02 Oct 2022</span>
+<p>This is a really nerdy breakdown of the differences between <a href="https://github.com/ethereum-optimism/optimism/blob/develop/specs/overview.md">Optimism Bedrock 🗿</a> and <a href="https://github.com/OffchainLabs/nitro">Arbitrum Nitro 🚀</a>.</p>
+<p>This is all sourced from my reading of the <a href="https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf">Nitro whitepaper</a>, and my intimate sensual knowledge of the Bedrock design.</p>
+<p>This actually started a Twitter thread, but grew way way too big for that.</p>
+<p>This gets very technical. If you want to follow &amp; get confused, I recommend referring to the <a href="https://github.com/ethereum-optimism/optimism/blob/develop/specs/overview.md">Bedrock overview</a> and <a href="https://twitter.com/norswap/status/1552454352316547076">my presentation on our Cannon fault proof system</a>, and of course the <a href="https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf">Nitro whitepaper</a>.</p>
+<p><strong>With this out of the way, let&#39;s dive in!</strong></p>
+<p>First of all, the whitepaper is great and was a pleasure to read. I recommend checking it out for all interested.</p>
+<p>Going into this, my impression was that Bedrock and Nitro share roughly the same architecture, with some smaller differences.</p>
+<p>The paper by and large confirms this. Still, there are quite a few differences, including a few I didn&#39;t expect. These are what this thread is about!</p>
+<h1 id="a-fixed-vs-variable-block-time">(A) Fixed vs variable block time</h1>
+<p>One of the most interesting and consequential things is that Nitro will work like the current version of Optimism, which has one block per transaction, and variable time between blocks.</p>
+<p>We moved away from this because it was a departure from how Ethereum works, and a pain point for devs. Bedrock will have &quot;real&quot; blocks with a fixed block time of 2 seconds.</p>
+<p>Irregular block times make quite a few common contracts wonky, because they keep time using blocks instead of the timestamp. This notably includes the Masterchef contract for distributing LP rewards that originated with Sushiswap.</p>
+<p>I&#39;m not sure why these contracts keep the time with blocks instead of timestamps! Ethereum miners have some leeway in manipulating timestamps, but clients will by default not build upon blocks that are too far away from the wallclock time (15s in Geth), so no problem.</p>
+<p>Anyway, on Optimism this caused the <a href="https://stargate.finance/">StargateFinance</a> incentives to run out months ahead of other chains, because they didn&#39;t account for this peculiarity!</p>
+<p>The &quot;one block per transaction&quot; model has other issues. First, it&#39;s a lot of overhead for storing the chain (one block header per tx). Second, it means the state root needs to be updated after each individual transaction.</p>
+<p>Updating the state root is a pretty expensive operation, whose cost is amortized when done over multiple transactions.</p>
+<h1 id="b-geth-as-a-library-or-as-the-execution-engine">(B) Geth as a library or as the execution engine</h1>
+<p>Nitro uses Geth &quot;as a library&quot; which is minimally modified with hooks to call the proper functionality.</p>
+<p>In Bedrock, a minimally modified Geth runs standalone as the &quot;execution engine&quot; which receives instructions from the rollup node in the same way the execution layer receives instructions from the execution layer in Eth2. We even use the exact same API!</p>
+<p>This has some important consequences. First we’re able to use other clients than Geth, applying a similar minimal diff on top of them. This is not just theory, we already have <a href="https://github.com/protolambda/erigon/tree/optimism">Erigon</a> pretty much ready.</p>
+<p>Second, this lets us reuse the whole Geth (or other client) stack, include at the networking layer, which enables things like peer discovery and state sync, without almost any additional dev work.</p>
+<h1 id="b-state-storage">(B) State storage</h1>
+<p>Nitro keeps some state (&quot;the state of ArbOS&quot;) inside a special account (itself stored within the Arbitrum&#39;s chain state), using a special memory layout to map keys to storage slots.</p>
+<p>(This is purely architecture, with no user impact.)</p>
+<p>Bedrock doesn&#39;t really have much state in that sense, and what little it has is stored in ordinary EVM contracts (to be fair, you could implement the ArbOS state layout using the EVM, though that&#39;s not what I think they are doing).</p>
+<p>When determining/executing the next L2 block, a Bedrock replica looks at:</p>
+<ul>
+<li>the header of the head of the L2 chain</li>
+<li>data read from L1</li>
+<li>some data in EVM contract on the L2 chain, currently only the L1 fee parameters</li>
+</ul>
+<p>In Bedrock, nodes can crash and immediately gracefully restart. They don&#39;t need to maintain an extra databases, because all the necessary information can be found in L1 and L2 blocks. I assume Nitro works the same (the architecture makes this possible).</p>
+<p>It&#39;s however apparent that Nitro does a little more bookkeeping work than Bedrock.</p>
+<h1 id="c-l1-to-l2-message-inclusion-delay">(C) L1 to L2 message inclusion delay</h1>
+<p>Nitro processes L1 to L2 messages (what we call &quot;deposited transactions&quot; or just &quot;deposits&quot;) with a 10 minutes delay. On Bedrock, they should usually be with a small confirmation depth of a few blocks (maybe 10 L1 blocks, so about 2 minutes).</p>
+<p>We do also have a parameter called &quot;sequencer drift&quot; that allows the timestamp of an L2 block to drift ahead of its L1 origin (L1 block that marks the end of the L1 block range from which batches and deposits are derived).</p>
+<p>We still have to decide the final value but we&#39;re leaning towards 10 minutes also, meaning the worst case is 10 minutes. However, this parameter is meant to ensure liveness of the L2 chain during temporary loss of connection to L1.</p>
+<p>Usually however, deposits will be included immediately after the confirmation depth.</p>
+<p>The Nitro paper mentions that this 10 minutes delay is to avoid the deposits from disappearing on L1 due to a re-org. This made me curious about an aspect that the paper does <em>not</em> talk about, and which is: how does the L2 chain handles L1 re-org. I think the answer is it doesn&#39;t.</p>
+<p>This isn&#39;t unreasonable: post-merge there is an L1 finality delay of about 12 minutes. So if it&#39;s okay for deposits to lag 10/12 minutes behind, then this design works.</p>
+<p>Because Bedrock tracks closer to L1, we need to handle L1 re-orgs by re-orging L2 if needed. The confirmation depth should avoid this happening too often.</p>
+<p>Another minor difference there is that if the Nitro sequencer does not include a deposit after 10 minutes, you can &quot;force include&quot; it via an L1 contract call.</p>
+<p>On Bedrock, this is not necessary: it&#39;s invalid to have an L2 block without including the deposits of its L1 origin.</p>
+<p>And because L2 can only be 10 minutes (sequencer drift) ahead of the origin, a chain that does not include deposits after 10 minutes is invalid, will be rejected by validators and challengeable by the fault proof mechanism.</p>
+<h1 id="d-l1-to-l2-messages-retry-mechanism">(D) L1-to-L2 messages retry mechanism</h1>
+<p>Nitro implements &quot;retryable tickets&quot; for L1-to-L2 messages. Say you&#39;re bridging, the L1 part of the tx could work (locking your tokens) but the L2 part could fail. So you need to be able to retry the L2 part (maybe with some more gas) or you&#39;ve lost your tokens.</p>
+<p>Nitro implements this in the ArbOS part of the node. In Bedrock, this is all done in Solidity itself.</p>
+<p>If you use our L1 cross-domain messenger contracts to send a transaction to L2, the transaction lands in our L2 cross-domain messenger which will record its hash, making it retryable. Nitro works the same way, it&#39;s just implemented in the node.</p>
+<p>We also expose a lower-level way to do deposits, via our L1 Optimism Portal contract.</p>
+<p>This doesn&#39;t give you the safety net of the L2 cross-domain messenger retry mechanism, but on the flip side, it means you can implement your own app-specific retry mechanism in Solidity. Pretty cool!</p>
+<h1 id="e-l2-fee-algorithm">(E) L2 fee algorithm</h1>
+<p>On both systems, fees have an L2 part (the execution gas, similar to Ethereum) and an L1 part (cost of L1 calldata). For its L2 fee, Nitro uses a bespoke system, while Bedrock re-uses EIP-1559. Nitro has to do this because they have the aforementioned 1 tx/block system.</p>
+<p>We still have to tune the EIP-1559 parameters to make it work well with the 2 second block time. Today, Optimism charges a low &amp; flat L2 fee (the L1 fee is 99% of the price anyway). I think we might have surge pricing too, but it never kicks in in practice.</p>
+<p>An advantage of reusing EIP-1559 is that it should make it marginally easier for wallets and other tools to compute fees.</p>
+<p>The Nitro gas-metering formula is pretty elegant though, and they seem to have put a lot of thought it.</p>
+<h1 id="f-l1-fee-algorithm">(F) L1 fee algorithm</h1>
+<p>What about L1 fees? This is a bigger difference. Bedrock uses backward-looking L1 basefee data. This data is pretty fresh, because it is delivered via the same mechanism as deposits (i.e. it&#39;s almost instant).</p>
+<p>Because there&#39;s still a risk that the L1 fee will spike, we charge a small multiplier of the expected cost.</p>
+<p>Fun fact: this multiplier (which we have lowered multiple times since launching the chain) is where all the current sequencer revenue come from! With EIP-4844, this will shrink, and revenues will come from (UX-preserving) MEV extraction instead.</p>
+<p>Nitro does something rather much more complicated. I don&#39;t claim to understand all the intricacies of it, but the basic gist is that they have a control system that gets feedback from how much fees were actually paid on L1.</p>
+<p>This means sending transaction back from L1 to L2 with this data. If the sequencer underpaid, it can start charging users less going forward. If it overpaid, it can start charging users more.</p>
+<p>As an aside, you may wonder why we need to transmit fee data from L1 to L2. It&#39;s because we want the fee scheme to be part of the protocol, and open to challenge by fault proofs. Otherwise, rogue sequencers could DoS the chain by setting arbitrarily high fees!</p>
+<p>Finally, transaction batches are compressed in both systems. Nitro charges the L1 fee based on an estimation of how well the transaction will compress. Bedrock currently doesn&#39;t do this, though we plan to.</p>
+<p>Not doing this worsens the perverse incentive to cache data in L2 storage, leading to problematic state growth.</p>
+<h1 id="g-fault-proof-instruction-set">(G) Fault proof instruction set</h1>
+<p>Fault/fraud proofs! Quite a few differences between what Nitro does and how Cannon (the fault proof system we&#39;re currently implementing to sit on top of Bedrock) will work.</p>
+<p>Bedrock compiles to the MIPS instruction set architecture (ISA), Nitro compiles to WASM. They seem to do quite a few more transformation on the output than we do, owing to compiling to a subset of WASM which they call WAVM.</p>
+<p>For instance, they replace floating point (FP) operations by library calls. I suspect that they didn&#39;t want to implement the gnarly FP operations in their on-chain interpreter. We do this too, but the Go compiler takes care of it for us!</p>
+<p>Another example: unlike most ISA that only has jumps, WASM has proper (potentially nested) control flow (if-else, while, etc). The conversion from WASM to WAVM removes this to go back to jumps, again probably for the sake of interpreter simplicity.</p>
+<p>They also compile a mix of Go, C &amp; Rust to WAVM (in different &quot;modules&quot;), while we do Go only. Apparently WAVM allows &quot;the languages&#39; memory management not to interfere&quot;, which I interpret as each WAVM module getting its own heap.</p>
+<p>Something I&#39;m curious about: how they deal with concurrency and garbage collection. We&#39;re able to avoid concurrency fairly easily in minigeth (our stripped down geth) so maybe that part is easy (more on how Bedrock and Nitro use geth at the end of this article).</p>
+<p>However, one of the only transformation we do on MIPS is to patch out garbage collection calls. This is because garbage collection uses concurrency in Go, and concurrency and fault proofs don&#39;t go well together. Does Nitro do the same thing?</p>
+<h1 id="h-bisection-game-structure">(H) Bisection game structure</h1>
+<p>The Bedrock fault proof will work on a run of minigeth that verifies the validity of a state root (actually an <a href="https://github.com/ethereum-optimism/optimism/blob/ab7ed0d43d77d2fd6723d0f4b9b056daca94071f/specs/proposals.md#l2-output-root-proposals-specification">output root</a>) posted to L1. Such state roots are not posted frequently, and a such encompass the validation of many blocks/batches.</p>
+<p>The bisection game in Cannon is played on the execution trace of this (long) run.</p>
+<p>In Nitro, on the other hand, state roots are posted with each set of batches (<em>RBlock</em>) posted to L1.</p>
+<p>The bisection game in Nitro is split in two parts. First find the first state root that challenger and defender disagreee on. Then, find the first WAVM instruction they disagree on in the validator run (which only validates a single transaction).</p>
+<p>The trade-off is more hashing during Nitro execution (see (A) above), but less hashing during the fault proof: each step in the bisection game over an execution trace requires submitting a Merkle root of the memory.</p>
+<p>Structure the fault proof like this also reduces the concern that memory will balloon in the validator, potentialy exceeding the 4G memory limit we currently have for running MIPS.</p>
+<p>This isn&#39;t a hard problem to fix, but we need to be careful in Bedrock, whereas there is probably no chance that validating a single transaction can ever approach the limit.</p>
+<h1 id="i-preimage-oracle">(I) Preimage oracle</h1>
+<p>The validator software used for fault proofs need to read data from L1 and L2. Because it will ultimately &quot;run&quot; on L1 (though only a single instruction), the L2 itself needs to be accessed via L1 - via the state roots &amp; block hashes posted to L1.</p>
+<p>How do you read from the state or chain (whether L1 or L2)?</p>
+<p>A Merkle root node is a hash of its children, so if you can request a preimage, you can traverse the whole state tree. Similarly, you can traverse the whole chain backwards by requesting the preimage of a block header. (Each block header contains the hash of its parent.)</p>
+<p>When executing on-chain, these preimages can be presupplied to the WAVM/MIPS interpreter in advance. (When executing off-chain, you can read the L2 state directly!)</p>
+<p>(Note that you only ever need to access one such preimage, because on-chain you only execute one instruction!)</p>
+<p>So that&#39;s how you read from L2, both on Nitro and Bedrock.</p>
+<p>You need to do something similar for L1 however. Because transaction batches are stored in L1 calldata, which is not accessible from L1 smart contracts.</p>
+<p>Nitro stores the hashes of its batches in an L1 contract (which is why their &quot;Sequencer Inbox&quot; is a contract and not an EOA like for Bedrock). So they at least need to do that, I&#39;m not sure why it wasn&#39;t mentionned.</p>
+<p>In Bedrock, we don&#39;t even store the batches hash (leading to some gas savings). Instead, we walk back the L1 chain using the L1 block headers, then walk down the transaction Merkle root to find the batches in the calldata.</p>
+<p>(Again, on-chain, at most a single preimage needs to be supplied.)</p>
+<p>Section 4.1 ends with a paragraph that reminds us that <a href="https://twitter.com/EdFelten/status/1488632545457618952">Arbitrum invented the &quot;hash oracle trick&quot;</a>. Credit where credit is due. Insecurity shouldn&#39;t be a reason to forget about the Arbitrum team&#39;s contributions!</p>
+<h1 id="j-large-preimages">(J) Large preimages</h1>
+<p>The paper also tells us that the fixed upper bound for an L2 preimage is 110kb, but does not quote the figure for L1.</p>
+<p>In Cannon, we have something called &quot;the large preimage problem&quot;, because one of the potential preimage to invert is the receipts preimage, which contains all the data emitted by Solidity events (&quot;logs&quot; at the EVM level).</p>
+<p>In the receipts, all the log data is concatenated together. This means an attacker could emit a ton of logs, and create an incredibly large preimage.</p>
+<p>We need to read logs because we use them to store deposits (L2-to-L1 messages). This is not strictly necessary: Nitro avoids the issue by storing a hash of the message (it&#39;s more complicated than this, but the end result is the same).</p>
+<p>We don&#39;t store a hash because of the significant cost to compute and store it. Around 20k gas to store and 6 gas per 32 bytes to compute. An average transaction is about 500 bytes, making a batch of 200 transactions cost about 20k gas to hash as well. At 2k$ ETH and 40 gwei basefee, the extra hashing and storage costs 3.2$. At 5k$ ETH and 100 gwei that&#39;s 20$.</p>
+<p>Our current plan to solve the large preimage problem is to use a simple zk-proof to prove the value of some bytes within the preimage (since that&#39;s all an instruction needs to access in practice).</p>
+<h1 id="k-batches--state-roots">(K) Batches &amp; state roots</h1>
+<p>Nitro ties batches with state roots very strongly. They post a set of batches in an <em>RBlock</em> which also contains a state root.</p>
+<p>Bedrock on the other hands posts its batches separately from the state roots. The key advantage is again reduced cost to posting batches (no need to interact with a contract or store data). This lets us post batches more often, and state roots less often.</p>
+<p>Another consequence is that with Nitro, should an RBlock be challenged, the transactions it contains will not be replayed on the new chain.</p>
+<p>In Bedrock, we&#39;re currently debating what to do in the case where a state root gets challenged: replay old transactions, or full rollback? (The current implementation implies a full rollback, but it’s likely to be changed before fault proofs are rolled out.)</p>
+<h1 id="l-misc">(L) Misc</h1>
+<p>Smaller, less consequential differences:</p>
+<p><strong>(i)</strong> Nitro allows individual transactions posted by the sequencer to be &quot;garbage&quot; (invalid signatures, etc). To minimize the changes to Geth, we always throw out batches that contain any garbage.</p>
+<p>The sequencer is always able to find those in advance, so lingering garbage entails either misbheaviour or bug. The sequencer runs the same code as the fault proof, so their definitions of what&#39;s invalid should be identical.</p>
+<p><strong>(ii)</strong> Nitro introduces precompile contracts, notably for L2-to-L1 message passing. We currently don&#39;t use any precompiles, preferring them &quot;pre-deploys&quot;, i.e. actual EVM contracts that exist at special addresses from the genesis block.</p>
+<p>Turns out we can do what we need just fine in the EVM, and this makes the node logic slightly simpler. We&#39;re not religiously opposed to precompiles though, maybe we&#39;ll need one at some point.</p>
+<p><strong>(iii)</strong> The Nitro fault proof does a d-way dissection. The proof-of-concept Cannon implementation uses a bisection, but we&#39;ll probably move to a d-way dissection too.</p>
+<p>There is a very nice formula in the paper that explains the optimal value of <em>d</em> based on fixed and variable costs. I wish they had included concrete examples of how they estimate these costs in practice however!</p>
+<h1 id="coda">Coda</h1>
+<p>No grand conclusion! Or rather: draw your own :)</p>
+<p>If you enjoyed this, follow me <a href="https://twitter.com/norswap">on Twitter</a> for
+more of the same and be notified of new articles.</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/bedrock-vs-nitro";
+        this.page.identifier = "bedrock-vs-nitro";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

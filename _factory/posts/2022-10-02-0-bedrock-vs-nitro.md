@@ -39,7 +39,7 @@ Updating the state root is a pretty expensive operation, whose cost is amortized
 
 Nitro uses Geth "as a library" which is minimally modified with hooks to call the proper functionality.
 
-In Bedrock, a minimally modified Geth runs standalone as the "execution engine" which receives instructions from the rollup node in the same way the execution layer receives instructions from the execution layer in Eth2. We even use the exact same API!
+In Bedrock, a minimally modified Geth runs standalone as the "execution engine" which receives instructions from the rollup node in the same way the execution layer receives instructions from the consensus layer in Eth2. We even use the exact same API!
 
 This has some important consequences. First we’re able to use other clients than Geth, applying a similar minimal diff on top of them. This is not just theory, we already have [Erigon](https://github.com/protolambda/erigon/tree/optimism) pretty much ready.
 
@@ -105,7 +105,7 @@ We still have to tune the EIP-1559 parameters to make it work well with the 2 se
 
 An advantage of reusing EIP-1559 is that it should make it marginally easier for wallets and other tools to compute fees.
 
-The Nitro gas-metering formula is pretty elegant though, and they seem to have put a lot of thought it.
+The Nitro gas-metering formula is pretty elegant though, and they seem to have put a lot of thought in it.
 
 # (F) L1 fee algorithm
 
@@ -201,9 +201,9 @@ Nitro ties batches with state roots very strongly. They post a set of batches in
 
 Bedrock on the other hands posts its batches separately from the state roots. The key advantage is again reduced cost to posting batches (no need to interact with a contract or store data). This lets us post batches more often, and state roots less often.
 
-Another consequence is that with Nitro, should an RBlock be challenged, the transactions it contains will not be replayed on the new chain.
+Another consequence is that with Nitro, should an RBlock be challenged, the transactions it contains will not be replayed on the new chain (new correct state roots).
 
-In Bedrock, we're currently debating what to do in the case where a state root gets challenged: replay old transactions, or full rollback? (The current implementation implies a full rollback, but it’s likely to be changed before fault proofs are rolled out.)
+In Bedrock, we're currently debating what to do in the case where a state root gets successfully challenged: replay old transactions on top of the new state roots, or full rollback? (The current implementation implies a full rollback, but it’s likely to be changed before fault proofs are rolled out.)
 
 # (L) Misc
 

@@ -67,7 +67,7 @@
 <p>Updating the state root is a pretty expensive operation, whose cost is amortized when done over multiple transactions.</p>
 <h1 id="b-geth-as-a-library-or-as-the-execution-engine">(B) Geth as a library or as the execution engine</h1>
 <p>Nitro uses Geth &quot;as a library&quot; which is minimally modified with hooks to call the proper functionality.</p>
-<p>In Bedrock, a minimally modified Geth runs standalone as the &quot;execution engine&quot; which receives instructions from the rollup node in the same way the execution layer receives instructions from the execution layer in Eth2. We even use the exact same API!</p>
+<p>In Bedrock, a minimally modified Geth runs standalone as the &quot;execution engine&quot; which receives instructions from the rollup node in the same way the execution layer receives instructions from the consensus layer in Eth2. We even use the exact same API!</p>
 <p>This has some important consequences. First we’re able to use other clients than Geth, applying a similar minimal diff on top of them. This is not just theory, we already have <a href="https://github.com/protolambda/erigon/tree/optimism">Erigon</a> pretty much ready.</p>
 <p>Second, this lets us reuse the whole Geth (or other client) stack, include at the networking layer, which enables things like peer discovery and state sync, without almost any additional dev work.</p>
 <h1 id="b-state-storage">(B) State storage</h1>
@@ -103,7 +103,7 @@
 <p>On both systems, fees have an L2 part (the execution gas, similar to Ethereum) and an L1 part (cost of L1 calldata). For its L2 fee, Nitro uses a bespoke system, while Bedrock re-uses EIP-1559. Nitro has to do this because they have the aforementioned 1 tx/block system.</p>
 <p>We still have to tune the EIP-1559 parameters to make it work well with the 2 second block time. Today, Optimism charges a low &amp; flat L2 fee (the L1 fee is 99% of the price anyway). I think we might have surge pricing too, but it never kicks in in practice.</p>
 <p>An advantage of reusing EIP-1559 is that it should make it marginally easier for wallets and other tools to compute fees.</p>
-<p>The Nitro gas-metering formula is pretty elegant though, and they seem to have put a lot of thought it.</p>
+<p>The Nitro gas-metering formula is pretty elegant though, and they seem to have put a lot of thought in it.</p>
 <h1 id="f-l1-fee-algorithm">(F) L1 fee algorithm</h1>
 <p>What about L1 fees? This is a bigger difference. Bedrock uses backward-looking L1 basefee data. This data is pretty fresh, because it is delivered via the same mechanism as deposits (i.e. it&#39;s almost instant).</p>
 <p>Because there&#39;s still a risk that the L1 fee will spike, we charge a small multiplier of the expected cost.</p>
@@ -151,8 +151,8 @@
 <h1 id="k-batches--state-roots">(K) Batches &amp; state roots</h1>
 <p>Nitro ties batches with state roots very strongly. They post a set of batches in an <em>RBlock</em> which also contains a state root.</p>
 <p>Bedrock on the other hands posts its batches separately from the state roots. The key advantage is again reduced cost to posting batches (no need to interact with a contract or store data). This lets us post batches more often, and state roots less often.</p>
-<p>Another consequence is that with Nitro, should an RBlock be challenged, the transactions it contains will not be replayed on the new chain.</p>
-<p>In Bedrock, we&#39;re currently debating what to do in the case where a state root gets challenged: replay old transactions, or full rollback? (The current implementation implies a full rollback, but it’s likely to be changed before fault proofs are rolled out.)</p>
+<p>Another consequence is that with Nitro, should an RBlock be challenged, the transactions it contains will not be replayed on the new chain (new correct state roots).</p>
+<p>In Bedrock, we&#39;re currently debating what to do in the case where a state root gets successfully challenged: replay old transactions on top of the new state roots, or full rollback? (The current implementation implies a full rollback, but it’s likely to be changed before fault proofs are rolled out.)</p>
 <h1 id="l-misc">(L) Misc</h1>
 <p>Smaller, less consequential differences:</p>
 <p><strong>(i)</strong> Nitro allows individual transactions posted by the sequencer to be &quot;garbage&quot; (invalid signatures, etc). To minimize the changes to Geth, we always throw out batches that contain any garbage.</p>

@@ -45,7 +45,7 @@ This has some important consequences. First we’re able to use other clients th
 
 Second, this lets us reuse the whole Geth (or other client) stack, include at the networking layer, which enables things like peer discovery and state sync, without almost any additional dev work.
 
-# (B) State storage
+# (C) State storage
 
 Nitro keeps some state ("the state of ArbOS") inside a special account (itself stored within the Arbitrum's chain state), using a special memory layout to map keys to storage slots.
 
@@ -63,7 +63,7 @@ In Bedrock, nodes can crash and immediately gracefully restart. They don't need 
 
 It's however apparent that Nitro does a little more bookkeeping work than Bedrock.
 
-# (C) L1 to L2 message inclusion delay
+# (D) L1 to L2 message inclusion delay
 
 Nitro processes L1 to L2 messages (what we call "deposited transactions" or just "deposits") with a 10 minutes delay. On Bedrock, they should usually be with a small confirmation depth of a few blocks (maybe 10 L1 blocks, so about 2 minutes).
 
@@ -85,7 +85,7 @@ On Bedrock, this is not necessary: it's invalid to have an L2 block without incl
 
 And because L2 can only be 10 minutes (sequencer drift) ahead of the origin, a chain that does not include deposits after 10 minutes is invalid, will be rejected by validators and challengeable by the fault proof mechanism.
 
-# (D) L1-to-L2 messages retry mechanism
+# (E) L1-to-L2 messages retry mechanism
 
 Nitro implements "retryable tickets" for L1-to-L2 messages. Say you're bridging, the L1 part of the tx could work (locking your tokens) but the L2 part could fail. So you need to be able to retry the L2 part (maybe with some more gas) or you've lost your tokens.
 
@@ -97,7 +97,7 @@ We also expose a lower-level way to do deposits, via our L1 Optimism Portal cont
 
 This doesn't give you the safety net of the L2 cross-domain messenger retry mechanism, but on the flip side, it means you can implement your own app-specific retry mechanism in Solidity. Pretty cool!
 
-# (E) L2 fee algorithm
+# (F) L2 fee algorithm
 
 On both systems, fees have an L2 part (the execution gas, similar to Ethereum) and an L1 part (cost of L1 calldata). For its L2 fee, Nitro uses a bespoke system, while Bedrock re-uses EIP-1559. Nitro has to do this because they have the aforementioned 1 tx/block system.
 
@@ -107,7 +107,7 @@ An advantage of reusing EIP-1559 is that it should make it marginally easier for
 
 The Nitro gas-metering formula is pretty elegant though, and they seem to have put a lot of thought in it.
 
-# (F) L1 fee algorithm
+# (G) L1 fee algorithm
 
 What about L1 fees? This is a bigger difference. Bedrock uses backward-looking L1 basefee data. This data is pretty fresh, because it is delivered via the same mechanism as deposits (i.e. it's almost instant).
 
@@ -125,7 +125,7 @@ Finally, transaction batches are compressed in both systems. Nitro charges the L
 
 Not doing this worsens the perverse incentive to cache data in L2 storage, leading to problematic state growth.
 
-# (G) Fault proof instruction set
+# (H) Fault proof instruction set
 
 Fault/fraud proofs! Quite a few differences between what Nitro does and how Cannon (the fault proof system we're currently implementing to sit on top of Bedrock) will work.
 
@@ -141,7 +141,7 @@ Something I'm curious about: how they deal with concurrency and garbage collecti
 
 However, one of the only transformation we do on MIPS is to patch out garbage collection calls. This is because garbage collection uses concurrency in Go, and concurrency and fault proofs don't go well together. Does Nitro do the same thing?
 
-# (H) Bisection game structure
+# (I) Bisection game structure
 
 The Bedrock fault proof will work on a run of minigeth that verifies the validity of a state root (actually an [output root](https://github.com/ethereum-optimism/optimism/blob/ab7ed0d43d77d2fd6723d0f4b9b056daca94071f/specs/proposals.md#l2-output-root-proposals-specification)) posted to L1. Such state roots are not posted frequently, and a such encompass the validation of many blocks/batches.
 
@@ -157,7 +157,7 @@ Structure the fault proof like this also reduces the concern that memory will ba
 
 This isn't a hard problem to fix, but we need to be careful in Bedrock, whereas there is probably no chance that validating a single transaction can ever approach the limit.
 
-# (I) Preimage oracle
+# (J) Preimage oracle
 
 The validator software used for fault proofs need to read data from L1 and L2. Because it will ultimately "run" on L1 (though only a single instruction), the L2 itself needs to be accessed via L1 - via the state roots & block hashes posted to L1.
 
@@ -181,7 +181,7 @@ In Bedrock, we don't even store the batches hash (leading to some gas savings). 
 
 Section 4.1 ends with a paragraph that reminds us that [Arbitrum invented the "hash oracle trick"](https://twitter.com/EdFelten/status/1488632545457618952). Credit where credit is due. Insecurity shouldn't be a reason to forget about the Arbitrum team's contributions!
 
-# (J) Large preimages
+# (K) Large preimages
 
 The paper also tells us that the fixed upper bound for an L2 preimage is 110kb, but does not quote the figure for L1.
 
@@ -195,7 +195,7 @@ We don't store a hash because of the significant cost to compute and store it. A
 
 Our current plan to solve the large preimage problem is to use a simple zk-proof to prove the value of some bytes within the preimage (since that's all an instruction needs to access in practice).
 
-# (K) Batches & state roots
+# (L) Batches & state roots
 
 Nitro ties batches with state roots very strongly. They post a set of batches in an *RBlock* which also contains a state root.
 
@@ -205,7 +205,7 @@ Another consequence is that with Nitro, should an RBlock be challenged, the tran
 
 In Bedrock, we're currently debating what to do in the case where a state root gets successfully challenged: replay old transactions on top of the new state roots, or full rollback? (The current implementation implies a full rollback, but it’s likely to be changed before fault proofs are rolled out.)
 
-# (L) Misc
+# (M) Misc
 
 Smaller, less consequential differences:
 

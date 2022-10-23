@@ -921,6 +921,90 @@ OlympusDAO.&lt;/p&gt;
       <guid isPermaLink="true">http://norswap.com/olympus-econ</guid>
     </item>
     <item>
+      <title>ZK Rollups vs Optimistic Rollups</title>
+      <description>
+&lt;p&gt;This was originally a &lt;a href=&quot;https://twitter.com/norswap/status/1494763568843132931&quot;&gt;tweet thread&lt;/a&gt; that I have reproduced here for
+discoverability and archive purposes (the copy was done on 23 October 2022).&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve only slightly reformatted the text (mostly links) and updated the line of
+code statistics.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;1/ At EthDenver, people keep asking me on my perspective on optimistic rollups
+vs zkRollups. Unfortunately, zkRollups have managed to occupy the whole
+narrative space, so here&amp;#39;s a take that is a bit more nuanced!&lt;/p&gt;
+&lt;p&gt;2/ The first advantages of zkRollups is a lower L1 calldata part of the fee.
+There a two important caveats:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The advantage is probably less than you think, see &lt;a href=&quot;https://twitter.com/norswap/status/1494456477246844928&quot;&gt;this thread to understand why&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Optimistic rollups have an advantage in non-calldata L1 cost, and in L2 cost.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;3/ A zkRollup needs to run the prover for every transaction, which has massive
+overheads (~ 10000x). On the other hand, &lt;a href=&quot;https://github.com/ethereum-optimism/cannon/&quot;&gt;Cannon&lt;/a&gt;&amp;#39;s MIPS-compiled validator has
+10x overhead, and this would disappear if we ran it on MIPS hardware.&lt;/p&gt;
+&lt;p&gt;4/ zkRollups also need to verify the zk proof on chain, which entails L1 gas
+costs on top of the calldata. The next version of Optimism (Bedrock) is going to
+be almost 100% calldata cost.&lt;/p&gt;
+&lt;p&gt;5/ We&amp;#39;re working hard to lower L1 calldata costs for all rollups. We want to
+help bring &amp;quot;blob-carrying transactions&amp;quot; to Ethereum in the Shangai hardfork.&lt;/p&gt;
+&lt;p&gt;See Vitalik Buterin&amp;#39;s &lt;a href=&quot;https://notes.ethereum.org/@vbuterin/blob_transactions&quot;&gt;explanation of blobs&lt;/a&gt; for more details.&lt;/p&gt;
+&lt;p&gt;6/ With blobs, calldata costs would likely lower 1Norswap 🏴‍☠️🔴✨
+@norswap
+·
+Feb 1800x (since rollups would be
+the only ones seriously competing for this calldata space).&lt;/p&gt;
+&lt;p&gt;Suddenly, non-calldata costs would become dominant, and opRollups would have the
+upper hand!&lt;/p&gt;
+&lt;p&gt;7/ To be fair, this would likely revert in the long term as rollups become the dominant way to transact.&lt;/p&gt;
+&lt;p&gt;But it&amp;#39;s still not clear to me that zkRollups will necessarily be cheaper, and
+it&amp;#39;s downright doubtful they will be significantly cheaper.&lt;/p&gt;
+&lt;p&gt;8/ As an aside, blobs are like a primitive version of &amp;quot;danksharding&amp;quot; (named after the wonderful @dankrad
+), which is itself an easier version of full sharding. Find all about this
+&lt;a href=&quot;https://notes.ethereum.org/@hww/workshop_feb_2022&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;9/ The second advantage of zkRollups is the absence of a withdrawal period.&lt;/p&gt;
+&lt;p&gt;This advantage is also a curse. You might know that Optimism recently paid the
+&lt;a href=&quot;https://twitter.com/optimismFND/status/1491821983796895747&quot;&gt;largest bug bounty&lt;/a&gt; in history (2M$) for an infinite money bug.&lt;/p&gt;
+&lt;p&gt;10/ But if the bug had been exploited, the withdrawal period would have allowed
+us to rollback the chain to mitigate the damage.&lt;/p&gt;
+&lt;p&gt;11/ At the moment this is possible because the system is permissioned (as are
+all rollups), but in the future, some form of governance could easily take this
+decision within 7 days.&lt;/p&gt;
+&lt;p&gt;12/ Economic bridges provide enough liquidity for most uses, and would be rekt
+in case of such a hack, but they do not have enough liquidity for an attacker to
+drain the chain.&lt;/p&gt;
+&lt;p&gt;13/ If this happened on a zkRollup instead, the exploiter could just immediately
+drain the whole rollup.&lt;/p&gt;
+&lt;p&gt;The zkProof wouldn&amp;#39;t save you: it&amp;#39;s happy to prove a buggy program/contract ran correctly.&lt;/p&gt;
+&lt;p&gt;14/ What about some advantages of opRollups?&lt;/p&gt;
+&lt;p&gt;For one, they&amp;#39;re much simpler to understand and audit.&lt;/p&gt;
+&lt;p&gt;They are only a handful of people in the world capable of auditing the zk prover and verifier logic.&lt;/p&gt;
+&lt;p&gt;15/ Not only that, but optimistic designs can be incredibly tiny and elegant.&lt;/p&gt;
+&lt;p&gt;In Bedrock, we&amp;#39;re on track to implement the system with &lt;a href=&quot;https://github.com/ethereum-optimism/op-geth&quot;&gt;less than one thousand
+lines of code on top of Geth&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;16/ The node itself (the part responsible for deriving the L2 chain from L1) is
+less than 20k lines of code.&lt;/p&gt;
+&lt;p&gt;We could probably cut that a lot if we weren&amp;#39;t using Go and its notoriously
+verbose error-checking 😁&lt;/p&gt;
+&lt;p&gt;17/ To be clear, I like zero knowledge proofs. We&amp;#39;re not shy about using them,
+if and when it makes sense.&lt;/p&gt;
+&lt;p&gt;e.g. I&amp;#39;m thinking about using a zkProof to aggregate ECDSA signatures &amp;amp; reduce
+our calldata size. (Hit me up if you know how!)&lt;/p&gt;
+&lt;p&gt;18/ I wish a lot of success to our zk competitors. The improvement they make to
+the technology is a net positive for all of us.&lt;/p&gt;
+&lt;p&gt;But to claim that ZK is the only way in the future (and even moreso, the only
+way now) is intellectually dishonest. The truth is much more nuanced.&lt;/p&gt;
+&lt;p&gt;19/ tl;dr&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;opRollups are cheaper on non-calldata cost&lt;/li&gt;
+&lt;li&gt;opRollups will be cheaper with blobs transactions&lt;/li&gt;
+&lt;li&gt;long-terms fees are less clear, but there shouldn&amp;#39;t be a huge difference&lt;/li&gt;
+&lt;li&gt;the withdrawal period is a protection against attacks&lt;/li&gt;
+&lt;li&gt;opRollups MUCH easier to audit&lt;/li&gt;
+&lt;/ul&gt;
+      </description>
+      <pubDate>2022-02-17T23:00:00.000Z</pubDate>
+      <link>http://norswap.com/zk-vs-optimistic</link>
+      <guid isPermaLink="true">http://norswap.com/zk-vs-optimistic</guid>
+    </item>
+    <item>
       <title>Olympus DAO from Primary Sources</title>
       <description>
 &lt;p&gt;If you&amp;#39;re following &lt;a href=&quot;https://ethereum.org/en/defi/&quot;&gt;decentralized finance (aka DeFi)&lt;/a&gt;, you&amp;#39;ve probably heard
@@ -3374,106 +3458,6 @@ and proof-of-stake. See you next time!&lt;/p&gt;
       <pubDate>2021-05-26T22:00:00.000Z</pubDate>
       <link>http://norswap.com/blockchain-how</link>
       <guid isPermaLink="true">http://norswap.com/blockchain-how</guid>
-    </item>
-    <item>
-      <title>Fun With Incentives</title>
-      <description>
-&lt;blockquote&gt;
-&lt;p&gt;Never, ever, think about something else when you should be thinking about the
-power of incentives.&lt;br&gt;— &lt;a href=&quot;https://norswap.com/munger-psychology/&quot;&gt;Charlie Munger&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;During this past month, I had a lot of fun with &lt;a href=&quot;https://1729.com&quot;&gt;1729.com&lt;/a&gt;, a
-newsletter that pays its members in Bitcoins for performing tasks — which are
-typically interesting and will teach you something useful.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s the main things I did so far:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/proof-of-workout/&quot;&gt;Worked out&lt;/a&gt; (didn&amp;#39;t need them for that,
-but it was nice getting 10$ for it!)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/learn-basic-elixir-with-exercism/&quot;&gt;Learned some Elixir&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/decentralized-task-creation/&quot;&gt;Wrote a task for the newsletter to
-reuse&lt;/a&gt; — &lt;a href=&quot;https://ghost.norswap.com/paving-the-titans-way/&quot;&gt;here&amp;#39;s my
-task&lt;/a&gt;. The useful thing in
-this one was actually to setup &lt;a href=&quot;https://www.cloudron.io/&quot;&gt;cloudron&lt;/a&gt; on &lt;a href=&quot;https://www.oracle.com/be/cloud/&quot;&gt;the
-oracle cloud&lt;/a&gt; (not shilling this because I&amp;#39;m
-an Oracle employeed, but because I&amp;#39;m cheap and it&amp;#39;s the only one that has a
-permanent free tier). Cloudron is a cool service manager that lets you install
-a bunch of server apps (including the &lt;a href=&quot;https://ghost.org/&quot;&gt;ghost&lt;/a&gt; blog
-platform). Don&amp;#39;t worry, I still like my &lt;a href=&quot;https://github.com/norswap/norswap.github.io/tree/master/_factory&quot;&gt;homegrown website
-generator&lt;/a&gt;
-better :)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/refer-task-sponsors/&quot;&gt;Cold-emailed some rich people to ask for
-money&lt;/a&gt; — not something I&amp;#39;d normally
-feel very comfortable doing.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/how-to-start-a-new-country/&quot;&gt;Wrote an article expanding on the idea of building a new digital-first
-country&lt;/a&gt; — &lt;a href=&quot;https://ghost.norswap.com/new-country/&quot;&gt;here&amp;#39;s my
-article&lt;/a&gt;. I must admit I feel a bit
-shy about this one, because it&amp;#39;s such an optimistic view — which is not really
-my usual personality. But that&amp;#39;s also why it was a useful exercise to get into
-a different perspective. It did get me thinking about blockchain technologies
-and their potential — expect a more nuanced article on that soon.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/quantum-computing-and-proof-of-memory/&quot;&gt;Learned about quantum
-computing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://1729.com/video-memes-on-indian-crypto/&quot;&gt;Made a video meme about India&amp;#39;s crypto
-ban&lt;/a&gt; — I went for the &lt;a href=&quot;https://www.youtube.com/watch?v=Ecnei9vtLyU&quot;&gt;Hitler
-reacts&lt;/a&gt; classic&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;My submissions got selected on some of these tasks and I got ~220$ out of those
-that have been awarded so far. That&amp;#39;s less that I could have earned otherwise in
-the same timespan if I was hell-bent on earning money. But as we&amp;#39;ll see below,
-that&amp;#39;s not why I did it.&lt;/p&gt;
-&lt;p&gt;There are now new tasks to learn about crypto technologies (the &lt;a href=&quot;https://ens.domains/&quot;&gt;Ethereum Name
-Service&lt;/a&gt; and &lt;a href=&quot;https://1729.com/learn-solidity-with-cryptozombies/&quot;&gt;learning the solidity smart contract
-langauge&lt;/a&gt;. I&amp;#39;m excited to
-do these too.&lt;/p&gt;
-&lt;p&gt;But I&amp;#39;m actually not writing this to shill 1729. Rather, it&amp;#39;s to marvel about
-the power of incentives.&lt;/p&gt;
-&lt;p&gt;See — most of these things I enjoyed doing and might have done without the
-possibility of a monetary compensation. But living is prioritizing (if you&amp;#39;re
-doing it right at least) and besides working out, none of these things were
-high-priority enough.&lt;/p&gt;
-&lt;p&gt;But 1729 offered me a collection of incentives to complete the tasks:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I may earn some money!&lt;/li&gt;
-&lt;li&gt;There&amp;#39;s a deadline.&lt;/li&gt;
-&lt;li&gt;I&amp;#39;ve attempted all tasks so far, so I&amp;#39;m strongly motivated to attempt new
-tasks, for the sake of completion (gamification!)&lt;/li&gt;
-&lt;li&gt;These tasks have generally taught me something, or reinforced some good habit
-or useful behaviour.&lt;/li&gt;
-&lt;li&gt;The tasks have been devised to be doable in a reasonable timeframe — no need
-to worry about biting off more than one can chew.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;To be fair, there was a reason that most of these things were not on my todo
-list. But the added incentives were enough to put them past the hump. And the
-way I use my time is far from optimal. Had I not, say, written an article, I
-might have watched an interesting youtube video instead with no relevance to my
-daily life. The incentives stir you towards spending your time smarter.&lt;/p&gt;
-&lt;p&gt;It also got me thinking. If 1729 can incentivize me in this way, can&amp;#39;t I do the
-same to me? I can certainly chunk task in manageable bits, and set deadlines. I
-can also use &lt;a href=&quot;https://jamesclear.com/stop-procrastinating-seinfeld-strategy&quot;&gt;the seinfeld
-method&lt;/a&gt; and build
-on top of a series of small wins. Paying yourself gets more tricky, however. I
-think I know how to make it work.&lt;/p&gt;
-&lt;p&gt;The key is that I&amp;#39;m cheap. So there are a few not-so-unresonable expenses that I
-don&amp;#39;t make because they are not strictly necessary or an improvement to my
-day-to-day life. Now say there&amp;#39;s something I want to get done, or a behaviour I
-want to promote. If I care enough about that, I can justify paying to speed it
-up. On the other end, I get the reward if I complete the task within the
-deadline. It&amp;#39;s a smart way to get in alignment with yourself.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s a snag though — what if you don&amp;#39;t make the deadline? Do you just put the
-reward back in play? As the payer this makes sense — you want the thing done
-after all. But on the other end, this is the wrong lesson: you can slip the
-deadline but still get the reward (albeit later). I think the key here is to
-reward yourself for consistency. So if you slip, the previous reward might be
-out of play for the next task, which will grant a smaller (or more generic)
-reward. But if you succeed at that one, &lt;em&gt;and&lt;/em&gt; at the next one, then you get the
-original reward. That way, you get the nice rewards only if you keep succeeding
-consistently.&lt;/p&gt;
-&lt;p&gt;I will try to experiment with these micro-incentive structures in the near
-future.&lt;/p&gt;
-      </description>
-      <pubDate>2021-04-29T22:00:00.000Z</pubDate>
-      <link>http://norswap.com/incentives</link>
-      <guid isPermaLink="true">http://norswap.com/incentives</guid>
     </item>
   </channel>
 </rss>

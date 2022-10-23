@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; ZK Rollups vs Optimistic Rollups
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">ZK Rollups vs Optimistic Rollups</h1>
+      <span class="post-date">18 Feb 2022</span>
+<p>This was originally a <a href="https://twitter.com/norswap/status/1494763568843132931">tweet thread</a> that I have reproduced here for
+discoverability and archive purposes (the copy was done on 23 October 2022).</p>
+<p>I&#39;ve only slightly reformatted the text (mostly links) and updated the line of
+code statistics.</p>
+<hr>
+<p>1/ At EthDenver, people keep asking me on my perspective on optimistic rollups
+vs zkRollups. Unfortunately, zkRollups have managed to occupy the whole
+narrative space, so here&#39;s a take that is a bit more nuanced!</p>
+<p>2/ The first advantages of zkRollups is a lower L1 calldata part of the fee.
+There a two important caveats:</p>
+<ul>
+<li>The advantage is probably less than you think, see <a href="https://twitter.com/norswap/status/1494456477246844928">this thread to understand why</a>.</li>
+<li>Optimistic rollups have an advantage in non-calldata L1 cost, and in L2 cost.</li>
+</ul>
+<p>3/ A zkRollup needs to run the prover for every transaction, which has massive
+overheads (~ 10000x). On the other hand, <a href="https://github.com/ethereum-optimism/cannon/">Cannon</a>&#39;s MIPS-compiled validator has
+10x overhead, and this would disappear if we ran it on MIPS hardware.</p>
+<p>4/ zkRollups also need to verify the zk proof on chain, which entails L1 gas
+costs on top of the calldata. The next version of Optimism (Bedrock) is going to
+be almost 100% calldata cost.</p>
+<p>5/ We&#39;re working hard to lower L1 calldata costs for all rollups. We want to
+help bring &quot;blob-carrying transactions&quot; to Ethereum in the Shangai hardfork.</p>
+<p>See Vitalik Buterin&#39;s <a href="https://notes.ethereum.org/@vbuterin/blob_transactions">explanation of blobs</a> for more details.</p>
+<p>6/ With blobs, calldata costs would likely lower 1Norswap 🏴‍☠️🔴✨
+@norswap
+·
+Feb 1800x (since rollups would be
+the only ones seriously competing for this calldata space).</p>
+<p>Suddenly, non-calldata costs would become dominant, and opRollups would have the
+upper hand!</p>
+<p>7/ To be fair, this would likely revert in the long term as rollups become the dominant way to transact.</p>
+<p>But it&#39;s still not clear to me that zkRollups will necessarily be cheaper, and
+it&#39;s downright doubtful they will be significantly cheaper.</p>
+<p>8/ As an aside, blobs are like a primitive version of &quot;danksharding&quot; (named after the wonderful @dankrad
+), which is itself an easier version of full sharding. Find all about this
+<a href="https://notes.ethereum.org/@hww/workshop_feb_2022">here</a>.</p>
+<p>9/ The second advantage of zkRollups is the absence of a withdrawal period.</p>
+<p>This advantage is also a curse. You might know that Optimism recently paid the
+<a href="https://twitter.com/optimismFND/status/1491821983796895747">largest bug bounty</a> in history (2M$) for an infinite money bug.</p>
+<p>10/ But if the bug had been exploited, the withdrawal period would have allowed
+us to rollback the chain to mitigate the damage.</p>
+<p>11/ At the moment this is possible because the system is permissioned (as are
+all rollups), but in the future, some form of governance could easily take this
+decision within 7 days.</p>
+<p>12/ Economic bridges provide enough liquidity for most uses, and would be rekt
+in case of such a hack, but they do not have enough liquidity for an attacker to
+drain the chain.</p>
+<p>13/ If this happened on a zkRollup instead, the exploiter could just immediately
+drain the whole rollup.</p>
+<p>The zkProof wouldn&#39;t save you: it&#39;s happy to prove a buggy program/contract ran correctly.</p>
+<p>14/ What about some advantages of opRollups?</p>
+<p>For one, they&#39;re much simpler to understand and audit.</p>
+<p>They are only a handful of people in the world capable of auditing the zk prover and verifier logic.</p>
+<p>15/ Not only that, but optimistic designs can be incredibly tiny and elegant.</p>
+<p>In Bedrock, we&#39;re on track to implement the system with <a href="https://github.com/ethereum-optimism/op-geth">less than one thousand
+lines of code on top of Geth</a>.</p>
+<p>16/ The node itself (the part responsible for deriving the L2 chain from L1) is
+less than 20k lines of code.</p>
+<p>We could probably cut that a lot if we weren&#39;t using Go and its notoriously
+verbose error-checking 😁</p>
+<p>17/ To be clear, I like zero knowledge proofs. We&#39;re not shy about using them,
+if and when it makes sense.</p>
+<p>e.g. I&#39;m thinking about using a zkProof to aggregate ECDSA signatures &amp; reduce
+our calldata size. (Hit me up if you know how!)</p>
+<p>18/ I wish a lot of success to our zk competitors. The improvement they make to
+the technology is a net positive for all of us.</p>
+<p>But to claim that ZK is the only way in the future (and even moreso, the only
+way now) is intellectually dishonest. The truth is much more nuanced.</p>
+<p>19/ tl;dr</p>
+<ul>
+<li>opRollups are cheaper on non-calldata cost</li>
+<li>opRollups will be cheaper with blobs transactions</li>
+<li>long-terms fees are less clear, but there shouldn&#39;t be a huge difference</li>
+<li>the withdrawal period is a protection against attacks</li>
+<li>opRollups MUCH easier to audit</li>
+</ul>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/zk-vs-optimistic";
+        this.page.identifier = "zk-vs-optimistic";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

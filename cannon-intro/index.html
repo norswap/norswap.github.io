@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; How Cannon Works
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">How Cannon Works</h1>
+      <span class="post-date">11 Mar 2022</span>
+<p>This was originally a <a href="https://twitter.com/norswap/status/1502085000967061504">tweet thread</a> that I have reproduced here for
+discoverability and archive purposes (the copy was done on 23 October 2022).</p>
+<p>I&#39;ve only slightly reformatted the text (mostly links), otherwise this is the
+original version.</p>
+<hr>
+<p>With the Cannon bug bounty out, it&#39;s time for me to take my best stab at
+describing what it is, and how it works.</p>
+<p>Cannon is our next-gen EVM-equivalent fault proof system. It&#39;s what will keep
+your funds secure when you use Optimism. Read to know more!</p>
+<p><img src="/cannon-intro/op-cannon.png" alt=""></p>
+<p>1/44 What to expect?</p>
+<ul>
+<li>Recap on optimistic rollups / fault proofs</li>
+<li>Short history of fault proofs at Optimism</li>
+<li>Most thorough explanation of Cannon (fault proofs?) to ever grace Twitter — quite technical, but approachable</li>
+<li>My longest twitter thread to date</li>
+</ul>
+<p>LET&#39;S FUCKING GO</p>
+<p>2/ Optimistic rollups in brief: users send txs to sequencer. Sequencer executes
+transactions and creates L2 blocks. It also (a) &quot;rolls up&quot; transaction into
+batches submitted to L1 (as calldata) and (b) submits output hashes (which we&#39;ll
+equate to L2 block hashes here) to L1.</p>
+<p>3/ Validators follow the L1 chain, get txs from batches, re-execute them, and
+compare the resulting block hashes to the ones submitted by the sequencer.</p>
+<p>If there&#39;s a mismatch, they challenge the incorrect block hash via a <em>fault
+proof</em>. This is where Cannon comes in.</p>
+<p>4/ (I&#39;m simplifying on purpose here, you can also send L1-to-L2 and L2-to-L1
+txs, such as deposits and withdrawals. But this is isn&#39;t crucial to this
+explanation.)</p>
+<p>5/ A rollups&#39; fault proof system is a way to prove on the L1 chain (i.e.
+<em>trustlessly</em>) that processing the txs from an L2 block doesn&#39;t yield the block
+whose hash was submitted by the sequencer.</p>
+<p>6/ (Crucially, the L2 block includes the state root: a hash of the L2 state
+after executing the txs in the block. This will typically be apple of discord.)</p>
+<p>7/ The easiest way to perform a fault proof is to re-execute the whole block on
+L1. This is what Optimism&#39;s previous fault system attempted to do.</p>
+<p>Unfortunately, this system had many issues.</p>
+<p>8/ To keep costs manageable, every block carried a single transaction. This
+would have had very bad consequences for the scalability of the rollup in the
+long term. Not to mention, it&#39;s very different from how L1 does things.</p>
+<p>9/ Second, <a href="https://en.wikipedia.org/wiki/Interpreter_(computing)">interpreting</a> EVM bytecode onchain is just too expensive.</p>
+<p>This led to the original OVM: a system to deploy L2 bytecode as L1 bytecode.</p>
+<p>10/ The original OVM design works well for simple things, but not when &quot;context&quot;
+is needed. For instance, you can&#39;t translate the L2 NUMBER opcode (returning
+block height) to the L1 NUMBER opcode! These opcodes needed to be translated
+into calls to special contracts.</p>
+<p>11/ Similar issues played out for things like L2 contract calls.</p>
+<p>Replacing opcodes &amp; calls by larger EVM routines &amp; contract calls also meant
+that the max size of contracts on L2 was smaller the max L1 contract size!</p>
+<p>12/ (And indirectly this also caused the choice of requiring a patched Solidity
+compiler. Though it must be said other designs were possible there.)</p>
+<p>13/ The original OVM design was a good first attempt, but it was also clear it
+wasn&#39;t a good long term solution.</p>
+<p>14/ After the team (h/t <a href="https://twitter.com/karl_dot_tech">@karl_dot_tech</a> <a href="https://twitter.com/ben_chain">@ben_chain</a>) &amp;
+<a href="https://twitter.com/realgeorgehotz">@realGeorgeHotz</a> came up with the idea for Cannon, it was decided to
+drop the old fault proof system to start from a sane foundation. This was the
+OVM 2.0 re-genesis.</p>
+<p>15/ (I wasn&#39;t at Optimism at that time and wasn&#39;t consulted, but these names are
+pretty terrible. The OVM 1.0 (just like Arbitrum&#39;s AVM) is only a VM in the most
+abstract sense — it&#39;s a modified instruction set translated to run on the EVM.
+The OVM 2.0 is not a VM in any sense.)</p>
+<p>16/ So how does Cannon prove a [txs → block hash] mismatch if it does not
+execute the whole block on chain?</p>
+<p>The solution is in two parts:</p>
+<ol>
+<li>The challenge game</li>
+<li>The single step execution</li>
+</ol>
+<p>17/ The challenge game is a binary search over the execution trace of the &quot;fault
+proof program&quot;.</p>
+<p>In our case that program is one that, in first approximation, takes the L2 chain
+state and some transactions as inputs and emits an L2 block hash.</p>
+<p>18/ George called this program &quot;minigeth&quot;.</p>
+<p>In reality its input is a set of L1 blockhashes, and the input will be a set of
+L2 blockhashes. I&#39;ll skip the details here as they get into the weeds of
+Optimism Bedrock and not super relevant.</p>
+<p>19/ The important thing is that the input L1 blockhashes are a <em>commitment</em> to
+all the inputs we actually care about: the L2 state and the transactions. We can
+prove these things against the blockhash. For instance, we can prove that a
+batch was posted to one of these L1 blocks.</p>
+<p>20/ To retrieve the transactions &amp; L2 state, minigeth uses a component called
+&quot;the preimage oracle&quot;.</p>
+<p>This is a generic component that lets you go from a hash to a preimage. This is normally
+<a href="https://en.wikipedia.org/wiki/Preimage_attack">impossible</a> to compute for cryptographic hashes.</p>
+<p>21/ So the trick will be to get these [hash → preimage] mappings from somewhere.
+I&#39;ll explain later how the preimage oracle is implemented on &amp; off-chain. But
+take it for granted for now.</p>
+<p>22/ So we have minigeth with our preimage oracle (which btw entirely replaces
+geth&#39;s usual database).</p>
+<p>We compile this to some instruction set, and execute it for our L1 blocks. This
+yields an execution trace, which is the list of every instruction executed
+during the execution.</p>
+<p>23/ During the challenge game, both the challenger and the sequencer do this,
+and then perform a binary search to find the first instruction whose result they
+disagree on.</p>
+<p>24/ It&#39;s a binary search because they start by looking a the result of the
+instruction 1/2 of the way through. If they disagree, they&#39;ll look at the
+instruction 1/4 of the way through, otherwise the instruction 3/4 of the way
+through, etc...</p>
+<p>25/ They&#39;ll keep narrowing the range until they zero in on a single instruction
+they disagree on.</p>
+<p>(Note that the challenger and the sequencer don&#39;t actually need to agree on the
+size of the execution trace.)</p>
+<p>26/ What&#39;s the &quot;result of an instruction&quot;? What do they agree/disagree on? It&#39;s
+simply a <a href="https://en.wikipedia.org/wiki/Merkle_tree">Merkle root</a> of a snapshot of the minigeth&#39;s memory!</p>
+<p>27/ George decided to compile minigeth to <a href="https://en.wikipedia.org/wiki/MIPS_architecture">MIPS</a>. So every step in the
+execution trace is a MIPS instruction.</p>
+<p>Why MIPS? It was one of the simplest instruction for which to implement an
+interpreter on-chain, and Go can natively compile to MIPS!</p>
+<p>28/ To do all of the above, we need to be able to run minigeth off-chain, to (1)
+get the execution trace and (2) generate MIPS memory snapshots.</p>
+<p>This is done by running the MIPS minigeth binary on the QEMU CPU emulator, and
+hooking into the emulator.</p>
+<p>29/ Off-chain (in MIPS-on-QEMU), the preimage oracle is implemented via calls to
+a JSON-RPC endpoint (i.e. querying an Ethereum node). In minigeth, each oracle
+use is tagged with its type, so we know which JSON-RPC call to emit.</p>
+<p>30/ (The most common JSON-RPC call is &quot;eth_getProof&quot;, used very creatively to
+retrieve storage slots and trie nodes.)</p>
+<p>31/ Alright, so the challenger and sequencer have agreed to disagree on a single
+instruction.</p>
+<p>Next comes the single step execution.</p>
+<p>The goal is to execute that single instruction, on the L1 chain.</p>
+<p>32/ For this, we need:</p>
+<ol>
+<li>An on-chain MIPS interpreter to interpret any instruction</li>
+<li>Any location in MIPS memory that the instruction might read</li>
+<li>Any preimage that the instruction might request</li>
+</ol>
+<p>33/ (1) was simply written by George.</p>
+<p>For (2), we already have a Merkle root of a memory snapshot taken right before
+the instruction (from the challenge game). We can use it to prove any memory
+location we might need to supply.</p>
+<p>34/ For (3), we simply presupply the [hash → preimage] mapping by supplying the
+preimage, and then the hash is derived on-chain.</p>
+<p>Note that minigeth off-chain is also instructed to save all the [hash →
+preimage] mappings it uses, so we have those handy.</p>
+<p>35/ Obviously, &quot;preimage requests&quot; are not a native MIPS instruction. Instead,
+it&#39;s encoded as a read to a pre-defined memory location, which &quot;magically&quot; has
+the preimage of the hash that was previously written at another pre-defined
+memory location.</p>
+<p>36/ This behaviour is implemented in the MIPS interpreter on-chain, and in the
+QEMU hooks off-chain.</p>
+<p>37/ Alright, so finally we can use our pre-supplied memory and preimages to run
+the single MIPS instruction on the on-chain MIPS interpreter. This yields a new
+memory snapshot Merkle root, which can be compared to the root asserted by the
+challenger.</p>
+<p>38/ If its Merkle root is the same, the challenge is valid, and the challenger
+wins.</p>
+<p>We haven&#39;t talked about this here, but in this case the challenger would receive
+the sequencer&#39;s &quot;bond&quot; as a reward.</p>
+<p>39/ And that&#39;s most of what there is to it!</p>
+<p>‼️ A very important note before I give you some further reading.</p>
+<p>The current implementation of Cannon DOES NOT allow you to challenge L2 blocks.
+Instead, it&#39;s a proof-of-concept that allows you to challenge L1 blocks.</p>
+<p>40/ So minigeth is currently a program that takes a blockhash as input and
+verifies the validity of that block by re-executing it on top of the previous
+state.</p>
+<p>Obviously, no L1 block should ever be invalid, meaning no challenge should ever
+succeed.</p>
+<p>41/ At least that&#39;s the theory we&#39;re putting on the line in our <a href="https://immunefi.com/bounty/optimismcannon/">bug bounty
+program</a>. Break this assumption and make 50k$ !</p>
+<p>42/ That was a looong thead, but I still had to simplify quite a bit and ommit
+some details.</p>
+<p>So, were can you learn more about Cannon? I&#39;m glad you ask!</p>
+<p>43/</p>
+<ul>
+<li>There&#39;s the <a href="https://github.com/ethereum-optimism/cannon">github repository</a></li>
+<li><a href="https://github.com/ethereum-optimism/optimistic-specs/wiki/Cannon-High-Level-Overview">A high-level overview</a></li>
+<li>A more detailed overview]<a href="https://github.com/ethereum-optimism/optimistic-specs/wiki/Cannon-Overview">detailed</a></li>
+</ul>
+<p>44/ Now, go forth and spread the chant</p>
+<p>cannon cannon cannon</p>
+<p>Cannon! Cannon! Cannon!</p>
+<p>CANNON CANNON CANNON</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/cannon-intro";
+        this.page.identifier = "cannon-intro";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

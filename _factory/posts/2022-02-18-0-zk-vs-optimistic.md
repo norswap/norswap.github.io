@@ -6,12 +6,12 @@ title: "ZK Rollups vs Optimistic Rollups"
 This was originally a [tweet thread][thread] that I have reproduced here for
 discoverability and archive purposes (the copy was done on 23 October 2022).
 
+[thread]: https://twitter.com/norswap/status/1494763568843132931
+
 I've only slightly reformatted the text (mostly links) and updated the line of
 code statistics.
 
 --------------------------------------------------------------------------------
-
-[thread]: https://twitter.com/norswap/status/1494763568843132931
 
 1/ At EthDenver, people keep asking me on my perspective on optimistic rollups
 vs zkRollups. Unfortunately, zkRollups have managed to occupy the whole

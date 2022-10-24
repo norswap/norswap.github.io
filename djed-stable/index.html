@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+       norswap &middot; Design of the $DJED Stablecoin
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Design of the $DJED Stablecoin</h1>
+      <span class="post-date">16 May 2022</span>
+<p>This was originally a <a href="https://twitter.com/norswap/status/1526004123811794944">tweet thread</a> that I have reproduced here for
+discoverability and archive purposes (the copy was done on 24 October 2022).</p>
+<p>I&#39;ve only slightly reformatted the text (mostly links), otherwise this is the
+original version.</p>
+<hr>
+<p>1/16/ Earlier this week, <a href="https://twitter.com/liamihorne">@liamihorne</a> asked if anybody knew about the
+design of the $DJED &quot;algorithmic&quot; stablecoin from @COTInetwork</p>
+<p>I was curious, so I gave it a look...</p>
+<p>2/ The stablecoin is not so much algorithmic as it is overcollateralized in a
+way that separates minting from collateralization.</p>
+<p>3/ On the minting side, users can mint $DJED (stable) for collateral at 100%
+capital efficiency, if the supply is at least 400% collateralized (otherwise,
+you can&#39;t mint). In this case, the collateral is $ADA, so if $ADA is worth 100$,
+you get 100 $DJED back per $ADA.</p>
+<p>4/ On the collateralization side, users can mint $SHEN for $ADA. As I
+understand, $SHEN represents ownership of the $ADA held by the protocol on top
+of 100% $DJED collateralization, and can be redeemed for that underlying.</p>
+<p>5/ To preserve stability, $SHEN cannot be redeemed when the collateralization
+ration (CR) falls under 400%. It also cannot be minted when CR is over 800% (to
+avoid dilution of existing holders).</p>
+<p>6/ This design is perfectly safe (as far as my basic understanding goes): the
+stablecoin is overcollateralized, and if you fall below 400% CR, $SHEN holder
+can&#39;t remove collateral.</p>
+<p>7/ At that point it would take a 75% $ADA price drop for $DJED to be
+uncollateralized. I must also assume the $ADA can be liquidated if approaching
+100% CR (potentially pretty bad for $ADA price if the protocol is successful).</p>
+<p>8/ Additionally, every action from this point onward can only improve the CR:</p>
+<ul>
+<li>If users redeem $DJED for $ADA, CR goes up.</li>
+<li>If users mint $SHEN, CR goes up.</li>
+</ul>
+<p>So quite the opposite of a death spiral.</p>
+<p>9/ For users, this is just a fairly unremakable overcollateralized stablecoin.
+One exception: if you&#39;re a whale, you can get a lot of stables for your $ADA
+without incurring slippage.</p>
+<p>10/ There is also an argument that this avoids liquidaton cascades. I&#39;m not
+entirely convinced, since you still have the problem in extreme cases (which is
+when cascades occur) when you approach 100% CR.</p>
+<p>11/ For $SHEN minters — if I&#39;m understanding is correct — you&#39;re essentially
+levered long $ADA. If $ADA goes up, you own your share of the &gt; 100% pot when
+you joined + what passes into this pot due to price increase.</p>
+<p>12/ e.g. if people bought $DJED for $ADA at 100$, and $ADA goes up to $200, then
+only half the original $ADA is necessary to collateralize the $DJED at 100%, the
+other half passes to the part of the collateral that can be redeemed by $SHEN
+holders.</p>
+<p>13/ On the flip side, if $ADA drops, you&#39;re bearing not only the losses of the &gt;
+100% pot, but also the losses of the $ADA that uses to 100% collateralize the
+$DJED.</p>
+<p>14/ $SHEN minters also have a claim to (some of?) the fees generated by the
+protocol.</p>
+<p>15/ Something interesting is that due to the fact that $SHEN cannot be redeemed
+&lt; 400% CR, you probably can buy it at a discount on an AMM at that time (the
+discount accouting for the lack of liquidity). This is actually a good thing
+that promotes recollateralization.</p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/djed-stable";
+        this.page.identifier = "djed-stable";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif"/></noscript>
+</body>
+</html>

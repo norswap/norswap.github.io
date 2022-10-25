@@ -5,7 +5,7 @@
   <!-- https://css-tricks.com/probably-use-initial-scale1/-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-       norswap
+       norswap &middot; 2022 Update
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
@@ -46,42 +46,39 @@
     </div>
   </div>
   <div class="content container">
-<style scoped>
-.posts { list-style-type: none; padding-left: 0; margin-bottom: 0; }
-.posts > li { border-top: solid 1px #CCC; padding: 20px 0; clear: both; }
-.posts > li .post-content { font-size: 90%; }
-.posts > li > .date-link  { color: inherit; display: block; font-size: 80%; float: right; padding: 3px 0 20px; }
-.posts > li > .title-link { color: inherit; font-weight: bold; }
-.pagination { border-top: solid 1px #CCC; clear:both; color: #AAA; margin-top: 0; padding-top: 20px; }
-</style>
-<ul class="posts">
-  <li>
-    <div class="post-content">
-<blockquote>
-<p>The path to wisdom is like this: each time you get one step closer, the target
-moves two steps away.</p>
-</blockquote>
-    </div>
-    <a class="date-link" href="/path-to-wisdom">08 Jul 2016</a>
-  </li>
-  <li>
-    <a class="title-link" href="/checked-exceptions">In Defence of Checked Exceptions</a>
-    <a class="date-link" href="/checked-exceptions">03 Oct 2015</a>
-  </li>
-  <li>
-    <a class="title-link" href="/java_caster">The Most Useful Java Function</a>
-    <a class="date-link" href="/java_caster">24 Feb 2015</a>
-  </li>
-  <li>
-    <a class="title-link" href="/c_scope_duration_linkage">C: Scope, Duration &amp; Linkage</a>
-    <a class="date-link" href="/c_scope_duration_linkage">26 Jan 2015</a>
-  </li>
+    <div class="post">
+      <h1 class="post-title">2022 Update</h1>
+      <span class="post-date">25 Oct 2022</span>
+<p>This blog has been rather less active than it should have been.</p>
+<p>I, however, have been busy, working at <a href="https://optimism.io">Optimism</a> on
+<a href="https://dev.optimism.io/introducing-optimism-bedrock/">Bedrock</a> and <a href="https://medium.com/ethereum-optimism/cannon-cannon-cannon-introducing-cannon-4ce0d9245a03">Cannon</a>.</p>
+<p>A lot of the action has instead been on <a href="https://twitter.com/norswap/">my Twitter</a>. See in particular <a href="https://twitter.com/norswap/status/1501920423662997504">this
+thread</a> collecting the biggest hits.</p>
+<p>For discoverability and archival purpose, I&#39;ve ported some of these tweet
+threads on the block, backdated to the original date. Here they are:</p>
+<ul>
+<li><a href="/zk-vs-optimistic">ZK Rollups vs Optimistic Rollups</a></li>
+<li><a href="/cannon-intro">How Cannon Works</a></li>
+<li><a href="/djed-stable">Design of the $DJED Stablecoin</a></li>
+<li><a href="/velodrome-liquidity">Velodrome and why it&#39;s a superior system for incentivizing liquidity</a></li>
+<li><a href="/amm-meditations">AMM Meditations 🍃</a></li>
 </ul>
-<div class="pagination">
-  <a href="/9" class="previous">Previous</a>
-  |
-  <span>Next</span>
-</div>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/2022-update";
+        this.page.identifier = "2022-update";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
   <script src="//static.getclicky.com/js" type="text/javascript"></script>
   <script type="text/javascript">try{ clicky.init(101118294); }catch(e){}</script>

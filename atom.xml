@@ -6,6 +6,28 @@
     <link>http://norswap.com/</link>
     <atom:link href="http://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>2022 Update</title>
+      <description>
+&lt;p&gt;This blog has been rather less active than it should have been.&lt;/p&gt;
+&lt;p&gt;I, however, have been busy, working at &lt;a href=&quot;https://optimism.io&quot;&gt;Optimism&lt;/a&gt; on
+&lt;a href=&quot;https://dev.optimism.io/introducing-optimism-bedrock/&quot;&gt;Bedrock&lt;/a&gt; and &lt;a href=&quot;https://medium.com/ethereum-optimism/cannon-cannon-cannon-introducing-cannon-4ce0d9245a03&quot;&gt;Cannon&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A lot of the action has instead been on &lt;a href=&quot;https://twitter.com/norswap/&quot;&gt;my Twitter&lt;/a&gt;. See in particular &lt;a href=&quot;https://twitter.com/norswap/status/1501920423662997504&quot;&gt;this
+thread&lt;/a&gt; collecting the biggest hits.&lt;/p&gt;
+&lt;p&gt;For discoverability and archival purpose, I&amp;#39;ve ported some of these tweet
+threads on the block, backdated to the original date. Here they are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/zk-vs-optimistic&quot;&gt;ZK Rollups vs Optimistic Rollups&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/cannon-intro&quot;&gt;How Cannon Works&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/djed-stable&quot;&gt;Design of the $DJED Stablecoin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/velodrome-liquidity&quot;&gt;Velodrome and why it&amp;#39;s a superior system for incentivizing liquidity&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://norswap.com/amm-meditations&quot;&gt;AMM Meditations 🍃&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+      </description>
+      <pubDate>2022-10-24T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/2022-update</link>
+      <guid isPermaLink="true">http://norswap.com/2022-update</guid>
+    </item>
+    <item>
       <title>Optimism Bedrock vs Arbitrum Nitro</title>
       <description>
 &lt;p&gt;This is a really nerdy breakdown of the differences between &lt;a href=&quot;https://github.com/ethereum-optimism/optimism/blob/develop/specs/overview.md&quot;&gt;Optimism Bedrock 🗿&lt;/a&gt; and &lt;a href=&quot;https://github.com/OffchainLabs/nitro&quot;&gt;Arbitrum Nitro 🚀&lt;/a&gt;.&lt;/p&gt;
@@ -128,6 +150,62 @@ more of the same and be notified of new articles.&lt;/p&gt;
       <pubDate>2022-10-02T05:00:00.000Z</pubDate>
       <link>http://norswap.com/bedrock-vs-nitro</link>
       <guid isPermaLink="true">http://norswap.com/bedrock-vs-nitro</guid>
+    </item>
+    <item>
+      <title>AMM Meditations 🍃</title>
+      <description>
+&lt;p&gt;This was originally a &lt;a href=&quot;https://twitter.com/norswap/status/1548122970903654411&quot;&gt;tweet thread&lt;/a&gt; that I have reproduced here for
+discoverability and archive purposes (the copy was done on 25 October 2022).&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve only slightly reformatted the text (mostly links), otherwise this is the
+original version.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;1/ I wonder how many people realize a volatile-vs-stable AMM position is an
+anti-leveraged position whose value varies with the square root of the change in
+price of the volatile asset. (In exchange for this reduced exposure, you get
+yield.)&lt;/p&gt;
+&lt;p&gt;2/ If the price of ETH is multiplied by X (e.g. X=4 or X=1/4), the value of an
+ETH-USD position will be multiplied by sqrt(X) (e.g. 2 or 1/2).&lt;/p&gt;
+&lt;p&gt;3/ Why? Because of the x*y=k equation. Assuming x is the volatile and y is the
+stable: If x is multipled by X (selling a bunch of the volatile), y must be
+divided by X such that x*X*y/X=k.&lt;/p&gt;
+&lt;p&gt;4/ The price of the volatile is given by y/x. After selling the volatile:
+(y/X)/(x*X) = (y/x)/X^2.&lt;/p&gt;
+&lt;p&gt;The value of the LP position is initially 2*y. After selling the volatile:
+2*y/X.&lt;/p&gt;
+&lt;p&gt;So the price is divided X^2, but the LP position value only by X.&lt;/p&gt;
+&lt;p&gt;5/ However, the impermanent loss is only (1 + X)/2 - sqrt(X), because only half
+of the initial LP position&amp;#39;s value was in the volatile asset.&lt;/p&gt;
+&lt;p&gt;(This number is a multiplier of initial LP position value.)&lt;/p&gt;
+&lt;p&gt;6/ How bad does impermanent loss get?&lt;/p&gt;
+&lt;p&gt;On the up side, ~2.5% for a 50% price increase, ~8.5% for a 2x, 50% for a 4x.&lt;/p&gt;
+&lt;p&gt;On the down side, ~4.2% for a 50% price decrease (halving), 12.5% for a 75%
+decrease (price divided by 4).&lt;/p&gt;
+&lt;p&gt;7/ Notice the asymmetry: you lose less on the down side, but that&amp;#39;s because you
+can never lose more than 50% of the initial LP value (if you held and the
+volatile went to 0, you&amp;#39;d be left with 50c on the dollar).&lt;/p&gt;
+&lt;p&gt;8/ You can ask google &lt;a href=&quot;https://www.google.com/search?q=(1%2BX)/2%20-%20sqrt(X)&quot;&gt;to plot this function&lt;/a&gt; btw (make sure to zoom out
+the plot).&lt;/p&gt;
+&lt;p&gt;9/ Note that these numbers are slightly different (larger) than what you&amp;#39;d get
+with a calculator like &lt;a href=&quot;https://baller.netlify.app&quot;&gt;https://baller.netlify.app&lt;/a&gt;,
+because they&amp;#39;re multiplier (%) of the initial LP position value, whereas the
+calculator gives you a % of the asset value if held.&lt;/p&gt;
+&lt;p&gt;10/ Anyway, what do these numbers mean? It means that if you expect that the
+price could move 4x up or down, you should be getting 50% APY. In a world where
+$ETH can do that, so can most tokens.&lt;/p&gt;
+&lt;p&gt;11/ But who&amp;#39;s getting that? Maybe if you&amp;#39;re lucky and you&amp;#39;re super early to a
+good project. Otherwise LPing on a inflationary shitcoin that is slowly or
+not-so-slowly going to 0 — but then you have another problem.&lt;/p&gt;
+&lt;p&gt;12/ LPing a a volatile-stable pair is a a sucker&amp;#39;s game, and I do not get why
+people do it.&lt;/p&gt;
+&lt;p&gt;UniV3 was going to fix this, but &lt;a href=&quot;https://twitter.com/0xdoug/status/1512296324036759557&quot;&gt;it&amp;#39;s not clear anybody is consistently beating
+impermanent loss in ETH-USDC&lt;/a&gt; (500M+ TVL).&lt;/p&gt;
+&lt;p&gt;13/ On the other hand, stock market (order book) market makers consistently make
+money. On-chain liquidity that does not rely on off-chain agents IS NOT A SOLVED
+ISSUE.&lt;/p&gt;
+      </description>
+      <pubDate>2022-07-15T22:00:00.000Z</pubDate>
+      <link>http://norswap.com/amm-meditations</link>
+      <guid isPermaLink="true">http://norswap.com/amm-meditations</guid>
     </item>
     <item>
       <title>Velodrome and why it&#39;s a superior system for incentivizing liquidity</title>
@@ -2338,155 +2416,6 @@ blockchains as &amp;quot;a protocol/architecture for near-trustless commitments&
       <pubDate>2021-12-10T23:00:00.000Z</pubDate>
       <link>http://norswap.com/essence-blockchains</link>
       <guid isPermaLink="true">http://norswap.com/essence-blockchains</guid>
-    </item>
-    <item>
-      <title>How rollups scale Ethereum</title>
-      <description>
-&lt;p&gt;From the &lt;a href=&quot;https://hackmd.io/ZJR05zr-SP-tm1D9aqKJaA&quot;&gt;overview&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Ethereum&amp;#39;s limited resources, specifically bandwidth, computation, and
-storage, constrain the number of transactions which can be processed on the
-network, leading to extremely high fees. Scaling Ethereum means increasing the
-number of useful transactions the Ethereum network can process, by increasing
-the supply of these limited resources.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;But how do rollups increase these resources? To understand this, we first need
-to give some details about layer-1 (L1) Ethereum.&lt;/p&gt;
-&lt;h2 id=&quot;state-in-l1-ethereum&quot;&gt;State in L1 Ethereum&lt;/h2&gt;
-&lt;p&gt;The size of the L1 state &lt;a href=&quot;https://youtu.be/LjGPCX2V1qk?t=267&quot;&gt;as per summer 2021&lt;/a&gt; was around 35GB.
-However, during execution, the state needs to be stored in a &lt;a href=&quot;https://github.com/norswap/nanoeth/tree/master/src/com/norswap/nanoeth/trees/patricia#readme&quot;&gt;Merkle Patricia
-Tree&lt;/a&gt; (MPT), which takes the effective stored size to 100GB. This size is
-expected to grow by 50GB per year, assuming the Ethereum &lt;a href=&quot;https://ethereum.org/en/developers/docs/gas/#what-is-gas-limit&quot;&gt;gas limit&lt;/a&gt; stays
-constant. These amounts does not even include historical state, some of which
-&lt;strong&gt;must&lt;/strong&gt; be kept to be able to process &lt;a href=&quot;https://www.paradigm.xyz/2021/07/ethereum-reorgs-after-the-merge/&quot;&gt;chain reorganizations&lt;/a&gt;. A node
-must also keep at least some recent block header data.&lt;/p&gt;
-&lt;p&gt;Currently, core developers are not increasing the gas limit because we expect
-higher throughput to cause faster state growth.&lt;/p&gt;
-&lt;p&gt;Still these numbers are manageable. 4TB SSD drives can be purchased for 400$ or
-less. So why don&amp;#39;t we just increase the gas limit?&lt;/p&gt;
-&lt;h2 id=&quot;why-not-increase-the-gas-limit&quot;&gt;Why not increase the gas limit?&lt;/h2&gt;
-&lt;p&gt;There are two reasons. The first is a commitment to keep Ethereum as
-decentralized as possible, which includes making it possible for as many people
-as possible to validate the network. We could increase the gas limit and require
-every validator to spend a few thousand dollars to participate and this wouldn&amp;#39;t
-really decrease the security of the network. However, the same kind of reasoning
-could be repeatedly applied to take us to a situation where you&amp;#39;d need to rent
-in a data center to validate the network. This is extremely undesirable, because
-it would let a small number of majority actors (e.g. staking pools) collude with
-very few people noticing.&lt;/p&gt;
-&lt;p&gt;Let me give just one possible scenario. A majority cabal of staking pools could
-claim to run a jointly-developed custom client, which so happened to have a
-&amp;quot;subtle bug&amp;quot; that associates of the pools are able to exploit for profit. The
-few remaining honest actors need to detect and then identify the problem — are
-the pools or the other validators correct? The pools could make this
-investigation difficult, and by the time the &amp;quot;bug&amp;quot; surfaces, the chain has moved
-on so far that a fork becomes unthinkable. The pools can maintain plausible
-deniability by claiming this was an innocent bug.&lt;/p&gt;
-&lt;p&gt;Like a lot of things in the blockchain space, this is a social problem as much
-as a technical one. One reason more eyes on the chain is better is because it
-can cause more outcry in case of fraud, and give legitimacy to the correct fork.&lt;/p&gt;
-&lt;p&gt;The second reason we don&amp;#39;t want to increase the gas limit is &lt;a href=&quot;https://www.parity.io/blog/what-is-a-light-client/&quot;&gt;light clients&lt;/a&gt;.
-Light clients are clients that can validate the network but are not required to
-store the state. Instead they can request the state from the network and
-validate it against state roots stored in recent block headers. Light clients
-allow reducing the reliance on centralized state providers like Infura.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Aside: how light clients work&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;A light client needs to start with a trusted block header (either coming from
-an initial sync or trusted source). Let&amp;#39;s assume that this hash is a
-semi-recent block hash, updated each time you use your light-client-enabled
-wallet. Then, the next time you use your wallet, you need to get all the block
-headers between that trusted header and the current head of the chain. There
-are solutions to validate these headers in both proof-of-work and
-proof-of-stake, but let&amp;#39;s focus on the latter, as it is Ethereum&amp;#39;s future.&lt;/p&gt;
-&lt;p&gt;To verify a block header, you&amp;#39;ll need to determine that the block was indeed
-signed by known Ethereum validators (stakers). The validator data is small
-enough that it could be kept locally, or you can request it from the network
-and validate it against the trusted block header.&lt;/p&gt;
-&lt;p&gt;Once you&amp;#39;re caught up with the chain (which should be fast unless you haven&amp;#39;t
-opened your wallet in months/years), you can speculatively execute
-transactions locally, or even execute whole new blocks yourself. During these
-executions, you&amp;#39;ll need to request the state from the network, which you can
-again validate against the state Merkle root in the most recent block header.&lt;/p&gt;
-&lt;p&gt;This state can even be obtained from a centralized provider. The difference is
-that you do not need to trust him anymore: now you can verify the state
-against block headers, and you run the computations yourself.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Light clients are expected to run on user&amp;#39;s machines (laptops, cell phones) and
-only sporadically (e.g. when using a wallet). Clearly this puts a limit on
-storage, computation and bandwidth. The storage is solved by getting the state
-from the network, but this further constrains bandwidth.&lt;/p&gt;
-&lt;p&gt;Increasing the gas limit too much would overwhelm light-client&amp;#39;s ability to
-catch up and keep up with the chain, in terms of bandwidth and computation.&lt;/p&gt;
-&lt;p&gt;Finally, light clients help keep Ethereum decentralized by creating more
-validators. Light clients associated with wallets are a formidable deterrent
-because it means these wallets won&amp;#39;t transact on fraudulent chains, even if they
-are supported by a majority of miners/stakers. Vitalik Buterin makes this point
-&lt;a href=&quot;https://vitalik.ca/general/2021/05/23/scaling.html#its-crucial-for-blockchain-decentralization-for-regular-users-to-be-able-to-run-a-node&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;enter-rollups&quot;&gt;Enter Rollups&lt;/h2&gt;
-&lt;p&gt;I first want to acknowledge the fact that how rollups scale Ethereum — while
-preserving its security guarantees — is not as straightforward as it is often
-made out to be.&lt;/p&gt;
-&lt;p&gt;The scaling property of rollups falls out from two facts:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;A rollup needs orders of magnitude less validators than L1 to maintain its
-security. As long as a single honest validator does its job, the network will
-remain secure.&lt;/li&gt;
-&lt;li&gt;State growth can be spread between multiple independent rollups.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Let&amp;#39;s look at (1) first. In an &lt;a href=&quot;https://vitalik.ca/general/2021/01/05/rollup.html&quot;&gt;optimistic rollup&lt;/a&gt;, the rollup will be secure if
-there is always a validator that can submit a fraud proof for every detected
-sequencer fraud. Therefore, it is okay to increase the requirements needed to
-run these validators, as long as motivated entities and individuals are able to
-run them. Note also that many entities have a vested interest in running these
-validators, because they derive value from the rollup: data and insight
-providers like Infura, The Graph, Dune Analytics; as well as projects building
-on top of the rollup. Unlike in my &amp;quot;evil staking pools&amp;quot; scenario, a majority of
-bad actors is no longer able to get away with fraud!&lt;/p&gt;
-&lt;p&gt;In a &lt;a href=&quot;https://vitalik.ca/general/2021/01/05/rollup.html&quot;&gt;zk rollup&lt;/a&gt;, you do not need validators at all for security (you might need
-them for data availability however, depending on the architecture of the
-rollup), but you need to trust the code of the zk verifier smart contract. While
-no external validators are needed, the requirements on the prover (the zk
-pendant of the sequencer) are extreme, as building the zk proofs is very costly.&lt;/p&gt;
-&lt;p&gt;Regarding (2), this lets different validators verify different parts of the
-state, hence not imposing the burden of the extra state of every rollup on every
-validator. Because of (1), we know that it&amp;#39;s okay for each rollup to have many
-less validators than L1. This is also the insight behind &lt;a href=&quot;https://ethereum.org/en/eth2/shard-chains/&quot;&gt;sharding&lt;/a&gt; — though in
-this case the reduced validator requirement does not apply and is solved with
-&lt;a href=&quot;https://vitalik.ca/general/2021/04/07/sharding.html&quot;&gt;random committee selection&lt;/a&gt; instead.&lt;/p&gt;
-&lt;h2 id=&quot;in-summary&quot;&gt;In Summary&lt;/h2&gt;
-&lt;p&gt;We can&amp;#39;t just raise the gas limit to scale Ethereum, because that would raise
-hardware requirements for validators, and the chain needs to be validated as
-broadly as possible to avoid a collusion of majority actors. It would also
-preclude the introduction of light clients to break our reliance on centralized
-data providers.&lt;/p&gt;
-&lt;p&gt;Rollups help scale Ethereum because they require order of magnitude less
-validators than L1 to stay secure (via the use of fraud proofs or zero-knowledge
-proofs), hence the requirements for validators can be increased. Additionally,
-the state growth between multiple rollups that can be validated separately.&lt;/p&gt;
-      </description>
-      <pubDate>2021-12-03T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/rollups-scale</link>
-      <guid isPermaLink="true">http://norswap.com/rollups-scale</guid>
-    </item>
-    <item>
-      <title>Life Updates</title>
-      <description>
-&lt;p&gt;It&amp;#39;s been a crazy year. It was already crazy &lt;a href=&quot;https://norswap.com/ragged&quot;&gt;back in March&lt;/a&gt;, but
-against my better judgement, I (thankfully!) doubled down.&lt;/p&gt;
-&lt;p&gt;In June, I took a leave from my Job at Oracle to take part in the &lt;a href=&quot;https://blog.ethereum.org/2021/05/13/core-dev-apprenticeship/&quot;&gt;Ethereum Core
-Developer Apprenticeship&lt;/a&gt; for four months. I learned a ton — here&amp;#39;s &lt;a href=&quot;https://github.com/ethereum-cdap/cohort-zero/blob/main/showcase/norswap.md&quot;&gt;a
-recap&lt;/a&gt; of what I did there.&lt;/p&gt;
-&lt;p&gt;By the end of the program, I was sold, and I joined &lt;a href=&quot;https://www.optimism.io/&quot;&gt;Optimism&lt;/a&gt; to work on
-scaling the Ethereum blockchain. My first task there will be to help &lt;a href=&quot;https://github.com/ethereum-optimism/optimistic-specs&quot;&gt;specify
-and prototype&lt;/a&gt; the new version of the Optimistic Ethereum rollup. It&amp;#39;s
-been a blast so far!&lt;/p&gt;
-&lt;p&gt;Expect more content soon, especially blockchain-related. If you hate blockchains
-— I&amp;#39;m so sorry.&lt;/p&gt;
-      </description>
-      <pubDate>2021-12-03T23:00:00.000Z</pubDate>
-      <link>http://norswap.com/life-updates</link>
-      <guid isPermaLink="true">http://norswap.com/life-updates</guid>
     </item>
   </channel>
 </rss>

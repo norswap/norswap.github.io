@@ -67,7 +67,7 @@ least not enough to answer most of my question. What I read about it also didn&#
 seem to make sense from an economic standpoint, but this was impossible to
 determine without establish ground truth on OlympusDAO&#39;s inner workings.</p>
 <p>So why were people talking about Olympus you ask? First, look at this chart:</p>
-<p><img src="/olympus/ohm-price.png" alt="OHM price chart"></p>
+<p><img src="ohm-price.png" alt="OHM price chart"></p>
 <p>Quite volatile (up 4x, down 6x, up 6x, down 12x), but nothing extraordinary for
 crypto. No, what is incredible is that this is while OlympusDAO was offering
 <a href="https://hackernoon.com/earning-passive-income-with-defi-staking-an-overview-4a1y3720">stakers</a> interest rates (aka <a href="https://www.investopedia.com/terms/a/apy.asp">APY</a>) of thousands of percents (&gt; 1700% as we
@@ -83,7 +83,7 @@ dipped under its treasury value.</p>
 <p>The market capitalization chart (which is in many ways much more relevant than
 the price charts, because of inflation) for OHM tells of its meteoric rise, and
 recent fall:</p>
-<p><img src="/olympus/ohm-market-cap.png" alt="OHM market capitalization chart"></p>
+<p><img src="ohm-market-cap.png" alt="OHM market capitalization chart"></p>
 <p><strong>In a subsequent article, I will dive deep into the economics of OlympusDAO and
 how the current situation is not all that surprising.</strong> I will say right now
 that I do not think Olympus is a scam or a ponzi scheme (which many people
@@ -170,37 +170,37 @@ before, these will be the subject of a subsequent article!</p>
 learn where all of the above functionality is implemented, and how.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
-<li><a href="/olympus/#">Top</a></li>
-<li><a href="/olympus/#summary-of-findings">Summary of Findings</a></li>
-<li><a href="/olympus/#olympus-v11-vs-olympus-v2">Olympus v1.1 vs Olympus v2</a></li>
-<li><a href="/olympus/#contracts">Contracts</a><ul>
-<li><a href="/olympus/#v11-contracts">v1.1 Contracts</a></li>
-<li><a href="/olympus/#v2-contracts">v2 Contracts</a></li>
-<li><a href="/olympus/#upgrade-paths">Upgrade Paths</a></li>
+<li><a href="#">Top</a></li>
+<li><a href="#summary-of-findings">Summary of Findings</a></li>
+<li><a href="#olympus-v11-vs-olympus-v2">Olympus v1.1 vs Olympus v2</a></li>
+<li><a href="#contracts">Contracts</a><ul>
+<li><a href="#v11-contracts">v1.1 Contracts</a></li>
+<li><a href="#v2-contracts">v2 Contracts</a></li>
+<li><a href="#upgrade-paths">Upgrade Paths</a></li>
 </ul>
 </li>
-<li><a href="/olympus/#basics--staking">Basics &amp; Staking</a><ul>
-<li><a href="/olympus/#intro-to-rebases--sohm-balances">Intro to Rebases &amp; sOHM Balances</a></li>
-<li><a href="/olympus/#staking--unstaking">Staking &amp; Unstaking</a></li>
-<li><a href="/olympus/#rebases-in-depth">Rebases in Depth</a></li>
-<li><a href="/olympus/#locker">Locker</a></li>
-<li><a href="/olympus/#sohm-index">sOHM Index</a></li>
+<li><a href="#basics--staking">Basics &amp; Staking</a><ul>
+<li><a href="#intro-to-rebases--sohm-balances">Intro to Rebases &amp; sOHM Balances</a></li>
+<li><a href="#staking--unstaking">Staking &amp; Unstaking</a></li>
+<li><a href="#rebases-in-depth">Rebases in Depth</a></li>
+<li><a href="#locker">Locker</a></li>
+<li><a href="#sohm-index">sOHM Index</a></li>
 </ul>
 </li>
-<li><a href="/olympus/#bonding">Bonding</a><ul>
-<li><a href="/olympus/#stablecoin-bond-pricing">Stablecoin Bond Pricing</a></li>
-<li><a href="/olympus/#liquidity-token-bond-pricing">Liquidity Token Bond Pricing</a>
+<li><a href="#bonding">Bonding</a><ul>
+<li><a href="#stablecoin-bond-pricing">Stablecoin Bond Pricing</a></li>
+<li><a href="#liquidity-token-bond-pricing">Liquidity Token Bond Pricing</a>
 (This section explains the Risk-Free Value computation for bonds.)</li>
-<li><a href="/olympus/#bonding-in-depth">Bonding in Depth</a><ol>
-<li><a href="/olympus/#1-checking-against-the-maximum-debt">Checking against the maximum debt</a></li>
-<li><a href="/olympus/#2-calculate-the-bond-price">Calculate the bond price</a></li>
-<li><a href="/olympus/#3-calculate-the-market-value-USD-bond-price">Calculate the market-value USD bond price</a></li>
-<li><a href="/olympus/#4-calculate-the-payout-and-dao-fee">Calculate the payout and DAO fee</a></li>
-<li><a href="/olympus/#5-mint-ohm-for-payout-and-dao-fee">Mint OHM for payout and DAO fee</a></li>
-<li><a href="/olympus/#6-pay-the-dao-and-perform-book-keeping">Pay the DAO and perform book-keeping</a></li>
+<li><a href="#bonding-in-depth">Bonding in Depth</a><ol>
+<li><a href="#1-checking-against-the-maximum-debt">Checking against the maximum debt</a></li>
+<li><a href="#2-calculate-the-bond-price">Calculate the bond price</a></li>
+<li><a href="#3-calculate-the-market-value-USD-bond-price">Calculate the market-value USD bond price</a></li>
+<li><a href="#4-calculate-the-payout-and-dao-fee">Calculate the payout and DAO fee</a></li>
+<li><a href="#5-mint-ohm-for-payout-and-dao-fee">Mint OHM for payout and DAO fee</a></li>
+<li><a href="#6-pay-the-dao-and-perform-book-keeping">Pay the DAO and perform book-keeping</a></li>
 </ol>
 </li>
-<li><a href="/olympus/#example">Example</a></li>
+<li><a href="#example">Example</a></li>
 </ul>
 </li>
 </ul>

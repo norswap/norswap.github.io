@@ -420,8 +420,7 @@ diligence — to go further than existing approaches.
    Springer, Berlin, Heidelberg, 2008.
 
 7. Torlak, Emina, and Rastislav Bodik. "A lightweight symbolic virtual machine
-   for solver-aided host languages." ACM SIGPLAN Notices. Vol. 49. No. 6. ACM,
-   2014.
+   for solver-aided host languages." ACM SIGPLAN Notices. Vol. 49. No. 6. ACM, 2014.
 
 8. Olsson, Roland. "Inductive functional programming using incremental program
    transformation." Artificial intelligence 74.1 (1995): 55-81.

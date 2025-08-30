@@ -1,6 +1,6 @@
 ---
 layout: brief
-title: ""
+title: "CHAMP Map"
 ---
 
 As a learning exercise, I implemented the CHAMP (Compressed Hash-Array Mapped

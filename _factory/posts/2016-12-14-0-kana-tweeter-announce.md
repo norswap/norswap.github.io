@@ -1,6 +1,6 @@
 ---
 layout: brief
-title: ""
+title: "Kana Tweeter"
 ---
 
 I made a small Tweeter bot that tweets one Japanese Kana every hour.

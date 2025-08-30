@@ -5,7 +5,7 @@
   <!-- https://css-tricks.com/probably-use-initial-scale1/-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-       norswap &middot; Ruby Methods, Procs and Blocks
+     norswap &middot; Ruby Methods, Procs and Blocks
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
@@ -324,18 +324,21 @@ inside the method.</p>
 <h3 id="procs-vs-lambdas">Procs vs Lambdas</h3>
 <p>Lambdas are special, stricter kind of procs.</p>
 <ul>
-<li>Regular procs can perform non-local control flow: if a proc uses <code>retry</code>,
- <code>return</code>, <code>break</code>, <code>next</code> or <code>redo</code>, those will be interpreted as though the
- proc&#39;s code had been inlined at the point where the proc was called. This can
- only happen in the method in which the proc was originally defined. If called
- outside the method, a proc that performs non-local control flow will cause a
- <code>LocalJumpError</code>.</li>
-<li>If regular procs are passed too many arguments, the extra arguments are
+<li><p>Regular procs can perform non-local control flow: if a proc uses <code>retry</code>,
+<code>return</code>, <code>break</code>, <code>next</code> or <code>redo</code>, those will be interpreted as though the
+proc&#39;s code had been inlined at the point where the proc was called. This can
+only happen in the method in which the proc was originally defined. If called
+outside the method, a proc that performs non-local control flow will cause a
+<code>LocalJumpError</code>.</p>
+</li>
+<li><p>If regular procs are passed too many arguments, the extra arguments are
 ignored instead of causing an error (the behaviour is otherwise the same as
 for methods, as outlined above). Lambda behave like methods for parameter
-assignment.</li>
-<li>Regular prrocs with multiple parameters can be passed a single array argument,
-which will be automatically &quot;splatted&quot;.</li>
+assignment.</p>
+</li>
+<li><p>Regular prrocs with multiple parameters can be passed a single array argument,
+which will be automatically &quot;splatted&quot;.</p>
+</li>
 </ul>
 <p><code>proc</code> and <code>Proc.new</code> are used to create regular procs, while <code>lambda</code> and <code>-&gt;</code>
 create lambdas.</p>

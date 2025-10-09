@@ -1,0 +1,38 @@
+<style scoped>
+.posts { list-style-type: none; padding-left: 0; margin-bottom: 0; }
+.posts > li { border-top: solid 1px #CCC; padding: 20px 0; clear: both; }
+.posts > li .post-content { font-size: 90%; }
+.posts > li > .date-link  { color: inherit; display: block; font-size: 80%; float: right; padding: 3px 0 20px; }
+.posts > li > .title-link { color: inherit; font-weight: bold; }
+.pagination { border-top: solid 1px #CCC; clear:both; color: #AAA; margin-top: 0; padding-top: 20px; }
+</style>
+<ul class="posts">
+{%- for post in posts %}
+  <li>
+  {%- if post.layout == "post" %}
+    <a class="title-link" href="/{{ post.slug }}">{{ post.title }}</a>
+    <a class="date-link" href="/{{ post.slug }}">{{ post.date }}</a>
+  {%- elif post.layout == "brief" %}
+    <div class="post-content">
+      {{ post.body | indent(6) }}
+    </div>
+    <a class="date-link" href="/{{ post.slug }}">{{ post.date }}</a>
+  {%- endif %}
+  </li>
+{%- endfor %}
+</ul>
+<div class="pagination">
+{%- if page == 1 %}
+  <span>Previous</span>
+{%- elif page == 2 %}
+  <a href="/" class="previous">Previous</a>
+{%- else %}
+  <a href="/{{ page - 1 }}" class="previous">Previous</a>
+{%- endif %}
+  |
+{%- if page == num_pages %}
+  <span>Next</span>
+{%- else %}
+  <a href="/{{ page + 1 }}" class="next">Next</a>
+{%- endif %}
+</div>

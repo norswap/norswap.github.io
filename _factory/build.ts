@@ -178,7 +178,7 @@ async function iteratePages(dirPath: string): Promise<void> {
         const layout = parsed.data.layout
         const body = (await marked(parsed.content)).trim()
         const date = page.pageType === PageType.POST ? formatDate(page.date) : ""
-        const content: Content = { layout, title, body: layout === "brief" ? body : undefined }
+        const content: Content = { layout, title, body }
 
         if (page.pageType === PageType.POST) {
             page.content = content
@@ -307,7 +307,7 @@ async function buildAtom() {
         date: post.date.toISOString(),
         title: post.content!.title,
         // Replace absolute (/) links with the domain name, for feed readers who can't handle it.
-        content: post.content!.body?.replace(/(src|href)=&quot;\//g, `$1=&quot;${DOMAIN}/`),
+        body: post.content!.body?.replace(/(src|href)=&quot;\//g, `$1=&quot;${DOMAIN}/`),
     }))
     const rendered = nunjucks.render(ATOM_TEMPLATE, {
         domain: DOMAIN,

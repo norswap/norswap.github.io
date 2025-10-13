@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <title>
+     norswap &middot; Lockonomics
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Lockonomics</h1>
+      <span class="post-date"></span>
+<h2 id="or-how-i-learn-to-stop-worrying-and-love-the-dromes">or: How I Learn to Stop Worrying and Love the Dromes</h2>
+<hr>
+<p>I finally got tired of hearing people say that Velodrome/Aerodrome was a ponzi, and having to correct them. Time to set
+the record straight, while not hiding from the uncomfortable.</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<!-- TOC -->
+<ul>
+<li><p><a href="#background">Background</a></p>
+<ul>
+<li><a href="#disclaimer">Disclaimer</a></li>
+<li><a href="#whats-a-drome">What&#39;s a drome?</a></li>
+<li><a href="#ve33-metadex-lockonomics">ve(3,3)? MetaDex? Lockonomics?</a></li>
+<li><a href="#whats-being-argued">What&#39;s being argued</a></li>
+</ul>
+</li>
+<li><p><a href="#lockonomics-explained">Lockonomics explained</a></p>
+<ul>
+<li><a href="#basic-plumbing">Basic Plumbing</a><ul>
+<li><a href="#basic-dex--uniswap">Basic DEX (~ Uniswap)</a></li>
+<li><a href="#velodrome">Velodrome</a></li>
+<li><a href="#an-apple-to-apple-comparison">An apple-to-apple comparison</a></li>
+</ul>
+</li>
+<li><a href="#the-key-insights-behind-lockonomics">The key insights behind lockonomics</a><ul>
+<li><a href="#1-velodrome-imposes-a-speculation-tax-on-short-term-holders">1. Velodrome imposes a speculation tax on short-term holders</a></li>
+<li><a href="#2-locking-is-beneficial-to-trading-flows">2. Locking is beneficial to trading flows</a></li>
+<li><a href="#3-there-is-a-floor-underneath-the-house">3. There is a floor underneath the house</a></li>
+<li><a href="#4-emission-control-makes-the-system-resilient-to-exogenous-shocks">4. Emission control makes the system resilient to exogenous shocks</a></li>
+<li><a href="#conclusion--for-lockers-heads-i-win-tails-i-win">Conclusion — For Lockers: Heads I win, Tails I win</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a href="#velodrome-in-practice">Velodrome in practice</a></p>
+<ul>
+<li><a href="#emissions--revenue">Emissions &gt; Revenue</a></li>
+<li><a href="#growth--moats">Growth &amp; Moats</a></li>
+</ul>
+</li>
+<li><p><a href="#lockonomics-beyond-amms">Lockonomics beyond AMMs</a></p>
+</li>
+<li><p><a href="#common-objections--questions">Common Objections &amp; Questions</a></p>
+<ul>
+<li><a href="#velodrome-is-a-ponzi-scheme">Velodrome is a Ponzi scheme</a></li>
+<li><a href="#velodrome-is-printing-money-out-of-thin-air">Velodrome is printing money out of thin air</a></li>
+<li><a href="#velo-will-inflate-to-nothing">VELO will inflate to nothing</a></li>
+<li><a href="#uniswap-is-better-than-velodrome">Uniswap is better than Velodrome</a></li>
+<li><a href="#how-does-ve33-relate-to-olympusdaos-33">How does ve(3,3) relate to OlympusDAO&#39;s (3,3)</a></li>
+<li><a href="#what-about-the-rebase">What about the rebase?</a></li>
+<li><a href="#4-years-is-forever-so-there-is-no-way-to-cash-out-of-velodrome">4 years is forever, so there is no way to cash out of Velodrome</a></li>
+<li><a href="#are-there-other-reasons-to-be-bullish-on-velodrome">Are there other reasons to be bullish on Velodrome?</a></li>
+<li><a href="#whats-the-batman-token-story">What&#39;s the BATMAN token story?</a></li>
+</ul>
+</li>
+<li><p><a href="#dune-dashboards">Dune Dashboards</a></p>
+</li>
+</ul>
+<!-- TOC -->
+
+<h1 id="background">Background</h1>
+<h3 id="disclaimer">Disclaimer</h3>
+<p>I introduced the Velodrome team to Optimism while I was working there, back in the day. So me and them go way back.</p>
+<p>None of this is investment or financial advice, which I am not qualified to give.</p>
+<h3 id="whats-a-drome">What&#39;s a drome?</h3>
+<p>Velodrome is the leading DEX on Optimism, and the first successful DEX of the ve(3,3) variety. Aerodrome is the leading
+DEX on Base, and features the highest-volume ETH-USDC and BTC-USDC pools in all of DeFi.</p>
+<p>ve(3,3) was devised by Andre Cronje for a DEX called Solidly, launched on the Fantom blockchain. The Solidly launch
+didn&#39;t exactly go well. Despite rapidly accumulating 2B$ in TVL (this was peak DeFi hype and most of that was in now
+worthless farming coins on Fantom), there were numerous issues.</p>
+<p>First, $SOLID was distributed was to top-TVL protocols on the Fantom blockchain. This lead to a race between Solidly
+over-layers to take control of the supply and then offer their own &quot;liquid locking&quot; system on top to direct voting
+power. If this seems confusing, see later for the explanation of how Velodrome works. If you&#39;re familiar with Curve
+Finance, think of these projects as the Convex layer this is not fully accurate, as Solidly does have &quot;bribing&quot;
+built-in). Unfortunately, the products were not ready for the Solidly launch and suffered numerous issues.</p>
+<p>Second, in classical Cronje style, he yeeted the contracts day one with zero centralized control. While this is the
+ideal end state, it&#39;s good to take some precautions with novel systems. The contracts (as far as I know) suffered no
+bugs, but there was a funny occurrence where control would have come in handy (search “batman” in this doc for more
+info). This was crowned by Cronje ragequitting crypto (not for the first time — he&#39;s back again now) just one month
+after launching Solidly.</p>
+<p>At that time, what would become the Velodrome team was involved with veDAO, one of the teams building on top of Solidly.
+They thought the idea was too good to waste, and went on to create Velodrome on Optimism (in part thanks to yours truly)
+and later Aerodrome, now the leading DEX on Base, and one the major leading DEX sporting the highest volume ETH-USDC and
+BTC-USDC pools in all of DeFi.</p>
+<p>In what follows I will use “Velodrome” as stand in for “Velodrome &amp; Aerodrome”, and all my comments about Velodrome
+apply equally to Aerodrome, unless otherwise specified.</p>
+<h3 id="ve33-metadex-lockonomics">ve(3,3)? MetaDex? Lockonomics?</h3>
+<p>I somehwat dislike the <em>ve(3,3)</em> moniker. The &quot;ve” part refers to “vote escrow”, which is borrowed from Curve Finance,
+one of the major inspiration behind Solidly. That part is fine. The (3,3) part is a nod to OlympusDAO.</p>
+<p>OlympusDAO... is difficult to describe. I wrote <a href="https://norswap.com/olympus/">an analysis of it</a> back in the day,
+because I didn&#39;t understand why seemingly smart people were doting on it.</p>
+<p>The summary is it&#39;s nothing too good. In short, it&#39;s essentially a memecoin with sky-high inflation accruing to stakers
+which was going to invest token sale proceeds into various ventures. Some people call it a ponzi (which is incorrect,
+<a href="#velodrome-is-a-ponzi-scheme">see later</a>), but it definitely wasn&#39;t a smart investment and there was definitely a fair
+amount of “suspension of disbelief” involved, if not something worse.</p>
+<p>I think the ve(3,3) model does suffer the association, and its contributions to the design are negligible (we&#39;ll go back
+to this later).</p>
+<p>The Velodrome team itself has tried to rebrand the model as
+<a href="https://paragraph.com/@dromos/the-metadex-and-defi-introduction-and-overview">MetaDex</a>, writing <a href="https://paragraph.com/@dromos">a series of
+article</a> on the topic.</p>
+<p>I think this series of article make a lot of good points, but I don&#39;t think they cut right to the core of why the model
+works, and why people&#39;s claims about it are incorrect. It&#39;s however an excellent read, and in particular most of what
+we&#39;ll touch on is explained with a different emphasis in <a href="https://paragraph.com/@dromos/sustainability">Part 4 on
+Sustainability</a>.</p>
+<p>This is my attempt to clarify things, and in the process I&#39;m coining “Lockonomics” for the model followed by Velodrome —
+which could potentially be extended to other places!</p>
+<h3 id="whats-being-argued">What&#39;s being argued</h3>
+<p>I&#39;ll be arguing that lockonomics is a good model, or at the very least an interesting model with interesting trade-offs
+that is not inferior to more traditional tokens model.</p>
+<p>We&#39;ll explore this by contrasting how Velodrome compared to how most classical AMM DEXes work, and we&#39;ll use Uniswap as
+a stand-in.</p>
+<p>Some people think that AMM DEXes are all bad (because of impermanent loss (IL) or loss-versus-rebalancing (LVR)). This
+is immaterial to the current discussion, which focuses on which token model works better if we assume that you are
+running a &quot;classical&quot; AMM DEX as a given.</p>
+<p>As we&#39;ll see, lockonomics could easily generalize to any other revenue-generating DeFi protocol.</p>
+<h1 id="lockonomics-explained">Lockonomics explained</h1>
+<h2 id="basic-plumbing">Basic Plumbing</h2>
+<h3 id="basic-dex--uniswap">Basic DEX (~ Uniswap)</h3>
+<p>To understand how Velodrome works, we first need to understand how Uniswap works.</p>
+<p>In this model, we consider an AMM pool. Let&#39;s imagine that this belongs to a project with a token $P, and that this is
+an $USDC-$P pool. Let&#39;s further assume that the project wants to incentivize the pool&#39;s liquidity.</p>
+<p><img src="uniswap.png" alt="uniswap.png"></p>
+<p>The model features the following actors:</p>
+<ul>
+<li>Users who swap $USDC for $P &amp; vice-versa, paying fees as they do so.</li>
+<li>Liquidity Providers (LPs) who provide $USDC and $P liquidity in exchange for LP tokens (which they can redeem at any
+time for their share of $UDSC and $P in the pool). LPs receive the fees paid by the users.</li>
+<li>The project, who incentivizes the pool liquidity by supplying $P rewards to a staking contract. LPs can stake their
+LP tokens and receive a share of the liquidity rewards in exchange.<ul>
+<li>This staking contract is not provided by the DEX, and must be setup by the project team separately. It is not
+advertised from the DEX&#39;s website.</li>
+</ul>
+</li>
+</ul>
+<p>If you&#39;ve been around DeFI, this is all pretty straightforward.</p>
+<p>Note that we do not mention a DEX token. If we&#39;re talking about Uniswap, this is fair: the token does not play an
+economic role (*), and is only involved in governance. More enlightened protocols will typically direct a cut of the fees to
+DEX token holders.</p>
+<p>(*) Though do note it is used to fund some of the protocol&#39;s operation&#39;s, though this is not strictly
+required — Uniswap makes enough money on frontend fees.</p>
+<h3 id="velodrome">Velodrome</h3>
+<p>Now here&#39;s how Velodrome works:</p>
+<p><img src="velodrome.png" alt="velodrome.png"></p>
+<p>The Velodrome model features a new actor: the $VELO locker. They lock $VELO long-term, and in exchange receive voting
+power that they can direct to AMM pools of their choosing. This occurs every voting cycle, which is one week for
+Velodrome.</p>
+<p>In exchange, they receive the fees paid to the pool, as well as any liquidity rewards setup by the project (now called
+“bribes” since they incentivize voting).</p>
+<p>Instead of fees and liquidity rewards, LPs receive a share of $VELO emissions. These emissions are inflationary to the
+$VELO supply.</p>
+<p>(Note that Velodrome allow LPs to receive fees instead of $VELO emission, albeit with a haircut. I don&#39;t believe that
+this feature is very important in how lockonomics work, so I&#39;m omitting it in this analysis.)</p>
+<p>Finally, an important point: how much $VELO is emitted? This was initially following a decreasing inflation schedule to
+distribute the token and incentivize growth before stabilizing, and is now controlled by the protocol — the rate is
+currently set by the team and will become governed by lockers in the future.</p>
+<p>The emitted $VELO is directed to pools pro-rata to lockers’ votes.</p>
+<h3 id="an-apple-to-apple-comparison">An apple-to-apple comparison</h3>
+<p>Because of the role of the $VELO token, the system is very dynamic. Let&#39;s work our way up to the full complexity by
+constructing an artificial scenario where Velodrome would work as basically “Uniswap with extra steps”. In this
+scenario:</p>
+<ul>
+<li>LPs receive $VELO tokens worth exactly the fees paid by user + the bribes paid the project</li>
+<li>$VELO lockers receives fees &amp; bribes that exactly offset the inflation caused by emissions (if we posit that the
+$VELO market cap is constant). We&#39;ll refer to this as “emissions = revenue”.</li>
+</ul>
+<p>Is there any point in this basic scenario? Actually there is, and it&#39;s due to the facts that:</p>
+<ol>
+<li>Only a portion of the total $VELO supplied is locked.</li>
+<li>We can always fall back to this scenario via emission control.</li>
+</ol>
+<h2 id="the-key-insights-behind-lockonomics">The key insights behind lockonomics</h2>
+<h3 id="1-velodrome-imposes-a-speculation-tax-on-short-term-holders">1. Velodrome imposes a speculation tax on short-term holders</h3>
+<p>In our basic scenario, the $VELO lockers are actually making profit. Where does that profit come from if everyone else
+(users, LPs and project) are not worse off? <strong>It comes from non-lockers.</strong></p>
+<p>Every time $VELO is emitted, the $VELO supply is being diluted.</p>
+<p>Let&#39;s pick some bullshit numbers &amp; make some assumptions to illustrate (real numbers are much much smaller or bigger,
+this is only to illustrate the dynamics):</p>
+<ul>
+<li>Let&#39;s say that 10% of the current $VELO supplied is being emitted.</li>
+<li>We&#39;ll assume 1,000,000 $VELO tokens pre-emission, with a value of 1$ each.</li>
+<li>We&#39;ll assume the $VELO market cap remains constant.</li>
+<li>We&#39;ll assume that 50% of the $VELO supply is locked. (<a href="https://dune.com/0xkhmer/velodrome">This is actually the case.</a>)</li>
+<li>The value of $VELO drops to 1$*100/110 = 0.909$ after the emissions.</li>
+<li>The value of the emissions is thus 100,000*0.909$ = 90,900$</li>
+<li>Lockers collectively receive fees &amp; bribes offsetting the emission, i.e. 90,900$.</li>
+<li>Given that lockers only owned 50% of the $VELO supply, the collective value of their $VELO dropped by 90,900$/2 =
+45,450$. But they made 90,900$ on the fees &amp; bribes, for a profit of 45,450$.</li>
+</ul>
+<p>So in our baseline scenario, lockers make profit at the expense of short-term holders.</p>
+<h3 id="2-locking-is-beneficial-to-trading-flows">2. Locking is beneficial to trading flows</h3>
+<p>... and therefore to price action.</p>
+<p>It&#39;s not a secret to anyone that has looked at the field for more than 2 seconds that most crypto tokens do not trade on
+fundamentals.</p>
+<p>We could separate the value of any token into a “meme” (flow-driven) value and a “fundamentals” (revenue-driven) value.</p>
+<p>(The reality is slightly messy, as revenue can be funnelled into flows, this is for instance the case for stock buybacks
+or Ethereum-style token burning.)</p>
+<p>By trading flows, we simply mean the balance between supply and demand for a token.</p>
+<p>An example of flow dynamics at play are “low float high market cap” tokens, where only a tiny portion of the token
+supply is available for sale at launch, artificially driving the price (and thus the market cap) up.</p>
+<p>Long-term locking in Velodrome encourages the same dynamics. You need to lock your tokens for 4 years for maximal voting
+power, and the voting power decreases as the time on the lock decreases, leading most people to “perma-lock” their token
+(i.e. the tokens are always locked for 4 years until the locker disables the feature). This is evidenced by the average
+locking duration on Velodrome currently being 3.6 years.</p>
+<p>Locked $VELO is effectively removed from circulation, which tends to be beneficial to the token price.</p>
+<h3 id="3-there-is-a-floor-underneath-the-house">3. There is a floor underneath the house</h3>
+<p>The value of the $VELO token is not just memetic: it is supported by real revenue (from fees &amp; bribes). This means that
+the value of the token cannot drop arbitrarily low, as at some point the APY for lockers would be too tempting to pass
+up. The principal for lockers is $VELO tokens, but the interest is in other tokens, so as $VELO underperforms, the APY
+mechanically shoots up, encourage investors to scoop up &amp; lock $VELO.</p>
+<p>(Of course, black swan events are always possible, like if the team were to suddenly abandon the project. There is
+always risk.)</p>
+<p>It is important to note too that in the absence of revenue growth, it is natural for the inflationary $VELO token price
+to go down over time. This is normal, and as we have established, lockers are compensated for this (via fees, bribes,
+and the dilution of short-term holders) and come out ahead.</p>
+<p>But what if $VELO (and thus LPs’ revenue) drop, causing the LPs to leave and fees to dry up? I&#39;m glad you asked!</p>
+<h3 id="4-emission-control-makes-the-system-resilient-to-exogenous-shocks">4. Emission control makes the system resilient to exogenous shocks</h3>
+<p>You may wonder if our baseline artificial scenario is realistic. I think it is, because of the ability of the protocol
+to set the emission rate.</p>
+<p>If an exogenous (~external, not related to issues with the protocol itself) event would cause the token price to drop,
+this might potentially be threatening to the protocol, as the reduction in LPs&#39;s revenue could cause them to pull out.</p>
+<p>This can, in extreme cases, be fought with emission control. Recall that lockers do not care how high inflation is, as
+long as they are compensated for it in fees and bribes. The protocol can simply increase emissions to the level where
+they are commensurate with fees &amp; bribes, which will keep it competitive with classical DEXes.</p>
+<p>This means that our baseline scenario should represent a worst case that the protocol that can always fall back to.</p>
+<h3 id="conclusion--for-lockers-heads-i-win-tails-i-win">Conclusion — For Lockers: Heads I win, Tails I win</h3>
+<p><strong>The key insight behind lockonomics is that it&#39;s an engine that incentivizes long-term holding.</strong></p>
+<p>Short-term holders get penalized by inflation. The lower the percentage of the supply is locked, the more lockers make
+profit in this manner. There is however the risk that the token price would go down as there a large supply available to
+be sold. But there is a baseline value for the token due to the protocol&#39;s revenue.</p>
+<p>If, on the other hand, the percentage of the locked supply were to go up, then lockers would make less profit — but this
+would be positive for the token&#39;s price action.</p>
+<p>In the worst case, emission control can be used to bring the system back to the emissions = revenue state, stabilizing
+the protocol.</p>
+<h1 id="velodrome-in-practice">Velodrome in practice</h1>
+<h2 id="emissions--revenue">Emissions &gt; Revenue</h2>
+<p>We&#39;ve so far examined a baseline scenario where emissions precisely match revenue. In practice, emissions on Velodrome
+typically exceed revenue, often by as much as 100%.</p>
+<p>Velodrome is often described as a Ponzi scheme or as printing money out of thin air — and I believe that this is the
+reason for those particular accusations.</p>
+<p>The higher emissions are, in a certain sense, not ideal: it means that the lockers are getting overly diluted. If the
+goal is simply to stay competitive with Uniswap-like DEXes, then lower emissions would be sufficient. And the protocol
+could lower emissions today!</p>
+<p>But it&#39;s also undeniable that the higher emissions have served to grow the protocol. Higher emissions attract LPs with
+high APY, increasing liquidity. They also attract projects, who can get more than 1$ of liquidity incentives to LPs for
+every 1$ spent in bribes.</p>
+<p>Lockers haven&#39;t really suffered from the extra inflation in practice, as revenue has consistently exceeded the
+<em>observed</em> price impact from inflation (the token has had its price swings, but they cannot be easily attributed to
+routine inflation). Lockers are by design aligned with the protocol long-term, so growth is desirable as it represents a
+bigger future pie.</p>
+<p>Over recent voting periods, $VELO inflation has been 15% annualized, which is consistently lower than the yields
+available to lockers (which have rarely dipped under 20% and have often been much higher).</p>
+<p>It&#39;s important to understand that emissions &gt; revenue is not sustainable. But everything we laid out before explains
+that (1) when emissions = revenue, the protocol is sustainable and equivalent to a Uniswap-style DEX, (2) emission
+control can be used to forcibly bring the protocol to this point.</p>
+<p>Basically, by controlling emissions, a lockonomics DEX can choose between sustainable profits or incentivizing growth
+via incentives. If we hold market cap constant, the latter comes at the expense of lockers in the short-term — though in
+practice lockers have remained profitable with respect to token inflation.</p>
+<p><a href="https://paragraph.com/@dromos/sustainability">Part 4 of the MetaDEX series</a> makes the point that &quot;emissions can always
+exceed fees&quot;, which I don&#39;t agree with. However, it does clarify the conditions for this to hold, in particular noting
+the following condition:</p>
+<blockquote>
+<p>The fundamental value of each token depends on the degree to which fee growth outstrips supply growth.</p>
+</blockquote>
+<p>This is exactly our point: as long as emitting more tokens today brings in more fees tomorrow, emissions &gt; revenue is a
+winning strategy. This probably isn&#39;t the case <em>forever</em>, but it has been the case so far, and with the economy coming
+onchain, this could last a long time. And if or when it stops, you can always revert to emissions = revenue.</p>
+<h2 id="growth--moats">Growth &amp; Moats</h2>
+<p>Growth is only good if it is sticky, and worthless if liquidity were to evaporate when emissions revert to revenues. I
+argue that a good portion of growth is indeed sticky.</p>
+<ul>
+<li><p>Migrating liquidity to a different DEX is very disruptive for projects. They have to coordinate LPs to switch, direct
+users to a new DEX, and fragment (thus lower) liquidity while the migration is ongoing. In practice, DEXes are quite
+sticky for project.</p>
+</li>
+<li><p>Project are encouraged to accumulate $VELO. They will do so naturally if they have protocol-owned liquidity (POL), as
+they will receive emissions. On a long-term horizon, it is also more advantageous to accumulate locked $VELO because
+of its yield-bearing nature (if only because of the speculation tax).</p>
+<ul>
+<li><p>When emissions &gt; revenue, the situation is particularly favorable to protocols with POL, as they offset the extra
+inflation by being a recepient of the emissions themselves, letting them accumulate $VELO faster.</p>
+</li>
+<li><p>On Aerodrome, the “flight school” program also incentivizes projects to lock $AERO.</p>
+</li>
+</ul>
+</li>
+<li><p>Users want the best execution, which mostly means the least price impact. This means they will use the pool with the
+most liquidity (or the most efficient liquidity, which is notably a factor with concentrated liquidity pools).
+Liquidity thus translates into fee revenue, and as a pool accumulates liquidity, it requires more and more external
+incentives to attract LPs and displace the pool.</p>
+</li>
+<li><p>It&#39;s of course possible for a new DEX to come onto the scene with a shiny new token to farm, but we can observe that
+well-managed DEXes have a <a href="https://en.wikipedia.org/wiki/Lindy_effect">lindy</a> quality. Uniswap is a prime example, as
+despite the lack of protocol-specific incentive compared to the competition, they have remained a force to contend with.</p>
+</li>
+</ul>
+<p>Based on these observations, I think that one can indeed consider that growing the protocol is a worthwhile investment
+and not an unsustainable short-term “propping-up” of liquidity &amp; token price.</p>
+<h1 id="lockonomics-beyond-amms">Lockonomics beyond AMMs</h1>
+<p>The lockonomics model does not need to only apply to AMMs. In fact, it can work with any project that has real revenue
+(this could be lending, perps, launchpads, options, ...). Here&#39;s the playbook:</p>
+<ol>
+<li><p>Direct the revenue to the lockers.</p>
+</li>
+<li><p>Compensate the users that would normally receive the revenue via project token emissions instead.</p>
+</li>
+<li><p>(Optional) Let lockers direct the inflation (i.e. in a lending protocol, to lenders in specific lending pools).</p>
+<ul>
+<li>This is optional because you could simply direct emissions to be proportional to the revenue generated. However,
+there are advantages on letting the lockers vote: it incentivizes projects to accumulate locked token to
+incentivize &quot;things&quot; related to them (e.g. lending pools). This does not however apply to <em>every</em>
+revenue-generating project.</li>
+</ul>
+</li>
+<li><p>Let lockers vote on emissions, deciding between a growth-orientation (more incentive to the users that would normally
+receive revenue) and a stable profitable equilibrium (revenue = emissions).</p>
+</li>
+<li><p>Profit.</p>
+</li>
+</ol>
+<p>I&#39;m surprised this model hasn&#39;t been tried more widely before (or maybe it has and I&#39;m simply not aware).</p>
+<h1 id="common-objections--questions">Common Objections &amp; Questions</h1>
+<h2 id="velodrome-is-a-ponzi-scheme">Velodrome is a Ponzi scheme</h2>
+<p>A ponzi scheme is when money from new investors is used to pay older investors in a way that is unsustainable. When new
+money stops coming in, the system collapses.</p>
+<p>The term is often extended to systems that are not strictly Ponzi schemes in this sense, like memecoins: when new buyers
+stop coming in, everyone rushes for the exit.</p>
+<p>But Velodrome does not need new buyers: in the worst case, the inflation causes the token price to go down over time,
+for which lockers are compensated.</p>
+<p>As long as revenue (fees &amp; bribes) doesn&#39;t drop precipitously, a drop in price provides a buying incentive, as the
+locking APY goes up.</p>
+<p>The ability of the protocol to control emissions ensures that the system can always be brought to a baseline where
+emissions are commensurate to fees &amp; bribes, which is a stable equilibrium.</p>
+<h2 id="velodrome-is-printing-money-out-of-thin-air">Velodrome is printing money out of thin air</h2>
+<p>This criticism comes from the fact that, so far, Velodrome emissions have been systematically higher than protocol
+revenue (fees + bribes), often as high as 2x.</p>
+<p>I elaborate on this in the “Emissions &gt; Revenue” section, where I make two important points:</p>
+<ol>
+<li>The protocol does not not depend on emissions &gt; revenue for sustainability, and can always stabilize to become
+Uniswap equivalent (emissions = revenue).</li>
+<li>The higher emissions incentivize growth, and a good portion of this growth is sticky (just like how Uniswap has been
+sticky).</li>
+</ol>
+<h2 id="velo-will-inflate-to-nothing">VELO will inflate to nothing</h2>
+<p>In the absence of growth, yes the token price will go down over time. As we painstakingly established above, lockers are
+fully compensated for this and can even turn a profit. For non-lockers, this is indeed bad news, but that&#39;s the whole
+idea of lockonomics: incentivize &amp; enforce long-term holding via a speculation tax on short-term holders, enacted via
+inflation.</p>
+<h2 id="uniswap-is-better-than-velodrome">Uniswap is better than Velodrome</h2>
+<p>Velodrome can be made functionally Uniswap-equivalent (emissions = revenue) via emission control. In that scenario, it
+remains much better than Uniswap for token holders. $UNI token holder accrue zero value from Uniswap, while $VELO
+holders are currently making a good return, <em>even</em> as emissions (and thus inflation) exceeds revenue. As we&#39;ve seen,
+lockers remain profitable even when the system stabilize to emissions = revenue, via Velodrome&#39;s implicit speculation
+tax.</p>
+<p>In the current growth era of Velodrome (emissions &gt; revenue), it is also better for LPs (who make more revenue).</p>
+<p>If we move beyond mechanism, the Velodrome team is better aligned with $VELO lockers than Uniswap ever was with its
+token $UNI holders. Despite dangling the carrot of a “fee switch” (that would direct a portion of fees to $UNI holder)
+for years, the Uniswap DAO has failed to pass the measure, as most of the delegated token supply is held by the team,
+VCs, and close affiliates. There are other issues with Uniswap DAO governance, but this isn&#39;t really the theme of this
+article and you should do your own research.</p>
+<p>My suspicion is that Uniswap Labs (who makes 9 figures in frontend fees every year, none of which goes to token
+holders) resents having a token, which they only created as a reaction to the emergence of SushiSwap, and which is
+convenient to maintain the semblance of decentralization.</p>
+<p>On the flip side, the entire $VELO supply was released from the get go, and the team is incentivized via locked $VELO.</p>
+<p>Finally, note that 40% of the $UNI supply is not yet in circulation, and unlike Velodrome lockers, $UNI holders are
+not compensated for inflation.</p>
+<h2 id="how-does-ve33-relate-to-olympusdaos-33">How does ve(3,3) relate to OlympusDAO&#39;s (3,3)</h2>
+<p>(3,3) is a relatively stupid meme inspired by <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">game theory</a> that
+OlympusDAO stumble upon and ran with. It says in essence “if nobody sells we all get richer”. Of course you&#39;ve got to
+sell to realize these profits, which is when the whole thing collapses.</p>
+<p>From OlympusDAO, ve(3,3) takes two inspirations:</p>
+<ul>
+<li><p>First, the rebase mechanism. This is mostly a meme in Olympus, but serves some purpose in ve(3,3), while being
+non-essential. See next section for an explanation.</p>
+</li>
+<li><p>The realization that you can operationalize a mature version of “if nobody sells we all get richer” via the trading
+flows that we talked about earlier. Two conditions need to be satisfied for this to work.</p>
+<ul>
+<li><p>There needs to be real revenue underlying the protocol, otherwise you are pursuing an exercise in futility (even
+Olympus paid lip service to this with the prospect to invest in various projects).</p>
+</li>
+<li><p>You need to enforce the “don&#39;t sell” part, which is done via locks, and incentivize it correctly so that locking
+actually makes sense.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>I still generally dislike the association to OlympuDAO. While there is a throughline between trading flows and a meme
+like “if nobody sells we all get richer” (the grotestque extreme extrapolation of the concept), nuance is not in high
+supply and the association is likely to lead to misunderstandings. I think the (temporary) overperformance of low-float
+high market cap tokens is a much better way to explain how trading flows positively impact a token&#39;s price.</p>
+<h2 id="what-about-the-rebase">What about the rebase?</h2>
+<p>One feature of the Velodrome we didn&#39;t talk about is the “rebase”, which is basically extra $VELO emissions that are
+distributed to lockers.</p>
+<p>The rebase is in my opinion completely anecdotic, and is just a cute slider that can be used to further tax short-term
+holders. Emission control could be used to do the same, although since the token price cannot be directly controlled,
+this could have the not-so-dramatic effect of overpaying LPs compared to what would be optimal.</p>
+<p>It&#39;s a useful tool, and probably worth keeping, but ultimately the system doesn&#39;t need it to be sound.</p>
+<h2 id="4-years-is-forever-so-there-is-no-way-to-cash-out-of-velodrome">4 years is forever, so there is no way to cash out of Velodrome</h2>
+<p>Locked $VELO is placed into a veNFT that is <a href="https://vexy.fi/#/veVELO">freely tradeable</a>. The NFTs trade at a discount
+to the $VELO market price. They are also being traded OTC on the Velodrome Discord server.</p>
+<p>That being said, it is undeniable that locked your $VELO requires a long-term orientation that is not the norm within
+DeFi.</p>
+<h2 id="are-there-other-reasons-to-be-bullish-on-velodrome">Are there other reasons to be bullish on Velodrome?</h2>
+<p>I am biased, but I think the team is top class, and the results speak for themselves. Despite their success, they
+continue to work hard and have high ambitions that run long-term.</p>
+<p>There are reasons to be bullish in the short term too.</p>
+<p>Regarding Velodrome specifically, it now supports liquidity and cross-chain swaps accross major chains in the Optimism
+Superchain. With the advent of Superchain interop, these cross-chain swaps will become even faster and cheaper.</p>
+<p>Aerodrome on the other hand benefits from the success of Base as one of the two major L2 chains and on the Coinbase&#39;s
+effort to foster its success. All tokens listed on Aerodrome are <a href="https://x.com/AerodromeFi/status/1976038297672745223">now listed in the Coinbase
+app</a>.</p>
+<p>And because Base lacks a token of its own, $AERO often serves as a way for people to bet on Base&#39;s future success.</p>
+<h2 id="whats-the-batman-token-story">What&#39;s the BATMAN token story?</h2>
+<p>When Solidly launched, it also naturally had emissions &gt; revenue. Someone realized that, under these conditions, the
+best return on $SOLID was achieved in a way that didn&#39;t grow the protocol.</p>
+<p>What our trickster did was create two ERC-20 tokens whose supply was fully owned by them. One of these tokens was called
+BATMAN, and the other one ... in my memory it was SPIDERMAN, but I did some research and found one article mentioning
+SUPERMAN and one mentioning ROBIN. So I don&#39;t know! Crazy that these events are seemingly lost to easily retrievable
+history.</p>
+<p>Then, our trickster used his existing $SOLID to direction emissions to his own BATMAN-SPIDERMAN pool, receiving more
+emissions in this way than the fees + bribes he would have received otherwise.</p>
+<p>This wasn&#39;t a terrible death knell to the protocol, but it is rather sub-optimal that, while “honest” lockers were being
+diluted under emissions &gt; revenue, a part of these emissions did not grow the protocol in any useful way.</p>
+<p>And this also explains why, so far, pool deployment on Velodrome have been permissioned.</p>
+<p>Note that Aerodrome will soon feature a <a href="https://x.com/AerodromeFi/status/1940478145959973151">permissionless pool
+launcher</a> that allows permissionlessly launching pools in the
+basic &quot;Uniswap-like&quot; model, which can then graduate to the full lockonomics model (where approval is still
+permissioned).</p>
+<h1 id="dune-dashboards">Dune Dashboards</h1>
+<p>I really recommend digging into the following Dune dashboard if you want some data into Velodrome &amp; Aerodrome:</p>
+<ul>
+<li><a href="https://dune.com/0xkhmer/velodrome">https://dune.com/0xkhmer/velodrome</a></li>
+<li><a href="https://dune.com/0xkhmer/aerodrome">https://dune.com/0xkhmer/aerodrome</a></li>
+</ul>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/lockonomics";
+        this.page.identifier = "lockonomics";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script async data-id="101118294" src="//static.getclicky.com/js"></script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
+</body>
+</html>

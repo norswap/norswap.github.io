@@ -65,6 +65,12 @@ type Post = PageBase & {
     content?: Content
 }
 
+type Draft = PageBase & {
+    pageType: PageType.DRAFT
+    // Cached rendered content for display on the index page.
+    content?: Content
+}
+
 type Content = {
     layout: "post" | "brief"
     title: string
@@ -73,9 +79,9 @@ type Content = {
 
 type Page = PageBase & (
     | { pageType: PageType.PAGE }
-    | { pageType: PageType.DRAFT }
     | { pageType: PageType.INDEX }
     | Post
+    | Draft
     )
 
 type PageTemplateParamsBase = {
@@ -123,9 +129,10 @@ async function main() {
         const command = process.argv[2]
         if (command === "rebuild") options.rebuild = true
     }
-    await iteratePages("./" + PAGES_DIR)
-    await iteratePages("./" + POSTS_DIR)
-    await iteratePages("./" + PAGES_DIR)
+    await iteratePages(PAGES_DIR)
+    await iteratePages(POSTS_DIR)
+    await iteratePages(PAGES_DIR)
+    await iteratePages(DRAFTS_DIR)
     if (options.cleanOrphans) await cleanOrphans()
     posts.sort((a, b) => b.date.getTime() - a.date.getTime() || b.index - a.index) // most recent first
     await buildIndex()
@@ -134,6 +141,7 @@ async function main() {
 }
 
 async function iteratePages(dirPath: string): Promise<void> {
+    dirPath = "./" + dirPath
     for (const file of await readdir(dirPath)) {
         if (file === ".keep") continue
 
@@ -179,8 +187,9 @@ async function iteratePages(dirPath: string): Promise<void> {
         const body = (await marked(parsed.content)).trim()
         const date = page.pageType === PageType.POST ? formatDate(page.date) : ""
         const content: Content = { layout, title, body }
+        const isPostLike = page.pageType === PageType.POST || page.pageType === PageType.DRAFT
 
-        if (page.pageType === PageType.POST) {
+        if (isPostLike) {
             page.content = content
             if (options.rebuild || srcTime > contentTime)
                 await fs.writeFile(contentPath, JSON.stringify(content))

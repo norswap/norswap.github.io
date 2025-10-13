@@ -51,7 +51,7 @@
     </div>
   </div>
   <div class="content container">
-  {%- if pageType == "POST" %}
+  {%- if pageType == "POST" or pageType == "DRAFT" %}
     <div class="post">
       <h1 class="post-title">{{ title | escape }}</h1>
       <span class="post-date">{{ date }}</span>

@@ -15,3 +15,7 @@ clean:
 preview:
 	bun browser-sync .. --watch
 .PHONY: preview
+
+watch:
+	bun chokidar "./**/*" -c "make build"
+.PHONY: watch

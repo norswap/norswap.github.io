@@ -3,7 +3,7 @@ layout: post
 title: "Lockonomics"
 ---
 
-## or: How I Learn to Stop Worrying and Love the Dromes
+## or: How I Learned to Stop Worrying and Love the Dromes
 
 ---
 

@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Nicolas Laurent's Resume</title>
-    <meta charset='utf-8'>
-  </head>
-  <body>
-    <div id='content'>
-      <div class='inner'>
-        <!DOCTYPE html>
-<html>
 <head>
   <meta charset="utf-8">
   <title>Nicolas Laurent - Resume</title>
@@ -324,7 +315,6 @@ hr {
     }
     a, a:visited {
         color: blue;
-        text-decoration: none;
     }
 }
 
@@ -347,7 +337,6 @@ body > div[style] {
 
   <div id="header">
     <div id="name">Nicolas "Norswap" <span class="scaps">Laurent</span></div>
-    <div id="title">Software Engineer & Researcher, PhD</div>
   </div>
 
   <div class="section-title">Contact</div>
@@ -370,38 +359,62 @@ body > div[style] {
   <div class="section-title">Experience & Education</div>
   <div class="section separated">
     <div class="item">
-      <div class="when">November 2021 - December 2022</div>
+      <div class="when">April 2024 - July 2025</div>
+      <div class="title">
+        Founder & CEO
+      </div>
+      <div class="where">Happy Devs</div>
+      <div class="descr">
+        <p>Happy Devs built HappyChain, a blockchain for fully-onchain games. Our main engineering focus was
+           on building an onboarding experience for gamers unfamiliar with crypto, for which we built a
+           state-of-the-art <a href="https://docs.happy.tech/sdk/">embedded wallet<a>
+           and <a href="https://docs.happy.tech/boop">account abstraction stack</a>, as well as some connext
+           projects like chain monitoring infra and a novel onchain randomness system.
+        <p>I ran the company, including fundraising, ops, managing a team of 6, and technical leadership.
+      </div>
+    </div>
+    <div class="item">
+      <div class="when">February 2023 - March 2024</div>
+      <div class="title">
+        Freelance Work & Explorations
+      </div>
+      <div class="descr">
+        <p>Wrote an exhaustive <a href="https://github.com/0xFableOrg/xchain">research report</a> on cross-chain
+           interoperability as the behest of the <a href="https://gov.optimism.io/">Optimism Collective<a>.
+        <p>Built <a href="https://github.com/0xFableOrg/roll-op">roll-op</a>, a deployment & devops tool for OP stack chains,
+           which received multiple retro funding grants from the Optimism Collective.
+        <p>Built <a href="https://github.com/0xFableOrg/0xFable">0xFable</a>, a MVP fully-onchain trading card game
+           (TCG), the first (and I think still only) of its kind. Notable for
+           <a href="https://x.com/norswap/status/1590489878726205440">innovative use</a> of zero-knowledge proofs to enforce
+           random draws & keep players' hands hidden.
+        <p>Delivered conferences talks at venues like EthDenver, ETH[CC] on onchain games and shared sequencing.
+      </div>
+    </div>
+    <div class="item">
+      <div class="when">November 2021 - January 2023</div>
       <div class="title">
         Staff R&amp;D Protocol Engineer (Blockchain)
       </div>
       <div class="where">Optimism, Remote</div>
       <div class="descr">
-        <p>I mostly worked on the design & architecture of Bedrock, from
-        inception to feature-completeness. Bedrock is the new release of the
-        Optimism L2 (rollup) blockchain, which currently secures upwards of 1B$
-        in assets. Bedrock is also the basis for the OP Stack, an open-source
-        modular rollup architecture available to all.
-        <p>I was involved in almost every design discussion, wrote the major
-        part of
-        the <a href="https://github.com/ethereum-optimism/optimism/tree/develop/specs">specification</a>,
-        as well as the Bedrock whitepaper (to be released soon).
-        <p>Additionally, I did the initial discovery & cleanup work
-        on <a href="https://github.com/ethereum-optimism/cannon">Cannon</a>, as
-        well as set a tentative roadmap. Cannon is a fault proof system (the
-        system that secures optimistic rollups like Optimism) originally devised
-        by the legendary Georges Hotz. Cannon will be one of the main focus on
-        Optimism going into 2023.
-        <p>I also dabbled in other functions. On the side of business
-        development, I was instrumental in bringing Velodrome Finance to
-        Optimism, a distributed exchange (DEX) onto Optimism, where it now has
-        75M$ in total locked value, and just shy of 3B$ in cumulative
-        transaction volume. I also helped handle the relationships with our
-        "protocol partners", including organizations such as Flashbots, Shutter
-        Network, Cartesi, ...
+        <p>I worked on the design & architecture of the OP Stack, from inception to feature-completeness.
+           The OP Stack is a L2 rollup blockchain stack, which currently secures
+           <a href="https://l2beat.com/scaling/summary?filters=%7B%22stack%22%3A%7B%22values%22%3A%5B%22OP+Stack%22%5D%7D%7D">upwards of 20B$</a>
+           in assets and more than a 1B$ in daily transaction volume across more than a dozen blockchains.
+        <p>I was involved in almost every design discussion, reviewed the entirery of the code base, and wrote the major
+           part of the
+           <a href="https://github.com/ethereum-optimism/optimism/tree/develop/specs">specification</a>.
+           I also led discovery & cleanup work on Georges Hotz' initial implementation of
+           <a href="https://github.com/ethereum-optimism/cannon">Cannon</a>,
+           the fault proof system responsible for securing the chain.
+        <p>I dabbled in business development, where I was instrumental in bringing Velodrome Finance (a distributed
+           exchange, now called Aero) onto OP Mainnet, where it held 100s of M$ in value and achieved 10s of B$ in cumulative
+           trading volume. They multiplied these numbers one hundredfold on the Base blockchain (part of the Optimism Superchain) as Aerodrome Finance.
+           I also helped handle the relationships with our "protocol partners", including organizations such as
+           Flashbots, Shutter Network, Cartesi, ...
         <p>I delivered many conference talks, including at top venues like
-        ETH[CC] and Devcon, on topics such as Bedrock, Cannon, as well as ideas
-        regarding future direction like MEV-handling and cross-rollup atomic
-        transactions.
+           ETH[CC] and Devcon, on topics such as the OP Stack, Cannon, MEV-handling and cross-rollup atomic transactions.
+        <div class="pgbreak"></div>
       </div>
     </div>
     <div class="item">
@@ -420,7 +433,7 @@ body > div[style] {
         at <a href="https://norswap.com/compilers">norswap.com/compilers</a></p>
       </div>
     </div>
-    <div class="pgbreak"></div>
+
     <div class="item">
       <div class="when">June-October 2021</div>
       <div class="title">
@@ -428,17 +441,6 @@ body > div[style] {
           Core Developer Apprenticeship</a>
       </div>
       <div class="where">Ethereum Foundation, Remote</div>
-      <div class="descr">
-        <p>I was selected as one of about ten grant recipients for the core developer
-        apprenticeship, in a pool of more than 400 applicants.</p>
-        <p>As part of the apprenticeship, I went from barely knowing what a
-        blockchain was to understanding Ethereum in depth, wrote a
-        state-of-the-art reviews on blockchain state expiry and a research
-        proposal on miner extracted value. I also wrote my own implementation of
-        a large chunk of Ethereum's execution layer for education purposes.</p>
-        <p>All the work I did during my apprenticeship is available
-        at <a href="https://norswap.com/cdap">norswap.com/cdap</a></p>
-    </div>
     </div>
     <div class="item">
       <div class="when">October 2019 - November 2021</div>
@@ -448,12 +450,11 @@ body > div[style] {
       </div>
       <div class="where">Oracle Labs, Remote</div>
       <div class="descr">
-        <p>I am working on the GraalVM project, and in particular the implementation
+        <p>I worked on the GraalVM project, and in particular the implementation
           of TruffleRuby.</p>
         <p>My work has contributed to improve TruffleRuby's peak performance (it
         is the fastest Ruby implementation on a wide range of benchmarks) and
-        reduce its warmup time. I have also collaborated closely with our
-          customers at Shopify.</p>
+        reduce its warmup time.</p>
         <p>Much of my work at Oracle is publicly visible
         at <a href="https://github.com/oracle/truffleruby/commits?author=norswap">github.com/oracle/truffleruby/commits?author=norswap</a></p>
       </div>
@@ -477,13 +478,6 @@ body > div[style] {
       <div class="when">September 2013 - February 2014</div>
       <div class="title">iOS Developer</div>
       <div class="where">Famest, Louvain-La-Neuve, Belgium</div>
-      <div class="descr">
-      <p>Famest was a fashion-centric social network that let users showcase
-        their outfits and connect with brands. <br/>I rewrote the hastily-writen
-        Famest iPhone app (which would routinely crash after any quick
-        succession of user inputs) in order to make it realiable and
-        maintainable.</p>
-      </div>
     </div>
     <div class="item">
       <div class="when">September 2008 - August 2013</div>
@@ -501,8 +495,7 @@ body > div[style] {
     </div>
   </div>
 
-  <div class="pgbreak"></div>
-  <div class="section-title">Technologies</div>
+  <div id="technologies" class="section-title">Technologies</div>
   <div class="section">
     <div class="item">
       <div class="descr">
@@ -510,14 +503,14 @@ body > div[style] {
       be a good fit. Having at this point implemented multiple languages and
       frameworks, I like to think I'm able to learn anything that is required in
       a reasonable amount of time.</p>
-      <p>That being said, I have experience in Java, C, C++, Objective-C, Go,
-      Kotlin, Ruby, Javascript, Python, Prolog, Lua, Bash, SQL, Git, Make,
+      <p>That being said, I have experience in Java, C, Objective-C, Go,
+      Kotlin, Ruby, Javascript, TypeScript, Python, Prolog, Lua, Bash, SQL, Git, Make,
       CMake, Maven, Gradle, Solidity, and more.</p>
     </div>
     </div>
   </div>
-  </div></div>
 
+  <div class="pgbreak"></div>
   <div class="section-title">Selected Publications</div>
   <div class="section">
   <div class="item">
@@ -579,7 +572,7 @@ body > div[style] {
       <div class="title">French</div>
     </div>
     <div class="item">
-      <div class="proficiency">Advanced Professional Proficiency (ILR-4+)</div>
+      <div class="proficiency">Bilingual Proficiency (ILR-5)</div>
       <div class="title">English</div>
     </div>
     <div class="item">
@@ -587,6 +580,5 @@ body > div[style] {
       <div class="title">Dutch</div>
     </div>
   </div>
-
 </body>
 </html>

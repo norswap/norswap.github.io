@@ -121,6 +121,10 @@ ul, ol, dl {
   margin-bottom: 1rem;
 }
 
+li > ul {
+    margin-bottom: 0;
+}
+
 dt {
   font-weight: bold;
 }

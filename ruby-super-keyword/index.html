@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -52,30 +53,29 @@
       <span class="post-date">04 Sep 2017</span>
 <p>The other day, my colleague Benoît was faced with a strange problem in his Ruby
 code. Here is a greatly simplified version of the code that caused the problem:</p>
-<pre><code class="language-Ruby">class A
-    def foo
-        p :A
-    end
-end
+<pre><code class="hljs language-Ruby"><span class="hljs-keyword">class</span> A
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">foo</span>
+        p <span class="hljs-symbol">:A</span>
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
 
-class B &lt; A
-end
+<span class="hljs-keyword">class</span> B &lt; A
+<span class="hljs-keyword">end</span>
 
-module F
-    def foo
-        super
-        p :F
-    end
-end
+<span class="hljs-keyword">module</span> F
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">foo</span>
+        <span class="hljs-variable language_">super</span>
+        p <span class="hljs-symbol">:F</span>
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
 
-method = F.instance_method(:foo)
-B.send(:define_method, :foo, lambda { |*args|
-    method.bind(self).call(*args)
+method = F.instance_method(<span class="hljs-symbol">:foo</span>)
+B.send(<span class="hljs-symbol">:define_method</span>, <span class="hljs-symbol">:foo</span>, <span class="hljs-built_in">lambda</span> { |<span class="hljs-params">*args</span>|
+    method.bind(<span class="hljs-variable language_">self</span>).call(*args)
 })
 
 B.new.foo
-</code></pre>
-<p>What do you think the last line does?</p>
+</code></pre><p>What do you think the last line does?</p>
 <p>It seems like it should print <code>:F</code>, then <code>:A</code>. <code>B#foo</code> becomes bounds to a
 lambda, inside which we call <code>F#foo</code> with <code>self</code> bound to <code>self</code> from the
 lambda.</p>
@@ -84,14 +84,12 @@ that the <code>super</code> from <code>F#foo</code> would invoke <code>A#foo</co
 invokes <code>B#foo</code> recursively.</p>
 <p>And so it turns out that the last line fails with <code>SystemStackError: stack level too deep</code>.</p>
 <p>Of course, the code is actually needlessly complicated. You could do this:</p>
-<pre><code class="language-ruby">method = F.instance_method(:foo)
-B.send(:define_method, :foo, method)
-</code></pre>
-<p>And — plot twist — this actually works fine.</p>
+<pre><code class="hljs language-ruby">method = F.instance_method(<span class="hljs-symbol">:foo</span>)
+B.send(<span class="hljs-symbol">:define_method</span>, <span class="hljs-symbol">:foo</span>, method)
+</code></pre><p>And — plot twist — this actually works fine.</p>
 <p>This also works:</p>
-<pre><code class="language-ruby">B.send(:define_method, :foo, lambda { |*args| super(*args); p :F })
-</code></pre>
-<p>That&#39;s interesting and wasn&#39;t covered in
+<pre><code class="hljs language-ruby">B.send(<span class="hljs-symbol">:define_method</span>, <span class="hljs-symbol">:foo</span>, <span class="hljs-built_in">lambda</span> { |<span class="hljs-params">*args</span>| <span class="hljs-variable language_">super</span>(*args); p <span class="hljs-symbol">:F</span> })
+</code></pre><p>That&#39;s interesting and wasn&#39;t covered in
 the <a href="/ruby-dark-corners">Ruby&#39;s Dark Corners</a> series can explain it. And of
 course, <a href="/ruby-specification-problem">Ruby doesn&#39;t have a specification</a>.</p>
 <p>I have an hypothesis: when a &quot;callable&quot; (unbound method, lambda, ...) is
@@ -118,6 +116,11 @@ in the class hierarchy), no matter what method it was reached from.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

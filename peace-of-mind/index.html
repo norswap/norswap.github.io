@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -155,6 +156,11 @@ of mankind. I just want to talk about how to fix a motorcycle.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

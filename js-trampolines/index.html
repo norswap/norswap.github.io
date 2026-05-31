@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -72,77 +73,68 @@ and, in my opinion, easier to understand.</p>
 <hr>
 <h2 id="the-mockingbird-code-injection">The Mockingbird (Code Injection)</h2>
 <p>Let&#39;s start with a recursive (JavaScript) function:</p>
-<pre><code class="language-javascript">const is_even = n =&gt;
-    (n === 0) || !is_even(n - 1);
-</code></pre>
-<p>This implement a very inefficient way to check if a number is even. It&#39;s a toy
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">is_even</span> = n =&gt;
+    (n === <span class="hljs-number">0</span>) || !<span class="hljs-title function_">is_even</span>(n - <span class="hljs-number">1</span>);
+</code></pre><p>This implement a very inefficient way to check if a number is even. It&#39;s a toy
 example, obviously.</p>
 <p>Let&#39;s take our first goal first: &quot;inject code at each recursive call in a
 recursive function&quot;.</p>
 <p>To achieve this, we need to rewrite the function in a different form. Here is
 the so-called &quot;mockingbird form&quot;:</p>
-<pre><code class="language-javascript">const mock_is_even = (myself, n) =&gt;
-    (n === 0) || !myself(myself, n - 1);
-</code></pre>
-<p><code>is_even</code> now take a <code>myself</code> function as argument, which it called recursively,
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">mock_is_even</span> = (<span class="hljs-params">myself, n</span>) =&gt;
+    (n === <span class="hljs-number">0</span>) || !<span class="hljs-title function_">myself</span>(myself, n - <span class="hljs-number">1</span>);
+</code></pre><p><code>is_even</code> now take a <code>myself</code> function as argument, which it called recursively,
 passing itself along.</p>
 <p>We can call <code>mock_is_even(mock_is_even, 10)</code>, and it will behave just like
 <code>is_even(10)</code>. So far that&#39;s pretty useless.</p>
 <p>We can re-implement <code>is_even</code> in terms of <code>mock_is_even</code> using the &quot;mockingbird&quot;
 combinator:</p>
-<pre><code class="language-javascript">const mockingbird =
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">mockingbird</span> =
     fn =&gt;
-        (...args) =&gt;
-            fn(fn, ...args);
+        <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span>
+            <span class="hljs-title function_">fn</span>(fn, ...args);
       
-const is_even = mockingbird(mock_is_even);
-</code></pre>
-<p>Okay, that works: when we call <code>is_even(10)</code>, the call becomes
+<span class="hljs-keyword">const</span> is_even = <span class="hljs-title function_">mockingbird</span>(mock_is_even);
+</code></pre><p>Okay, that works: when we call <code>is_even(10)</code>, the call becomes
 <code>mock_is_even(mock_is_even, 10)</code>, exactly what we wanted.</p>
 <p>What&#39;s the point?</p>
 <p>Well, now we can inject code. Assume we want to memoize the function. After all,
 the result of <code>is_even(X)</code> will always be the same for a given <code>X</code>.</p>
-<pre><code class="language-javascript">const memoized = fn =&gt; {
-    const map = new Map();
-    return (...args) =&gt; {
-        const key = JSON.stringify(args);
-        return map[key] || (map[key] = fn(args));
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">memoized</span> = fn =&gt; {
+    <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> key = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(args);
+        <span class="hljs-keyword">return</span> map[key] || (map[key] = <span class="hljs-title function_">fn</span>(args));
     }
 }
 
-const is_even_memo = mockingbird(memoized(mock_is_even));
-</code></pre>
-<p>We can verify it&#39;s working by measuring the run time:</p>
-<pre><code class="language-javascript">console.time(&#39;slow&#39;);
-is_even_memo(100); // not memoized yet
-console.timeEnd(&#39;slow&#39;);
+<span class="hljs-keyword">const</span> is_even_memo = <span class="hljs-title function_">mockingbird</span>(<span class="hljs-title function_">memoized</span>(mock_is_even));
+</code></pre><p>We can verify it&#39;s working by measuring the run time:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#x27;slow&#x27;</span>);
+<span class="hljs-title function_">is_even_memo</span>(<span class="hljs-number">100</span>); <span class="hljs-comment">// not memoized yet</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#x27;slow&#x27;</span>);
 
-console.time(&#39;fast&#39;);
-is_even_memo(100); // memoized
-console.timeEnd(&#39;fast&#39;);
-</code></pre>
-<h2 id="the-y-combinator-better-code-injection">The Y Combinator (Better Code Injection)</h2>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#x27;fast&#x27;</span>);
+<span class="hljs-title function_">is_even_memo</span>(<span class="hljs-number">100</span>); <span class="hljs-comment">// memoized</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#x27;fast&#x27;</span>);
+</code></pre><h2 id="the-y-combinator-better-code-injection">The Y Combinator (Better Code Injection)</h2>
 <p>This <code>myself(myself, ...)</code> business is ugly. Can we do better? Yes.</p>
 <p>Instead of the mockingbird form:</p>
-<pre><code class="language-javascript">const mock_is_even = (myself, n) =&gt;
-    (n === 0) || !myself(myself, n - 1);
-</code></pre>
-<p>We can write our function in Y form:</p>
-<pre><code class="language-javascript">const Y_is_even = (myself, n) =&gt;
-    (n === 0) || !myself(n - 1);
-</code></pre>
-<p>And here is how we derive the <code>is_even</code> from the Y combinator:</p>
-<pre><code class="language-javascript">const Y = fn =&gt; {
-    const wrapper = (...args) =&gt; fn(wrapper, ...args);
-    return wrapper;
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">mock_is_even</span> = (<span class="hljs-params">myself, n</span>) =&gt;
+    (n === <span class="hljs-number">0</span>) || !<span class="hljs-title function_">myself</span>(myself, n - <span class="hljs-number">1</span>);
+</code></pre><p>We can write our function in Y form:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Y_is_even</span> = (<span class="hljs-params">myself, n</span>) =&gt;
+    (n === <span class="hljs-number">0</span>) || !<span class="hljs-title function_">myself</span>(n - <span class="hljs-number">1</span>);
+</code></pre><p>And here is how we derive the <code>is_even</code> from the Y combinator:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Y</span> = fn =&gt; {
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">wrapper</span> = (<span class="hljs-params">...args</span>) =&gt; <span class="hljs-title function_">fn</span>(wrapper, ...args);
+    <span class="hljs-keyword">return</span> wrapper;
 }
 
-const is_even = Y(Y_is_even);
-</code></pre>
-<p>Injection is done the same way as before:</p>
-<pre><code class="language-javascript">const is_even_memo = Y(memoized(Y_is_even));
-</code></pre>
-<p>Let&#39;s explain: the Y combinator is similar to the mockingbird, but takes care of
+<span class="hljs-keyword">const</span> is_even = <span class="hljs-title function_">Y</span>(Y_is_even);
+</code></pre><p>Injection is done the same way as before:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> is_even_memo = <span class="hljs-title function_">Y</span>(<span class="hljs-title function_">memoized</span>(Y_is_even));
+</code></pre><p>Let&#39;s explain: the Y combinator is similar to the mockingbird, but takes care of
 passing the function to itself, so that we don&#39;t need to do it in Y-form
 functions, unlike in mockingbird-form.</p>
 <p><a href="http://raganwald.com/2018/09/10/why-y.html">Reginald&#39;s post</a> provides the traditional way to express the combinator,
@@ -158,12 +150,11 @@ they are <em>tail-recursive</em>.</p>
 <p>Our <code>Y_is_even</code> function is not tail recursive, pecause of that pesky <code>!</code>
 operator, which is applied after the call to <code>myself</code> returns.</p>
 <p>Fortunately, we can rewrite it to be tail-recursive:</p>
-<pre><code class="language-javascript">const Y_is_even_tailrec = (myself, n) =&gt;
-    n === 0 ? true
-    n === 1 ? false
-    : myself(n - 2);
-</code></pre>
-<p>The idea behind the longtailed widowbird is that, instead of injecting code
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">Y_is_even_tailrec</span> = (<span class="hljs-params">myself, n</span>) =&gt;
+    n === <span class="hljs-number">0</span> ? <span class="hljs-literal">true</span>
+    n === <span class="hljs-number">1</span> ? <span class="hljs-literal">false</span>
+    : <span class="hljs-title function_">myself</span>(n - <span class="hljs-number">2</span>);
+</code></pre><p>The idea behind the longtailed widowbird is that, instead of injecting code
 around the recursive function call, we will <em>replace</em> the recursive call by code
 that returns a function (which executes the &quot;recursive&quot; function call).</p>
 <p>Once we get this function, we can call it. If it does another recursive call, it
@@ -171,30 +162,29 @@ will return another function, which we can call as well. And so on and so forth.
 We call the returned functions in a loop, until we get the final result.
 Recursion has been eliminated in favor of iteration!</p>
 <p>Here is the longtailed widowbird combinator:</p>
-<pre><code class="language-javascript">const longtailed = fn =&gt; (...args0) =&gt; {
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">longtailed</span> = fn =&gt; <span class="hljs-function">(<span class="hljs-params">...args0</span>) =&gt;</span> {
 
-    class Thunk {
-        constructor (delayed) {
-            this.delayed = delayed;
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Thunk</span> {
+        <span class="hljs-title function_">constructor</span> (<span class="hljs-params">delayed</span>) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">delayed</span> = delayed;
         }
 
-        evaluate() {
-            return this.delayed();
+        <span class="hljs-title function_">evaluate</span>(<span class="hljs-params"></span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">delayed</span>();
         }
     }
     
-    const wrapper = (...args) =&gt;
-        new Thunk(() =&gt; fn(wrapper, ...args));
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">wrapper</span> = (<span class="hljs-params">...args</span>) =&gt;
+        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thunk</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">fn</span>(wrapper, ...args));
 
-    let value = fn(wrapper, ...args0);
+    <span class="hljs-keyword">let</span> value = <span class="hljs-title function_">fn</span>(wrapper, ...args0);
 
-    while (value instanceof Thunk)
-        value = value.evaluate();
+    <span class="hljs-keyword">while</span> (value <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Thunk</span>)
+        value = value.<span class="hljs-title function_">evaluate</span>();
 
-    return value;
+    <span class="hljs-keyword">return</span> value;
 }
-</code></pre>
-<p>Let&#39;s go over this.</p>
+</code></pre><p>Let&#39;s go over this.</p>
 <p>The <code>Thunk</code> class is just a way to identify the functions we need to execute in
 the loop (it&#39;s used in the <code>value instancceof Thunk</code> test). If we didn&#39;t have
 this class and just tested for JavaScript&#39;s <code>Function</code> class, our combinator
@@ -204,18 +194,16 @@ wrap the call in a function we store in a <code>Thunk</code> instance.</p>
 <p>Then we get the initial value and we start iterating, until a result is
 obtained!</p>
 <p>Let&#39;s try this!</p>
-<pre><code class="language-javascript">const iter_is_even = longtailed(Y_is_even_tailrec);
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> iter_is_even = <span class="hljs-title function_">longtailed</span>(Y_is_even_tailrec);
 
-// No problem!
-iter_is_even(1000000);
+<span class="hljs-comment">// No problem!</span>
+<span class="hljs-title function_">iter_is_even</span>(<span class="hljs-number">1000000</span>);
 
-// Maximum call stack size exceeded
-is_even(1000000);
-</code></pre>
-<p>Can we still memoize? Of course:</p>
-<pre><code class="language-javascript">const iter_is_even_memo = longtailed(memoized(Y_is_even_tailrec));
-</code></pre>
-<p>And that&#39;s it folks! Code injection in recursive functions, and tail call
+<span class="hljs-comment">// Maximum call stack size exceeded</span>
+<span class="hljs-title function_">is_even</span>(<span class="hljs-number">1000000</span>);
+</code></pre><p>Can we still memoize? Of course:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> iter_is_even_memo = <span class="hljs-title function_">longtailed</span>(<span class="hljs-title function_">memoized</span>(Y_is_even_tailrec));
+</code></pre><p>And that&#39;s it folks! Code injection in recursive functions, and tail call
 optimization in JavaScript, easy as pie!</p>
 <p>You can find all the code in this article collected <a href="https://gist.github.com/norswap/be5fa7938f8331a252d3ff79e61e5834">in this gist</a>.</p>
     </div>
@@ -235,6 +223,11 @@ optimization in JavaScript, easy as pie!</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

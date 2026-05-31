@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -58,11 +59,10 @@ for this purpose.</p>
 <p>To check what a process is up to (or if it is running at all), you&#39;d run a
 command like this (here, assuming I&#39;m interested in the status of the <code>sleep</code>
 process):</p>
-<pre><code class="language-bash">$ ps aux | grep sleep
-# norswap    58694   0.0  0.0  4399328    728 s006  S+    2:26PM   0:00.00 grep sleep
-# norswap    58686   0.0  0.0  4268240    576 s003  S+    2:26PM   0:00.00 sleep 300
-</code></pre>
-<p>This is an incantation I&#39;ve personally memorized a long time ago. I didn&#39;t even
+<pre><code class="hljs language-bash">$ ps aux | grep <span class="hljs-built_in">sleep</span>
+<span class="hljs-comment"># norswap    58694   0.0  0.0  4399328    728 s006  S+    2:26PM   0:00.00 grep sleep</span>
+<span class="hljs-comment"># norswap    58686   0.0  0.0  4268240    576 s003  S+    2:26PM   0:00.00 sleep 300</span>
+</code></pre><p>This is an incantation I&#39;ve personally memorized a long time ago. I didn&#39;t even
 remember what those <code>aux</code> flags meant.</p>
 <p>(As it turns out, omitting the dash (<code>-</code>) toggles legacy mode, in which <code>u</code>
 displays more info. <code>a</code> and <code>x</code> work like they do with a dash, respectively
@@ -72,23 +72,21 @@ to a controlling terminal.)</p>
 <code>grep</code> command itself!</p>
 <p>Here is the remedy, where <code>grep -v</code> excludes matching lines (and no, there is no
 easy way to merge the two <code>grep</code> commands):</p>
-<pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep foobar
-</code></pre>
-<p>Frankly, not something you&#39;d want to type each time.</p>
+<pre><code class="hljs language-bash">$ ps -ax | grep -v <span class="hljs-string">&quot; grep &quot;</span> | grep foobar
+</code></pre><p>Frankly, not something you&#39;d want to type each time.</p>
 <p>Another thing that bothers me is: what are all these numbers and letters? Do I
 care?</p>
 <p>Let&#39;s start by omitting our legacy <code>u</code> option. Then, by default (at leasts on
 stock macOS Catalina!), you&#39;ll get the following fields:</p>
-<pre><code class="language-bash">$ ps ax | head -1
-#  PID   TT  STAT      TIME COMMAND
-</code></pre>
-<p>You should know what the <code>PID</code> is (the process ID), <code>TT</code> is an identifier for
+<pre><code class="hljs language-bash">$ ps ax | <span class="hljs-built_in">head</span> -1
+<span class="hljs-comment">#  PID   TT  STAT      TIME COMMAND</span>
+</code></pre><p>You should know what the <code>PID</code> is (the process ID), <code>TT</code> is an identifier for
 the controlling terminal (e.g. <code>s006</code>) or <code>??</code> if there are no controlling
 terminal.</p>
 <p>The <code>STAT</code> column lists flags that gives information on the status of the
 process. Info about which can be found under the &quot;state&quot; heading when running
 <code>man ps</code> on my mac:</p>
-<pre><code class="language-none">state     The state is given by a sequence of characters, for example, ``RWNA&#39;&#39;.
+<pre><code class="hljs language-none">state     The state is given by a sequence of characters, for example, ``RWNA&#x27;&#x27;.
           The first character indicates the run state of the process:
 
   I       Marks a process that is idle (sleeping for longer than about 20 seconds).
@@ -96,7 +94,7 @@ process. Info about which can be found under the &quot;state&quot; heading when 
   S       Marks a process that is sleeping for less than about 20 seconds.
   T       Marks a stopped process.
   U       Marks a process in uninterruptible wait.
-  Z       Marks a dead process (a ``zombie&#39;&#39;).
+  Z       Marks a dead process (a ``zombie&#x27;&#x27;).
 
   Additional characters after these, if any, indicate additional state information:
 
@@ -116,8 +114,7 @@ process. Info about which can be found under the &quot;state&quot; heading when 
   V       The process is suspended during a vfork(2).
   W       The process is swapped out.
   X       The process is being traced or debugged.
-</code></pre>
-<p>There is a different output (probably Linux) <a href="https://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean#360253">listed in this StackOverflow
+</code></pre><p>There is a different output (probably Linux) <a href="https://askubuntu.com/questions/360252/what-do-the-stat-column-values-in-ps-mean#360253">listed in this StackOverflow
 answer</a> that you might find handy.</p>
 <p>The <code>TIME</code> column: the CPU time the process has consumed since it started, in
 <code>&lt;hours&gt;:&lt;minutes&gt;.&lt;second&gt;</code> format.</p>
@@ -126,15 +123,13 @@ answer</a> that you might find handy.</p>
 <p>So of course, the double <code>grep</code> thing is insane. I think some people might have
 some point have recognized this. What did these good souls do? Come up with
 <code>pgrep</code>, of course!</p>
-<pre><code class="language-bash">$ pgrep sleep
-# 58686
-</code></pre>
-<p>The number printed out is the PID of matched processes. That <code>pgrep sleep</code>
+<pre><code class="hljs language-bash">$ pgrep <span class="hljs-built_in">sleep</span>
+<span class="hljs-comment"># 58686</span>
+</code></pre><p>The number printed out is the PID of matched processes. That <code>pgrep sleep</code>
 command is approximately equivalent to the following full pipe:</p>
-<pre><code class="language-bash">$ ps -ax | grep -v &quot; grep &quot; | grep sleep | awk &#39;{ print $1 }&#39;
-# 58686
-</code></pre>
-<p>But not exactly. On the plus side, it&#39;s slightly more robust, for instance it
+<pre><code class="hljs language-bash">$ ps -ax | grep -v <span class="hljs-string">&quot; grep &quot;</span> | grep <span class="hljs-built_in">sleep</span> | awk <span class="hljs-string">&#x27;{ print $1 }&#x27;</span>
+<span class="hljs-comment"># 58686</span>
+</code></pre><p>But not exactly. On the plus side, it&#39;s slightly more robust, for instance it
 wouldn&#39;t ignore entries in the very unlikely scneario where entries of interest
 contain the &quot; grep &quot; string. <code>pgrep</code> just ignores its own process and that&#39;s it.</p>
 <p>Also, by default <code>pgrep</code> only matches on the program name and not on the
@@ -153,16 +148,14 @@ given). But there are no flags to retrieve any other piece of information.</p>
 <p>One way to do it is to run a <code>grep</code> (or <code>pgrep</code>) command and copy the PID by
 hand.</p>
 <p>Another way is use some piping:</p>
-<pre><code class="language-bash">$ ps -ax | grep sleep # identify process
-$ ps -ax | grep sleep | grep -v &quot; grep &quot; | awk &#39;{ print $1 }&#39; | xargs kill -9 # kill it
-</code></pre>
-<p>Adding <code>awk &#39;{ print $1 }&#39;</code> outputs the first column (the PIDs), while <code>xargs</code>
+<pre><code class="hljs language-bash">$ ps -ax | grep <span class="hljs-built_in">sleep</span> <span class="hljs-comment"># identify process</span>
+$ ps -ax | grep <span class="hljs-built_in">sleep</span> | grep -v <span class="hljs-string">&quot; grep &quot;</span> | awk <span class="hljs-string">&#x27;{ print $1 }&#x27;</span> | xargs <span class="hljs-built_in">kill</span> -9 <span class="hljs-comment"># kill it</span>
+</code></pre><p>Adding <code>awk &#39;{ print $1 }&#39;</code> outputs the first column (the PIDs), while <code>xargs</code>
 transmits them to <code>kill -9</code> as arguments.</p>
 <p>Or using <code>pgrep</code>:</p>
-<pre><code class="language-bash">$ pgrep -l sleep # identify process
-$ pkill !* # kill it
-</code></pre>
-<p>Here the trick is <code>!*</code> which passes the same arguments as the previous command
+<pre><code class="hljs language-bash">$ pgrep -l <span class="hljs-built_in">sleep</span> <span class="hljs-comment"># identify process</span>
+$ pkill !* <span class="hljs-comment"># kill it</span>
+</code></pre><p>Here the trick is <code>!*</code> which passes the same arguments as the previous command
  (<code>pgrep</code>) to <code>pkill</code>. <code>pkill</code> is <code>pgrep</code>&#39;s cousin, which instead of printing
  the matched PIDs, kills them.</p>
 <p>Of course, we could also have used <code>xargs kill -9</code> here.</p>
@@ -221,10 +214,9 @@ hides the header by default, but it can be included back with the <code>--header
 option.</p>
 <h2 id="killing-processes-with-nps">Killing Processes with <code>nps</code></h2>
 <p>Killing processes? Easy peezy, lemon squeezy, just add the <code>-k</code> flag:</p>
-<pre><code class="language-bash">$ nps -k sleep
-# 60772 sleep 300
-</code></pre>
-<p><code>nps</code> still prints the matched processes, which it also kills. Note it may fail
+<pre><code class="hljs language-bash">$ nps -k <span class="hljs-built_in">sleep</span>
+<span class="hljs-comment"># 60772 sleep 300</span>
+</code></pre><p><code>nps</code> still prints the matched processes, which it also kills. Note it may fail
 to kill the matched processes! If the exit code is 0 when using <code>-k</code>, it means
 that all matched processes were killed (or that no process was matched).</p>
 <p>As an aside, it&#39;s rather difficult to make the decision of what to return when
@@ -243,21 +235,19 @@ commands, options can be freely mixed with regular arguments (which are passed
 to <code>grep</code> for matching purposes). One advantage is that if you want to kill a
 process, you can first verify your query, then kill the process by appening the
 <code>-k</code> flag:</p>
-<pre><code class="language-bash">$ nps foobar
-# 59325 sleep 300
-# # (press up, type &#39; -k&#39;)
+<pre><code class="hljs language-bash">$ nps foobar
+<span class="hljs-comment"># 59325 sleep 300</span>
+<span class="hljs-comment"># # (press up, type &#x27; -k&#x27;)</span>
 $ nps foobar -k
-# 59325 sleep 300
-</code></pre>
-<p>If you use an unknown flag (e.g. <code>-z</code> or <code>--foobar</code>), <code>nps</code> will display its
+<span class="hljs-comment"># 59325 sleep 300</span>
+</code></pre><p>If you use an unknown flag (e.g. <code>-z</code> or <code>--foobar</code>), <code>nps</code> will display its
 help and exit with code 1. But what if you want to match flags — a totally
 reasonable thing to do? Then you need to put those flags at the end, <em>after</em> the
 special <code>--</code> separator:</p>
-<pre><code class="language-bash">$ nps -- -li
-# 2043 bash -li
-#  519 bash -li
-</code></pre>
-<p>I think it would be <em>slightly</em> better if one could still have regular options
+<pre><code class="hljs language-bash">$ nps -- -li
+<span class="hljs-comment"># 2043 bash -li</span>
+<span class="hljs-comment">#  519 bash -li</span>
+</code></pre><p>I think it would be <em>slightly</em> better if one could still have regular options
 after. We could imagine to bracket sensitive options with <code>--</code>: <code>nps -- -li -- -k</code>, but then we also need a way to specify we want to match <code>--</code> itself,
 probably as a special flag (e.g. <code>--sep</code>). This is a pretty big change to the
 script for little benefits, so I&#39;m holding out for now.</p>
@@ -272,9 +262,8 @@ the last section) will be used as a <a href="https://www.regular-expressions.inf
 to be quoted. For instance, to search for an interrogation mark: <code>nps &#39;\?&#39;</code>.</p>
 <p>For instance, the following command will match and highlight all string literals
 in running commands arguments:</p>
-<pre><code class="language-bash">$ nps &#39;&quot;.*&quot;&#39;
-</code></pre>
-<p>As for the return code, <code>nps</code> returns 0 if it matched processes, 1 otherwise.
+<pre><code class="hljs language-bash">$ nps <span class="hljs-string">&#x27;&quot;.*&quot;&#x27;</span>
+</code></pre><p>As for the return code, <code>nps</code> returns 0 if it matched processes, 1 otherwise.
 This is different when using the <code>-k</code> flag, as discussed above.</p>
 <h2 id="potential-pitfalls">Potential Pitfalls</h2>
 <p><code>nps</code> was only tested on macOS Catalina, and given how finicky these things are,
@@ -284,125 +273,124 @@ than in <a href="https://www.unix.com/man-page/mojave/1/script/">macOS</a>.</p>
 <h2 id="getting-nps">Getting <code>nps</code></h2>
 <p><a href="https://gist.github.com/norswap/3506d2b46102c2f32f18acced0ecd798"><code>nps</code> can be found in this Gist</a>. Because it&#39;s short, I&#39;m also
 joining a copy below:</p>
-<pre><code class="language-bash">#!/bin/bash
+<pre><code class="hljs language-bash"><span class="hljs-meta">#!/bin/bash</span>
 
-### --- Constants ---
+<span class="hljs-comment">### --- Constants ---</span>
 
-SCRIPT_CMD=&#39;script -q /dev/null&#39;
-TAIL_CMD=&#39;tail -n +2&#39;
+SCRIPT_CMD=<span class="hljs-string">&#x27;script -q /dev/null&#x27;</span>
+TAIL_CMD=<span class="hljs-string">&#x27;tail -n +2&#x27;</span>
 
-### --- Parameters ---
+<span class="hljs-comment">### --- Parameters ---</span>
 
-ALL=&#39;&#39;     # flag to match all users process
-CASE=&#39;-i&#39;  # flag for case-insensitive matches
-KILL=0     # if 1, kill matched processes
+ALL=<span class="hljs-string">&#x27;&#x27;</span>     <span class="hljs-comment"># flag to match all users process</span>
+CASE=<span class="hljs-string">&#x27;-i&#x27;</span>  <span class="hljs-comment"># flag for case-insensitive matches</span>
+KILL=0     <span class="hljs-comment"># if 1, kill matched processes</span>
 
-# ps fields to match on
-MATCH_FIELDS=&#39;-o pid,command&#39;
+<span class="hljs-comment"># ps fields to match on</span>
+MATCH_FIELDS=<span class="hljs-string">&#x27;-o pid,command&#x27;</span>
 
-# ps fields to output
-OUTPUT_FIELDS=&#39;-o pid,command&#39;
+<span class="hljs-comment"># ps fields to output</span>
+OUTPUT_FIELDS=<span class="hljs-string">&#x27;-o pid,command&#x27;</span>
 
-# command used to strip the header (or not)
-STRIP_HEADER=&quot;$TAIL_CMD&quot;
+<span class="hljs-comment"># command used to strip the header (or not)</span>
+STRIP_HEADER=<span class="hljs-string">&quot;<span class="hljs-variable">$TAIL_CMD</span>&quot;</span>
 
-if [[ -t 1 ]]; then
-    COLOR=&#39;--color=always&#39;  # whether to colorize output
-    CLIP=&quot;$SCRIPT_CMD&quot;      # command to clip command names (or not)
-else
-    COLOR=&#39;--color=none&#39;
-    CLIP=&#39;&#39;
-fi
+<span class="hljs-keyword">if</span> [[ -t 1 ]]; <span class="hljs-keyword">then</span>
+    COLOR=<span class="hljs-string">&#x27;--color=always&#x27;</span>  <span class="hljs-comment"># whether to colorize output</span>
+    CLIP=<span class="hljs-string">&quot;<span class="hljs-variable">$SCRIPT_CMD</span>&quot;</span>      <span class="hljs-comment"># command to clip command names (or not)</span>
+<span class="hljs-keyword">else</span>
+    COLOR=<span class="hljs-string">&#x27;--color=none&#x27;</span>
+    CLIP=<span class="hljs-string">&#x27;&#x27;</span>
+<span class="hljs-keyword">fi</span>
 
-### --- Help ---
+<span class="hljs-comment">### --- Help ---</span>
 
-help() {
-    echo -e &quot;Usage: nps &lt;opts or search terms&gt; [-- &lt;search terms&gt;]\n&quot; \
-    &quot;  Print processes.\n&quot; \
-    &quot;    -a: include processes from [a]ll users\n&quot; \
-    &quot;    -s: case-sensitive match\n&quot; \
-    &quot;    -k: [k]ill the mached processes\n&quot; \
-    &quot;    -h: print this [h]elp and exit\n&quot; \
-    &quot;    -l: print the [l]ist of selectable fields and exit\n&quot; \
-    &quot;    -m &lt;fields&gt;: specify comma-separated list of field to [m]atch on\n&quot; \
-    &quot;       If specifying only &#39;-m pid&#39;, only matches entired PIDs. \n&quot; \
-    &quot;    -o &lt;fields&gt;: specify comma-separated list of fields to [o]utput\n&quot; \
-    &quot;    -v: [v]erbose output, equivalent to\n&quot; \
-    &quot;        -o &#39;user, pid, ppid, pgid, sess ,jobc, state, tt, time, command&#39; \n&quot; \
-    &quot;    --color: [c]olorize output even when piping to programs\n&quot; \
-    &quot;    --header: include fields (columns) header in output\n&quot; \
-    &quot;    --full: output full command name even if stdout is a terminal\n&quot; \
-    &quot;    --clip: output clipped command name even if stdout is not a terminal\n&quot; \
-    &quot;    --version: print version and exit\n&quot;;
+<span class="hljs-function"><span class="hljs-title">help</span></span>() {
+    <span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;Usage: nps &lt;opts or search terms&gt; [-- &lt;search terms&gt;]\n&quot;</span> \
+    <span class="hljs-string">&quot;  Print processes.\n&quot;</span> \
+    <span class="hljs-string">&quot;    -a: include processes from [a]ll users\n&quot;</span> \
+    <span class="hljs-string">&quot;    -s: case-sensitive match\n&quot;</span> \
+    <span class="hljs-string">&quot;    -k: [k]ill the mached processes\n&quot;</span> \
+    <span class="hljs-string">&quot;    -h: print this [h]elp and exit\n&quot;</span> \
+    <span class="hljs-string">&quot;    -l: print the [l]ist of selectable fields and exit\n&quot;</span> \
+    <span class="hljs-string">&quot;    -m &lt;fields&gt;: specify comma-separated list of field to [m]atch on\n&quot;</span> \
+    <span class="hljs-string">&quot;       If specifying only &#x27;-m pid&#x27;, only matches entired PIDs. \n&quot;</span> \
+    <span class="hljs-string">&quot;    -o &lt;fields&gt;: specify comma-separated list of fields to [o]utput\n&quot;</span> \
+    <span class="hljs-string">&quot;    -v: [v]erbose output, equivalent to\n&quot;</span> \
+    <span class="hljs-string">&quot;        -o &#x27;user, pid, ppid, pgid, sess ,jobc, state, tt, time, command&#x27; \n&quot;</span> \
+    <span class="hljs-string">&quot;    --color: [c]olorize output even when piping to programs\n&quot;</span> \
+    <span class="hljs-string">&quot;    --header: include fields (columns) header in output\n&quot;</span> \
+    <span class="hljs-string">&quot;    --full: output full command name even if stdout is a terminal\n&quot;</span> \
+    <span class="hljs-string">&quot;    --clip: output clipped command name even if stdout is not a terminal\n&quot;</span> \
+    <span class="hljs-string">&quot;    --version: print version and exit\n&quot;</span>;
 }
 
-### --- Arg Parsing ---
+<span class="hljs-comment">### --- Arg Parsing ---</span>
 
 POSITIONAL=()
-while [[ $# -gt 0 ]]; do case &quot;$1&quot; in
-    -a)  ALL=&#39;-a&#39;;;
-    -s)  CASE=&#39;&#39;;;
-    -v)  OUTPUT_FIELDS=&quot;-o user, pid, ppid, pgid, sess, jobc, state, tt, time, command&#39;&quot;;;
-    -o)  OUTPUT_FIELDS=&quot;-o $2&quot;; shift;;
-    -m)   MATCH_FIELDS=&quot;-o $2&quot;; shift;;
+<span class="hljs-keyword">while</span> [[ <span class="hljs-variable">$#</span> -gt 0 ]]; <span class="hljs-keyword">do</span> <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> <span class="hljs-keyword">in</span>
+    -a)  ALL=<span class="hljs-string">&#x27;-a&#x27;</span>;;
+    -s)  CASE=<span class="hljs-string">&#x27;&#x27;</span>;;
+    -v)  OUTPUT_FIELDS=<span class="hljs-string">&quot;-o user, pid, ppid, pgid, sess, jobc, state, tt, time, command&#x27;&quot;</span>;;
+    -o)  OUTPUT_FIELDS=<span class="hljs-string">&quot;-o <span class="hljs-variable">$2</span>&quot;</span>; <span class="hljs-built_in">shift</span>;;
+    -m)   MATCH_FIELDS=<span class="hljs-string">&quot;-o <span class="hljs-variable">$2</span>&quot;</span>; <span class="hljs-built_in">shift</span>;;
     -k)  KILL=1;;
-    -l)         ps -L; exit;;
-    -h|--help)  help; exit;;
-    --)         shift; break;;
+    -l)         ps -L; <span class="hljs-built_in">exit</span>;;
+    -h|--<span class="hljs-built_in">help</span>)  <span class="hljs-built_in">help</span>; <span class="hljs-built_in">exit</span>;;
+    --)         <span class="hljs-built_in">shift</span>; <span class="hljs-built_in">break</span>;;
 
-    --color)    COLOR=&#39;--color=always&#39;;;
-    --header)   STRIP_HEADER=&#39;cat&#39;;;
-    --full)     CLIP=&#39;&#39;;;
-    --clip)     CLIP=&quot;$SCRIPT_CMD&quot;;;
-    --version)  echo 2020.03.22; exit;;
-    -*)         help; exit 1;;
+    --color)    COLOR=<span class="hljs-string">&#x27;--color=always&#x27;</span>;;
+    --header)   STRIP_HEADER=<span class="hljs-string">&#x27;cat&#x27;</span>;;
+    --full)     CLIP=<span class="hljs-string">&#x27;&#x27;</span>;;
+    --clip)     CLIP=<span class="hljs-string">&quot;<span class="hljs-variable">$SCRIPT_CMD</span>&quot;</span>;;
+    --version)  <span class="hljs-built_in">echo</span> 2020.03.22; <span class="hljs-built_in">exit</span>;;
+    -*)         <span class="hljs-built_in">help</span>; <span class="hljs-built_in">exit</span> 1;;
 
-     *)  POSITIONAL+=(&quot;$1&quot;);;
-    esac
-    shift
-done
-set -- &quot;${POSITIONAL[@]}&quot; &quot;$@&quot; # restore positional parameters
+     *)  POSITIONAL+=(<span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span>);;
+    <span class="hljs-keyword">esac</span>
+    <span class="hljs-built_in">shift</span>
+<span class="hljs-keyword">done</span>
+<span class="hljs-built_in">set</span> -- <span class="hljs-string">&quot;<span class="hljs-variable">${POSITIONAL[@]}</span>&quot;</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span> <span class="hljs-comment"># restore positional parameters</span>
 
-### --- Match PIDs ---
+<span class="hljs-comment">### --- Match PIDs ---</span>
 
-filter_header_and_grep() {
-    $TAIL_CMD | grep -v &quot;$(which nps)&quot; | grep -v &quot; grep &quot;
+<span class="hljs-function"><span class="hljs-title">filter_header_and_grep</span></span>() {
+    <span class="hljs-variable">$TAIL_CMD</span> | grep -v <span class="hljs-string">&quot;<span class="hljs-subst">$(which nps)</span>&quot;</span> | grep -v <span class="hljs-string">&quot; grep &quot;</span>
 }
-select_pids() {
-    grep $CASE -E -- &quot;$*&quot; | awk &#39;{ print $1 }&#39;
-}
-
-# if matching on PID only, only match whole PIDs
-[[ &quot;$MATCH_FIELDS&quot; == &quot;-o pid&quot; ]] &amp;&amp; MATCH_FIELDS=-&quot;p $*&quot;
-
-# find matching PIDs
-PIDS=&quot;$(ps -x $ALL &quot;$MATCH_FIELDS&quot; | filter_header_and_grep | select_pids &quot;$*&quot;)&quot;
-
-# when no process is found: exit with 1, or with 0 when the -k flag is set
-[[ &quot;$PIDS&quot; == &#39;&#39; ]] &amp;&amp; { [[ $KILL == 1 ]]; exit $?; }
-
-### --- Output ---
-
-highlight_matches() {
-    if [[ &quot;$*&quot; == &#39;&#39; ]]; then cat; else grep $COLOR $CASE -E &quot;($*)|$&quot;; fi
+<span class="hljs-function"><span class="hljs-title">select_pids</span></span>() {
+    grep <span class="hljs-variable">$CASE</span> -E -- <span class="hljs-string">&quot;$*&quot;</span> | awk <span class="hljs-string">&#x27;{ print $1 }&#x27;</span>
 }
 
-# print with requested fields + highlighting
-# the tr command cleans up the script command output
-$CLIP ps -x &quot;$OUTPUT_FIELDS&quot; -p $PIDS | tr -d &#39;\r&#39; | $STRIP_HEADER | highlight_matches &quot;$*&quot;
+<span class="hljs-comment"># if matching on PID only, only match whole PIDs</span>
+[[ <span class="hljs-string">&quot;<span class="hljs-variable">$MATCH_FIELDS</span>&quot;</span> == <span class="hljs-string">&quot;-o pid&quot;</span> ]] &amp;&amp; MATCH_FIELDS=-<span class="hljs-string">&quot;p $*&quot;</span>
+
+<span class="hljs-comment"># find matching PIDs</span>
+PIDS=<span class="hljs-string">&quot;<span class="hljs-subst">$(ps -x $ALL <span class="hljs-string">&quot;<span class="hljs-variable">$MATCH_FIELDS</span>&quot;</span> | filter_header_and_grep | select_pids <span class="hljs-string">&quot;$*&quot;</span>)</span>&quot;</span>
+
+<span class="hljs-comment"># when no process is found: exit with 1, or with 0 when the -k flag is set</span>
+[[ <span class="hljs-string">&quot;<span class="hljs-variable">$PIDS</span>&quot;</span> == <span class="hljs-string">&#x27;&#x27;</span> ]] &amp;&amp; { [[ <span class="hljs-variable">$KILL</span> == 1 ]]; <span class="hljs-built_in">exit</span> $?; }
+
+<span class="hljs-comment">### --- Output ---</span>
+
+<span class="hljs-function"><span class="hljs-title">highlight_matches</span></span>() {
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">&quot;$*&quot;</span> == <span class="hljs-string">&#x27;&#x27;</span> ]]; <span class="hljs-keyword">then</span> <span class="hljs-built_in">cat</span>; <span class="hljs-keyword">else</span> grep <span class="hljs-variable">$COLOR</span> <span class="hljs-variable">$CASE</span> -E <span class="hljs-string">&quot;($*)|$&quot;</span>; <span class="hljs-keyword">fi</span>
+}
+
+<span class="hljs-comment"># print with requested fields + highlighting</span>
+<span class="hljs-comment"># the tr command cleans up the script command output</span>
+<span class="hljs-variable">$CLIP</span> ps -x <span class="hljs-string">&quot;<span class="hljs-variable">$OUTPUT_FIELDS</span>&quot;</span> -p <span class="hljs-variable">$PIDS</span> | <span class="hljs-built_in">tr</span> -d <span class="hljs-string">&#x27;\r&#x27;</span> | <span class="hljs-variable">$STRIP_HEADER</span> | highlight_matches <span class="hljs-string">&quot;$*&quot;</span>
 EXIT=$?
 
-### --- Kill ---
+<span class="hljs-comment">### --- Kill ---</span>
 
-# kill matched processes if requested
-if [[ $KILL == 1 ]]; then
-    kill -9 $PIDS
+<span class="hljs-comment"># kill matched processes if requested</span>
+<span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$KILL</span> == 1 ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">kill</span> -9 <span class="hljs-variable">$PIDS</span>
     EXIT=$?
-fi
+<span class="hljs-keyword">fi</span>
 
-exit $EXIT
-</code></pre>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
+<span class="hljs-built_in">exit</span> <span class="hljs-variable">$EXIT</span>
+</code></pre><link href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' rel='stylesheet' />
 <script
 src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/components/prism-core.min.js'></script>
 <script
@@ -424,6 +412,11 @@ src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/pris
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

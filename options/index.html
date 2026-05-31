@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -87,13 +88,11 @@ premium is usually lower than the stock price.</p>
 <p>In a simple scenario, if you buy a call option and hold it until expiration, you
 will profit if the price of the stock ends up being superior to the sum of the
 strike price and the premium.</p>
-<pre><code>call_profit_or_loss = stock_price - (strike_price + premium_paid)
-</code></pre>
-<p>For put options, the logic is reversed, you profit if the stock price goes down
+<pre><code class="hljs">call_profit_or_loss = stock_price - (strike_price + premium_paid)
+</code></pre><p>For put options, the logic is reversed, you profit if the stock price goes down
 enough:</p>
-<pre><code>put_profit_or_loss = strike_price - (stock_price + premium_paid)
-</code></pre>
-<p>Try to understand these formulas. The key idea for a call option is that it
+<pre><code class="hljs">put_profit_or_loss = strike_price - (stock_price + premium_paid)
+</code></pre><p>Try to understand these formulas. The key idea for a call option is that it
 allows you to purchase the stock at the strike price. If the current stock price
 is above the strike price, you can buy the stock (through the call option) and
 sell it for an instant markup.</p>
@@ -507,6 +506,11 @@ rally</a>.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

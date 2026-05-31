@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -159,7 +160,7 @@ on your squat for a little while.</p>
 something that looks like a <a href="/weight-training-7">DUP</a> at home. It&#39;s more difficult to vary intensity
 for the same exercise at home, so I&#39;m mostly varying the exercises. Here&#39;s a
 copy of the listing of what I&#39;ve planned:</p>
-<pre><code class="language-org">* One
+<pre><code class="hljs language-org">* One
 ** Bulgarian Split Squats, 20kg
 ** Regular Pushups
 ** Single Leg Deadlift
@@ -189,8 +190,7 @@ copy of the listing of what I&#39;ve planned:</p>
 ** Lying Leg Curls / Reverse Hypers
 ** Seated Corkscrew
 ** Leviation Crunches
-</code></pre>
-<p>I&#39;m doing one exercise of each of four types every session: squat-like,
+</code></pre><p>I&#39;m doing one exercise of each of four types every session: squat-like,
 deadlift-like, arms and shoulders. I finish every session with two small ab
 exercises.</p>
 <p>My heavy squat move is the bulgarian split squat, the heavy deadlift is the
@@ -219,6 +219,11 @@ other bodyweight exercises too?</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

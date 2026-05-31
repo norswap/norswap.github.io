@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -114,7 +115,7 @@ the class file that you are forced to use to submit you paper (I&#39;m looking a
 you, ACM).</p>
 <p>Here&#39;s an exemple of filtering spec to get rid of all errors that pop up when
 compiling the <a href="http://www.sigplan.org/Resources/Author/">acmart</a> example file:</p>
-<pre><code>!(boring | info | message | under | over
+<pre><code class="hljs">!(boring | info | message | under | over
 | p &quot;hyperref&quot; &amp; &quot;Token not allowed in a PDF string&quot;
 | &quot;Class acmart Info&quot;
 | &quot;file:line:error style messages enabled&quot;
@@ -125,20 +126,18 @@ compiling the <a href="http://www.sigplan.org/Resources/Author/">acmart</a> exam
 | &quot;(msharpe)&quot;
 | &quot;]&quot; &amp;&amp; !&quot;..&quot;
 )
-</code></pre>
-<p>The first line matches <code>pulp</code>&#39;s default specification.</p>
+</code></pre><p>The first line matches <code>pulp</code>&#39;s default specification.</p>
 <p><code>pulp</code> can be integrated with <code>latexmk</code> fairly easily, by means of a
 configuration file.</p>
 <p><code>pulp</code> is not as friendly to install as the other tools. Here is how to install
 on OSX, assuming you already have <a href="https://brew.sh/">homebrew</a> (on other platforms, you just need
 to install the Haskell platform in some other way):</p>
-<pre><code>brew cask install haskell-platform
+<pre><code class="hljs">brew cask install haskell-platform
 git clone https://github.com/dmwit/pulp.git
 cabal update
 cabal install
 PATH=&quot;$HOME/Library/Haskell/bin:$PATH&quot;
-</code></pre>
-<h2 id="preview">Preview</h2>
+</code></pre><h2 id="preview">Preview</h2>
 <p>Unless you&#39;re working with TeXstudio or ShareLatex, you&#39;ll need to preview the
 generated PDF files using a PDF viewer. You want to use one that picks up
 changes to the PDF on the disk, and reloads it on the fly, while keeping your
@@ -189,6 +188,11 @@ things, rather than as a toolchain to be relied on.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

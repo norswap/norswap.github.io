@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -52,7 +53,7 @@
       <span class="post-date">24 Feb 2015</span>
 <p>Warning: title may contain hyperbole.</p>
 <p>Without further ado:</p>
-<pre><code>public class Caster
+<pre><code class="hljs">public class Caster
 {
     @SuppressWarnings(&quot;unchecked&quot;)
     public static &lt;T&gt; T cast(Object obj)
@@ -60,18 +61,15 @@
         return (T) obj;
     }
 }
-</code></pre>
-<p>Now you can write:</p>
-<pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
+</code></pre><p>Now you can write:</p>
+<pre><code class="hljs">List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
 functionExpectingStringList(Caster.cast(x));
-</code></pre>
-<p>instead of:</p>
-<pre><code>List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
+</code></pre><p>instead of:</p>
+<pre><code class="hljs">List&lt;Object&gt; x = objectList(&quot;cthulhu&quot;);
 @SuppressWarnings(&quot;unchecked&quot;)
 List&lt;String&gt; y = (List&lt;String&gt;) x;
 functionExpectingStringList(y);
-</code></pre>
-<p>So, it does two things: (1) automatically infer the destination type and (2)
+</code></pre><p>So, it does two things: (1) automatically infer the destination type and (2)
 avoid an intermediate variable declaration, which you need if you want to ignore
 the resulting &quot;unchecked cast&quot; warning. This warning appears when the cast can&#39;t
 be checked at run-time, as is the case when casting between types that differ in
@@ -80,11 +78,10 @@ their generic type parameters.</p>
 <code>cast</code> is valid on Java 5 and higher however, and you still get benefit (2).</p>
 <p>In the cases where the type cannot be inferred, you need to specify it
 explicitly:</p>
-<pre><code>Object x = &quot;cthulhu&quot;;
+<pre><code class="hljs">Object x = &quot;cthulhu&quot;;
 functionExpectingString(Caster.&lt;String&gt;cast(x));
-</code></pre>
-<p>It also holds up remarkably well when using multiple casts with generics:</p>
-<pre><code>static &lt;T&gt; void takeArrayListPair(ArrayList&lt;T&gt; a, ArrayList&lt;T&gt; b) {}
+</code></pre><p>It also holds up remarkably well when using multiple casts with generics:</p>
+<pre><code class="hljs">static &lt;T&gt; void takeArrayListPair(ArrayList&lt;T&gt; a, ArrayList&lt;T&gt; b) {}
 
 static void test()
 {
@@ -112,6 +109,11 @@ static void test()
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

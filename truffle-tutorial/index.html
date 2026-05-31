@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -118,9 +119,8 @@ instructions).</p>
 <code>“graalvm-ce-java11-20.1.0” cannot be opened because the developer cannot be verified.</code> or <code>macOS cannot verify that this app is free from malware.</code> when
 trying one of GraalVM&#39;s binaries (<code>java</code>, <code>javac</code>, ...), you can fix the
 situation by running:</p>
-<pre><code class="language-bash">sudo xattr -dr com.apple.quarantine graalvm-ce-java11-20.1.0
-</code></pre>
-<p>(Replace <code>graalvm-ce-java11-20.1.0</code> by the path to the root directory of your
+<pre><code class="hljs language-bash"><span class="hljs-built_in">sudo</span> xattr -dr com.apple.quarantine graalvm-ce-java11-20.1.0
+</code></pre><p>(Replace <code>graalvm-ce-java11-20.1.0</code> by the path to the root directory of your
 GraalVM installation.)</p>
 <p>You&#39;ll also need the Ideal Graph Visualizer (IGV), (again, I used version 20.1.0
 for Java 11). IGV is normally part of the (paid/licensed) Entreprise Edition of
@@ -130,72 +130,69 @@ it here</a>.</p>
 <p>Same as before, if you get an error on macOS, you might need to run the
 following (where <code>idealgraphvisualizer</code> is the directory where you extracted
 IGV):</p>
-<pre><code class="language-bash">sudo xattr -dr com.apple.quarantine idealgraphvisualizer
-</code></pre>
-<p>I&#39;m going to walk through my whole language example, showing you the code as I
+<pre><code class="hljs language-bash"><span class="hljs-built_in">sudo</span> xattr -dr com.apple.quarantine idealgraphvisualizer
+</code></pre><p>I&#39;m going to walk through my whole language example, showing you the code as I
 go. However, the entire source is avaiable <a href="https://github.com/norswap/truffle-tutorial">on this Github repository</a>.</p>
 <p>Let&#39;s get started. We&#39;ll use Maven to build the project and pull in the
 dependencies. To install it, just use your package manager of choice, or follow
 the <a href="http://maven.apache.org/install.html">install instruction</a>.</p>
 <p>Here is the Maven config file for the project (<a href="https://github.com/norswap/truffle-tutorial/blob/master/pom.xml"><code>pom.xml</code> 🔗</a>):</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-    &lt;groupId&gt;com.norswap&lt;/groupId&gt;
-    &lt;artifactId&gt;exni&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
-    &lt;build&gt;
-        &lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-                &lt;version&gt;3.8.1&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;source&gt;11&lt;/source&gt;
-                    &lt;target&gt;11&lt;/target&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-    &lt;properties&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;graalvm.version&gt;20.1.0&lt;/graalvm.version&gt;
-    &lt;/properties&gt;
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.graalvm.truffle&lt;/groupId&gt;
-            &lt;artifactId&gt;truffle-api&lt;/artifactId&gt;
-            &lt;version&gt;${graalvm.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.graalvm.truffle&lt;/groupId&gt;
-            &lt;artifactId&gt;truffle-dsl-processor&lt;/artifactId&gt;
-            &lt;version&gt;${graalvm.version}&lt;/version&gt;
-            &lt;scope&gt;provided&lt;/scope&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-&lt;/project&gt;
-</code></pre>
-<p>There&#39;s nothing incredibly tricky going on here. Sources go to <code>src</code>
+<pre><code class="hljs language-xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.norswap<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>exni<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0.0-SNAPSHOT<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">sourceDirectory</span>&gt;</span>src<span class="hljs-tag">&lt;/<span class="hljs-name">sourceDirectory</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.8.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">source</span>&gt;</span>11<span class="hljs-tag">&lt;/<span class="hljs-name">source</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">target</span>&gt;</span>11<span class="hljs-tag">&lt;/<span class="hljs-name">target</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">graalvm.version</span>&gt;</span>20.1.0<span class="hljs-tag">&lt;/<span class="hljs-name">graalvm.version</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.graalvm.truffle<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>truffle-api<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>${graalvm.version}<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.graalvm.truffle<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>truffle-dsl-processor<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>${graalvm.version}<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>provided<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span>
+</code></pre><p>There&#39;s nothing incredibly tricky going on here. Sources go to <code>src</code>
 (<a href="https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html"><code>src/main/java</code></a> can burn in hell), we&#39;re using Java version 11, and pulling down
 the Truffle API and Truffle annotation processor version 20.1.0.</p>
 <p>I&#39;m calling this project <code>exni</code> for &quot;ex nihilo&quot;. I&#39;m cute like that.</p>
 <h2 id="building-the-ast">Building the AST</h2>
 <p>The first thing we need to do is to build a simple AST to be evaluated.</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/ExniNode.java"><code>ExniNode.java</code> 🔗</a></p>
-<pre><code class="language-java">package exni.nodes;
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni.nodes;
 
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.Node;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.frame.VirtualFrame;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.nodes.Node;
 
-public abstract class ExniNode extends Node
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExniNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Node</span>
 {
-    /** main execute method */
-    public abstract Object execute (VirtualFrame frame);
+    <span class="hljs-comment">/** main execute method */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> Object <span class="hljs-title function_">execute</span> <span class="hljs-params">(VirtualFrame frame)</span>;
 }
-</code></pre>
-<p>We&#39;ll use this as the parent class for all our AST nodes. It inherits from the
+</code></pre><p>We&#39;ll use this as the parent class for all our AST nodes. It inherits from the
 Truffle <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/Node.html"><code>Node</code></a> class itself. The <code>execute</code> method evaluates the node and returns
 a result of type <code>Object</code>. It takes a <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/frame/VirtualFrame.html"><code>VirtualFrame</code></a>, which represents a
 <a href="https://en.wikipedia.org/wiki/Call_stack">stack frame</a>: that of the &quot;function&quot; (or equivalent concept) to which the node belongs.</p>
@@ -206,56 +203,54 @@ depends on the requested value type (<code>Object</code> being the most general,
 therefore always applicable) as well as available parameters.</p>
 <p>Let&#39;s move to the simplest node implementation possible:</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/IntLiteralNode.java"><code>IntLiteralNode.java</code> 🔗</a></p>
-<pre><code class="language-java">package exni.nodes;
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni.nodes;
 
-import com.oracle.truffle.api.frame.VirtualFrame;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.frame.VirtualFrame;
 
-public final class IntLiteralNode extends ExniNode
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">IntLiteralNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ExniNode</span>
 {
-    public final long value;
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> value;
 
-    public IntLiteralNode (long value) {
-        this.value = value;
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">IntLiteralNode</span> <span class="hljs-params">(<span class="hljs-type">long</span> value)</span> {
+        <span class="hljs-built_in">this</span>.value = value;
     }
 
-    @Override public Object execute (VirtualFrame frame) {
-        return value;
+    <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">execute</span> <span class="hljs-params">(VirtualFrame frame)</span> {
+        <span class="hljs-keyword">return</span> value;
     }
 }
-</code></pre>
-<p>This node represents an integer literal that appears in source code. We
+</code></pre><p>This node represents an integer literal that appears in source code. We
 implement the <code>execute</code> method to simply return that number.</p>
 <p>Now, a node for the <code>+</code> operator:</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/AddNode.java"><code>AddNode.java</code> 🔗</a></p>
-<pre><code class="language-java">package exni.nodes;
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni.nodes;
 
-import com.oracle.truffle.api.dsl.Fallback;
-import com.oracle.truffle.api.dsl.NodeChild;
-import com.oracle.truffle.api.dsl.Specialization;
-import exni.ExniException;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.dsl.Fallback;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.dsl.NodeChild;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.dsl.Specialization;
+<span class="hljs-keyword">import</span> exni.ExniException;
 
-@NodeChild(&quot;left&quot;)
-@NodeChild(&quot;right&quot;)
-public abstract class AddNode extends ExniNode
+<span class="hljs-meta">@NodeChild(&quot;left&quot;)</span>
+<span class="hljs-meta">@NodeChild(&quot;right&quot;)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AddNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ExniNode</span>
 {
-    public static AddNode create (ExniNode left, ExniNode right) {
-        return AddNodeGen.create(left, right);
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> AddNode <span class="hljs-title function_">create</span> <span class="hljs-params">(ExniNode left, ExniNode right)</span> {
+        <span class="hljs-keyword">return</span> AddNodeGen.create(left, right);
     }
 
-    @Specialization protected long addLongs (long left, long right) {
-        return left + right;
+    <span class="hljs-meta">@Specialization</span> <span class="hljs-keyword">protected</span> <span class="hljs-type">long</span> <span class="hljs-title function_">addLongs</span> <span class="hljs-params">(<span class="hljs-type">long</span> left, <span class="hljs-type">long</span> right)</span> {
+        <span class="hljs-keyword">return</span> left + right;
     }
 
-    @Specialization String addStrings (String left, String right) {
-        return left + right;
+    <span class="hljs-meta">@Specialization</span> String <span class="hljs-title function_">addStrings</span> <span class="hljs-params">(String left, String right)</span> {
+        <span class="hljs-keyword">return</span> left + right;
     }
 
-    @Fallback protected void typeError (Object left, Object right) {
-        throw new ExniException(&quot;type error: args must be two longs, or two strings&quot;, this);
+    <span class="hljs-meta">@Fallback</span> <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">typeError</span> <span class="hljs-params">(Object left, Object right)</span> {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ExniException</span>(<span class="hljs-string">&quot;type error: args must be two longs, or two strings&quot;</span>, <span class="hljs-built_in">this</span>);
     }
 }
-</code></pre>
-<p>The two <code>NodeChild</code> annotations define children nodes of this AST node. By
+</code></pre><p>The two <code>NodeChild</code> annotations define children nodes of this AST node. By
 default, these have the type of the superclass (<code>ExniNode</code> in this case), but
 it&#39;s also possible to specify the type explicitly with the <code>type</code> annotation
 element.</p>
@@ -289,87 +284,86 @@ method overloads, of course).</p>
 <p>Let&#39;s look at the class generated by Truffle to implement our abstract
 <code>AddNode</code>:</p>
 <p><a href="https://gist.github.com/norswap/a235123a4aa3a236fbdeb653ea389362#file-addnodegen-java"><code>AddNodeGen 🔗</code></a></p>
-<pre><code class="language-java">package exni.nodes;
-// ...
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni.nodes;
+<span class="hljs-comment">// ...</span>
 
-@GeneratedBy(AddNode.class)
-public final class AddNodeGen extends AddNode {
+<span class="hljs-meta">@GeneratedBy(AddNode.class)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AddNodeGen</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AddNode</span> {
 
-    @Child private ExniNode left_;
-    @Child private ExniNode right_;
-    @CompilationFinal private int state_;
+    <span class="hljs-meta">@Child</span> <span class="hljs-keyword">private</span> ExniNode left_;
+    <span class="hljs-meta">@Child</span> <span class="hljs-keyword">private</span> ExniNode right_;
+    <span class="hljs-meta">@CompilationFinal</span> <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> state_;
 
-    private AddNodeGen(ExniNode left, ExniNode right) {
-        this.left_ = left;
-        this.right_ = right;
+    <span class="hljs-keyword">private</span> <span class="hljs-title function_">AddNodeGen</span><span class="hljs-params">(ExniNode left, ExniNode right)</span> {
+        <span class="hljs-built_in">this</span>.left_ = left;
+        <span class="hljs-built_in">this</span>.right_ = right;
     }
 
-    @Override
-    public Object execute(VirtualFrame frameValue) {
-        int state = state_;
-        Object leftValue_ = this.left_.execute(frameValue);
-        Object rightValue_ = this.right_.execute(frameValue);
-        if ((state &amp; 0b1) != 0 /* is-active addLongs(long, long) */ &amp;&amp; leftValue_ instanceof Long) {
-            long leftValue__ = (long) leftValue_;
-            if (rightValue_ instanceof Long) {
-                long rightValue__ = (long) rightValue_;
-                return addLongs(leftValue__, rightValue__);
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">execute</span><span class="hljs-params">(VirtualFrame frameValue)</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">state</span> <span class="hljs-operator">=</span> state_;
+        <span class="hljs-type">Object</span> <span class="hljs-variable">leftValue_</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.left_.execute(frameValue);
+        <span class="hljs-type">Object</span> <span class="hljs-variable">rightValue_</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.right_.execute(frameValue);
+        <span class="hljs-keyword">if</span> ((state &amp; <span class="hljs-number">0b1</span>) != <span class="hljs-number">0</span> <span class="hljs-comment">/* is-active addLongs(long, long) */</span> &amp;&amp; leftValue_ <span class="hljs-keyword">instanceof</span> Long) {
+            <span class="hljs-type">long</span> <span class="hljs-variable">leftValue__</span> <span class="hljs-operator">=</span> (<span class="hljs-type">long</span>) leftValue_;
+            <span class="hljs-keyword">if</span> (rightValue_ <span class="hljs-keyword">instanceof</span> Long) {
+                <span class="hljs-type">long</span> <span class="hljs-variable">rightValue__</span> <span class="hljs-operator">=</span> (<span class="hljs-type">long</span>) rightValue_;
+                <span class="hljs-keyword">return</span> addLongs(leftValue__, rightValue__);
             }
         }
-        if ((state &amp; 0b10) != 0 /* is-active addStrings(String, String) */ &amp;&amp; leftValue_ instanceof String) {
-            String leftValue__ = (String) leftValue_;
-            if (rightValue_ instanceof String) {
-                String rightValue__ = (String) rightValue_;
-                return addStrings(leftValue__, rightValue__);
+        <span class="hljs-keyword">if</span> ((state &amp; <span class="hljs-number">0b10</span>) != <span class="hljs-number">0</span> <span class="hljs-comment">/* is-active addStrings(String, String) */</span> &amp;&amp; leftValue_ <span class="hljs-keyword">instanceof</span> String) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">leftValue__</span> <span class="hljs-operator">=</span> (String) leftValue_;
+            <span class="hljs-keyword">if</span> (rightValue_ <span class="hljs-keyword">instanceof</span> String) {
+                <span class="hljs-type">String</span> <span class="hljs-variable">rightValue__</span> <span class="hljs-operator">=</span> (String) rightValue_;
+                <span class="hljs-keyword">return</span> addStrings(leftValue__, rightValue__);
             }
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
-        return executeAndSpecialize(leftValue_, rightValue_);
+        <span class="hljs-keyword">return</span> executeAndSpecialize(leftValue_, rightValue_);
     }
 
-    private Object executeAndSpecialize(Object leftValue, Object rightValue) {
-        int state = state_;
-        if (leftValue instanceof Long) {
-            long leftValue_ = (long) leftValue;
-            if (rightValue instanceof Long) {
-                long rightValue_ = (long) rightValue;
-                this.state_ = state = state | 0b1 /* add-active addLongs(long, long) */;
-                return addLongs(leftValue_, rightValue_);
+    <span class="hljs-keyword">private</span> Object <span class="hljs-title function_">executeAndSpecialize</span><span class="hljs-params">(Object leftValue, Object rightValue)</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">state</span> <span class="hljs-operator">=</span> state_;
+        <span class="hljs-keyword">if</span> (leftValue <span class="hljs-keyword">instanceof</span> Long) {
+            <span class="hljs-type">long</span> <span class="hljs-variable">leftValue_</span> <span class="hljs-operator">=</span> (<span class="hljs-type">long</span>) leftValue;
+            <span class="hljs-keyword">if</span> (rightValue <span class="hljs-keyword">instanceof</span> Long) {
+                <span class="hljs-type">long</span> <span class="hljs-variable">rightValue_</span> <span class="hljs-operator">=</span> (<span class="hljs-type">long</span>) rightValue;
+                <span class="hljs-built_in">this</span>.state_ = state = state | <span class="hljs-number">0b1</span> <span class="hljs-comment">/* add-active addLongs(long, long) */</span>;
+                <span class="hljs-keyword">return</span> addLongs(leftValue_, rightValue_);
             }
         }
-        if (leftValue instanceof String) {
-            String leftValue_ = (String) leftValue;
-            if (rightValue instanceof String) {
-                String rightValue_ = (String) rightValue;
-                this.state_ = state = state | 0b10 /* add-active addStrings(String, String) */;
-                return addStrings(leftValue_, rightValue_);
+        <span class="hljs-keyword">if</span> (leftValue <span class="hljs-keyword">instanceof</span> String) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">leftValue_</span> <span class="hljs-operator">=</span> (String) leftValue;
+            <span class="hljs-keyword">if</span> (rightValue <span class="hljs-keyword">instanceof</span> String) {
+                <span class="hljs-type">String</span> <span class="hljs-variable">rightValue_</span> <span class="hljs-operator">=</span> (String) rightValue;
+                <span class="hljs-built_in">this</span>.state_ = state = state | <span class="hljs-number">0b10</span> <span class="hljs-comment">/* add-active addStrings(String, String) */</span>;
+                <span class="hljs-keyword">return</span> addStrings(leftValue_, rightValue_);
             }
         }
-        this.state_ = state = state | 0b100 /* add-active typeError(Object, Object) */;
+        <span class="hljs-built_in">this</span>.state_ = state = state | <span class="hljs-number">0b100</span> <span class="hljs-comment">/* add-active typeError(Object, Object) */</span>;
         typeError(leftValue, rightValue);
-        return null;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
     }
 
-    @Override
-    public NodeCost getCost() { /* ... */ }
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-keyword">public</span> NodeCost <span class="hljs-title function_">getCost</span><span class="hljs-params">()</span> { <span class="hljs-comment">/* ... */</span> }
 
-    private static boolean fallbackGuard_(int state, Object leftValue, Object rightValue) {
-        if (((state &amp; 0b1)) == 0 /* is-not-active addLongs(long, long) */ &amp;&amp; leftValue instanceof Long &amp;&amp; rightValue instanceof Long) {
-            return false;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">fallbackGuard_</span><span class="hljs-params">(<span class="hljs-type">int</span> state, Object leftValue, Object rightValue)</span> {
+        <span class="hljs-keyword">if</span> (((state &amp; <span class="hljs-number">0b1</span>)) == <span class="hljs-number">0</span> <span class="hljs-comment">/* is-not-active addLongs(long, long) */</span> &amp;&amp; leftValue <span class="hljs-keyword">instanceof</span> Long &amp;&amp; rightValue <span class="hljs-keyword">instanceof</span> Long) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
         }
-        if (((state &amp; 0b10)) == 0 /* is-not-active addStrings(String, String) */ &amp;&amp; leftValue instanceof String &amp;&amp; rightValue instanceof String) {
-            return false;
+        <span class="hljs-keyword">if</span> (((state &amp; <span class="hljs-number">0b10</span>)) == <span class="hljs-number">0</span> <span class="hljs-comment">/* is-not-active addStrings(String, String) */</span> &amp;&amp; leftValue <span class="hljs-keyword">instanceof</span> String &amp;&amp; rightValue <span class="hljs-keyword">instanceof</span> String) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
         }
-        return true;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
 
-    public static AddNode create(ExniNode left, ExniNode right) {
-        return new AddNodeGen(left, right);
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> AddNode <span class="hljs-title function_">create</span><span class="hljs-params">(ExniNode left, ExniNode right)</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AddNodeGen</span>(left, right);
     }
 
 }
-</code></pre>
-<p>It has three fields. The first two were generated by the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/NodeChild.html"><code>NodeChild</code></a>
+</code></pre><p>It has three fields. The first two were generated by the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/dsl/NodeChild.html"><code>NodeChild</code></a>
 annotations. There is also a <code>create</code> method at the bottom, which can be used to
 get create an instance of <code>AddNode</code> if given its two children. The third field
 (<code>state_</code>) keeps track of what specializations are active for the node.</p>
@@ -378,14 +372,13 @@ specialization is first used, it becomes active. One node can have multiple
 specializations active at the same time. A new node starts with no active
 specializations.</p>
 <p>For instance, let&#39;s imagine a small syntax and a dummy program for our language:</p>
-<pre><code>def add(x, y)
+<pre><code class="hljs">def add(x, y)
     return x + y; // AddNode 1
 
 add(1, 2)
 add(&quot;a&quot;, &quot;b&quot;)
 1 + 2 // AddNode 2
-</code></pre>
-<p>I have used comments to mark the two locations where an <code>AddNode</code> is generated.
+</code></pre><p>I have used comments to mark the two locations where an <code>AddNode</code> is generated.
 <code>AddNode 1</code> will see both integer and string values, and so both specializations
 will become active. <code>AddNode 2</code>, on the other hand, will only ever see integers.</p>
 <p>But why do we need to distinguish between active and inactive specializations?
@@ -454,32 +447,31 @@ thesis</a>.</p>
 <p>Okay, so we have our grand addition/concatenation node. Let&#39;s actually use it.
 Here is our main class:</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniMain.java"><code>ExniMain</code> 🔗</a></p>
-<pre><code class="language-java">package exni;
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni;
 
-import com.oracle.truffle.api.Truffle;
-import exni.nodes.AddNode;
-import exni.nodes.IntLiteralNode;
-import exni.nodes.ExniRootNode;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.Truffle;
+<span class="hljs-keyword">import</span> exni.nodes.AddNode;
+<span class="hljs-keyword">import</span> exni.nodes.IntLiteralNode;
+<span class="hljs-keyword">import</span> exni.nodes.ExniRootNode;
 
-public abstract class ExniMain
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExniMain</span>
 {
-    public static void main (String[] args)
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span> <span class="hljs-params">(String[] args)</span>
     {
-        var add = AddNode.create(new IntLiteralNode(1), new IntLiteralNode(2));
-        var root = new ExniRootNode(add);
-        var target = Truffle.getRuntime().createCallTarget(root);
+        <span class="hljs-type">var</span> <span class="hljs-variable">add</span> <span class="hljs-operator">=</span> AddNode.create(<span class="hljs-keyword">new</span> <span class="hljs-title class_">IntLiteralNode</span>(<span class="hljs-number">1</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">IntLiteralNode</span>(<span class="hljs-number">2</span>));
+        <span class="hljs-type">var</span> <span class="hljs-variable">root</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ExniRootNode</span>(add);
+        <span class="hljs-type">var</span> <span class="hljs-variable">target</span> <span class="hljs-operator">=</span> Truffle.getRuntime().createCallTarget(root);
 
-        // Uncomment this in order to use a CountNode instead of an AddNode.
-        // target = Truffle.getRuntime().createCallTarget(new MainNode(new CountNode()));
+        <span class="hljs-comment">// Uncomment this in order to use a CountNode instead of an AddNode.</span>
+        <span class="hljs-comment">// target = Truffle.getRuntime().createCallTarget(new MainNode(new CountNode()));</span>
 
         System.out.println(target.call());
 
-        // Uncomment this in order to force the compilation of the node.
-        // while (true) target.call();
+        <span class="hljs-comment">// Uncomment this in order to force the compilation of the node.</span>
+        <span class="hljs-comment">// while (true) target.call();</span>
     }
 }
-</code></pre>
-<blockquote>
+</code></pre><blockquote>
 <p>Don&#39;t worry about the &quot;uncomment&quot; bit. We&#39;ll get to those later.</p>
 </blockquote>
 <p>We construct our <code>AddNode</code> as expected, but then we wrap it into a
@@ -493,27 +485,26 @@ expression does not take parameters.</p>
 <p><code>ExniRootNode</code> doesn&#39;t do anything fancy by itself: it just wraps an <code>ExniNode</code>,
 and extends <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/nodes/RootNode.html"><code>RootNode</code></a>.</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/ExniRootNode.java"><code>ExniRootNode</code> 🔗</a></p>
-<pre><code class="language-java">package exni.nodes;
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni.nodes;
 
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.RootNode;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.frame.VirtualFrame;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.nodes.RootNode;
 
-public final class ExniRootNode extends RootNode
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExniRootNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RootNode</span>
 {
-    @SuppressWarnings(&quot;FieldMayBeFinal&quot;)
-    private @Child ExniNode root;
+    <span class="hljs-meta">@SuppressWarnings(&quot;FieldMayBeFinal&quot;)</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-meta">@Child</span> ExniNode root;
 
-    public ExniRootNode(ExniNode root) {
-        super(null);
-        this.root = root;
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ExniRootNode</span><span class="hljs-params">(ExniNode root)</span> {
+        <span class="hljs-built_in">super</span>(<span class="hljs-literal">null</span>);
+        <span class="hljs-built_in">this</span>.root = root;
     }
 
-    @Override public Object execute (VirtualFrame frame) {
-        return root.execute(frame);
+    <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">execute</span> <span class="hljs-params">(VirtualFrame frame)</span> {
+        <span class="hljs-keyword">return</span> root.execute(frame);
     }
 }
-</code></pre>
-<p>The next step is to call
+</code></pre><p>The next step is to call
 <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/TruffleRuntime.html#createCallTarget-com.oracle.truffle.api.nodes.RootNode-"><code>Truffle.getRuntime().createCallTarget(root)</code></a> to create a
 <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget</code></a>. The call target represents something you can call (in this case,
 it&#39;s our add expression).</p>
@@ -532,15 +523,14 @@ various <code>execute</code> methods) when called.</p>
 <p>All that is left to do is to invoke <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/CallTarget.html"><code>CallTarget#call</code></a> and print
 the result.</p>
 <p>To run this after building with Maven, you can use the following command:</p>
-<pre><code class="language-bash">M2=$HOME/.m2/repository
+<pre><code class="hljs language-bash">M2=<span class="hljs-variable">$HOME</span>/.m2/repository
 java \
     -Dtruffle.class.path.append=target/classes \
     --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
     --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
-    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
+    -classpath target/classes:<span class="hljs-variable">$M2</span>/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:<span class="hljs-variable">$M2</span>/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
     exni.ExniMain
-</code></pre>
-<p>A couple practical points:</p>
+</code></pre><p>A couple practical points:</p>
 <ul>
 <li>you need to be at the repository&#39;s root</li>
 <li><code>java</code> must point to the GraalVM version</li>
@@ -563,23 +553,21 @@ classloader to find our own node classes.</p>
 directory (just wherever you unzipped the downloaded archive). This will tie up
 the console in which IGV is run — if you it to run in the background, I
 recommend using <a href="https://www.man7.org/linux/man-pages/man1/screen.1.html"><code>screen</code></a>:</p>
-<pre><code>screen -dm -S igv bin/idealgraphvisualizer
+<pre><code class="hljs">screen -dm -S igv bin/idealgraphvisualizer
 screen -r igv # to attach to the screen
-</code></pre>
-<p>Next you&#39;ll need to configure your java run command in order for it to generate
+</code></pre><p>Next you&#39;ll need to configure your java run command in order for it to generate
 compilation graphs and send them to IGV. You can achieve this by adding the
 following flags to your Java command: <code>-Dgraal.Dump=Truffle -Dgraal.PrintGraph=Network</code>. Full command:</p>
-<pre><code class="language-bash">M2=$HOME/.m2/repository
+<pre><code class="hljs language-bash">M2=<span class="hljs-variable">$HOME</span>/.m2/repository
 java \
     -Dtruffle.class.path.append=target/classes \
     --add-exports org.graalvm.truffle/com.oracle.truffle.api.nodes=ALL-UNNAMED  \
     --add-exports org.graalvm.truffle/com.oracle.truffle.api=ALL-UNNAMED \
-    -classpath target/classes:$M2/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:$M2/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
+    -classpath target/classes:<span class="hljs-variable">$M2</span>/org/graalvm/truffle/truffle-api/20.1.0/truffle-api-20.1.0.jar:<span class="hljs-variable">$M2</span>/org/graalvm/sdk/graal-sdk/20.1.0/graal-sdk-20.1.0.jar \
     -Dgraal.Dump=Truffle \
     -Dgraal.PrintGraph=Network \
     exni.ExniMain
-</code></pre>
-<p>The <code>Dump=Truffle</code> option means to only dump graphs relevant to analysing
+</code></pre><p>The <code>Dump=Truffle</code> option means to only dump graphs relevant to analysing
 Truffle&#39;s performance (for instance it won&#39;t include graphs for compiled Java
 code that is not related to Truffle).</p>
 <p>The <code>PrintGraph=Network</code> option means to send the graphs directly to a running
@@ -638,20 +626,19 @@ implemented a loop in the guest language itself.</p>
 <p>Okay, so let&#39;s see some actual graphs. We&#39;ll create a new node that doesn&#39;t
 optimize away. This node will be a counter that updates a public field:</p>
 <p><a href="https://github.com/norswap/truffle-tutorial/blob/master/src/exni/nodes/CountNode.java"><code>CountNode</code> 🔗</a></p>
-<pre><code class="language-java">package exni.nodes;
+<pre><code class="hljs language-java"><span class="hljs-keyword">package</span> exni.nodes;
 
-import com.oracle.truffle.api.frame.VirtualFrame;
+<span class="hljs-keyword">import</span> com.oracle.truffle.api.frame.VirtualFrame;
 
-public final class CountNode extends ExniNode {
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CountNode</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ExniNode</span> {
 
-    public long counter;
+    <span class="hljs-keyword">public</span> <span class="hljs-type">long</span> counter;
 
-    @Override public Object execute (VirtualFrame frame) {
-        return counter++;
+    <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">execute</span> <span class="hljs-params">(VirtualFrame frame)</span> {
+        <span class="hljs-keyword">return</span> counter++;
     }
 }
-</code></pre>
-<p>Even though we&#39;ll never read the counter, the field is public and the compiler
+</code></pre><p>Even though we&#39;ll never read the counter, the field is public and the compiler
 cannot prove that it won&#39;t be read, so it has to be dutifully incremented.</p>
 <p>If you modify the main method to run this node instead, and go to the graphs
 (still &quot;Before phase Lowering&quot;) — click for full size version:</p>
@@ -743,6 +730,11 @@ src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/plugins/autoloader/pris
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

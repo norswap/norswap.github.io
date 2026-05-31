@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -67,15 +68,14 @@ to store it in a collection, for instance.</p>
 types. This is done either through another kind of polymorphism (often
 <em>subtyping polymorphism</em>), or by checking the type explicitly and branching out
 in different execution path on that basis. For instance:</p>
-<pre><code>def foo(x):
+<pre><code class="hljs">def foo(x):
     if type(x) is Bar:
         foo_bar(x)
     elif type(x) is Baz:
         foo_baz(x)
     else
         raise TypeError(&quot;x is neither Bar nor Baz&quot;)
-</code></pre>
-<p>Some people also say that <em>overloading</em> in statically-typed languages (having
+</code></pre><p>Some people also say that <em>overloading</em> in statically-typed languages (having
 multiple functions with the same name, but differing in the type of their
 arguments) counts as polymorphism. I&#39;m not anal about definitions, but
 overloading isn&#39;t what I&#39;m talking about here.</p>
@@ -111,11 +111,10 @@ even sharing a superclass. A function can call a method on an object, and has
 long as the object does implement a method by that name, it will work.</p>
 <p>Said otherwise, the interfaces can be left implicit, the following method is
 polymorphic for any object that has both a <code>bar()</code> and <code>baz()</code> method.</p>
-<pre><code>def foo(x):
+<pre><code class="hljs">def foo(x):
     x.bar()
     x.baz()
-</code></pre>
-<h2 id="parametric-polymorphism">Parametric Polymorphism</h2>
+</code></pre><h2 id="parametric-polymorphism">Parametric Polymorphism</h2>
 <p>Finally, last of the big three, we have <strong>parametric polymorphism</strong>. There are a
 few famous examples of that: generics in Java and C#, templates in C++.
 Basically you endow bits of code (typically functions and data structures) with
@@ -185,6 +184,11 @@ complements the present article nicely.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -98,35 +99,31 @@ it as soon as you close the original shell used to run the command. And if you
 want to kill the command at that point, you need to find out its PID and use
 <code>pkill</code>.</p>
 <p>But with <code>screen</code>, you can do this, from any shell:</p>
-<pre><code class="language-bash">$ screen -dm &lt;command&gt;           # start command in background
-$ screen -dm -S &lt;name&gt; &lt;command&gt; # ... and give it a specific name
-$ screen -ls                     # list all running screens
-$ screen -r &lt;name&gt;               # (re)attach to the given screen
-$ screen -S &lt;name&gt; -X quit       # kill the given screen
-</code></pre>
-<p>Since some of those are not super intuitive, I propose the use of the following
+<pre><code class="hljs language-bash">$ screen -dm &lt;<span class="hljs-built_in">command</span>&gt;           <span class="hljs-comment"># start command in background</span>
+$ screen -dm -S &lt;name&gt; &lt;<span class="hljs-built_in">command</span>&gt; <span class="hljs-comment"># ... and give it a specific name</span>
+$ screen -<span class="hljs-built_in">ls</span>                     <span class="hljs-comment"># list all running screens</span>
+$ screen -r &lt;name&gt;               <span class="hljs-comment"># (re)attach to the given screen</span>
+$ screen -S &lt;name&gt; -X quit       <span class="hljs-comment"># kill the given screen</span>
+</code></pre><p>Since some of those are not super intuitive, I propose the use of the following
 aliases and functions:</p>
-<pre><code class="language-bash">alias sjobls=&#39;screen -ls&#39;
-alias sjoba=&#39;screen -r&#39;
-alias sjobmk=&#39;screen -dm -S&#39;
+<pre><code class="hljs language-bash"><span class="hljs-built_in">alias</span> sjobls=<span class="hljs-string">&#x27;screen -ls&#x27;</span>
+<span class="hljs-built_in">alias</span> sjoba=<span class="hljs-string">&#x27;screen -r&#x27;</span>
+<span class="hljs-built_in">alias</span> sjobmk=<span class="hljs-string">&#x27;screen -dm -S&#x27;</span>
 
-sjobk() {
-    screen -S $1 -X quit
+<span class="hljs-function"><span class="hljs-title">sjobk</span></span>() {
+    screen -S <span class="hljs-variable">$1</span> -X quit
 }
-</code></pre>
-<p>Final tip: when you attach to the screen, it&#39;s <code>ctrl+a d</code> (or <code>cmd+a d</code> on mac)
+</code></pre><p>Final tip: when you attach to the screen, it&#39;s <code>ctrl+a d</code> (or <code>cmd+a d</code> on mac)
 to detach.</p>
 <h2 id="repeating-the-command">Repeating the Command</h2>
 <p>To repeat a command in <code>bash</code>, with 3 seconds of delay between each execution,
 you&#39;d normaly do:</p>
-<pre><code class="language-bash">while true; do &lt;command&gt;; sleep 3; done
-</code></pre>
-<p>Which you can turn into the following function:</p>
-<pre><code class="language-bash">repeat() {
-    while true; do $1; sleep 3; done
+<pre><code class="hljs language-bash"><span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span> &lt;<span class="hljs-built_in">command</span>&gt;; <span class="hljs-built_in">sleep</span> 3; <span class="hljs-keyword">done</span>
+</code></pre><p>Which you can turn into the following function:</p>
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">repeat</span></span>() {
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span> <span class="hljs-variable">$1</span>; <span class="hljs-built_in">sleep</span> 3; <span class="hljs-keyword">done</span>
 }
-</code></pre>
-<p><strong>IMPORTANT POINT:</strong> Making a function was a mistake. This is also valid for
+</code></pre><p><strong>IMPORTANT POINT:</strong> Making a function was a mistake. This is also valid for
 other functions that will be presented later. It should be a script to be put
 somewhere on the path instead. Why?</p>
 <ol>
@@ -154,21 +151,20 @@ is not valid Bash syntax).</p>
 gets annoying when dealing with commands that already have multiple level of
 quotations: for instance <code>echo &quot;&#39;a&#39;&quot;</code> should have been quoted as <code>&#39;echo &quot;\&#39;a\&#39;&quot;&#39;</code>. But it&#39;s still a good step forward.</p>
 <p>With all the considerations factored in, we get the following function:</p>
-<pre><code class="language-bash">repeat() {
-    local OPT OPTIND OPTARG T=3
-    while getopts &quot;:t:&quot; OPT; do
-        case $OPT in
-            t)  T=$OPTARG;;
-            \?) echo &quot;Usage: repeat [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;;
-                return;;
-        esac
-    done
-    shift $((OPTIND - 1))
-    while true; do bash -c &quot;$*&quot;; sleep $T; done
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">repeat</span></span>() {
+    <span class="hljs-built_in">local</span> OPT OPTIND OPTARG T=3
+    <span class="hljs-keyword">while</span> <span class="hljs-built_in">getopts</span> <span class="hljs-string">&quot;:t:&quot;</span> OPT; <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-variable">$OPT</span> <span class="hljs-keyword">in</span>
+            t)  T=<span class="hljs-variable">$OPTARG</span>;;
+            \?) <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Usage: repeat [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;</span>;
+                <span class="hljs-built_in">return</span>;;
+        <span class="hljs-keyword">esac</span>
+    <span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">shift</span> $((OPTIND - <span class="hljs-number">1</span>))
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span> bash -c <span class="hljs-string">&quot;$*&quot;</span>; <span class="hljs-built_in">sleep</span> <span class="hljs-variable">$T</span>; <span class="hljs-keyword">done</span>
 }
-export -f repeat
-</code></pre>
-<p>For a brief description of argument handling: the option string <code>:t:</code> says that
+<span class="hljs-built_in">export</span> -f repeat
+</code></pre><p>For a brief description of argument handling: the option string <code>:t:</code> says that
 to disable getopt&#39;s normal error output (first colon <code>:</code>): we&#39;ll do it ourselves
 with the <code>\?</code> option. The <code>t:</code> part says we expect an optional argument <code>t</code> that
 takes a value (the second colon <code>:</code>). The variable <code>OPT</code> receives the option
@@ -213,14 +209,13 @@ shell.</p>
 <p>But imagine you want to kill the command, while still being able to peruse the
 output in the shell? (Again, quite relevant to my use case: stop trying to
 connect to the proxy, but let me see what&#39;s going on.) Well that&#39;s possible too:</p>
-<pre><code class="language-bash">remain() {
-    trap &quot;echo Interrupted by user&quot; SIGINT
-    bash -c &quot;$*&quot;
-    exec bash
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">remain</span></span>() {
+    <span class="hljs-built_in">trap</span> <span class="hljs-string">&quot;echo Interrupted by user&quot;</span> SIGINT
+    bash -c <span class="hljs-string">&quot;$*&quot;</span>
+    <span class="hljs-built_in">exec</span> bash
 }
-export -f remain
-</code></pre>
-<p>This traps <code>SIGINT</code>, making it echo a message rather than letting it kill the
+<span class="hljs-built_in">export</span> -f remain
+</code></pre><p>This traps <code>SIGINT</code>, making it echo a message rather than letting it kill the
 screen. We run our command using <code>bash -c</code> (again, to enable passing whole
 pipelines to the function). We end by <code>exec bash</code> which makes the process
 becomes bash. We could just have written <code>bash</code> there instead, this is just a
@@ -229,9 +224,8 @@ tiny bit more economical.</p>
 <p>It&#39;s time for a little confession: <code>repeat</code> and <code>remain</code> are not entirely robust
 as-is.</p>
 <p>Consider that we want to use <code>remain</code> with <code>repeat</code>:</p>
-<pre><code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;
-</code></pre>
-<p>What happens is that the <code>bash -c &quot;$*&quot;</code> line in <code>remain</code> expands to something
+<pre><code class="hljs">remain repeat &#x27;echo &quot;x&quot; | cat -n&#x27;
+</code></pre><p>What happens is that the <code>bash -c &quot;$*&quot;</code> line in <code>remain</code> expands to something
 equivalent to <code>bash -c &#39;repeat echo &quot;x&quot; | cat -n&#39;</code> — the outer quotes have been
 stripped! This will misbeheave in <code>repeat</code>, producing the wrong <code>1 x</code>, <code>2 x</code>
 (etc) output rather than straight <code>1 x</code> each time.</p>
@@ -248,43 +242,41 @@ quotes!</p>
 function called <code>quote_args</code>, which takes a series of arguments and sets <code>ARGS</code>
 to the concatenation of all those arguments with quotes inserted around each of
 them (excepted when there is a single argument).</p>
-<pre><code class="language-bash">quote_args() {
-    ARGS=&#39;&#39;
-    # single argument: output directly
-    if [[ $# -eq 1 ]]; then
-        ARGS=&quot;$1&quot;
-        return
-    fi
-    # multiple arguments: quote each and output
-    for ARG in &quot;$@&quot;; do
-        ARGS+=&quot;&#39;$ARG&#39;&quot;
-    done
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">quote_args</span></span>() {
+    ARGS=<span class="hljs-string">&#x27;&#x27;</span>
+    <span class="hljs-comment"># single argument: output directly</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$#</span> -eq 1 ]]; <span class="hljs-keyword">then</span>
+        ARGS=<span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span>
+        <span class="hljs-built_in">return</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-comment"># multiple arguments: quote each and output</span>
+    <span class="hljs-keyword">for</span> ARG <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>; <span class="hljs-keyword">do</span>
+        ARGS+=<span class="hljs-string">&quot;&#x27;<span class="hljs-variable">$ARG</span>&#x27;&quot;</span>
+    <span class="hljs-keyword">done</span>
 }
-export -f quote_args
-</code></pre>
-<p>Why add exception for single arguments? Consider the following examples given
+<span class="hljs-built_in">export</span> -f quote_args
+</code></pre><p>Why add exception for single arguments? Consider the following examples given
 that we always quote even on single args:</p>
-<pre><code class="language-bash">always_quote_args echo hello
+<pre><code class="hljs language-bash">always_quote_args <span class="hljs-built_in">echo</span> hello
 
-bash -c &quot;$ARGS&quot;
-# 1.    &quot;expansion&quot;: bash -c &quot;&#39;echo&#39; &#39;hello&#39;&quot;
-#       output: &quot;hello&quot;
+bash -c <span class="hljs-string">&quot;<span class="hljs-variable">$ARGS</span>&quot;</span>
+<span class="hljs-comment"># 1.    &quot;expansion&quot;: bash -c &quot;&#x27;echo&#x27; &#x27;hello&#x27;&quot;</span>
+<span class="hljs-comment">#       output: &quot;hello&quot;</span>
 
-bash -c $ARGS
-# 2.    &quot;expansion&quot;: bash -c &#39;echo&#39; &#39;hello&#39;
-#       output: &quot;&quot;
+bash -c <span class="hljs-variable">$ARGS</span>
+<span class="hljs-comment"># 2.    &quot;expansion&quot;: bash -c &#x27;echo&#x27; &#x27;hello&#x27;</span>
+<span class="hljs-comment">#       output: &quot;&quot;</span>
 
-always_quote_args &#39;echo hello&#39;
+always_quote_args <span class="hljs-string">&#x27;echo hello&#x27;</span>
 
-bash -c &quot;$ARGS&quot;
-# 3.    &quot;expansion&quot;: bash -c &quot;&#39;echo hello&#39;&quot;
-#       output: bash: echo hello: command not found
+bash -c <span class="hljs-string">&quot;<span class="hljs-variable">$ARGS</span>&quot;</span>
+<span class="hljs-comment"># 3.    &quot;expansion&quot;: bash -c &quot;&#x27;echo hello&#x27;&quot;</span>
+<span class="hljs-comment">#       output: bash: echo hello: command not found</span>
 
-bash -c $ARGS
-# 4.    &quot;expansion&quot;: bash -c &#39;echo hello&#39;
-#       output: &quot;hello&quot;
-</code></pre>
-<p>(<em>Expansion</em> is quoted because again, bash does not expand to a textual
+bash -c <span class="hljs-variable">$ARGS</span>
+<span class="hljs-comment"># 4.    &quot;expansion&quot;: bash -c &#x27;echo hello&#x27;</span>
+<span class="hljs-comment">#       output: &quot;hello&quot;</span>
+</code></pre><p>(<em>Expansion</em> is quoted because again, bash does not expand to a textual
 representation, but to an internal representation tracking &quot;words&quot;.)</p>
 <p>We would like behaviour 1 and 4, meaning we need to know the number of arguments
 to know whether to quote <code>$ARGS</code>. So we move this choice into <code>quote_args</code>
@@ -293,30 +285,29 @@ itself and now we should just always quote <code>$ARGS</code>.</p>
 commands like <code>bash -c</code> that expect a command as a single argument. As always,
 the key is to understand what this is doing so you can reason about it.</p>
 <p>Now that we have <code>quote_args</code>, we can patch <code>repeat</code> and <code>remain</code> with it:</p>
-<pre><code class="language-bash">repeat() {
-    local OPT OPTIND OPTARG T=3
-    while getopts &quot;:t:&quot; OPT; do
-        case $OPT in
-            t)  T=$OPTARG;;
-            \?) echo &quot;Usage: repeat [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;;
-                return;;
-        esac
-    done
-    shift $((OPTIND - 1))
-    quote_args &quot;$@&quot;
-    while true; do bash -c &quot;$ARGS&quot;; sleep $T; done
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">repeat</span></span>() {
+    <span class="hljs-built_in">local</span> OPT OPTIND OPTARG T=3
+    <span class="hljs-keyword">while</span> <span class="hljs-built_in">getopts</span> <span class="hljs-string">&quot;:t:&quot;</span> OPT; <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-variable">$OPT</span> <span class="hljs-keyword">in</span>
+            t)  T=<span class="hljs-variable">$OPTARG</span>;;
+            \?) <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Usage: repeat [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;</span>;
+                <span class="hljs-built_in">return</span>;;
+        <span class="hljs-keyword">esac</span>
+    <span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">shift</span> $((OPTIND - <span class="hljs-number">1</span>))
+    quote_args <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span> bash -c <span class="hljs-string">&quot;<span class="hljs-variable">$ARGS</span>&quot;</span>; <span class="hljs-built_in">sleep</span> <span class="hljs-variable">$T</span>; <span class="hljs-keyword">done</span>
 }
-export -f repeat
+<span class="hljs-built_in">export</span> -f repeat
 
-remain() {
-    trap &quot;echo Interrupted by user&quot; SIGINT
-    quote_args &quot;$@&quot;
-    bash -c &quot;$ARGS&quot;
-    exec bash
+<span class="hljs-function"><span class="hljs-title">remain</span></span>() {
+    <span class="hljs-built_in">trap</span> <span class="hljs-string">&quot;echo Interrupted by user&quot;</span> SIGINT
+    quote_args <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+    bash -c <span class="hljs-string">&quot;<span class="hljs-variable">$ARGS</span>&quot;</span>
+    <span class="hljs-built_in">exec</span> bash
 }
-export -f remain
-</code></pre>
-<p>So in our initial example (<code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code>), we end up with
+<span class="hljs-built_in">export</span> -f remain
+</code></pre><p>So in our initial example (<code>remain repeat &#39;echo &quot;x&quot; | cat -n&#39;</code>), we end up with
 <code>ARGS</code> containing <code>&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;</code>. Using <code>&quot;$ARGS&quot;</code> within
 <code>remain</code> then produces a single argument where the individual arguments are
 properly quoted: <code>&quot;&#39;repeat&#39; &#39;echo &quot;x&quot; | cat -n&#39;&quot;</code>. (Note that in this case we
@@ -340,45 +331,43 @@ calls as parameter (that&#39;s because it passes its arguments to <code>exec</co
 that takes an optional <code>-n</code> option to set the job name (equivalent to <code>screen</code>&#39;s
 own <code>-S</code> parameter) and (a) parameter(s) to specify the command, similar to
 <code>remain</code> and <code>repeat</code>.</p>
-<pre><code class="language-bash">sjob() {
-    local OPT OPTIND OPTARG N=sjob
-    while getopts &quot;:n:&quot; OPT; do
-        case $OPT in
-            n)  N=$OPTARG;;
-            \?) echo &quot;Usage: sjob [-n &lt;Name&gt;] &lt;command&gt;&quot;;
-                return;;
-        esac
-    done
-    shift $((OPTIND - 1))
-    quote_args &quot;$@&quot;
-    screen -dm -S $N bash -c &quot;remain $ARGS&quot;
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">sjob</span></span>() {
+    <span class="hljs-built_in">local</span> OPT OPTIND OPTARG N=sjob
+    <span class="hljs-keyword">while</span> <span class="hljs-built_in">getopts</span> <span class="hljs-string">&quot;:n:&quot;</span> OPT; <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-variable">$OPT</span> <span class="hljs-keyword">in</span>
+            n)  N=<span class="hljs-variable">$OPTARG</span>;;
+            \?) <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Usage: sjob [-n &lt;Name&gt;] &lt;command&gt;&quot;</span>;
+                <span class="hljs-built_in">return</span>;;
+        <span class="hljs-keyword">esac</span>
+    <span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">shift</span> $((OPTIND - <span class="hljs-number">1</span>))
+    quote_args <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+    screen -dm -S <span class="hljs-variable">$N</span> bash -c <span class="hljs-string">&quot;remain <span class="hljs-variable">$ARGS</span>&quot;</span>
 }
-export -f sjob
-</code></pre>
-<p>You can see all our previous tricks: option handling, <code>quote_args</code> and a direct
+<span class="hljs-built_in">export</span> -f sjob
+</code></pre><p>You can see all our previous tricks: option handling, <code>quote_args</code> and a direct
 call to <code>remain</code>.</p>
 <p>Now for the full shebub, we also want to throw <code>repeat</code> in the mix. Since this
 is going to be run by some kind of init system (<code>launchd</code>, <code>systemd</code>, ...), we
 also want to make sure that the command is only run once even if the function is
 called multiple times. We&#39;ll use a unique name + <code>screen -ls</code> to ensure that.</p>
-<pre><code class="language-bash">daemon() {
-    local OPT OPTIND OPTARG T=3 N=daemon
-    while getopts &quot;:n:t:&quot; OPT; do
-        case $OPT in
-            t)  T=$OPTARG;;
-            n)  N=$OPTARG;;
-            \?) echo &quot;Usage: daemon [-n &lt;Name&gt;] [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;;
-                return;;
-        esac
-    done
-    shift $((OPTIND - 1))
-    # Only run if the daemon by this name is not already running.
-    (screen -ls | grep -q $N) &amp;&amp; return
-    sjob -n $N repeat -t $T &quot;$@&quot;
+<pre><code class="hljs language-bash"><span class="hljs-function"><span class="hljs-title">daemon</span></span>() {
+    <span class="hljs-built_in">local</span> OPT OPTIND OPTARG T=3 N=daemon
+    <span class="hljs-keyword">while</span> <span class="hljs-built_in">getopts</span> <span class="hljs-string">&quot;:n:t:&quot;</span> OPT; <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-variable">$OPT</span> <span class="hljs-keyword">in</span>
+            t)  T=<span class="hljs-variable">$OPTARG</span>;;
+            n)  N=<span class="hljs-variable">$OPTARG</span>;;
+            \?) <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Usage: daemon [-n &lt;Name&gt;] [-t &lt;Time interval in seconds&gt;] &lt;command&gt;&quot;</span>;
+                <span class="hljs-built_in">return</span>;;
+        <span class="hljs-keyword">esac</span>
+    <span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">shift</span> $((OPTIND - <span class="hljs-number">1</span>))
+    <span class="hljs-comment"># Only run if the daemon by this name is not already running.</span>
+    (screen -<span class="hljs-built_in">ls</span> | grep -q <span class="hljs-variable">$N</span>) &amp;&amp; <span class="hljs-built_in">return</span>
+    sjob -n <span class="hljs-variable">$N</span> repeat -t <span class="hljs-variable">$T</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
 }
-export -f daemon
-</code></pre>
-<p>Note that this doesn&#39;t use <code>quote_args</code>: <code>sjob</code> can handle that, and we use
+<span class="hljs-built_in">export</span> -f daemon
+</code></pre><p>Note that this doesn&#39;t use <code>quote_args</code>: <code>sjob</code> can handle that, and we use
 <code>&quot;$@&quot;</code> meaning the arguments we receive (minus the processed options) will be
 passed as &quot;as-is&quot; and not unduly split because of stripped quotes.</p>
 <h2 id="calling-at-startup-mac-only">Calling at Startup (mac-only)</h2>
@@ -426,50 +415,47 @@ agents and daemons, see <a href="https://www.launchd.info/">the ref</a>).</p>
 symlink, and it works. The file itself will need to have read permissions, so
 <code>chmod 644 com.startup.plist</code>.</p>
 <p>Here is what the content of the file should be:</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-&lt;plist version=&quot;1.0&quot;&gt;
-  &lt;dict&gt;
-    &lt;key&gt;EnvironmentVariables&lt;/key&gt;
-    &lt;dict&gt;
-      &lt;key&gt;PATH&lt;/key&gt;
-      &lt;string&gt;/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:&lt;/string&gt;
-    &lt;/dict&gt;
-    &lt;key&gt;Label&lt;/key&gt;
-    &lt;string&gt;com.startup&lt;/string&gt;
-    &lt;key&gt;Program&lt;/key&gt;
-    &lt;string&gt;/Users/norswap/bin/startup&lt;/string&gt;
-    &lt;key&gt;RunAtLoad&lt;/key&gt;
-    &lt;true/&gt;
-    &lt;key&gt;KeepAlive&lt;/key&gt;
-    &lt;false/&gt;
-    &lt;key&gt;LaunchOnlyOnce&lt;/key&gt;
-    &lt;true/&gt;
-    &lt;key&gt;StandardOutPath&lt;/key&gt;
-    &lt;string&gt;/tmp/startup.stdout&lt;/string&gt;
-    &lt;key&gt;StandardErrorPath&lt;/key&gt;
-    &lt;string&gt;/tmp/startup.stderr&lt;/string&gt;
-  &lt;/dict&gt;
-&lt;/plist&gt;
-</code></pre>
-<p>This is verbose but actually pretty straightforward. Notice the log files. The
+<pre><code class="hljs language-xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span>
+<span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">plist</span> <span class="hljs-keyword">PUBLIC</span> <span class="hljs-string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="hljs-string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">plist</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.0&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>EnvironmentVariables<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PATH<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>Label<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>com.startup<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>Program<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>/Users/norswap/bin/startup<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>RunAtLoad<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">true</span>/&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>KeepAlive<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">false</span>/&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>LaunchOnlyOnce<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">true</span>/&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>StandardOutPath<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>/tmp/startup.stdout<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>StandardErrorPath<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>/tmp/startup.stderr<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">plist</span>&gt;</span>
+</code></pre><p>This is verbose but actually pretty straightforward. Notice the log files. The
 program being run is my <code>startup</code> script:</p>
-<pre><code>#!/bin/bash
+<pre><code class="hljs">#!/bin/bash
 P=/Users/norswap/startup
 for file in $P/*
 do
     $file
 done
-</code></pre>
-<p>The shebang (<code>#!/bin/bash</code>) is actually important and <code>launchd</code> will complain
+</code></pre><p>The shebang (<code>#!/bin/bash</code>) is actually important and <code>launchd</code> will complain
 if it&#39;s not present.</p>
 <p>And here is an example of file in <code>~/startup</code>, namely the one I use to run my
 VPN (with confidential details redacted).</p>
-<pre><code>#!/bin/bash -l
-daemon -n proxyvpn &#39;echo &lt;password&gt; | openconnect --script-tun \
-    --script &quot;ocproxy -D 9999&quot; -u &lt;username&gt; -passwd-on-stdin &lt;vpn address&gt;&#39;
-</code></pre>
-<p>Two notes. First off, don&#39;t write your password in a readable bash script unless you want
+<pre><code class="hljs">#!/bin/bash -l
+daemon -n proxyvpn &#x27;echo &lt;password&gt; | openconnect --script-tun \
+    --script &quot;ocproxy -D 9999&quot; -u &lt;username&gt; -passwd-on-stdin &lt;vpn address&gt;&#x27;
+</code></pre><p>Two notes. First off, don&#39;t write your password in a readable bash script unless you want
 your local sysadmin to berate and/or murder you.</p>
 <p>Second, note how the script specifies <code>bash -l</code> after the shebang to get a
 &quot;login shell&quot; — login shell source <code>.bash_profile</code> while other don&#39;t, and that&#39;s
@@ -480,9 +466,8 @@ on shell initialization</a>.</p>
 <div class=nsep></div>
 
 <p>You&#39;ll probably want to test all of this. To do so you can run:</p>
-<pre><code>launchctl load -w ~/Library/LaunchAgents/com.startup.plist
-</code></pre>
-<p>The <code>-w</code> option ignores some file where the agent can be disabled for some
+<pre><code class="hljs">launchctl load -w ~/Library/LaunchAgents/com.startup.plist
+</code></pre><p>The <code>-w</code> option ignores some file where the agent can be disabled for some
 nefarious reasons. I didn&#39;t need it, but it doesn&#39;t hurt either.</p>
 <p>You might see stuff about a <code>start</code> command that can in the place of <code>load</code>.
 That didn&#39;t work for me (but it might be because my <code>plist</code> file is too
@@ -495,10 +480,9 @@ script that returns, the agent is not considered to be &quot;loaded&quot;.</p>
 <p>You can also run <code>tail -f /var/log/system.log</code> before you run the <code>load</code> command
 in another shell. This will give you messages such as the following if things go
 wrong.</p>
-<pre><code>Service could not initialize: 19D76: xpcproxy + 15636
+<pre><code class="hljs">Service could not initialize: 19D76: xpcproxy + 15636
 com.apple.xpc.launchd[1] (com.startup[2355]): Service exited with abnormal code: 78
-</code></pre>
-<h2 id="parting-thoughts">Parting Thoughts</h2>
+</code></pre><h2 id="parting-thoughts">Parting Thoughts</h2>
 <p>When I started my &quot;quest&quot; for a quick daemon setup, I didn&#39;t think it would end
 taking as much time, nor require me to go so deep (but then, getting lost in the
 depths seems like a recurring theme on this blog and in my life).</p>
@@ -535,6 +519,11 @@ to achieve. I&#39;m also re-plugging the <a href="https://github.com/rbenv/rbenv
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

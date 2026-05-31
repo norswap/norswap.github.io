@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -271,19 +272,17 @@ different name.</p>
 <p>Second, the interplay of <code>extern</code>, <code>static</code> (at file-scope), and no specifier
 (at file-scope) is too complex.</p>
 <p>We could describe the behaviour of <code>extern</code> as follows:</p>
-<pre><code>if (first declaration for same object was static)
+<pre><code class="hljs">if (first declaration for same object was static)
     static linkage
 else
     external linkage
-</code></pre>
-<p>While no-specifier (at file-scope) means:</p>
-<pre><code>if (object is a function
+</code></pre><p>While no-specifier (at file-scope) means:</p>
+<pre><code class="hljs">if (object is a function
         &amp;&amp; first declaration for same object was static)
     static linkage
 else
     external linkage
-</code></pre>
-<p>The reason for making the lack of a specifier act like <code>extern</code> for functions is
+</code></pre><p>The reason for making the lack of a specifier act like <code>extern</code> for functions is
 that functions don&#39;t have tentative definitions.</p>
 <p>Why do we even need tentative definitions? The only advantage I see is that one
 can declare a variable only in a header file and get a definition for it. The
@@ -344,6 +343,11 @@ file. Block-scope declarations can use <code>import</code> or <code>local</code>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

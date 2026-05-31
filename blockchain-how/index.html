@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -189,12 +190,11 @@ contains all the transactions, but also a reference to the previous block
 <p><img src="block-format.png" alt="Bitcoin block format"></p>
 <p>(Image source: <a href="https://blog.scottlogic.com/2016/04/04/jenny-from-the-blockchain.html">Scott Logic</a>)</p>
 <p>The <em>problem</em> proof-of-work has to solve is as follows:</p>
-<pre><code>nonce = random 32 bit number
+<pre><code class="hljs">nonce = random 32 bit number
 h1 = hash(block including nonce)
 h2 = hash(h1 concatenated with nonce)
 ... such that h2 &gt; difficulty
-</code></pre>
-<p>So we pick a nonce and hash the block which contains this nonce. Then we append
+</code></pre><p>So we pick a nonce and hash the block which contains this nonce. Then we append
 the nonce to this first hash, and hash that to get a second hash. The problem is
 solved only this second hash is higher than a set number, called <em>the
 difficulty</em>. If the condition is not fulfilled, the process starts again with
@@ -397,6 +397,11 @@ and proof-of-stake. See you next time!</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

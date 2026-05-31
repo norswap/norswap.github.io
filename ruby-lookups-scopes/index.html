@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -86,35 +87,31 @@ statements do not create scopes!</p>
 <p>Only scopes created by blocks inherit their parent&#39;s scope. Scope created by
 methods and modules are completely isolated from their parent&#39;s scope. It is
 sometimes said that <code>module</code>, <code>class</code> and <code>def</code> are <em>scope gates</em>.</p>
-<pre><code class="language-ruby">x = 1
-module Foo
-  p x # NameError
-end
-</code></pre>
-<p>There is however a trick you can use:</p>
-<pre><code class="language-ruby">x = 1
-Foo = Module.new do
-  p x # ok
-end
-</code></pre>
-<p>It is possible to make local variables survive their lexical scope:</p>
-<pre><code class="language-ruby">def foo
-  x = 0
-  [lambda { x += 1 }, lambda { p x }]
-end
+<pre><code class="hljs language-ruby">x = <span class="hljs-number">1</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">Foo</span>
+  p x <span class="hljs-comment"># NameError</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>There is however a trick you can use:</p>
+<pre><code class="hljs language-ruby">x = <span class="hljs-number">1</span>
+<span class="hljs-title class_">Foo</span> = <span class="hljs-title class_">Module</span>.new <span class="hljs-keyword">do</span>
+  p x <span class="hljs-comment"># ok</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>It is possible to make local variables survive their lexical scope:</p>
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">def</span> <span class="hljs-title function_">foo</span>
+  x = <span class="hljs-number">0</span>
+  [<span class="hljs-built_in">lambda</span> { x += <span class="hljs-number">1</span> }, <span class="hljs-built_in">lambda</span> { p x }]
+<span class="hljs-keyword">end</span>
 x, y = foo
 x.call()
-y.call() # 1
-</code></pre>
-<p>Something else that is peculiar: a variable is &quot;in scope&quot; in an assignment to it
+y.call() <span class="hljs-comment"># 1</span>
+</code></pre><p>Something else that is peculiar: a variable is &quot;in scope&quot; in an assignment to it
 has appeared before in the current scope.</p>
-<pre><code class="language-ruby">p x # NameError
-x = 1
-# but
-x = 1 if false
-p x # nil
-</code></pre>
-<p>Reflection can help with local variables too: the <code>binding</code> method (both
+<pre><code class="hljs language-ruby">p x <span class="hljs-comment"># NameError</span>
+x = <span class="hljs-number">1</span>
+<span class="hljs-comment"># but</span>
+x = <span class="hljs-number">1</span> <span class="hljs-keyword">if</span> <span class="hljs-literal">false</span>
+p x <span class="hljs-comment"># nil</span>
+</code></pre><p>Reflection can help with local variables too: the <code>binding</code> method (both
 <code>Kernel#binding</code> and <code>Proc#binding</code>) returns a <code>Binding</code> object which describes
 the local variables in scope.</p>
 <h2 id="instance-variables">Instance Variables</h2>
@@ -138,14 +135,13 @@ class variables). Interestingly, class variables can &quot;migrate&quot;: if the
 a class that has a class variable <code>@@a</code>, and that <code>@@a</code> becomes defined on one
 of its ancestor, the class variable will disappear from the class. This will not
 happen for non-class modules however.</p>
-<pre><code class="language-ruby">class T; @@a = &#39;t&#39;; end
-class Object; @@a = &#39;o&#39;; end
-class T
-  p @@a # o
-  p class_variables(false) # []
-end
-</code></pre>
-<p>If a class variable is accessed before it has been assigned, a <code>NameError</code>
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">class</span> T; <span class="hljs-variable">@@a</span> = <span class="hljs-string">&#x27;t&#x27;</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Object</span>; <span class="hljs-variable">@@a</span> = <span class="hljs-string">&#x27;o&#x27;</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> T
+  p <span class="hljs-variable">@@a</span> <span class="hljs-comment"># o</span>
+  p class_variables(<span class="hljs-literal">false</span>) <span class="hljs-comment"># []</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>If a class variable is accessed before it has been assigned, a <code>NameError</code>
 occurs.</p>
 <p>Final catch, class variables can only be accessed inside the body of a class
 that inherits/includes the class defining the variables. This means you can&#39;t
@@ -158,48 +154,44 @@ constant.</p>
 declared inside a module body that is around you, or in one of the ancestors of
 the current module (but <strong>not</strong> in an ancestor of a surrounding module!). You
 can also use <code>::</code> to navigate through modules:</p>
-<pre><code class="language-ruby">X = 0
-module A
-  X = 1
-  p ::X # 0
-  module B; module C; Y = 2; end; end
-  module D
-    p X # 1
+<pre><code class="hljs language-ruby">X = <span class="hljs-number">0</span>
+<span class="hljs-keyword">module</span> A
+  X = <span class="hljs-number">1</span>
+  p <span class="hljs-symbol">:</span><span class="hljs-symbol">:X</span> <span class="hljs-comment"># 0</span>
+  <span class="hljs-keyword">module</span> B; <span class="hljs-keyword">module</span> C; Y = <span class="hljs-number">2</span>; <span class="hljs-keyword">end</span>; <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">module</span> D
+    p X <span class="hljs-comment"># 1</span>
     p B::C::Y
-  end
-end
-</code></pre>
-<p>The following exemple illustrates two gotchas:</p>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>The following exemple illustrates two gotchas:</p>
 <ul>
 <li>You don&#39;t have access to constants defined in an ancestor of a surrounding
 module.</li>
 <li>Constants in surrounding modules take precedence over constants in ancestors.</li>
 </ul>
-<pre><code class="language-ruby">module A; X = &#39;a&#39;; end
-module B; Y = &#39;b&#39;; end
-module C
-  include A
-  p X # ok
-  Y = &#39;c&#39;
-  module D
-    include B
-    p Y # &#39;c&#39;!
-    p X # NameError
-  end
-end
-</code></pre>
-<p>The module body really has to be around you:</p>
-<pre><code class="language-ruby">module A::B::C; p Y; end # ok (Y defined in C)
-module A::D; p X; end # NameError (X defined in A)
-</code></pre>
-<p>We can access the current nesting with <code>Module::nesting</code> and clarify the
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">module</span> A; X = <span class="hljs-string">&#x27;a&#x27;</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> B; Y = <span class="hljs-string">&#x27;b&#x27;</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> C
+  <span class="hljs-keyword">include</span> A
+  p X <span class="hljs-comment"># ok</span>
+  Y = <span class="hljs-string">&#x27;c&#x27;</span>
+  <span class="hljs-keyword">module</span> D
+    <span class="hljs-keyword">include</span> B
+    p Y <span class="hljs-comment"># &#x27;c&#x27;!</span>
+    p X <span class="hljs-comment"># NameError</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>The module body really has to be around you:</p>
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">module</span> A::B::C; p Y; <span class="hljs-keyword">end</span> <span class="hljs-comment"># ok (Y defined in C)</span>
+<span class="hljs-keyword">module</span> A::D; p X; <span class="hljs-keyword">end</span> <span class="hljs-comment"># NameError (X defined in A)</span>
+</code></pre><p>We can access the current nesting with <code>Module::nesting</code> and clarify the
 example:</p>
-<pre><code class="language-ruby">module A
-  module D; p Module.nesting; end # [A, A::D]
-end
-module A::D; p Module.nesting; end # [A::D]
-</code></pre>
-<p>Of course, if you try to access a constant before it has been assigned, a
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">module</span> A
+  <span class="hljs-keyword">module</span> D; p <span class="hljs-title class_">Module</span>.nesting; <span class="hljs-keyword">end</span> <span class="hljs-comment"># [A, A::D]</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> A::D; p <span class="hljs-title class_">Module</span>.nesting; <span class="hljs-keyword">end</span> <span class="hljs-comment"># [A::D]</span>
+</code></pre><p>Of course, if you try to access a constant before it has been assigned, a
 <code>NameError</code> ensues. <code>Module::constants</code> will list the constants defined at the
 point of call, while <code>Module#constants</code> will list the constants defined by the
 module (and optionally by its ancestors, depending on the argument).</p>
@@ -214,44 +206,40 @@ to use <em>monkey patching</em> to open a class and add and redefine methods. Ho
 if every library starts doing this, you can end up with nasty conflicts.
 Refinements were introduced as a solution to this problem.</p>
 <p>Refinements can only be defined in non-class modules, and only classes can be refined:</p>
-<pre><code class="language-ruby">class C
-  def foo; &#39;foo&#39;; end
-end
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">class</span> C
+  <span class="hljs-keyword">def</span> <span class="hljs-title function_">foo</span>; <span class="hljs-string">&#x27;foo&#x27;</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
 
-module M
-  refine C do
-    def foo; &#39;bar&#39;; end
-  end
-end
-</code></pre>
-<p>Defining a refinement does nothing by itself. You have to use the <code>Module#using</code>
+<span class="hljs-keyword">module</span> M
+  refine C <span class="hljs-keyword">do</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">foo</span>; <span class="hljs-string">&#x27;bar&#x27;</span>; <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>Defining a refinement does nothing by itself. You have to use the <code>Module#using</code>
 function to enable some refinements in the current module:</p>
-<pre><code class="language-ruby">module N
-  p C.new.foo # &#39;foo&#39;
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">module</span> N
+  p C.new.foo <span class="hljs-comment"># &#x27;foo&#x27;</span>
   using M
-  p C.new.foo # &#39;bar&#39;
-end
-p C.new.foo # &#39;foo&#39;
-</code></pre>
-<p><code>using</code> statements are somewhat peculiar, because they are strictly lexical in
+  p C.new.foo <span class="hljs-comment"># &#x27;bar&#x27;</span>
+<span class="hljs-keyword">end</span>
+p C.new.foo <span class="hljs-comment"># &#x27;foo&#x27;</span>
+</code></pre><p><code>using</code> statements are somewhat peculiar, because they are strictly lexical in
 scope. Said otherwise, the introduced refinements have the same visibility as
 constants, <strong>excepted</strong> that the <code>using</code> is not inherited (via sublassing or
 include):</p>
-<pre><code class="language-ruby">class A; using M; end
-class B &lt; A
-  p C.new.foo # &#39;foo&#39;
-end
-</code></pre>
-<p>However, refinements themselves are inherited:</p>
-<pre><code class="language-ruby">module O
-  include M
-end
-module P
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">class</span> A; using M; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> B &lt; A
+  p C.new.foo <span class="hljs-comment"># &#x27;foo&#x27;</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>However, refinements themselves are inherited:</p>
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">module</span> O
+  <span class="hljs-keyword">include</span> M
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> P
   using O
-  p C.new.foo # &#39;bar&#39;
-end
-</code></pre>
-<p>How prioritary are refinements? Refinements always take priority over everything
+  p C.new.foo <span class="hljs-comment"># &#x27;bar&#x27;</span>
+<span class="hljs-keyword">end</span>
+</code></pre><p>How prioritary are refinements? Refinements always take priority over everything
 else. What if multiple refinements conflicts? The latest innermost <code>using</code> statement
 always wins.</p>
 <p>You can get a list of modules whose refinements are visible with
@@ -401,6 +389,11 @@ points are worth considering.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -336,16 +337,15 @@ Extensibility with Object Algebras&quot; paper (<a href="https://i.cs.hku.hk/~br
 different from those we discussed previously, and conforms to neither of our two
 options — because it doesn&#39;t encode data as a data structure at all!</p>
 <p>Instead, data is encoded as a tree of method calls. Here is an example:</p>
-<pre><code class="language-java">interface Algebra&lt;E&gt; {
-    E lit (int value);
-    E add (E left, E right);
+<pre><code class="hljs language-java"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Algebra</span>&lt;E&gt; {
+    E <span class="hljs-title function_">lit</span> <span class="hljs-params">(<span class="hljs-type">int</span> value)</span>;
+    E <span class="hljs-title function_">add</span> <span class="hljs-params">(E left, E right)</span>;
 }
 
-public static &lt;E&gt; E expression (Algebra&lt;E&gt; a) {
-    return a.add(a.lit(1), a.lit(2)); // 1 + 2
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;E&gt; E <span class="hljs-title function_">expression</span> <span class="hljs-params">(Algebra&lt;E&gt; a)</span> {
+    <span class="hljs-keyword">return</span> a.add(a.lit(<span class="hljs-number">1</span>), a.lit(<span class="hljs-number">2</span>)); <span class="hljs-comment">// 1 + 2</span>
 }
-</code></pre>
-<p>The <code>expression</code> method encodes the expression tree <code>1 + 2</code> made of an &quot;add
+</code></pre><p>The <code>expression</code> method encodes the expression tree <code>1 + 2</code> made of an &quot;add
 node&quot; with two &quot;literal node&quot; child. Of course, there are no such nodes — it&#39;s
 just a method!</p>
 <p>To do anything useful with <code>expression</code>, we need to supply an <code>Algebra&lt;E&gt;</code> where
@@ -395,25 +395,24 @@ pitfall is that the whole construction logic needs to be re-run each time we
 want to run an operation of our data. If the construction logic is expensive,
 this can be a problem. Fortunately there is a solution: simply return a function
 object that encodes the expression:</p>
-<pre><code class="language-java">public E expr1 (NegAlgebra&lt;E&gt; a) {
-    return expensive_predicate()
-        ? a.add(a.lit(1), a.lit(2))
-        : a.add(a.lit(1), a.neg(a.lit(2)));
+<pre><code class="hljs language-java"><span class="hljs-keyword">public</span> E <span class="hljs-title function_">expr1</span> <span class="hljs-params">(NegAlgebra&lt;E&gt; a)</span> {
+    <span class="hljs-keyword">return</span> expensive_predicate()
+        ? a.add(a.lit(<span class="hljs-number">1</span>), a.lit(<span class="hljs-number">2</span>))
+        : a.add(a.lit(<span class="hljs-number">1</span>), a.neg(a.lit(<span class="hljs-number">2</span>)));
 }
 
-// use: expr1(my_algebra);
-// slow!
+<span class="hljs-comment">// use: expr1(my_algebra);</span>
+<span class="hljs-comment">// slow!</span>
 
-public E Function&lt;NegAlgebra&lt;E&gt;, E&gt; expr2() {
-    return expensive_predicate()
-        ? a -&gt; a.add(a.lit(1), a.lit(2))
-        : a -&gt; a.add(a.lit(1), a.neg(a.lit(2)));
+<span class="hljs-keyword">public</span> E Function&lt;NegAlgebra&lt;E&gt;, E&gt; <span class="hljs-title function_">expr2</span><span class="hljs-params">()</span> {
+    <span class="hljs-keyword">return</span> expensive_predicate()
+        ? a -&gt; a.add(a.lit(<span class="hljs-number">1</span>), a.lit(<span class="hljs-number">2</span>))
+        : a -&gt; a.add(a.lit(<span class="hljs-number">1</span>), a.neg(a.lit(<span class="hljs-number">2</span>)));
 }
 
-// use: expr2.apply(my_algebra);
-// fast!
-</code></pre>
-<p>When we pass an algebra to <code>expr2</code>, <code>expensive_predicate()</code> is not run — it is
+<span class="hljs-comment">// use: expr2.apply(my_algebra);</span>
+<span class="hljs-comment">// fast!</span>
+</code></pre><p>When we pass an algebra to <code>expr2</code>, <code>expensive_predicate()</code> is not run — it is
 only run once when the <code>expr2</code> is created.</p>
 <p>Finally, object algebra make &quot;tree reuse&quot; easy. You can compose an expression
 built with an <code>Algebra&lt;E&gt;</code> and one built with a <code>NegAlgebra&lt;E&gt;</code> pretty easily:
@@ -447,15 +446,14 @@ use of generics in favor of covariant return types. What are covariant return
 types? In Java, you can override a method by a method with a different return
 type, but only if that type is a subtype of the original return type, for
 instance:</p>
-<pre><code class="language-java">abstract class A {
-    abstract Object foo();
+<pre><code class="hljs language-java"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> {
+    <span class="hljs-keyword">abstract</span> Object <span class="hljs-title function_">foo</span><span class="hljs-params">()</span>;
 }
 
-abstract class B extends A {
-    @Override String foo();
+<span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">A</span> {
+    <span class="hljs-meta">@Override</span> String <span class="hljs-title function_">foo</span><span class="hljs-params">()</span>;
 }
-</code></pre>
-<p>This works because <code>String</code> is a subclass of <code>Object</code>. And if you didn&#39;t know,
+</code></pre><p>This works because <code>String</code> is a subclass of <code>Object</code>. And if you didn&#39;t know,
 yes you can override an abstract method without implementing it — that&#39;s an
 essential feature needed in the covariant solution.</p>
 <p>Let&#39;s have a look at the solution:</p>
@@ -545,6 +543,11 @@ solution.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -184,11 +185,10 @@ null hypothesis: that red meat consumption matters very little.</p>
 consumption decreases mortality&quot; to 0 = &quot;red meat consumption doesn&#39;t change
 morality&quot; to 100 = &quot;red meat consumption increases mortality, the evidence we
 have puts us at around 1.</p>
-<pre><code>                 👇 evidence points here
+<pre><code class="hljs">                 👇 evidence points here
 -100 ---------- 0 ---------- 100
 meat 👼      meat 🤷     meat ☠️
-</code></pre>
-<h2 id="controversy-and-the-shills">Controversy and The Shills</h2>
+</code></pre><h2 id="controversy-and-the-shills">Controversy and The Shills</h2>
 <p>The good people at the Harvard School of Public Health weren&#39;t too happy with
 the Annals of Internal Medicine&#39;s guidelines, as evidenced by <a href="https://www.hsph.harvard.edu/nutritionsource/2019/09/30/flawed-guidelines-red-processed-meat/">this article</a>.</p>
 <p>I should probably warn you, I&#39;m going to say bad things about the good people of
@@ -217,13 +217,12 @@ criticism of the meta-reviews. But then they try to spin this by saying that the
 meta-reviews show that red meat consumption is bad for you. Except, as we
 already said, it shows very very weak evidence of that.</p>
 <p>Let&#39;s update our graph from before:</p>
-<pre><code>                 👇 evidence points here
+<pre><code class="hljs">                 👇 evidence points here
 -100 ---------- 0 ---------- 100
 meat 👼      meat 🤷    | meat ☠️
                        👆
                     where Harvard SPH says the evidence points
-</code></pre>
-<p>And that&#39;s why they&#39;re being disingenuous.</p>
+</code></pre><p>And that&#39;s why they&#39;re being disingenuous.</p>
 <p>Let&#39;s also plug <a href="https://old.reddit.com/r/gwern/comments/dbw577/effect_of_lower_versus_higher_red_meat_intake_on/f266lfq/">the reaction of Gwern Branwern</a> on that article:</p>
 <blockquote>
 <p>You don&#39;t see any problem with the Noble Lie? &#39;They should not publish these
@@ -276,6 +275,11 @@ of the article!</em></p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

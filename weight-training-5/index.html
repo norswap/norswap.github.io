@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -421,14 +422,13 @@ options.</p>
 given rep count &amp; RPE). You then drop the fatigue percent, and keep
 performing sets with the same rep count until you reach the same rep count.</p>
 <p>Example:</p>
-<pre><code> - 90kg   ×5 @7      (warmup)
+<pre><code class="hljs"> - 90kg   ×5 @7      (warmup)
  - 95kg   ×5 @8      (warmup)
  - 100kg  ×5 @9      (top set)
  - 95kg   ×5 @8      (drop 5%)
  - 95kg   ×5 @8.5
  - 95kg   ×5 @9      (fatigue reached)
-</code></pre>
-</li>
+</code></pre></li>
 <li><p>Repeats. Instead of working your way up to a top heavy set, you pick some
 fixed weight under your max. You then repeat sets using this weight until you
 reach some pre-determined RPE. To determine the fatigue accrued from working
@@ -768,6 +768,11 @@ about the exercise I didn&#39;t before... We&#39;ll see if it reproduces!</li>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

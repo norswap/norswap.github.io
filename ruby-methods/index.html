@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -105,22 +106,20 @@
 </tr>
 </tbody></table>
 <p>A kitchen sink example:</p>
-<pre><code class="language-ruby">def foo a, b = 2, *c, d, e:, f: 7, **g, &amp;blk; end
-</code></pre>
-<p>Here are quick explanations:</p>
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">def</span> <span class="hljs-title function_">foo</span> a, b = <span class="hljs-number">2</span>, *c, d, <span class="hljs-symbol">e:</span>, <span class="hljs-symbol">f:</span> <span class="hljs-number">7</span>, **g, &amp;blk; <span class="hljs-keyword">end</span>
+</code></pre><p>Here are quick explanations:</p>
 <ul>
 <li><p>Optional parameters can have a default value.</p>
 </li>
 <li><p>Array decomposition parameters are required parameters that decompose an array
 argument into parts. Here are some examples, assuming the argument is <code>[[1, 2], 3]</code>:</p>
-<pre><code>(*a)          a = [[1, 2], 3]
+<pre><code class="hljs">(*a)          a = [[1, 2], 3]
 (a, b)        a = [1, 2], b = 3
 (a, *b)       a = [1, 2], b = [3]
 (a, b, *c)    a = [1, 2], b = 3,   c = []
 ((a, b), c)   a = 1,      b = 2,   c = 3
 ((a, *b), c)  a = 1,      b = [2], c = 3
-</code></pre>
-</li>
+</code></pre></li>
 <li><p>The splat parameter enables variable length argument lists and receives all
 extra arguments.</p>
 </li>
@@ -140,10 +139,9 @@ you to pass it to other methods, and call it by name instead of through
 </ul>
 <p>You can get a list of a method&#39;s parameters with <code>Method#parameters</code>, which will
 show the type of each parameter. Here it is, running over our <code>foo</code> method.</p>
-<pre><code class="language-ruby">method(:foo).parameters
-# [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]
-</code></pre>
-<p>Note that this glitches for array decomposition parameters, indicating just
+<pre><code class="hljs language-ruby">method(<span class="hljs-symbol">:foo</span>).parameters
+<span class="hljs-comment"># [[:req, :a], [:opt, :b], [:rest, :c], [:req, :d], [:keyreq, :e], [:key, :f], [:keyrest, :g], [:block, :blk]]</span>
+</code></pre><p>Note that this glitches for array decomposition parameters, indicating just
 <code>[:req]</code>.</p>
 <h3 id="ordering">Ordering</h3>
 <p>You can&#39;t mix match these parameters as you please. All types of parameters are
@@ -204,9 +202,8 @@ parameters.</p>
 <p>You can substitute <code>v</code> (and <code>v1</code>, <code>v2</code>) with almost any expression, as long as
 you respect operator precedence.</p>
 <p>A kitchen sink example:</p>
-<pre><code class="language-ruby">foo 1, *array, 2, c: 3, &quot;d&quot; =&gt; 4, **hash
-</code></pre>
-<p>Here are quick explanations:</p>
+<pre><code class="hljs language-ruby">foo <span class="hljs-number">1</span>, *array, <span class="hljs-number">2</span>, <span class="hljs-symbol">c:</span> <span class="hljs-number">3</span>, <span class="hljs-string">&quot;d&quot;</span> =&gt; <span class="hljs-number">4</span>, **hash
+</code></pre><p>Here are quick explanations:</p>
 <ul>
 <li><p>Keyword arguments are equivalent to hash arguments whose key is a symbol. If
 you are using keyword arguments with the intent to fill keyword parameters,
@@ -310,12 +307,11 @@ This parameter must be assigned a (syntactic) block (which becomes a proc) or a
 <code>lambda</code> or <code>-&gt;</code> (<em>lambda literal</em> or <em>dash rocket</em> or <em>stab operator</em>). The
 three first forms simply take a block argument, while the last form looks like
 this:</p>
-<pre><code class="language-ruby">-&gt; (a, b) { ... }
--&gt; (a, b) do .. end
+<pre><code class="hljs language-ruby">-&gt; (a, b) { ... }
+-&gt; (a, b) <span class="hljs-keyword">do</span> .. <span class="hljs-keyword">end</span>
 -&gt; { ... }
--&gt; do .. end
-</code></pre>
-<p>When a method accepts an implicit block, you can call it with <code>yield</code> (you can
+-&gt; <span class="hljs-keyword">do</span> .. <span class="hljs-keyword">end</span>
+</code></pre><p>When a method accepts an implicit block, you can call it with <code>yield</code> (you can
 also call the explicit block parameter with <code>yield</code>). Somewhat peculiarly, the
 <code>yield</code> notation cannot be passed a block of its own. A proc or block parameter
 named <code>x</code> can be called using <code>x.call(1, 2)</code>, <code>x.(1, 2)</code> or <code>x[1, 2]</code>.</p>
@@ -350,10 +346,9 @@ preserved. The converse is true for the reverse conversion.</p>
 <p>There is no semantic difference between both forms.</p>
 <p>There is one syntactic difference because the two forms have different
 precedences:</p>
-<pre><code class="language-ruby">foo bar { ... }     # foo(bar { ... })
-foo bar do ... end  # foo(bar) { ... }
-</code></pre>
-<p>If you don&#39;t need to use this particularity, there are two popular ways to
+<pre><code class="hljs language-ruby">foo bar { ... }     <span class="hljs-comment"># foo(bar { ... })</span>
+foo bar <span class="hljs-keyword">do</span> ... <span class="hljs-keyword">end</span>  <span class="hljs-comment"># foo(bar) { ... }</span>
+</code></pre><p>If you don&#39;t need to use this particularity, there are two popular ways to
 choose on form over the other:</p>
 <ul>
 <li><p>Use curlies for single-line blocks, <code>do ... end</code> for multi-line blocks.</p>
@@ -399,6 +394,11 @@ as long as you respect the parameter ordering.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

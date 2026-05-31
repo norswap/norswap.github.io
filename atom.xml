@@ -12,31 +12,28 @@
         <p>In the past few weeks I&#39;ve been writing a little library in TypeScript, and I&#39;ve learned a lot about the type system in
         the process. This is the first article, which focuses on how TypeScript deals with unions.</p>
         <p>Does this typecheck? And if it does, what is the type of <code>x</code>?</p>
-        <pre><code class="language-typescript">function foo(it: string): string
-        function foo(it: number): number
-        function foo(it: number | string): number | string { return it }
-        declare const it: number | string
-        const x = foo(it)
-        </code></pre>
-        <p>What about this?</p>
-        <pre><code class="language-typescript">class Foo {
-            foo(): string { return &quot;1&quot; }
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">number</span>
+        <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span> { <span class="hljs-keyword">return</span> it }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(it)
+        </code></pre><p>What about this?</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> {
+            <span class="hljs-title function_">foo</span>(): <span class="hljs-built_in">string</span> { <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;1&quot;</span> }
         }
-        class Bar {
-            foo(): number { return 1 }
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> {
+            <span class="hljs-title function_">foo</span>(): <span class="hljs-built_in">number</span> { <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> }
         }
-        declare const r: Foo | Bar
-        const x = r.foo()
-        </code></pre>
-        <p>Final question, in the following snippet does <code>x</code> come out as <code>Foo&lt;number | string&gt;</code> or <code>Foo&lt;number&gt; | Foo&lt;string&gt;</code>?</p>
-        <pre><code class="language-typescript">class Foo&lt;A&gt; {
-            constructor (readonly value: A) {}
-            copy(): Foo&lt;A&gt; { return new Foo(this.value) }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span> | <span class="hljs-title class_">Bar</span>
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">foo</span>()
+        </code></pre><p>Final question, in the following snippet does <code>x</code> come out as <code>Foo&lt;number | string&gt;</code> or <code>Foo&lt;number&gt; | Foo&lt;string&gt;</code>?</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span>&lt;A&gt; {
+            <span class="hljs-title function_">constructor</span> (<span class="hljs-params"><span class="hljs-keyword">readonly</span> <span class="hljs-attr">value</span>: A</span>) {}
+            <span class="hljs-title function_">copy</span>(): <span class="hljs-title class_">Foo</span>&lt;A&gt; { <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Foo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>) }
         }
-        declare const r: Foo&lt;string&gt; | Foo&lt;number&gt;
-        const x = r.copy()
-        </code></pre>
-        <p>The first example doesn&#39;t compile, the second does. This will explain why, and how we can create a functional signature
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">string</span>&gt; | <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">number</span>&gt;
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">copy</span>()
+        </code></pre><p>The first example doesn&#39;t compile, the second does. This will explain why, and how we can create a functional signature
         equivalent to that of the first example.</p>
         <p>The third example comes out as <code>Foo&lt;number&gt; | Foo&lt;string&gt;</code> (which is <em>assignable</em> to <code>Foo&lt;number | string&gt;</code>). This is
         what we want! However, we will see how to can force the function to output <code>Foo&lt;number | string&gt;</code>, because that is
@@ -55,13 +52,12 @@
         
         <h2 id="overload-distributivity">Overload Distributivity</h2>
         <p>Let&#39;s take our motivating example:</p>
-        <pre><code class="language-typescript">function foo(it: string): string
-        function foo(it: number): number
-        function foo(it: number | string): number | string { return it }
-        declare const it: number | string
-        const x = foo(it) // TS2769: No overload matches this call. 
-        </code></pre>
-        <p><code>foo</code> is an overloaded function. These work differently in TypeScript than in traditional statically-typed languages
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">number</span>
+        <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span> { <span class="hljs-keyword">return</span> it }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(it) <span class="hljs-comment">// TS2769: No overload matches this call. </span>
+        </code></pre><p><code>foo</code> is an overloaded function. These work differently in TypeScript than in traditional statically-typed languages
         like Java. In Java, each overload would be its own distinct function, with its own implementation, that just happen to
         share a name. In TypeScript, there is a single implementation with multiple signatures.</p>
         <p>TypeScript <em>could</em> do what Java does. It could compile each overload to a JavaScript function with a different name
@@ -79,16 +75,15 @@
         <p>For receivers, the logic is more complicated. <strong>The basic idea is that TypeScript tries to find matching signatures
         across receivers, and that match does not include the return type, so distribution is possible!</strong></p>
         <p>Therefore our example works and types <code>x</code> as <code>string | number</code>:</p>
-        <pre><code class="language-typescript">class Foo {
-            foo(): string { return &quot;1&quot; }
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> {
+            <span class="hljs-title function_">foo</span>(): <span class="hljs-built_in">string</span> { <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;1&quot;</span> }
         }
-        class Bar {
-            foo(): number { return 1 }
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> {
+            <span class="hljs-title function_">foo</span>(): <span class="hljs-built_in">number</span> { <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> }
         }
-        declare const r: Foo | Bar
-        const x = r.foo()
-        </code></pre>
-        <p>Now let&#39;s unpack the exact process.</p>
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span> | <span class="hljs-title class_">Bar</span>
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">foo</span>()
+        </code></pre><p>Now let&#39;s unpack the exact process.</p>
         <p>When calling a method on a union receiver, TypeScript collects the method definitions on both sides. It instantiates the
         class type parameters (if any) with the concrete type arguments. It then tries to build a set of unified signatures,
         basically trying to match every signature on every branch with another signature on all the other branches. If no match
@@ -152,20 +147,19 @@
         The signature matching process can however cause some signatures to disappear.</p>
         <p>Consider the following example, where we can imagine that <code>Foo.foo</code> is a function to process parameters, where
         strings are automatically parsed as numbers:</p>
-        <pre><code class="language-typescript">class Foo {
-            foo(x: string): number
-            foo&lt;A&gt;(it: A): A
-            foo&lt;A&gt;(it: A | string): A | number {
-                return typeof it === &quot;string&quot; ? Number.parseInt(it) : it
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> {
+            <span class="hljs-title function_">foo</span>(<span class="hljs-attr">x</span>: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">number</span>
+            foo&lt;A&gt;(<span class="hljs-attr">it</span>: A): A
+            foo&lt;A&gt;(<span class="hljs-attr">it</span>: A | <span class="hljs-built_in">string</span>): A | <span class="hljs-built_in">number</span> {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> it === <span class="hljs-string">&quot;string&quot;</span> ? <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">parseInt</span>(it) : it
             }
         }
-        class Bar {
-            foo&lt;A&gt;(it: A): A { return it }
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> {
+            foo&lt;A&gt;(<span class="hljs-attr">it</span>: A): A { <span class="hljs-keyword">return</span> it }
         }
-        declare const r: Foo | Bar
-        const x = r.foo(&quot;42&quot;) // x: &quot;42&quot;
-        </code></pre>
-        <p>Here <code>x</code> will type as <code>&quot;42&quot;</code>, because the first <code>foo</code> signature disappears in the matching process. The implementation,
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span> | <span class="hljs-title class_">Bar</span>
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">foo</span>(<span class="hljs-string">&quot;42&quot;</span>) <span class="hljs-comment">// x: &quot;42&quot;</span>
+        </code></pre><p>Here <code>x</code> will type as <code>&quot;42&quot;</code>, because the first <code>foo</code> signature disappears in the matching process. The implementation,
         however, remains the same. This means that if <code>r</code> is assigned an instance of <code>Foo</code>, then <code>x</code> will contain <code>42</code>, but type
         as <code>&quot;42&quot;</code>, a type soundness issue.</p>
         <h2 id="conditional-distributivity">Conditional Distributivity</h2>
@@ -173,20 +167,18 @@
         on type conditionals (i.e. type-level expression of the form <code>A extends B ? C : D</code>).</p>
         <p>Type conditionals distribute on unions if the left-hand side of the condition is naked. They don&#39;t distribute if it is
         wrapped. The common way to prevent distribution is to wrap in a tuple.</p>
-        <pre><code class="language-typescript">type Foo&lt;T&gt; = T extends &quot;a&quot; ? &quot;A&quot; : T extends &quot;b&quot; ? &quot;B&quot; : &quot;C&quot;
-        type Test = Foo&lt;&quot;a&quot; | &quot;b&quot; | &quot;c&quot;&gt; // &quot;A&quot; | &quot;B&quot; | &quot;C&quot;
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Foo</span>&lt;T&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-string">&quot;a&quot;</span> ? <span class="hljs-string">&quot;A&quot;</span> : T <span class="hljs-keyword">extends</span> <span class="hljs-string">&quot;b&quot;</span> ? <span class="hljs-string">&quot;B&quot;</span> : <span class="hljs-string">&quot;C&quot;</span>
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">Test</span> = <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-string">&quot;a&quot;</span> | <span class="hljs-string">&quot;b&quot;</span> | <span class="hljs-string">&quot;c&quot;</span>&gt; <span class="hljs-comment">// &quot;A&quot; | &quot;B&quot; | &quot;C&quot;</span>
         
-        type Foo2&lt;T&gt; = [T] extends [&quot;a&quot;] ? &quot;A&quot; : [T] extends [&quot;b&quot;] ? &quot;B&quot; : &quot;C&quot;
-        type Test2 = Foo2&lt;&quot;a&quot; | &quot;b&quot; | &quot;c&quot;&gt; // &quot;C&quot;
-        </code></pre>
-        <p>The example should be self-explanatory: in <code>Foo1</code> the union distributes and each lowercase string type maps to the
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">Foo2</span>&lt;T&gt; = [T] <span class="hljs-keyword">extends</span> [<span class="hljs-string">&quot;a&quot;</span>] ? <span class="hljs-string">&quot;A&quot;</span> : [T] <span class="hljs-keyword">extends</span> [<span class="hljs-string">&quot;b&quot;</span>] ? <span class="hljs-string">&quot;B&quot;</span> : <span class="hljs-string">&quot;C&quot;</span>
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">Test2</span> = <span class="hljs-title class_">Foo2</span>&lt;<span class="hljs-string">&quot;a&quot;</span> | <span class="hljs-string">&quot;b&quot;</span> | <span class="hljs-string">&quot;c&quot;</span>&gt; <span class="hljs-comment">// &quot;C&quot;</span>
+        </code></pre><p>The example should be self-explanatory: in <code>Foo1</code> the union distributes and each lowercase string type maps to the
         corresponding uppercase string type. In <code>Foo2</code>, <code>T</code> is the entire union, which falls through the default case (<code>&quot;C&quot;</code>).</p>
         <p><strong><code>never</code> in conditionals</strong></p>
         <p><code>never</code> with conditionals behaves like an empty union. Distributing <code>never</code> on a conditional yields <code>never</code>.</p>
-        <pre><code class="language-typescript">type TestNever = Foo&lt;never&gt; // never
-        type TestNever2 = Foo2&lt;never&gt; // &quot;A&quot;
-        </code></pre>
-        <h2 id="overloads-via-generic-signatures">&quot;Overloads&quot; via Generic Signatures</h2>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">TestNever</span> = <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">never</span>&gt; <span class="hljs-comment">// never</span>
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">TestNever2</span> = <span class="hljs-title class_">Foo2</span>&lt;<span class="hljs-built_in">never</span>&gt; <span class="hljs-comment">// &quot;A&quot;</span>
+        </code></pre><h2 id="overloads-via-generic-signatures">&quot;Overloads&quot; via Generic Signatures</h2>
         <p>What overloads provide is the ability to define multiple parameter lists for a single function, and to map each
         parameter list to a return type.</p>
         <p>With a few tricks, we can achieve a lot of this, <strong>and</strong> allow distribution over unions.</p>
@@ -200,20 +192,18 @@
         <li>A nested conditional type mapping the concrete parameter type to a concrete return type, to be used as return type.</li>
         </ul>
         <p>Given our headline example:</p>
-        <pre><code class="language-typescript">function foo(it: string): string
-        function foo(it: number): number
-        function foo(it: number | string): number | string { return it }
-        declare const it: number | string
-        const x = foo(it) // TS2769: No overload matches this call. 
-        </code></pre>
-        <p>The solution looks like this:</p>
-        <pre><code class="language-typescript">type FooReturn&lt;T extends number | string&gt; = T extends number ? number : string
-        function foo&lt;T extends number | string&gt;(it: T): FooReturn&lt;T&gt; { return it as FooReturn&lt;T&gt; }
-        declare const it: number | string
-        const x = foo(it) // number | string
-        const y = foo(42) // number
-        </code></pre>
-        <p>Maybe you&#39;ve noticed this is overcomplicated here, and the return type could simply have been <code>T</code>. This is indeed
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">number</span>
+        <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span> { <span class="hljs-keyword">return</span> it }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(it) <span class="hljs-comment">// TS2769: No overload matches this call. </span>
+        </code></pre><p>The solution looks like this:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">FooReturn</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">number</span> ? <span class="hljs-built_in">number</span> : <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">function</span> foo&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>&gt;(<span class="hljs-attr">it</span>: T): <span class="hljs-title class_">FooReturn</span>&lt;T&gt; { <span class="hljs-keyword">return</span> it <span class="hljs-keyword">as</span> <span class="hljs-title class_">FooReturn</span>&lt;T&gt; }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(it) <span class="hljs-comment">// number | string</span>
+        <span class="hljs-keyword">const</span> y = <span class="hljs-title function_">foo</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// number</span>
+        </code></pre><p>Maybe you&#39;ve noticed this is overcomplicated here, and the return type could simply have been <code>T</code>. This is indeed
         correct here, but in every case where the parameter type and return type differ, you will need the conditional type.</p>
         <p>Notice that sadly, TypeScript will be unable to figure out that the return type matches the bound, so a cast will be
         needed.</p>
@@ -223,15 +213,14 @@
         <p>A particularly interesting class of unions are those where each branch is a differently-parameterized version of the
         same type.</p>
         <p>Consider the example from the intro:</p>
-        <pre><code class="language-typescript">class Foo&lt;T&gt; {
-            constructor (readonly value: T) {}
-            copy(): Foo&lt;T&gt; { return new Foo(this.value) }
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span>&lt;T&gt; {
+            <span class="hljs-title function_">constructor</span> (<span class="hljs-params"><span class="hljs-keyword">readonly</span> <span class="hljs-attr">value</span>: T</span>) {}
+            <span class="hljs-title function_">copy</span>(): <span class="hljs-title class_">Foo</span>&lt;T&gt; { <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Foo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>) }
         }
-        declare const r: Foo&lt;string&gt; | Foo&lt;number&gt;
-        const x = r.copy() // types as `Foo&lt;string&gt; | Foo&lt;number&gt;`
-        const y: Foo&lt;string | number&gt; = r.copy()
-        </code></pre>
-        <p>Up to the <code>x</code> assignment, nothing is terribly novel here: we&#39;ve seen that typescript can distribute methods over
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">string</span>&gt; | <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">number</span>&gt;
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">copy</span>() <span class="hljs-comment">// types as `Foo&lt;string&gt; | Foo&lt;number&gt;`</span>
+        <span class="hljs-keyword">const</span> <span class="hljs-attr">y</span>: <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span>&gt; = r.<span class="hljs-title function_">copy</span>()
+        </code></pre><p>Up to the <code>x</code> assignment, nothing is terribly novel here: we&#39;ve seen that typescript can distribute methods over
         receivers.</p>
         <p>The <code>y</code> assignment is interesting: whenever <code>T</code> is a covariant type parameter, it is always true that <code>Foo&lt;A&gt; | Foo&lt;B&gt;</code>
         is assignable to <code>Foo&lt;A | B&gt;</code>.</p>
@@ -247,21 +236,19 @@
         naturally in the code via multiple <code>return</code> statements and conditionals (<code>condition ? new Foo(42) : new Foo(&quot;AH&quot;)</code>).</p>
         <p>While we can always coerce to <code>Foo&lt;A | B&gt;</code> via a cast or a type bound, it is sometimes convenient to perform this
         coercion as part of a method. I encountered the situation while writing a small result library for TypeScript:</p>
-        <pre><code class="language-typescript">const x = condition ? okay(42) : fail(Error(&quot;error!&quot;)) // Result&lt;number, never&gt; | Result&lt;never, Error&gt;
-        const y = x.map(it =&gt; it + 69)
-        </code></pre>
-        <p>We&#39;d like <code>y</code> to have the &quot;nice&quot; type <code>Result&lt;number, Error&gt;</code>, meaning it either holds a number or an error, instead
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> x = condition ? <span class="hljs-title function_">okay</span>(<span class="hljs-number">42</span>) : <span class="hljs-title function_">fail</span>(<span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;error!&quot;</span>)) <span class="hljs-comment">// Result&lt;number, never&gt; | Result&lt;never, Error&gt;</span>
+        <span class="hljs-keyword">const</span> y = x.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">it</span> =&gt;</span> it + <span class="hljs-number">69</span>)
+        </code></pre><p>We&#39;d like <code>y</code> to have the &quot;nice&quot; type <code>Result&lt;number, Error&gt;</code>, meaning it either holds a number or an error, instead
         of <code>Result&lt;number, never&gt; | Result&lt;never, Error&gt;</code>, which means the same thing, but is less readable.</p>
         <p>Here&#39;s how you do it:</p>
-        <pre><code class="language-typescript">type GetT&lt;F extends Foo&lt;unknown&gt;&gt; = F extends Foo&lt;infer T&gt; ? T : never
-        class Foo&lt;T&gt; {
-            constructor (readonly value: T) {}
-            copy&lt;This extends Foo&lt;unknown&gt;&gt;(this: This): Foo&lt;GetT&lt;This&gt;&gt; { return new Foo(this.value as GetT&lt;This&gt;) }
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">GetT</span>&lt;F <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">unknown</span>&gt;&gt; = F <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Foo</span>&lt;infer T&gt; ? T : <span class="hljs-built_in">never</span>
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span>&lt;T&gt; {
+            <span class="hljs-title function_">constructor</span> (<span class="hljs-params"><span class="hljs-keyword">readonly</span> <span class="hljs-attr">value</span>: T</span>) {}
+            copy&lt;<span class="hljs-title class_">This</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">unknown</span>&gt;&gt;(<span class="hljs-attr">this</span>: <span class="hljs-title class_">This</span>): <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-title class_">GetT</span>&lt;<span class="hljs-title class_">This</span>&gt;&gt; { <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Foo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> <span class="hljs-keyword">as</span> <span class="hljs-title class_">GetT</span>&lt;<span class="hljs-title class_">This</span>&gt;) }
         }
-        declare const r: Foo&lt;string&gt; | Foo&lt;number&gt;
-        const x = r.copy() // types as `Foo&lt;string | number&gt;`
-        </code></pre>
-        <p>We capture the type of the receiver in <code>This</code> (and in this example, it&#39;s a union). Then we use the extractor type <code>GetT</code>
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">string</span>&gt; | <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">number</span>&gt;
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">copy</span>() <span class="hljs-comment">// types as `Foo&lt;string | number&gt;`</span>
+        </code></pre><p>We capture the type of the receiver in <code>This</code> (and in this example, it&#39;s a union). Then we use the extractor type <code>GetT</code>
         to recover the value of <code>T</code>. Because unions distribute over type conditionals, <code>GetT&lt;This&gt;</code> yields <code>string | number</code>,
         and we get what we want.</p>
         <h2 id="summary">Summary</h2>

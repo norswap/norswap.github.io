@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -78,13 +79,11 @@ unclear, check the animated gif on the <a href="https://github.com/garybernhardt
 <p>Unfortunately selecta is Unix-only, however there are a few clones and I ended
 up settling on the multi-platform <a href="https://github.com/rschmitt/heatseeker">heatseeker</a>.</p>
 <p>Here&#39;s an example of what I can do with <code>ag</code> and heatseeker (<code>hs</code>):</p>
-<pre><code>em $(ag -l parser | hs)
-</code></pre>
-<p>Or the Windows equivalent (assuming you have <code>xargs</code> installed, it comes with
+<pre><code class="hljs">em $(ag -l parser | hs)
+</code></pre><p>Or the Windows equivalent (assuming you have <code>xargs</code> installed, it comes with
 <a href="https://www.cygwin.com/">Cygwin</a>, <a href="http://www.mingw.org/">MinGW</a> and even Git):</p>
-<pre><code>ag -l parser | hs | xargs em
-</code></pre>
-<p>What I&#39;m doing is that I&#39;m searching for the string &quot;parser&quot; in the current
+<pre><code class="hljs">ag -l parser | hs | xargs em
+</code></pre><p>What I&#39;m doing is that I&#39;m searching for the string &quot;parser&quot; in the current
 directory. The <code>-l</code> flag says to only print the file name (not the line number)
 of matches. Then heatseeker is used for the selection, and once the selection is
 done, the file opens in Emacs (<code>em</code> is my <a href="https://github.com/norswap/.emacs.d">custom Emacs launching
@@ -130,6 +129,11 @@ tried <a href="https://play.google.com/store/apps/details?id=com.docsearch&hl=en
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -89,24 +90,23 @@ package will fire another callback before the last one finished processing. This
 was not acceptable to me: each set of filesystem changes had to be fully
 processed before the processing of the nex tone began.</p>
 <p>Here is how I solved it:</p>
-<pre><code class="language-Javascript">async function watch()
+<pre><code class="hljs language-Javascript"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">watch</span>(<span class="hljs-params"></span>)
 {
-    let lock = Promise.resolve()
+    <span class="hljs-keyword">let</span> lock = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>()
     ...
-    const watching = await watcher(..., async (events) =&gt; {
-        let resolve
-        const old_lock = lock
-        lock = new Promise((r, _) =&gt; resolve = r)
-        await old_lock
+    <span class="hljs-keyword">const</span> watching = <span class="hljs-keyword">await</span> <span class="hljs-title function_">watcher</span>(..., <span class="hljs-title function_">async</span> (events) =&gt; {
+        <span class="hljs-keyword">let</span> resolve
+        <span class="hljs-keyword">const</span> old_lock = lock
+        lock = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">r, _</span>) =&gt;</span> resolve = r)
+        <span class="hljs-keyword">await</span> old_lock
         ...
-        // process events
+        <span class="hljs-comment">// process events</span>
         ...
-        resolve()
+        <span class="hljs-title function_">resolve</span>()
     })
-    watching.start()
+    watching.<span class="hljs-title function_">start</span>()
 }
-</code></pre>
-<p>Basically, each invocation of the callback creates a &quot;lock&quot; object, which is an
+</code></pre><p>Basically, each invocation of the callback creates a &quot;lock&quot; object, which is an
 unfullfilled promise. It then waits on the previous lock to be fullfilled. Only
 when it has finished processing does if fullfill (<code>resolve</code>) its own lock.
 Notice that since code is never executed in parallel, it&#39;s perfectly safe to use
@@ -193,6 +193,11 @@ Chokidar.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -76,91 +77,86 @@ single inheritance chain (the <em>ancestor chain</em>) and consecutive calls to
 <p>But how does linearization work, exactly?</p>
 <p>Here are a couple scenarios, what do you think the behaviour for each of this
 scenario is? Each is tailored to show something about the linearization process.</p>
-<pre><code class="language-ruby"># Scenario 1
+<pre><code class="hljs language-ruby"><span class="hljs-comment"># Scenario 1</span>
 
-module A1; end
-module B1; end
-module C1
-  include A1
-  include B1
-end
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">A1</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">B1</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">C1</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A1</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">B1</span>
+<span class="hljs-keyword">end</span>
 
-# C1.ancestors    =&gt; [C1, B1, A1]
-</code></pre>
-<pre><code class="language-ruby"># Scenario 2
+<span class="hljs-comment"># C1.ancestors    =&gt; [C1, B1, A1]</span>
+</code></pre><pre><code class="hljs language-ruby"><span class="hljs-comment"># Scenario 2</span>
 
-module A2; end
-module B2; end
-module C2
-  include A2
-end
-module D2
-  include B2
-end
-module E2
-  include C2
-  include D2
-end
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">A2</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">B2</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">C2</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A2</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">D2</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">B2</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">E2</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">C2</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">D2</span>
+<span class="hljs-keyword">end</span>
 
-# E2.ancestors    =&gt; [E2, D2, B2, C2, A2] 
-</code></pre>
-<pre><code class="language-ruby"># Scenario 3
+<span class="hljs-comment"># E2.ancestors    =&gt; [E2, D2, B2, C2, A2] </span>
+</code></pre><pre><code class="hljs language-ruby"><span class="hljs-comment"># Scenario 3</span>
 
-module A3; end
-module C3
-  include A3
-end
-module D3
-  include A3
-end
-module E3
-  include C3
-  include D3
-end
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">A3</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">C3</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A3</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">D3</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A3</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">E3</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">C3</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">D3</span>
+<span class="hljs-keyword">end</span>
 
-# E3.ancestors    =&gt; [E3, D3, C3, A3]
-</code></pre>
-<p>So far, so good.</p>
-<pre><code class="language-ruby"># Scenario 4
+<span class="hljs-comment"># E3.ancestors    =&gt; [E3, D3, C3, A3]</span>
+</code></pre><p>So far, so good.</p>
+<pre><code class="hljs language-ruby"><span class="hljs-comment"># Scenario 4</span>
 
-module A4; end
-module B4; end
-module F4; end
-module C4
-  include B4
-  include A4
-end
-module D4
-  include F4
-  include A4
-end
-module E4
-  include C4
-  include D4
-end
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">A4</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">B4</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">F4</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">C4</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">B4</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A4</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">D4</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">F4</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A4</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">E4</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">C4</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">D4</span>
+<span class="hljs-keyword">end</span>
 
-# E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]
-</code></pre>
-<pre><code class="language-ruby"># Scenario 5
+<span class="hljs-comment"># E4.ancestors    =&gt; [E4, D4, C4, A4, F4, B4]</span>
+</code></pre><pre><code class="hljs language-ruby"><span class="hljs-comment"># Scenario 5</span>
 
-module A5; end
-module B5; end
-module C5
-  include B5
-  include A5
-end
-module D5
-  include A5
-  include B5
-end
-module E5
-  include C5
-  include D5
-end
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">A5</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">B5</span>; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">C5</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">B5</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A5</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">D5</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">A5</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">B5</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">module</span> <span class="hljs-title class_">E5</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">C5</span>
+  <span class="hljs-keyword">include</span> <span class="hljs-title class_">D5</span>
+<span class="hljs-keyword">end</span>
 
-# E5.ancestors    =&gt; [E5, D5, C5, A5, B5]
-</code></pre>
-<p>Pretty surprising, isn&#39;t it?</p>
+<span class="hljs-comment"># E5.ancestors    =&gt; [E5, D5, C5, A5, B5]</span>
+</code></pre><p>Pretty surprising, isn&#39;t it?</p>
 <p>Two things further complicate the situation:</p>
 <ul>
 <li>The <code>prepend</code> function is a variant of <code>include</code> with a slightly different
@@ -170,43 +166,42 @@ behaviour.</li>
 <h2 id="the-algorithm">The Algorithm</h2>
 <p>The linearization algorithm is very hard to describe precisely with a few
 sentences, so I&#39;ll just serve you the code:</p>
-<pre><code class="language-ruby">Include = Struct.new :mod
-Prepend = Struct.new :mod
+<pre><code class="hljs language-ruby"><span class="hljs-title class_">Include</span> = <span class="hljs-title class_">Struct</span>.new <span class="hljs-symbol">:mod</span>
+<span class="hljs-title class_">Prepend</span> = <span class="hljs-title class_">Struct</span>.new <span class="hljs-symbol">:mod</span>
 
-# Returns the ancestry chain of `mod`, given the environment `env`.
-#
-# No distinctions are made between classes and modules: where a class extends
-# another class, that class is treated as the first included module.
-#
-# params:
-# - mod: Symbol
-#   Represents a module.
-# - env: Map&lt;Symbol, Array&lt;Include|Prepend&gt;&gt;
-#   Maps modules to inclusions, in order of apperance.
+<span class="hljs-comment"># Returns the ancestry chain of `mod`, given the environment `env`.</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># No distinctions are made between classes and modules: where a class extends</span>
+<span class="hljs-comment"># another class, that class is treated as the first included module.</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># params:</span>
+<span class="hljs-comment"># - mod: Symbol</span>
+<span class="hljs-comment">#   Represents a module.</span>
+<span class="hljs-comment"># - env: Map&lt;Symbol, Array&lt;Include|Prepend&gt;&gt;</span>
+<span class="hljs-comment">#   Maps modules to inclusions, in order of apperance.</span>
 
-def ancestors (mod, env)
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">ancestors</span> (mod, env)
   chain = [mod]
   includes = env[mod]
-  includes.each { |it| insert(mod, it, env, chain) }
+  includes.each { |<span class="hljs-params">it</span>| insert(mod, it, env, chain) }
   chain
-end
+<span class="hljs-keyword">end</span>
 
 
-def insert (mod, inclusion, env, chain)
-  i = inclusion.is_a?(Prepend) ? 0 : 1
-  ancestors(inclusion.mod, env).each do |it|
-    raise ArgumentError(&#39;cyclic include detected&#39;) if it == mod
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">insert</span> (mod, inclusion, env, chain)
+  i = inclusion.is_a?(<span class="hljs-title class_">Prepend</span>) ? <span class="hljs-number">0</span> : <span class="hljs-number">1</span>
+  ancestors(inclusion.mod, env).each <span class="hljs-keyword">do</span> |<span class="hljs-params">it</span>|
+    <span class="hljs-keyword">raise</span> <span class="hljs-title class_">ArgumentError</span>(<span class="hljs-string">&#x27;cyclic include detected&#x27;</span>) <span class="hljs-keyword">if</span> it == mod
     j = chain.find_index it
-    if not j.nil?
-      i = j + 1 if j &gt;= i
-      next
-    end
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> j.<span class="hljs-literal">nil</span>?
+      i = j + <span class="hljs-number">1</span> <span class="hljs-keyword">if</span> j &gt;= i
+      <span class="hljs-keyword">next</span>
+    <span class="hljs-keyword">end</span>
     chain.insert(i, it)
-    i += 1
-  end
-end
-</code></pre>
-<h3 id="intuition">Intuition</h3>
+    i += <span class="hljs-number">1</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre><h3 id="intuition">Intuition</h3>
 <p>Let&#39;s try to get some intuition in there. Let&#39;s start with some observations:</p>
 <ul>
 <li><p>If B is included after A, B take precedence over A.</p>
@@ -248,11 +243,10 @@ remain at the current position (in both cases the module is not re-inserted).</p
 <p>The only difference between <code>include</code> and <code>prepend</code> is that prepend will try
 merging the ancestor chain of its parameter <em>before</em> the class in the class
 own&#39;s ancestor chain:</p>
-<pre><code class="language-ruby">module M; end
-class C; prepend M; end
+<pre><code class="hljs language-ruby"><span class="hljs-keyword">module</span> M; <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">class</span> C; <span class="hljs-keyword">prepend</span> M; <span class="hljs-keyword">end</span>
 C.ancestors =&gt; [M, C, ...]
-</code></pre>
-<h2 id="doing-better">Doing Better?</h2>
+</code></pre><h2 id="doing-better">Doing Better?</h2>
 <p>Despite its idiosyncracies, I would be hard pressed to improve on the algorithm
 without losing some of its nice properties. The key tension is that later calls
 to <code>include</code> should take precedence (to enable effective run-time
@@ -278,6 +272,11 @@ worse off because of it.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

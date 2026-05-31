@@ -10,6 +10,7 @@
   </title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
   <style type="text/css">
@@ -163,9 +164,8 @@ lexicographic order, so you can control the order of entries in the PATH.</p>
 its fully qualified name <code>/usr/libexec/path_helper</code>. The output of <code>path_helper</code>
 is a shell command to set the PATH. This command must itself be evaluated.</p>
 <p>I suggest to define the following shell alias for ease of use:</p>
-<pre><code>alias refresh_path=&#39;eval `/usr/libexec/path_helper -s`&#39;
-</code></pre>
-<p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
+<pre><code class="hljs">alias refresh_path=&#x27;eval `/usr/libexec/path_helper -s`&#x27;
+</code></pre><p>The <code>-s</code> part is just to ensure a bash-compatible command is generated.</p>
 <p>By default, OS X calls <code>path_helper</code> in <code>/etc/profile</code> so you do not need to add
 it yourself.</p>
 <p>Oh and by the way, <code>path_helper</code> does the same thing it does to <code>PATH</code> to
@@ -220,6 +220,11 @@ defining variables in <code>.profile</code>.</p>
     </script>
     <noscript>Please enable JavaScript to view comments.</noscript>
   </div>
+  <script type="module">
+    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
+    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
+    hljs.registerLanguage("typescript", typescript)
+  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

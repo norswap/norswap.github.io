@@ -11,8 +11,10 @@
     "chokidar-cli": "^3.0.0",
     "fs-extra": "^11.3.1",
     "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
     "marked": "^16.2.1",
     "marked-gfm-heading-id": "^4.1.2",
+    "marked-highlight": "^2.2.4",
     "nunjucks": "^3.2.4"
   },
   "license": "CC-BY-NC-4.0",

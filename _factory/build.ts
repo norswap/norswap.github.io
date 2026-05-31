@@ -5,6 +5,8 @@ import { marked } from "marked"
 import { gfmHeadingId } from "marked-gfm-heading-id"
 import * as nunjucks from "nunjucks"
 import { join } from "path"
+import { markedHighlight } from "marked-highlight"
+import hljs from "highlight.js"
 
 // NOTE: Marked always escapes things like quotes, even when not necessary
 // https://github.com/markedjs/marked/issues/269
@@ -12,6 +14,15 @@ import { join } from "path"
 
 marked.use(gfmHeadingId()) // adds #this-is-the-title id attributes to h1, h2, ...
 nunjucks.configure({ autoescape: false })
+
+marked.use(markedHighlight({
+    emptyLangClass: 'hljs',
+    langPrefix: 'hljs language-',
+    highlight(code, lang, _info) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+    }
+}))
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Constants / Config
@@ -286,7 +297,7 @@ async function buildIndex() {
     const pagePosts = posts.map(post => ({
         slug: post.slug,
         date: formatDate(post.date),
-         ...post.content,
+        ...post.content,
     }))
     let page = 1
     let slug = "" // initial value will be omitted in `join(...)` calls

@@ -1,4 +1,5 @@
 .DS_Store
+.claude
 /_factory/node_modules*
 /_factory/posts.json
 /_factory/generate.js.rna

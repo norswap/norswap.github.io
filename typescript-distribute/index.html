@@ -220,7 +220,11 @@ corresponding uppercase string type. In <code>Foo2</code>, <code>T</code> is the
 <p><code>never</code> with conditionals behaves like an empty union. Distributing <code>never</code> on a conditional yields <code>never</code>.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">TestNever</span> = <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">never</span>&gt; <span class="hljs-comment">// never</span>
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">TestNever2</span> = <span class="hljs-title class_">Foo2</span>&lt;<span class="hljs-built_in">never</span>&gt; <span class="hljs-comment">// &quot;A&quot;</span>
-</code></pre><h2 id="overloads-via-generic-signatures">&quot;Overloads&quot; via Generic Signatures</h2>
+</code></pre><p><strong>Bonus note: <code>any</code> in conditionals</strong></p>
+<p>Nothing to do with the topic at hand, but despite <code>any</code> being both a top and bottom type (meaning it acts as both a
+supertype and subtype of every other types) <code>any extends X</code> evaluates to <code>false</code> for every <code>X</code> besides <code>any</code> and
+<code>unknown</code>. Which is an understandble choice for a situation where there isn&#39;t a good solution for all cases.</p>
+<h2 id="overloads-via-generic-signatures">&quot;Overloads&quot; via Generic Signatures</h2>
 <p>What overloads provide is the ability to define multiple parameter lists for a single function, and to map each
 parameter list to a return type.</p>
 <p>With a few tricks, we can achieve a lot of this, <strong>and</strong> allow distribution over unions.</p>

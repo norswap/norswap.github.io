@@ -219,6 +219,12 @@ type TestNever = Foo<never> // never
 type TestNever2 = Foo2<never> // "A"
 ```
 
+**Bonus note: `any` in conditionals**
+
+Nothing to do with the topic at hand, but despite `any` being both a top and bottom type (meaning it acts as both a
+supertype and subtype of every other types) `any extends X` evaluates to `false` for every `X` besides `any` and
+`unknown`. Which is an understandble choice for a situation where there isn't a good solution for all cases.
+
 ## "Overloads" via Generic Signatures
 
 What overloads provide is the ability to define multiple parameter lists for a single function, and to map each

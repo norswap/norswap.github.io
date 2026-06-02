@@ -6,6 +6,343 @@
     <link>https://norswap.com</link>
     <atom:link href="https://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>How TypeScript infers type variables</title>
+      <description>
+      <![CDATA[
+        <p>This is the second article about what I learned about the TypeScript type system while writing a small library.
+        This one is about how TypeScript assigns a type to type variables defined in functions via inference.</p>
+        <p>You can also read <a href="/typescript-distribute">the first article about how TypeScript distributes unions</a>.</p>
+        <p>Type variable inference is a complex process. It often does what you expect or want, although when you&#39;re lost in the
+        type sauce, it&#39;s not always obvious what that is.</p>
+        <p>Sometimes however, it&#39;s a little bit bonkers:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span>&lt;A&gt; {
+            <span class="hljs-title function_">foo</span>(): <span class="hljs-title class_">Foo</span>&lt;A&gt; {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Foo</span>()
+            }
+        }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">r</span>: <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">string</span>&gt; | <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">number</span>&gt;
+        <span class="hljs-keyword">const</span> x = r.<span class="hljs-title function_">foo</span>() <span class="hljs-comment">// typed as Foo&lt;string&gt;</span>
+        </code></pre><pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;A, B&gt;(<span class="hljs-attr">it</span>: A &amp; B): A &amp; B { <span class="hljs-keyword">return</span> it }
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// typed as unknown</span>
+        </code></pre><pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;A&gt;(<span class="hljs-attr">it</span>: A &amp; { <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span> }): A { <span class="hljs-keyword">return</span> it }
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>({ <span class="hljs-attr">x</span>: <span class="hljs-number">42</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">42</span> }) <span class="hljs-comment">// typed as { x: number, y: number }</span>
+        </code></pre><pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">X</span> {}
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">X</span> { <span class="hljs-keyword">readonly</span> kind = <span class="hljs-string">&quot;A&quot;</span> }
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">X</span> { <span class="hljs-keyword">readonly</span> kind = <span class="hljs-string">&quot;B&quot;</span> }
+        
+        <span class="hljs-keyword">function</span> foo&lt;T <span class="hljs-keyword">extends</span> X&gt;(<span class="hljs-attr">a</span>: T, <span class="hljs-attr">b</span>: T): T { <span class="hljs-keyword">return</span> a }
+        <span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">A</span>(), <span class="hljs-keyword">new</span> <span class="hljs-title function_">B</span>()) <span class="hljs-comment">// T = A</span>
+        <span class="hljs-comment">// ^ TS2345: Argument of type B is not assignable to parameter of type A</span>
+        <span class="hljs-keyword">const</span> y = foo&lt;A|B&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title function_">A</span>(), <span class="hljs-keyword">new</span> <span class="hljs-title function_">B</span>()) <span class="hljs-comment">// ok, also works with foo&lt;X&gt;</span>
+        </code></pre><p>In this article, I&#39;ll lay down the rules that will help you understand how TypeScript infers type variables.</p>
+        <p>Type variable inference is a complex topic and we will not cover <em>all</em> the intricacies. The information I&#39;m presenting
+        here is probably missing details and might even be somewhat incorrect by virtue of being simplified. Nevertheless, it
+        matches all the observations I&#39;ve made and seems to be congruent with TypeScript&#39;s implementation. In any case, this
+        understanding will serve you well whenever you need to reason about type variable inference.</p>
+        <!-- TOC -->
+        <ul>
+        <li><a href="#outline">Outline</a></li>
+        <li><a href="#candidate-collection">Candidate Collection</a></li>
+        <li><a href="#candidate-resolution">Candidate Resolution</a></li>
+        <li><a href="#type-variable-inference-with-type-variables-in-source-types">Type Variable Inference with Type Variables in Source Types</a></li>
+        <li><a href="#summary">Summary</a></li>
+        </ul>
+        <!-- TOC -->
+        
+        <h2 id="outline">Outline</h2>
+        <p>The process start with a series of source types, which are the types of the argument passed to the function, as well as
+        expected return type (e.g. if assigning to a variable declaration with an explicit type). These will be paired (1-1)
+        with a series of target types which are the types of the parameters of the function and its return type. The target
+        types can contain type variables.</p>
+        <p>The inference process then runs in two phases:</p>
+        <ol>
+        <li><strong>Candidate Collection</strong> — Walk the source and target types in parallel. Every time the walk reaches a bare type
+        parameter on the target side, record the corresponding source type as a candidate.</li>
+        <li><strong>Candidate Resolution</strong> — Collapse the candidate list(s) into a single inferred type.</li>
+        </ol>
+        <p>This is then followed by applying the regular type checking algorithm after injecting the resolved candidate into the
+        type parameters.</p>
+        <p>We&#39;ll detail these two phases in the two next sections.</p>
+        <h2 id="candidate-collection">Candidate Collection</h2>
+        <p>As we said, every time a bare type parameter is reached, inference occur, otherwise we recurse.</p>
+        <p>Candidates are collected in two distinct lists: covariant (&quot;output position&quot;) and contravariant (&quot;input position&quot;). See
+        <a href="https://en.wikipedia.org/wiki/Type_variance">this wikipedia article</a> for more info on type variance.</p>
+        <p>Simple example:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> f&lt;A, B, C&gt;(<span class="hljs-attr">x</span>: A, <span class="hljs-attr">y</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">a</span>: B</span>) =&gt;</span> C) {}
+        <span class="hljs-title function_">f</span>(<span class="hljs-literal">true</span>, <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span></span>) =&gt;</span> <span class="hljs-string">&quot;hello&quot;</span>)
+        </code></pre><p>Infers <code>A = boolean</code>, <code>B = number</code>, <code>C = string</code>. B is a <a href="https://www.typescriptlang.org/docs/handbook/2/generics.html#variance-annotations">contravariant</a> candidate, A and C are covariant candidates.</p>
+        <p>The &quot;walk&quot; we&#39;re referering to: when matching <code>(it: number) =&gt; string</code> to <code>(a: B) =&gt; C</code>, we&#39;re recursing inside both
+        structures as we&#39;re matching them to reach the bare type parameters. If a match is impossible, that part of the walk is
+        aborted during inference. If the source type cannot match the target type at all, you&#39;ll get a type error when regular
+        type checking runs.</p>
+        <p>This process also walks &quot;into&quot; type definitions.</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">ArrayContainer</span>&lt;T&gt; = T[] | { <span class="hljs-attr">array</span>: T[] }
+        <span class="hljs-keyword">function</span> f&lt;E&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">ArrayContainer</span>&lt;E&gt;) {}
+        <span class="hljs-title function_">f</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
+        </code></pre><p>Infers <code>E = number</code>. The type definition is expanded, so we&#39;re matching <code>number[]</code> against <code>E[] | { array: E[] }</code>.
+        The array side matches, we&#39;re collecting <code>E = number</code> as a candidate.</p>
+        <p>When a type-level conditional is encountered, candidates are collected on the right-hand side of conditionals.</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Pair</span>&lt;A, B&gt; = A <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-title class_">Map</span>&lt;A, B&gt; : [A, B]
+        <span class="hljs-keyword">function</span> f&lt;A, B&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Pair</span>&lt;A, B&gt;) {}
+        <span class="hljs-title function_">f</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
+        <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">1</span>]]))
+        <span class="hljs-title function_">f</span>([<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>]) <span class="hljs-comment">// TS2345: Argument of type string[] is not assignable to parameter of type Map&lt;string, string&gt;</span>
+        </code></pre><p>In this case, the first call collects <code>A = number, B = number</code> from the second branch, while the second call collects <code>A = string, B = number</code> from the first branch.</p>
+        <p>The third call collects <code>A = string, B = string</code> from the second branch. It causes an error at type-checking time
+        because [&quot;a&quot;, &quot;b&quot;] does not satisfy <code>Pair&lt;string, string&gt;</code> (when <code>A = string</code>, <code>Pair&lt;A, B&gt; = Map&lt;A, B&gt;</code>). Notice that
+        the candidates are collected from the second branch, but type checking walks into the first branch! <strong>Type variable
+        inference does not evaluate branches!</strong></p>
+        <p>Note that object key and value type inference in conditionals does not work (I don&#39;t know why). So we couldn&#39;t have
+        written <code>type Pair&lt;A, B&gt; = A extends string ? { [key in A]: B } : [A, B]</code>.</p>
+        <p>Additionally <code>infer T</code> directives create new type variables that are added to the set of variables to be inferred.</p>
+        <p>A goood example is this simplified redefinition of the standard <code>Awaited</code> type (only for promises, not all thenables):</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Awaited</span>&lt;T&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Promise</span>&lt;infer U&gt; ? <span class="hljs-title class_">Awaited</span>&lt;U&gt; : T
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">Foo</span> = <span class="hljs-title class_">Awaited</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">number</span>&gt;&gt;&gt;
+        </code></pre><p>In this case, <code>U</code> is inferred to <code>Promise&lt;number&gt;</code> in the first expansion of <code>Awaited</code>, then <code>U</code> is inferred to <code>number</code>
+        in the recursive expansion of <code>Awaited</code> (these two <code>U</code>s count as distinct type variables).</p>
+        <p>Let&#39;s now highlight some unintuitive aspects of this, as well as give some additional information on special cases.</p>
+        <p><strong>What is not considered during candidate collection.</strong></p>
+        <ul>
+        <li>The condition-side of conditional types.<ul>
+        <li><code>infer</code> still introducing new variables</li>
+        <li>The condition never adds candidate for any variables. <code>T extends Foo</code> does NOT add <code>Foo</code> as a candidate for <code>T</code>!</li>
+        </ul>
+        </li>
+        <li>Type parameter constraints (<code>&lt;T extends Foo&gt;</code> in type, class or function type parameter list).<ul>
+        <li>They can be injected later (during the resolution phase) if the selected candidates do not match them,
+        or if there is no candidate.</li>
+        </ul>
+        </li>
+        <li>Type parameter defaults <code>&lt;T = unknown&gt;</code>.</li>
+        <li>Supertypes of a source type (or of its type arguments).</li>
+        </ul>
+        <p><strong>Inference distributes over unions, source intersection types sometimes merge.</strong></p>
+        <p>Whenever the source type at a walk step is a union and the target type is not a bare type parameter (in which case it
+        simply matches the union), the walk iterates over union branches and reruns inference against the target for each one
+        independently. All resulting candidates land in the same list (they are not re-unioned).</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> f&lt;T&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Foo</span>&lt;T&gt;): T
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">u</span>: <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-title class_">Dog</span>&gt; | <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-title class_">Cat</span>&gt;
+        <span class="hljs-title function_">f</span>(u) <span class="hljs-comment">// candidates: [Dog, Cat]</span>
+        </code></pre><p>From <a href="/typescript-distribute">my article on union distribution</a>, also remember that type conditionals distribute if the thing before
+        <code>extends</code> is a naked type variable (e.g. <code>A extends { x: number }</code> distributes, <code>[A] extends [{x: number}]</code> does not).</p>
+        <p>Source intersection types mostly remain intact, except when structurally matching to an object type (e.g. <code>{ x: T }</code>) is
+        required. In the case of structural matching, the intersected (merged) object shape is created (e.g. <code>{ x: string, y: number } &amp; { x: &quot;a&quot; }</code> yields <code>{ x: &quot;a&quot;, y: number }</code>).</p>
+        <p><strong>Ambiguous target intersections do not record candidates</strong></p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;A, B&gt;(<span class="hljs-attr">it</span>: A &amp; B) {}
+        <span class="hljs-title function_">foo</span>(<span class="hljs-number">42</span>)
+        </code></pre><p>Both <code>A</code> and <code>B</code> infer to <code>unknown</code>, as TypeScript is unable to determine whether <code>A</code> or <code>B</code> should match
+        <code>number</code> (but bizarrely does not choose arbitrarily).</p>
+        <p><strong>Type variables in target intersections sometimes &quot;peel off&quot; and sometimes don&#39;t</strong></p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;A&gt;(<span class="hljs-attr">it</span>: A &amp; { <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span> }) {}
+        <span class="hljs-title function_">foo</span>({ <span class="hljs-attr">x</span>: <span class="hljs-number">42</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">42</span> }) <span class="hljs-comment">// A = `{x: number, y: number }`</span>
+        
+        <span class="hljs-keyword">function</span> bar&lt;A&gt;(<span class="hljs-attr">it</span>: A &amp; <span class="hljs-built_in">number</span>) {}
+        <span class="hljs-title function_">bar</span>(<span class="hljs-number">42</span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">number</span> &amp; { <span class="hljs-attr">brand</span>: <span class="hljs-string">&quot;USD&quot;</span> }) <span class="hljs-comment">// A = { brand: &quot;USD&quot; }</span>
+        
+        <span class="hljs-keyword">function</span> baz&lt;A&gt;(<span class="hljs-attr">it</span>: A &amp; <span class="hljs-built_in">string</span>) {}
+        <span class="hljs-title function_">baz</span>(<span class="hljs-string">&quot;a&quot;</span> <span class="hljs-keyword">as</span> <span class="hljs-string">&quot;a&quot;</span> &amp; { <span class="hljs-attr">brand</span>: <span class="hljs-number">1</span> }) <span class="hljs-comment">// A = &quot;a&quot; &amp; { brand: 1 }</span>
+        
+        <span class="hljs-keyword">function</span> qux&lt;A&gt;(<span class="hljs-attr">it</span>: A &amp; <span class="hljs-string">&quot;a&quot;</span>) {}
+        <span class="hljs-title function_">qux</span>(<span class="hljs-string">&quot;a&quot;</span> <span class="hljs-keyword">as</span> <span class="hljs-string">&quot;a&quot;</span> &amp; { <span class="hljs-attr">brand</span>: <span class="hljs-number">1</span> }) <span class="hljs-comment">// A = { brand: 1 }</span>
+        </code></pre><p>We could expect <code>A</code> to infer to <code>{ y: number }</code> in the <code>foo</code> call, and to <code>{ brand: 1 }</code> in the <code>baz</code> call, but that is
+        not the case. These are probably heuristics designed to maximize the utility of the captured type: in the first case, to
+        capture the entire object type, and in the second case to capture the precise literal string.</p>
+        <p>Note that the order in which the intersection is specified (both in source and target types) never matters.</p>
+        <p><strong>Important takeaway: type variables can only match against structural parts of the concrete type.</strong></p>
+        <p>If we have a source type <code>Elephant&lt;Savannah&gt;</code> with <code>Elephant extends Animal</code> and <code>Savannah extends Location</code>, type
+        variables inferred against this source type can only ever match <code>Elephant&lt;Savannah&gt;</code>, or <code>Savannah</code>. Supertypes are
+        never considered for candidate collection, so <code>Animal</code>, <code>Animal&lt;Savannah&gt;</code>, <code>Location</code>, etc...  will never end up in the
+        candidate lists.</p>
+        <p>Another corollary: there is no way to have an argument of type <code>number</code> and produce a binding of a type variable to
+        <code>string</code>. Surprisingly, that would actualy be quite convenient, consider:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Indexed</span>&lt;K, V&gt; = K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-title class_">Map</span>&lt;K, V&gt; : V[]
+        <span class="hljs-keyword">function</span> f&lt;K, V&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Indexed</span>&lt;K, V&gt;) {}
+        <span class="hljs-title function_">f</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
+        <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">1</span>]]))
+        </code></pre><p>We&#39;d love to infer <code>K = number</code> when the argument is an array! Of course we don&#39;t use the key type for anything.
+        If we needed it, here&#39;s how we could get around it:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Indexed</span>&lt;K, V&gt; = K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-title class_">Map</span>&lt;K, V&gt; : V[]
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">Key</span>&lt;K&gt; = K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-built_in">string</span> : <span class="hljs-built_in">number</span>
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> f&lt;K, V&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Indexed</span>&lt;K, V&gt;): <span class="hljs-title class_">Key</span>&lt;K&gt;
+        <span class="hljs-keyword">const</span> <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span> = <span class="hljs-title function_">f</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
+        <span class="hljs-keyword">const</span> <span class="hljs-attr">y</span>: <span class="hljs-built_in">string</span> = <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">1</span>]]))
+        </code></pre><p>Here&#39;s an alternative way:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Indexed</span>&lt;K, V&gt; = K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-title class_">Map</span>&lt;K, V&gt; : V[]
+        <span class="hljs-keyword">type</span> <span class="hljs-title class_">Key</span>&lt;T&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;infer K, <span class="hljs-built_in">any</span>&gt; ? K : <span class="hljs-built_in">number</span>
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> f&lt;T, K, V&gt;(<span class="hljs-attr">x</span>: T &amp; <span class="hljs-title class_">Indexed</span>&lt;K, V&gt;): <span class="hljs-title class_">Key</span>&lt;T&gt;
+        <span class="hljs-keyword">const</span> <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span> = <span class="hljs-title function_">f</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])
+        <span class="hljs-keyword">const</span> <span class="hljs-attr">y</span>: <span class="hljs-built_in">string</span> = <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">1</span>]]))
+        </code></pre><p>It&#39;s unnecessary here, but the pattern of saving the entire input type <code>T</code> (and how to do so it needs to appear in an
+        inference position) ends up being useful quite often when doing advanced type alchemy.</p>
+        <p>In fact we use this trick in our article on <a href="/typescript-distribute">union distribution</a> to simulate overloads with generics.</p>
+        <h2 id="candidate-resolution">Candidate Resolution</h2>
+        <p>Candidate collection outputs two candidate lists: covariant and contravariant.
+        Resolution reduces each list to a single type, then combines them.</p>
+        <p>The general process:</p>
+        <ul>
+        <li>The covariant candidates collapse to a union (under rare specific conditions — see below), a common supertype (if
+        one is present in the candidate list), or its first member.<ul>
+        <li>To reduce to a common supertype, it must present in the candidate list — TypeScript never resolves to a type not
+        in the candidate list.</li>
+        <li>See below for how the list is collapsed.</li>
+        <li>If the list contains multiple anonymous literal object or array types (e.g. <code>{ a: number }</code> inferred via the source
+        argument <code>{ a: 1 }</code>), then they get unioned together before collapsing (only for the covariant list).</li>
+        </ul>
+        </li>
+        <li>The contravariant candidates collapse to an intersection (under rare specific conditions), a common subtype
+        (if one is present in the candidate list), or to its first member.</li>
+        <li>If both a covariant and a contravariant candidate list are present, the contravariant result wins.<ul>
+        <li>... unless it fails to satisfy the type parameter&#39;s constraint, in which case the covariant one is used as a fallback.</li>
+        <li>... unless the covariant result is a subtype of the contravariant result, in which case the covariant one wins.</li>
+        </ul>
+        </li>
+        <li>If both lists are empty, the type parameter&#39;s declared default is used.</li>
+        <li>With no default, the result is <code>unknown</code>.</li>
+        <li>If the resolved type doesn&#39;t satisfy its type constraint (<code>extends</code>), it is replaced by the constraint.</li>
+        </ul>
+        <p>The &quot;anonymous literal types&quot; rule is weird. Below is an illustration. The motivation boils down to the fact that we
+        probably didn&#39;t intend different <strong>named</strong> types to match the same type variable, while if we&#39;re using object or array
+        literals, that might actually be our intent, and this lets us avoid writing extra type definition to clarify.</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> f&lt;T&gt;(<span class="hljs-attr">x</span>: T, <span class="hljs-attr">y</span>: T): T
+        <span class="hljs-title function_">f</span>({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>}, {<span class="hljs-attr">b</span>: <span class="hljs-number">2</span>}) <span class="hljs-comment">// T = { a: number } | { b: number }</span>
+        
+        <span class="hljs-keyword">interface</span> A { <span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span> }
+        <span class="hljs-keyword">interface</span> B { <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span> }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">a</span>: A, <span class="hljs-attr">b</span>: B
+        <span class="hljs-title function_">f</span>(a, b) <span class="hljs-comment">// TS2345: Argument of type B is not assignable to parameter of type A</span>
+        </code></pre><p>Regarding choosing the covariant type over the contravariant type when both are present and the covariant type is
+        a subtype the contravariant type, this example will make it make sense:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> f&lt;T&gt;(<span class="hljs-attr">x</span>: T, <span class="hljs-attr">sink</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">t</span>: T</span>) =&gt;</span> <span class="hljs-built_in">void</span>) { <span class="hljs-title function_">sink</span>(x) }
+        <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Dog</span>(), <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">_</span>: <span class="hljs-title class_">Animal</span></span>) =&gt;</span> {}) <span class="hljs-comment">// T = Dog</span>
+        <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Animal</span>(), <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">_</span>: <span class="hljs-title class_">Dog</span></span>) =&gt;</span> {}) <span class="hljs-comment">// T = Dog</span>
+        <span class="hljs-comment">// ^ TS2345: Argument of type Animal is not assignable to parameter of type Dog</span>
+        </code></pre><p>In the first call, everything make senses: a function accepting animals also accepts dogs (i.e. T is contravariant!), so
+        everything type checks. Both <code>T = Animal</code> and <code>T = Dog</code> would have worked, but <code>Dog</code> is more precise. Imagine we want to
+        return <code>x</code> from the function, inferring <code>T = Dog</code> does indeed give is a more precise return type.</p>
+        <p>In the second one, it&#39;s impossible to type check the call given the two arguments, no matter what we infer <code>T</code> to (<code>Dog</code>
+        or <code>Animal</code>).</p>
+        <p><strong>Collapsing Candidate Lists</strong></p>
+        <p>Here&#39;s how the candidate lists are collapsed. This is the explanation for the covariant list, but the principle is the
+        same for the contravariant list, just inverting the type relationship (look for subtypes instead of supertypes).</p>
+        <ol>
+        <li>If all candidates are literals of the same base type, union them.</li>
+        <li>Otherwise scan the list looking for one candidate that is a strict supertype of all others. If found, return it.</li>
+        <li>If not, try again using a looser supertype check (we won&#39;t get into the details, it&#39;s very edge-casey, like &quot;does
+        <code>any</code> subtype <code>unknown</code>?).<ul>
+        <li>This is a left-reduce: start with the first type as the candidate, then replacing it with a supertype if one is
+        encountered. Don&#39;t exit early if unrelated types are encountered.</li>
+        <li>As a result, if no candidate is a supertype of the first candidate, the first candidate is returned.</li>
+        </ul>
+        </li>
+        </ol>
+        <p>Crucially, resolution never settles on a type that is not on a list of candidates. So if your candidate list is <code>[Cat, Dog]</code>, the type will resolve to <code>Dog</code> and not the common supertype <code>Animal</code>, nor <code>Cat | Dog</code>.</p>
+        <p><strong>Examples</strong></p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> f&lt;T&gt;(<span class="hljs-attr">x</span>: T, <span class="hljs-attr">y</span>: T) {}
+        <span class="hljs-title function_">f</span>(<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>)  <span class="hljs-comment">// T = &quot;a&quot; | &quot;b&quot;</span>
+        </code></pre><p>Two covariant candidates, both string literals of the same base. Same-base-literal candidates get unioned.</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Animal</span> {}
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Animal</span> { <span class="hljs-keyword">readonly</span> kind = <span class="hljs-string">&quot;dog&quot;</span> }
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">a</span>: <span class="hljs-title class_">Animal</span>, <span class="hljs-attr">d</span>: <span class="hljs-title class_">Dog</span>, <span class="hljs-attr">c</span>: <span class="hljs-title class_">Cat</span>
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">ad</span>: <span class="hljs-title class_">Dog</span>[], <span class="hljs-attr">ac</span>: <span class="hljs-title class_">Cat</span>[]
+        
+        <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> f&lt;T&gt;(<span class="hljs-attr">x</span>: T, <span class="hljs-attr">y</span>: T): T
+        <span class="hljs-title function_">f</span>(d, a)         <span class="hljs-comment">// T = Animal       (Animal is strict supertype of Dog → found)</span>
+        <span class="hljs-title function_">f</span>(a, d)         <span class="hljs-comment">// T = Animal       (same)</span>
+        <span class="hljs-title function_">f</span>(d, c)         <span class="hljs-comment">// T = Dog          (siblings → first kept!)</span>
+        <span class="hljs-title function_">f</span>(<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">1</span>)       <span class="hljs-comment">// T = &quot;a&quot;          (different bases → first kept)</span>
+        <span class="hljs-title function_">f</span>(ad, ac)       <span class="hljs-comment">// T = Dog[]        (sibling Array generics → first kept)</span>
+        </code></pre><pre><code class="hljs language-typescript"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> f&lt;T&gt;(<span class="hljs-attr">x</span>: T, <span class="hljs-attr">y</span>: T): T
+        <span class="hljs-title function_">f</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Dog</span>(), <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cat</span>()) <span class="hljs-comment">// T = Dog (not Animal!)</span>
+        </code></pre><p><strong>Priorities</strong></p>
+        <p>Each candidate is tagged with priority bits at collection time, with lower numeric value = higher priority. When a
+        candidate of higher priority arrives, candidates at lower priorities (higher numeric value) get wiped.</p>
+        <p>(This is a collection-time concern, but since the consequences of priorities are felt during candidate selection, I&#39;m
+        including it in this section.)</p>
+        <p>Here are the priority bits alongside where they apply:</p>
+        <ul>
+        <li><strong>None (0)</strong> — everything not covered in the other buckets</li>
+        <li><strong>NakedTypeVariable (1)</strong> — when a source fully matches the non-T constituent of <code>T | string</code> (leaving nothing for T),
+        the source is recorded against T at this priority. If the source does not match the other constituent (<code>string</code> in the
+        example), it falls through to bare-T recording at <em>None</em> priority.</li>
+        <li><strong>MappedTypeConstraint (32)</strong> — when inferring through a mapped type whose key constraint is a type parameter.</li>
+        <li><strong>ReturnType (128)</strong> — when a return type is inferred from the context in which the function call appears (e.g. <code>const x: X = f()</code> → <code>X</code> is a candidate for the type variable <code>T</code> returned by <code>f</code>) or used as an argument (e.g. passing <code>f</code> to <code>g(f: () =&gt; number)</code> inferring <code>T</code> to <code>number</code>).</li>
+        <li><strong>LiteralKeyof (256)</strong> — when matching a literal type against <code>keyof T</code>.</li>
+        </ul>
+        <p><code>MappedTypeConstraint</code>, <code>ReturnType</code>, and <code>LiteralKeyof</code> are the &quot;combination&quot; priorities — if the candidate list is at
+        this priority, the resolved type is obtained via union (covariant) or intersection (contravariant) instead of
+        supertype/subtype (respectively).</p>
+        <p><strong>Defaults are looked up on the type parameter being resolved, not on aliases referenced from the parameter type.</strong></p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Result</span>&lt;V, E = <span class="hljs-built_in">never</span>&gt; = { <span class="hljs-attr">okay</span>: V } | { <span class="hljs-attr">error</span>: E }
+        <span class="hljs-keyword">function</span> f&lt;V, E&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Result</span>&lt;V, E&gt;) {}
+        <span class="hljs-title function_">f</span>({ <span class="hljs-attr">okay</span>: <span class="hljs-number">42</span> }) <span class="hljs-comment">// E = unknown, NOT never</span>
+        </code></pre><p>The walk into <code>Result</code> collects no candidates for <code>E</code>. Resolution of <code>f</code>&#39;s <code>E</code> then checks <code>f</code>&#39;s declared default —
+        there isn&#39;t one — and falls back to <code>unknown</code>. The <code>E = never</code> default belongs to <code>Result</code>, and only kicks in when
+        <code>Result</code> is referenced as <code>Result&lt;X&gt;</code> with the second argument omitted.</p>
+        <p>To get <code>never</code> at the call site, you need <code>function f&lt;V, E = never&gt;(...) {}</code>.</p>
+        <h2 id="type-variable-inference-with-type-variables-in-source-types">Type Variable Inference with Type Variables in Source Types</h2>
+        <p>When inference is done in a generic context where type variables appear in the source type, one complication is
+        introduced: type conditionals cannot be evaluated.</p>
+        <p>Type variable inference is always local, but locally in a generic function, type variables are uninstantiated, hence why
+        evaluating conditionals is not possible.</p>
+        <p>Let&#39;s use the standard <code>Exclude</code> type, defined as <code>type Exclude&lt;T, U&gt; = T extends U ? never : T</code> as an intuition pump.</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">x</span>: <span class="hljs-title class_">Exclude</span>&lt;<span class="hljs-built_in">unknown</span>, <span class="hljs-built_in">number</span>&gt;</span>) {}
+        <span class="hljs-keyword">function</span> bar&lt;X&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Exclude</span>&lt;X, <span class="hljs-built_in">number</span>&gt;) {}
+        <span class="hljs-keyword">function</span> baz&lt;X <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Exclude</span>&lt;<span class="hljs-built_in">unknown</span>, <span class="hljs-built_in">number</span>&gt;&gt;(<span class="hljs-attr">x</span>: X) {}
+        <span class="hljs-keyword">function</span> quz&lt;X, Y <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Exclude</span>&lt;X, <span class="hljs-built_in">number</span>&gt;&gt;(<span class="hljs-attr">x</span>: Y) {}
+        <span class="hljs-title function_">foo</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// allowed</span>
+        <span class="hljs-title function_">bar</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// TS2345: Argument of type 42 is not assignable to parameter of type never</span>
+        <span class="hljs-title function_">baz</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// allowed</span>
+        <span class="hljs-title function_">quz</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// allowed</span>
+        </code></pre><p>In general, <code>Exclude</code> is meant to work with an union as its first type parameter. Remember <a href="/typescript-distribute">unions distribute over type
+        conditionals</a>. But here&#39;s how it works (or doesn&#39;t) here.</p>
+        <p>In <code>foo</code>, the parameter type reduces to <code>unknown</code> (<code>unknown</code> doesn&#39;t extend <code>number</code>, so <code>Exclude&lt;unknown, number&gt; = unknown</code>) and so our intent to block numbers fails.</p>
+        <p>In <code>bar</code>, <code>X</code> is inferred to <code>number</code>, so we get <code>Exclude&lt;number, number&gt; = never</code> for the parameter type and the number
+        argument is successfully blocked.</p>
+        <p><code>baz</code> fails in exactly the same way as <code>foo</code> (the bound becomes <code>X extends unknown</code>).</p>
+        <p>In <code>quz</code>, there is no way to infer <code>X</code> at all! It only appears in the <code>extends</code> bound, which doesn&#39;t contribute an
+        inference candidate, and so we end up with <code>X = unknown</code>.</p>
+        <p>Now let&#39;s introduce the generic context by calling <code>bar</code> (the correct function) from a generic function, here&#39;s the only
+        way that will work:</p>
+        <pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> quuz&lt;V&gt;(<span class="hljs-attr">x</span>: <span class="hljs-title class_">Exclude</span>&lt;V, <span class="hljs-built_in">number</span>&gt;) { <span class="hljs-title function_">bar</span>(x) }
+        </code></pre><p>You basically need to reproduce the type. Because inside <code>quuz</code>, <code>V</code> is unbound, the conditional in <code>Exclude&lt;V, number&gt;</code>
+        cannot be evaluated. The only way this type-checks is because TypeScript does a structural match between the type of the
+        <code>x</code> argument from <code>quuz</code> and the type of the <code>x</code> parameter from <code>bar</code>. Even though it can&#39;t evaluate the conditional,
+        the types are structurally identical, and the call type checks.</p>
+        <h2 id="summary">Summary</h2>
+        <p>We learned about the complex algorithm TypeScript uses to infer function-level type variables when a function call is
+        made. If we simplify a lot, here&#39;s what that algorithm looks like:</p>
+        <ul>
+        <li>Walk source (argument) types against target (parameter) types.<ul>
+        <li>Add a candidate to the (covariant or contravariant) list when a bare type variable is encountered.</li>
+        <li>When unions are encountered, distribute the other type over them.</li>
+        <li>Candidates have priorities, with higher priorities wiping out lower priorities candidates.</li>
+        <li>Candidates are only collected from the source types and its structural components.<ul>
+        <li>Not from <code>extends</code> bounds, defaults, the condition part of type conditionals, supertypes, ...</li>
+        </ul>
+        </li>
+        </ul>
+        </li>
+        <li>Reduce each list to a single candidate.<ul>
+        <li>Pick a candidate that supertypes (covariant) or subtypes (contravariant) all other candidates.</li>
+        <li>Otherwise start with first candidate, iterate the list, replacing the current candidate with a
+        supertype/subtype if encountered.</li>
+        <li>In some very specific cases (lower priorites), an union of the candidates is picked instead.</li>
+        </ul>
+        </li>
+        <li>Pick the final contravariant candidate if (1) present, (2) the covariant candidate is not a subtype of it, and (3) it
+        fits the <code>extends</code> bound if present; otherwise pick the final covariant candidate.</li>
+        <li>If an <code>extends</code> bound is present and not satisfied by the selected candidate, replace the candidate with the bound.</li>
+        <li>If there is still no candidate, use the default value if present, and use <code>unknown</code> otherwise.</li>
+        </ul>
+        <p>And note that intersection types behave a little strangely sometimes, but refer to the article for that.</p>
+        <p>Hopefully this helps you debug some unintuitive type variable inference behaviour! See you around, language nerd.</p>
+      ]]>
+      </description>
+      <pubDate>2026-06-02T16:00:00.000Z</pubDate>
+      <link>https://norswap.com/typescript-type-variable-inference</link>
+      <guid isPermaLink="true">https://norswap.com/typescript-type-variable-inference</guid>
+    </item>
+    <item>
       <title>How TypeScript distributes unions</title>
       <description>
       <![CDATA[
@@ -178,7 +515,11 @@
         <p><code>never</code> with conditionals behaves like an empty union. Distributing <code>never</code> on a conditional yields <code>never</code>.</p>
         <pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">TestNever</span> = <span class="hljs-title class_">Foo</span>&lt;<span class="hljs-built_in">never</span>&gt; <span class="hljs-comment">// never</span>
         <span class="hljs-keyword">type</span> <span class="hljs-title class_">TestNever2</span> = <span class="hljs-title class_">Foo2</span>&lt;<span class="hljs-built_in">never</span>&gt; <span class="hljs-comment">// &quot;A&quot;</span>
-        </code></pre><h2 id="overloads-via-generic-signatures">&quot;Overloads&quot; via Generic Signatures</h2>
+        </code></pre><p><strong>Bonus note: <code>any</code> in conditionals</strong></p>
+        <p>Nothing to do with the topic at hand, but despite <code>any</code> being both a top and bottom type (meaning it acts as both a
+        supertype and subtype of every other types) <code>any extends X</code> evaluates to <code>false</code> for every <code>X</code> besides <code>any</code> and
+        <code>unknown</code>. Which is an understandble choice for a situation where there isn&#39;t a good solution for all cases.</p>
+        <h2 id="overloads-via-generic-signatures">&quot;Overloads&quot; via Generic Signatures</h2>
         <p>What overloads provide is the ability to define multiple parameter lists for a single function, and to map each
         parameter list to a return type.</p>
         <p>With a few tricks, we can achieve a lot of this, <strong>and</strong> allow distribution over unions.</p>
@@ -3313,27 +3654,6 @@
       <pubDate>2021-12-03T16:00:00.000Z</pubDate>
       <link>https://norswap.com/rollups-scale</link>
       <guid isPermaLink="true">https://norswap.com/rollups-scale</guid>
-    </item>
-    <item>
-      <title>Life Updates</title>
-      <description>
-      <![CDATA[
-        <p>It&#39;s been a crazy year. It was already crazy <a href="/ragged">back in March</a>, but
-        against my better judgement, I (thankfully!) doubled down.</p>
-        <p>In June, I took a leave from my Job at Oracle to take part in the <a href="https://blog.ethereum.org/2021/05/13/core-dev-apprenticeship/">Ethereum Core
-        Developer Apprenticeship</a> for four months. I learned a ton — here&#39;s <a href="https://github.com/ethereum-cdap/cohort-zero/blob/main/showcase/norswap.md">a
-        recap</a> of what I did there.</p>
-        <p>By the end of the program, I was sold, and I joined <a href="https://www.optimism.io/">Optimism</a> to work on
-        scaling the Ethereum blockchain. My first task there will be to help <a href="https://github.com/ethereum-optimism/optimistic-specs">specify
-        and prototype</a> the new version of the Optimistic Ethereum rollup. It&#39;s
-        been a blast so far!</p>
-        <p>Expect more content soon, especially blockchain-related. If you hate blockchains
-        — I&#39;m so sorry.</p>
-      ]]>
-      </description>
-      <pubDate>2021-12-03T16:00:00.000Z</pubDate>
-      <link>https://norswap.com/life-updates</link>
-      <guid isPermaLink="true">https://norswap.com/life-updates</guid>
     </item>
   </channel>
 </rss>

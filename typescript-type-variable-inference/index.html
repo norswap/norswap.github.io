@@ -350,6 +350,11 @@ way that will work:</p>
 cannot be evaluated. The only way this type-checks is because TypeScript does a structural match between the type of the
 <code>x</code> argument from <code>quuz</code> and the type of the <code>x</code> parameter from <code>bar</code>. Even though it can&#39;t evaluate the conditional,
 the types are structurally identical, and the call type checks.</p>
+<h2 id="steering-inference-with-noinfert">Steering Inference With <code>NoInfer&lt;T&gt;</code></h2>
+<p>TypeScript offers the built-in utility type <code>NoInfer</code> to block inference. Instead of using a type variable <code>T</code>, you
+write <code>NoInfer&lt;T&gt;</code>, the effect of which is that <code>T</code> will not collect candidates from that position.</p>
+<p>Note a minor inconvenience of <code>NoInfer</code>: at the time of writing, some IDE tooling (at least IntelliJ) doesn&#39;t always see
+through <code>NoInfer</code> and might give you some spurious warnings related to it.</p>
 <h2 id="summary">Summary</h2>
 <p>We learned about the complex algorithm TypeScript uses to infer function-level type variables when a function call is
 made. If we simplify a lot, here&#39;s what that algorithm looks like:</p>

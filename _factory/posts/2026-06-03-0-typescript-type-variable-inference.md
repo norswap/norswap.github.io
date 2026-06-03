@@ -438,6 +438,14 @@ cannot be evaluated. The only way this type-checks is because TypeScript does a 
 `x` argument from `quuz` and the type of the `x` parameter from `bar`. Even though it can't evaluate the conditional,
 the types are structurally identical, and the call type checks.
 
+## Steering Inference With `NoInfer<T>`
+
+TypeScript offers the built-in utility type `NoInfer` to block inference. Instead of using a type variable `T`, you
+write `NoInfer<T>`, the effect of which is that `T` will not collect candidates from that position.
+
+Note a minor inconvenience of `NoInfer`: at the time of writing, some IDE tooling (at least IntelliJ) doesn't always see
+through `NoInfer` and might give you some spurious warnings related to it.
+
 ## Summary
 
 We learned about the complex algorithm TypeScript uses to infer function-level type variables when a function call is

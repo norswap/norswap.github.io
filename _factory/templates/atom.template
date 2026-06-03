@@ -10,7 +10,7 @@
       <title>{{ post.title | escape }}</title>
       <description>
       <![CDATA[
-        {{ post.body | indent(8) }}
+        {{ post.body }}
       ]]>
       </description>
       <pubDate>{{ post.date }}</pubDate>

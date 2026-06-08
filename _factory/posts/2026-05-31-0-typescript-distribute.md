@@ -219,6 +219,12 @@ type TestNever = Foo<never> // never
 type TestNever2 = Foo2<never> // "A"
 ```
 
+**`unknown` in conditionals**
+
+`unknown` behaves like the "everything union" and everything unioned with `unknown` reduces to `unknown`. This impact
+distribution: `unknown | number` does not distribute over a conditional with `unknown` and `number` — only the `unknown`
+branch is evaluated.
+
 **Bonus note: `any` in conditionals**
 
 Nothing to do with the topic at hand, but despite `any` being both a top and bottom type (meaning it acts as both a

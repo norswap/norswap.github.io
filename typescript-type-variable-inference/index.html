@@ -87,6 +87,8 @@ understanding will serve you well whenever you need to reason about type variabl
 <li><a href="#candidate-collection">Candidate Collection</a></li>
 <li><a href="#candidate-resolution">Candidate Resolution</a></li>
 <li><a href="#type-variable-inference-with-type-variables-in-source-types">Type Variable Inference with Type Variables in Source Types</a></li>
+<li><a href="#steering-inference-with-noinfert">Steering Inference With <code>NoInfer&lt;T&gt;</code></a></li>
+<li><a href="#the-most-annoying-situation-capturing-a-concrete-subtype-and-its-structural-subparts">The most annoying situation: Capturing a concrete subtype and its structural subparts</a></li>
 <li><a href="#summary">Summary</a></li>
 </ul>
 <!-- TOC -->
@@ -355,6 +357,58 @@ the types are structurally identical, and the call type checks.</p>
 write <code>NoInfer&lt;T&gt;</code>, the effect of which is that <code>T</code> will not collect candidates from that position.</p>
 <p>Note a minor inconvenience of <code>NoInfer</code>: at the time of writing, some IDE tooling (at least IntelliJ) doesn&#39;t always see
 through <code>NoInfer</code> and might give you some spurious warnings related to it.</p>
+<h2 id="the-most-annoying-situation-capturing-a-concrete-subtype-and-its-structural-subparts">The most annoying situation: Capturing a concrete subtype and its structural subparts</h2>
+<p>In the article on <a href="/typescript-distribute">unions</a>, we explained how to use generics to build the equivalent of this non-functional overloads
+example:</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">string</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">number</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"><span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span> { <span class="hljs-keyword">return</span> it }
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>
+<span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(it) <span class="hljs-comment">// TS2769: No overload matches this call.</span>
+</code></pre><p>The solution was this (with the note that the return type could be simplified to just <code>T</code> in this case, but in general
+selecting the return type based on the input type requires a conditional type):</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">FooReturn</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">number</span> ? <span class="hljs-built_in">number</span> : <span class="hljs-built_in">string</span>
+<span class="hljs-keyword">function</span> foo&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>&gt;(<span class="hljs-attr">it</span>: T): <span class="hljs-title class_">FooReturn</span>&lt;T&gt; {
+    <span class="hljs-keyword">return</span> it <span class="hljs-keyword">as</span> <span class="hljs-title class_">FooReturn</span>&lt;T&gt;
+}
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">it</span>: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">string</span>
+<span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(it) <span class="hljs-comment">// number | string</span>
+<span class="hljs-keyword">const</span> y = <span class="hljs-title function_">foo</span>(<span class="hljs-number">42</span>) <span class="hljs-comment">// number</span>
+</code></pre><p>Now, the &quot;most annoying situation&quot; happens when one of the input type has type parameter that we want to infer, but
+don&#39;t appear in the input:</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;K, V, T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;K, V&gt;&gt;(<span class="hljs-attr">map</span>: T, <span class="hljs-attr">key</span>: K): [T, V] {
+    <span class="hljs-keyword">return</span> [map, map.<span class="hljs-title function_">get</span>(key)!]
+}
+<span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>]])
+<span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(map, <span class="hljs-number">42</span>)
+<span class="hljs-comment">//    ^ [Map&lt;number, string&gt;, unknown]</span>
+</code></pre><p>It&#39;s very clear that <code>V</code> should infer to <code>string</code>, but since (1) the <code>extends</code> bound does not contribute candidates to
+inference, and (2) <code>V</code> does not appear in the target type, the inference algorithm will not figure it out.</p>
+<p>If we had typed <code>map: Map&lt;K, V&gt;</code>, there would be no issue, but in some cases, we do want to capture the exact <code>T</code> type!</p>
+<p>The <a href="/typescript-distribute">previous article</a> also covered &quot;extractor types&quot; and that can indeed help here:</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">type</span> <span class="hljs-title class_">GetV</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">unknown</span>, <span class="hljs-built_in">unknown</span>&gt;&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">unknown</span>, infer V&gt; ? V : <span class="hljs-built_in">never</span>
+<span class="hljs-keyword">function</span> foo&lt;K, V, T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;K, V&gt;&gt;(<span class="hljs-attr">map</span>: T, <span class="hljs-attr">key</span>: K): [T, <span class="hljs-title class_">GetV</span>&lt;T&gt;] {
+    <span class="hljs-keyword">return</span> [map, map.<span class="hljs-title function_">get</span>(key) <span class="hljs-keyword">as</span> <span class="hljs-title class_">GetV</span>&lt;T&gt;]
+}
+<span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>]])
+<span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(map, <span class="hljs-number">42</span>)
+</code></pre><p>This time, everything works! But note that TypeScript cannot figure out that <code>typeof map.get(key)</code> is the same as
+<code>GetV&lt;T&gt;</code>, hence we need the pesky cast.</p>
+<p>Here&#39;s another solution that avoids the cast, at the cost of some verbosity (note the bound on the <code>map</code> parameter):</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;K, V, T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;K, V&gt;&gt;(<span class="hljs-attr">map</span>: T &amp; <span class="hljs-title class_">Map</span>&lt;K, V&gt;, <span class="hljs-attr">key</span>: K): [T, V] {
+    <span class="hljs-keyword">return</span> [map, map.<span class="hljs-title function_">get</span>(key)!]
+}
+<span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>]])
+<span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(map, <span class="hljs-number">42</span>)
+</code></pre><p>Perfect? Not quite. In the previous article we saw how we could use extractor types to make sure unions distribute on
+the signature, and that does not work with the last solution:</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">function</span> foo&lt;K, V, T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Map</span>&lt;K, V&gt;&gt;(<span class="hljs-attr">map</span>: T &amp; <span class="hljs-title class_">Map</span>&lt;K, V&gt;, <span class="hljs-attr">key</span>: K): [T, V] {
+    <span class="hljs-keyword">return</span> [map, map.<span class="hljs-title function_">get</span>(key)!]
+}
+<span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-number">42</span>, <span class="hljs-string">&quot;42&quot;</span>]]) <span class="hljs-keyword">as</span> <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-built_in">string</span>&gt; | <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-built_in">boolean</span>&gt;
+<span class="hljs-keyword">const</span> x = <span class="hljs-title function_">foo</span>(map, <span class="hljs-number">42</span>)
+<span class="hljs-comment">// TS2345: Argument of type Map&lt;number, string&gt; | Map&lt;number, boolean&gt; is not assignable to parameter of type Map&lt;number, string&gt;</span>
+</code></pre><p>So your choice is between an uglier signature and the need for casts, and supporting unions.</p>
 <h2 id="summary">Summary</h2>
 <p>We learned about the complex algorithm TypeScript uses to infer function-level type variables when a function call is
 made. If we simplify a lot, here&#39;s what that algorithm looks like:</p>

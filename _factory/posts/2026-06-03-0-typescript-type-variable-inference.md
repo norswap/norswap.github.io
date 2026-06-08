@@ -58,6 +58,8 @@ understanding will serve you well whenever you need to reason about type variabl
   * [Candidate Collection](#candidate-collection)
   * [Candidate Resolution](#candidate-resolution)
   * [Type Variable Inference with Type Variables in Source Types](#type-variable-inference-with-type-variables-in-source-types)
+  * [Steering Inference With `NoInfer<T>`](#steering-inference-with-noinfert)
+  * [The most annoying situation: Capturing a concrete subtype and its structural subparts](#the-most-annoying-situation-capturing-a-concrete-subtype-and-its-structural-subparts)
   * [Summary](#summary)
 <!-- TOC -->
 
@@ -445,6 +447,87 @@ write `NoInfer<T>`, the effect of which is that `T` will not collect candidates 
 
 Note a minor inconvenience of `NoInfer`: at the time of writing, some IDE tooling (at least IntelliJ) doesn't always see
 through `NoInfer` and might give you some spurious warnings related to it.
+
+## The most annoying situation: Capturing a concrete subtype and its structural subparts
+
+In the article on [unions], we explained how to use generics to build the equivalent of this non-functional overloads
+example:
+
+```typescript
+function foo(it: string): string
+function foo(it: number): number
+function foo(it: number | string): number | string { return it }
+declare const it: number | string
+const x = foo(it) // TS2769: No overload matches this call.
+```
+
+The solution was this (with the note that the return type could be simplified to just `T` in this case, but in general
+selecting the return type based on the input type requires a conditional type):
+
+```typescript
+type FooReturn<T extends number | string> = T extends number ? number : string
+function foo<T extends number | string>(it: T): FooReturn<T> {
+    return it as FooReturn<T>
+}
+declare const it: number | string
+const x = foo(it) // number | string
+const y = foo(42) // number
+```
+
+Now, the "most annoying situation" happens when one of the input type has type parameter that we want to infer, but
+don't appear in the input:
+
+```typescript
+function foo<K, V, T extends Map<K, V>>(map: T, key: K): [T, V] {
+    return [map, map.get(key)!]
+}
+const map = new Map([[42, "42"]])
+const x = foo(map, 42)
+//    ^ [Map<number, string>, unknown]
+```
+
+It's very clear that `V` should infer to `string`, but since (1) the `extends` bound does not contribute candidates to
+inference, and (2) `V` does not appear in the target type, the inference algorithm will not figure it out.
+
+If we had typed `map: Map<K, V>`, there would be no issue, but in some cases, we do want to capture the exact `T` type!
+
+The [previous article][unions] also covered "extractor types" and that can indeed help here:
+
+```typescript
+type GetV<T extends Map<unknown, unknown>> = T extends Map<unknown, infer V> ? V : never
+function foo<K, V, T extends Map<K, V>>(map: T, key: K): [T, GetV<T>] {
+    return [map, map.get(key) as GetV<T>]
+}
+const map = new Map([[42, "42"]])
+const x = foo(map, 42)
+```
+
+This time, everything works! But note that TypeScript cannot figure out that `typeof map.get(key)` is the same as
+`GetV<T>`, hence we need the pesky cast.
+
+Here's another solution that avoids the cast, at the cost of some verbosity (note the bound on the `map` parameter):
+
+```typescript
+function foo<K, V, T extends Map<K, V>>(map: T & Map<K, V>, key: K): [T, V] {
+    return [map, map.get(key)!]
+}
+const map = new Map([[42, "42"]])
+const x = foo(map, 42)
+```
+
+Perfect? Not quite. In the previous article we saw how we could use extractor types to make sure unions distribute on
+the signature, and that does not work with the last solution:
+
+```typescript
+function foo<K, V, T extends Map<K, V>>(map: T & Map<K, V>, key: K): [T, V] {
+    return [map, map.get(key)!]
+}
+const map = new Map([[42, "42"]]) as Map<number, string> | Map<number, boolean>
+const x = foo(map, 42)
+// TS2345: Argument of type Map<number, string> | Map<number, boolean> is not assignable to parameter of type Map<number, string>
+```
+
+So your choice is between an uglier signature and the need for casts, and supporting unions.
 
 ## Summary
 

@@ -553,9 +553,3 @@ made. If we simplify a lot, here's what that algorithm looks like:
 And note that intersection types behave a little strangely sometimes, but refer to the article for that.
 
 Hopefully this helps you debug some unintuitive type variable inference behaviour! See you around, language nerd.
-
-<script type="module">
-  import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js";
-  import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js";
-  hljs.registerLanguage("typescript", typescript);
-</script>

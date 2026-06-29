@@ -351,9 +351,3 @@ There you have it. You now know:
 - how to squash homogeneous unions (`Foo<A> | Foo<B>` to `Foo<A | B>`) within methods by using extractor types.
 
 I hope it's been helpful, until next time!
-
-<script type="module">
-  import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js";
-  import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js";
-  hljs.registerLanguage("typescript", typescript);
-</script>

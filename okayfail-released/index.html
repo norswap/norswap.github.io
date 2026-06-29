@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <!-- https://css-tricks.com/probably-use-initial-scale1/-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <title>
+     norswap &middot; Okayfail Library Released
+  </title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/norswap">
+  <style type="text/css">
+    #mc_embed_signup form { margin-left: 0; padding-left: 0; margin-bottom: 2em; }
+  </style>
+</head>
+<body class="layout-reverse">
+  <div class="sidebar">
+    <div class="container sidebar-sticky">
+      <div class="sidebar-about">
+        <h1><a href="/">norswap</a></h1>
+        <p class="lead">aka Nicolas Laurent</p>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item ">
+           <a href="/">Home</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/about">About</a></li>
+        <li class="sidebar-nav-item ">
+           <a class="sidebar-nav-item" href="/sitemap">Site Map</a></li>
+        <li class="sidebar-nav-item">
+           <a class="sidebar-nav-item" href="https://github.com/norswap">&#128279; Github</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://twitter.com/norswap">&#128279; Twitter</a></li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="http://feeds.feedburner.com/norswap">
+            <img style="display: inline; margin-bottom: 0;" src="/assets/rss-16.png">
+            RSS Feed
+          </a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="sidebar-nav-item" href="https://norswap.us15.list-manage.com/subscribe?u=ed54e8af45409496579de0a77&id=ef486ce844">
+            &#x2709;&#xFE0F; Blog as Newsletter</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="content container">
+    <div class="post">
+      <h1 class="post-title">Okayfail Library Released</h1>
+      <span class="post-date">30 Jun 2026</span>
+<p>I&#39;m dropping <a href="https://github.com/norswap/evmetal/tree/master/pkgs/okayfail">a little library called &quot;okayfail&quot;</a> implementing a <code>Result&lt;Value, Error&gt;</code> type for TypeScript.
+(Like the Rust Result type, or the NeverThrow TypeScript library.)</p>
+<p>My favorite feature is the ability to do checked/typed exceptions via generators:</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">numberResult</span>: <span class="hljs-title class_">Result</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-title class_">Error</span>&gt;
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fNumberResult</span>(<span class="hljs-params"></span>): <span class="hljs-title class_">Result</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-built_in">string</span>&gt;
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">shouldSum</span>: <span class="hljs-built_in">boolean</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">foo</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">Result</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-title class_">Error</span> | <span class="hljs-built_in">string</span>&gt; =
+   <span class="hljs-title function_">fresult</span>(<span class="hljs-keyword">function</span> *() {
+       <span class="hljs-keyword">const</span> v1 = <span class="hljs-keyword">yield</span>* numberResult
+       <span class="hljs-comment">// v1 is type `number`</span>
+       <span class="hljs-comment">// if the result fails, foo returns it immediately</span>
+       <span class="hljs-keyword">const</span> v2 = <span class="hljs-keyword">yield</span>* <span class="hljs-title function_">fNumberResult</span>()
+       <span class="hljs-comment">// same            </span>
+       <span class="hljs-keyword">return</span> shouldSum ? v1 + v2 : <span class="hljs-title function_">okay</span>(v1 - v2)
+       <span class="hljs-comment">// can return either values or results,</span>
+       <span class="hljs-comment">// or a mix (the value types must match!)</span>
+   })
+</code></pre><p><a href="https://github.com/norswap/evmetal/tree/master/pkgs/okayfail">Check out the code &amp; docs here.</a></p>
+    </div>
+    <hr>
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://norswap.com/okayfail-released";
+        this.page.identifier = "okayfail-released";
+      };
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = '//norswap.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view comments.</noscript>
+  </div>
+  <script async data-id="101118294" src="//static.getclicky.com/js"></script>
+  <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
+</body>
+</html>

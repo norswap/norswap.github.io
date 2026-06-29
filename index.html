@@ -58,6 +58,30 @@
 </style>
 <ul class="posts">
   <li>
+    <div class="post-content">
+      <p>I&#39;m dropping <a href="https://github.com/norswap/evmetal/tree/master/pkgs/okayfail">a little library called &quot;okayfail&quot;</a> implementing a <code>Result&lt;Value, Error&gt;</code> type for TypeScript.
+      (Like the Rust Result type, or the NeverThrow TypeScript library.)</p>
+      <p>My favorite feature is the ability to do checked/typed exceptions via generators:</p>
+      <pre><code class="hljs language-typescript"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">numberResult</span>: <span class="hljs-title class_">Result</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-title class_">Error</span>&gt;
+      <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fNumberResult</span>(<span class="hljs-params"></span>): <span class="hljs-title class_">Result</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-built_in">string</span>&gt;
+      <span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">shouldSum</span>: <span class="hljs-built_in">boolean</span>
+      
+      <span class="hljs-keyword">const</span> <span class="hljs-attr">foo</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">Result</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-title class_">Error</span> | <span class="hljs-built_in">string</span>&gt; =
+         <span class="hljs-title function_">fresult</span>(<span class="hljs-keyword">function</span> *() {
+             <span class="hljs-keyword">const</span> v1 = <span class="hljs-keyword">yield</span>* numberResult
+             <span class="hljs-comment">// v1 is type `number`</span>
+             <span class="hljs-comment">// if the result fails, foo returns it immediately</span>
+             <span class="hljs-keyword">const</span> v2 = <span class="hljs-keyword">yield</span>* <span class="hljs-title function_">fNumberResult</span>()
+             <span class="hljs-comment">// same            </span>
+             <span class="hljs-keyword">return</span> shouldSum ? v1 + v2 : <span class="hljs-title function_">okay</span>(v1 - v2)
+             <span class="hljs-comment">// can return either values or results,</span>
+             <span class="hljs-comment">// or a mix (the value types must match!)</span>
+         })
+      </code></pre><p><a href="https://github.com/norswap/evmetal/tree/master/pkgs/okayfail">Check out the code &amp; docs here.</a></p>
+    </div>
+    <a class="date-link" href="/okayfail-released">30 Jun 2026</a>
+  </li>
+  <li>
     <a class="title-link" href="/typescript-type-variable-inference">How TypeScript infers type variables</a>
     <a class="date-link" href="/typescript-type-variable-inference">03 Jun 2026</a>
   </li>
@@ -128,10 +152,6 @@
     <a class="title-link" href="/essence-blockchains">The Essence of Blockchains</a>
     <a class="date-link" href="/essence-blockchains">11 Dec 2021</a>
   </li>
-  <li>
-    <a class="title-link" href="/rollups-scale">How rollups scale Ethereum</a>
-    <a class="date-link" href="/rollups-scale">04 Dec 2021</a>
-  </li>
 </ul>
 <div class="pagination">
   <span>Previous</span>
@@ -139,11 +159,6 @@
   <a href="/2" class="next">Next</a>
 </div>
   </div>
-  <script type="module">
-    import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js"
-    import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js"
-    hljs.registerLanguage("typescript", typescript)
-  </script>
   <script async data-id="101118294" src="//static.getclicky.com/js"></script>
   <noscript><img width="1" height="1" src="//in.getclicky.com/101118294ns.gif" /></noscript>
 </body>

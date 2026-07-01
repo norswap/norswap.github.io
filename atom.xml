@@ -6,6 +6,119 @@
     <link>https://norswap.com</link>
     <atom:link href="https://norswap.com/atom.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Safe human-friendly multi-agent setup</title>
+      <description>
+      <![CDATA[
+        <p>Like everyone else I&#39;ve been playing with agents.</p>
+<p>But I had two problems:</p>
+<ol>
+<li>I didn&#39;t want to <code>--dangerously-skip-permissions</code> and give Claude access to my entire computer unsupervised.
+Besides regular agent stupidity, <a href="https://owasp.org/www-community/attacks/PromptInjection">prompt injections</a> are a thing.</li>
+<li>I couldn&#39;t safely run two agents or more on the same repo.</li>
+</ol>
+<p>I also wanted a solution that would let me edit and run the code on my machine, even if the agent runs inside a VM or
+container.</p>
+<p>This seems like a common set of issues and requirements. But the only thing I could find that satisfied all of them was
+<a href="https://workmux.raine.dev/">workmux</a>, which forces you into using tmux (which I didn&#39;t want).</p>
+<p>I figured rolling out my own solution would be easy (and for once, it was), and would teach me something (it did).
+So here we go!</p>
+<p>To bake this solution we need:</p>
+<ul>
+<li><a href="https://git-scm.com/docs/git-worktree">Git worktrees</a>, to get one checkout of the codebase to each agent (we&#39;ll also give them their own branch).</li>
+<li>A virtualization or containerization solution to run the agents inside. I went with <a href="https://containers.dev/">Dev Containers</a> and their
+<a href="https://github.com/devcontainers/cli">CLI</a>, which runs containers on Docker.</li>
+<li>Judicious use of mount volumes on the container so that we can share the code between host and container, but
+isolate OS-specific bits.</li>
+<li>Some command glue to make everything easy to operate.</li>
+</ul>
+<h2 id="notes-on-containerization">Notes on Containerization</h2>
+<p>There&#39;s many ways to build the containerization. I landed on Dev Containers as the first thing I tried, and it seems as
+easy to set up as those kind of things are going to get.</p>
+<p>One area of note is security. On macOS Docker runs your containers inside a VM. On Linux, it uses a suite of isolation
+tech to shield them from your system. Containers outside a VM are notoriously less secure in practice — the attack
+surface for an escape is much higher, and it&#39;s much easier to shoot yourself in the foot with misconfiguration. So if
+you&#39;re manning Linux and you want optimal security, you might want to look into alternatives. That being said, to purely
+defend against mistakes and prompt injections, this much is probably enough.</p>
+<p>Even on macOS, there&#39;s a single VM for all containers. You might want to isolate every worktree in its own container to
+avoid accidental cross-agent interference.</p>
+<p>Dev Containers are a standard for tools to setup and become aware of a container in which the code can be built and run.
+As such, some IDEs (VS Code, JetBrains, ...) can set up and connect to the container for you. They install a copy of the
+IDE inside the container and connect with a light client on the host. So while the UI is on the IDE, everything
+meaningful is running in the container (this is called &quot;remote development&quot;).</p>
+<p>This capability was initially appealing to me, but now I don&#39;t care about it. Because the code is mirrored between host
+and guest, and dependencies are isolated, I prefer to just edit on my host and run commands on the guest.</p>
+<p>Note that IDEs can also connect to any container via SSH instead for remote development. You will actually need this
+instead of the built-in dev container support if you want to open multiple sessions (one per worktree for instance).</p>
+<h2 id="example-walkthrough">Example Walkthrough</h2>
+<p>Okay, let&#39;s see what the setup looks like in practice. I will link to a repo where I&#39;m cooking some experiment (pinning
+the links to a commit for posterity).</p>
+<h3 id="dev-container">Dev Container</h3>
+<p>The Dev Container setup is done inside the <a href="https://github.com/norswap/evmetal/tree/e630a7c447b4365e25438851a7bef68c109ca21e/.devcontainer"><code>.devcontainer</code></a> directory.</p>
+<p><code>devcontainer.json</code> specified the attached Dockerfile, the resources we want to allocate, setting a few names so that
+things are nice and tidy inside the VM and inside Docker. There&#39;s a built-in feature for getting Node.js and one to run
+the SSH daemon. The other dependencies are installed via a <code>RUN</code> command in the Dockerfile.</p>
+<p>The username is <code>vscode</code> because we use a Microsoft Debian base image that comes with this non-root user by default.
+SSH will run on port 2222.</p>
+<p>We mount the host&#39;s <code>id_rsa</code> public key (so that it can be allowed to SSH into the container), as well as a
+<code>node_modules_volume</code> to isolate dependencies between host and container.</p>
+<p>In our repo, <code>node_modules</code> in the root and in every worktree is symlinked to <code>node_modules_volume/{root, wt-&lt;worktree&gt;}</code>. On the host, <code>node_modules_volume</code> is a regular directory, while on the container it is a volume,
+meaning guest and container manage their dependencies separately.</p>
+<p>We also mount create dedicated volumes for the Claude Code and JetBrains settings. These persist when the container
+image is being rebuilt which avoids us having to reauthenticate Claude and redownloading the (hefty) IntelliJ backend
+every time the image is rebuilt. (This is if you want to use remote development and can be skipped otherwise.)</p>
+<p>Finally, we can specify VS Code extension that need to exist container-side. Host-side extensions can still be used, but
+some (typically those that need to run binary tools) need to be installed server-side. (Again, only relevant for remote
+development).</p>
+<p>The <code>post-create.sh</code> script is referenced in the <code>Dockerfile</code>  and runs inside the container after it has been created &amp;
+spun up and is used to setup the shared volumes and files.</p>
+<p>The <code>Dockerfile</code> installs some dependencies, including Claude and the <a href="https://playwright.dev/">Playwright</a> MCP server so that Claude can debug webapps
+from inside the container.</p>
+<p>With this devcontainer setup, we can use the following command (although the repo wraps them in makefile commands which
+we&#39;ll review shortly):</p>
+<ul>
+<li>bring the container up or down with <code>devcontainer {up,down} --workspace-folder .</code></li>
+<li>rebuild the image with <code>devcontainer up --workspace-folder . --remove-existing-container</code></li>
+<li>run a shell or claude in the image with <code>devcontainer exec --workspace-folder . {bash, claude --dangerously-skip-permissions}</code></li>
+</ul>
+<p>Once spun up you can connect by SSH via <code>vscode@localhost:2222</code>, and you can connect your IDE for remote development. On
+VS Code use the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh">Remote SSH</a> extension, on JetBrains IDE look for the &quot;File &gt; Remote Development...&quot; menu.</p>
+<h3 id="worktrees--makefile">Worktrees &amp; Makefile</h3>
+<p>The repo&#39;s <a href="https://github.com/norswap/evmetal/blob/e630a7c447b4365e25438851a7bef68c109ca21e/makefile"><code>makefile</code></a> exposes the following commands:</p>
+<ul>
+<li><code>make dev.{up, down}</code> — bring the dev container up or down</li>
+<li><code>make dev.tear</code> — bring the dev container down and delete it (named volumes persist)</li>
+<li><code>make dev.rebuild</code> — rebuild the dev container</li>
+<li><code>make dev.shell</code> — open a shell in the container (if run from a worktree dir, open the shell in the corresponding worktree on the container)</li>
+<li><code>make dev.claude</code> — opens claude in the container (same comment for worktrees)</li>
+<li><code>make tree name=&lt;NAME&gt;</code> — create a new worktree at <code>.worktrees/&lt;NAME&gt;</code> on branch <code>wt/&lt;NAME&gt;</code></li>
+<li><code>make rmtree name=&lt;NAME&gt;</code> — remove the worktree at <code>.worktrees/&lt;NAME&gt;</code> (the branch is preserved)</li>
+<li><code>make trees</code> — list all worktrees</li>
+</ul>
+<p>Additionally, the makefie is aware of our system to isolate dependencies (<code>node_modules</code>) between host and container.
+<code>make setup</code> (sets up the repo) and <code>make nuke</code> (delete all outputs and dependencies) ensure that the <code>node_modules</code>
+symlink are setup properly, as described in the previous section.</p>
+<h2 id="coda">Coda</h2>
+<p>And that&#39;s it. Worktrees, containerization with judicious use of volumes, and some glue commands. That&#39;s all you need to
+safely isolate your agents from one another and from your system, while retaining the ability to build and run both on
+the host and the container. Have fun hacking!</p>
+<script type="module">
+  import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js";
+  import json from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/dockerfile.min.js";
+  import dockerfile from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/dockerfile.min.js";
+  import bash from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/dockerfile.min.js";
+  import makefile from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/dockerfile.min.js";
+  hljs.registerLanguage("json", json);
+  hljs.registerLanguage("dockerfile", dockerfile);
+  hljs.registerLanguage("bash", bash);
+  hljs.registerLanguage("makefile", makefile);
+</script>
+      ]]>
+      </description>
+      <pubDate>2026-06-30T16:00:00.000Z</pubDate>
+      <link>https://norswap.com/agent-setup</link>
+      <guid isPermaLink="true">https://norswap.com/agent-setup</guid>
+    </item>
+    <item>
       <title>Okayfail Library Released</title>
       <description>
       <![CDATA[
@@ -424,11 +537,6 @@ fits the <code>extends</code> bound if present; otherwise pick the final covaria
 </ul>
 <p>And note that intersection types behave a little strangely sometimes, but refer to the article for that.</p>
 <p>Hopefully this helps you debug some unintuitive type variable inference behaviour! See you around, language nerd.</p>
-<script type="module">
-  import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js";
-  import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js";
-  hljs.registerLanguage("typescript", typescript);
-</script>
       ]]>
       </description>
       <pubDate>2026-06-02T16:00:00.000Z</pubDate>
@@ -698,11 +806,6 @@ and we get what we want.</p>
 <li>how to squash homogeneous unions (<code>Foo&lt;A&gt; | Foo&lt;B&gt;</code> to <code>Foo&lt;A | B&gt;</code>) within methods by using extractor types.</li>
 </ul>
 <p>I hope it&#39;s been helpful, until next time!</p>
-<script type="module">
-  import hljs from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js";
-  import typescript from "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/typescript.min.js";
-  hljs.registerLanguage("typescript", typescript);
-</script>
       ]]>
       </description>
       <pubDate>2026-05-30T16:00:00.000Z</pubDate>
@@ -3451,179 +3554,6 @@ and learned something!</p>
       <pubDate>2022-02-14T16:00:00.000Z</pubDate>
       <link>https://norswap.com/olympus</link>
       <guid isPermaLink="true">https://norswap.com/olympus</guid>
-    </item>
-    <item>
-      <title>The Essence of Blockchains</title>
-      <description>
-      <![CDATA[
-        <p>What are blockchains for? Why are they useful?</p>
-<p><strong>I contend that the essence of blockchain is that they are decentralized trust
-engines.</strong></p>
-<p>Decentralized trust has a lot of benefits, but the one I&#39;m personally excited
-about is that it enables <strong>permissionless innovation</strong>.</p>
-<p>Below I explain what the hell I mean by <em>decentralized trust</em> and
-<em>permissionless innovation</em>.</p>
-<h2 id="who-do-you-trust">Who do you trust?</h2>
-<p>Whenever you perform some action online, you&#39;re always implicitly trusting some
-entity.</p>
-<p>For instance, if you run a computation on Amazon Web Service (AWS), or even in
-Google Sheets, you trust Amazon and Google not to alter the result of the
-computation.</p>
-<p>If you host files on Dropbox, you trust Dropbox not to alter their content, and
-to not arbitrarily destroy your backup.</p>
-<p>You trust that Google won&#39;t return you completely fabricated search result to
-get you to take some specific decision (e.g. a purchase) that is in their
-interest. (They certainly influence search results, but they don&#39;t (yet?)
-fabricate them.)</p>
-<p>You trust that your bank won&#39;t take your money. You trust that your insurer will
-actually compensate you in case of accident.</p>
-<p>You might also trust all of these companies with the privacy of your data.</p>
-<p>Etc, etc...</p>
-<p>You might object that these companies won&#39;t do these shady things. They stand to
-lose a lot, including reputation, customers, future revenues, etc! As for banks
-and insurances, they are heavily regulated.</p>
-<p>That&#39;s true — although I will say these companies have gotten away with a
-surprising number of things. But more importantly it means you can only deal
-with entities that either (a) have something to lose or (b) comply with draconic
-and time-consuming regulations — and mostly that means big entrenched companies.
-We&#39;ll explore this when we talk about <em>permissionless innovation</em>.</p>
-<p>Also consider that companies might be <em>forced</em> to do something, probably by some
-government.</p>
-<h2 id="decentralized-trust">&quot;Decentralized&quot; trust?</h2>
-<p>The fundamental proposition of blockchains is the following: <strong>What if you did
-not have to trust a single entity, a single company?</strong></p>
-<p>In blockchains, there is a network of <em>nodes</em> (aka <em>verifiers</em>, <em>validators</em>,
-<em>stakers</em>, <em>miners</em>, ...) that verify the operations of the blockchains. As long
-as a majority of these nodes are honest (e.g. 50% of them, this changes between
-blockchains), you can trust that anything that happens on the blockchain follows
-the rules of the blockchain. And dishonesty has dire consequences for validators
-— because of sunk costs, or because of explicit penalties.</p>
-<p>This changes your trust assumption from trusting a single entity to trusting
-that a majority of validators are honest.</p>
-<p>The more validators there are, the less collusion is likely. Said otherwise, the
-more decentralized the system is, the less trust you need to put in the system.</p>
-<p>It is also of paramount importance that anyone be able to become a validator of
-the network. Otherwise, the network is really controlled by the gatekeeper of
-the validation rights. This is less easy than it sounds — you have to make
-validation costly enough, otherwise an attacker could just spin a huge number of
-nodes and take over the network — a <a href="https://en.wikipedia.org/wiki/Sybil_attack">sybil attack</a>. Preventing sybil attacks is
-the main technical breakthrough of blockchain technology. I explain the
-solutions (proof-of-work and proof-of-stake) in my article: <a href="/blockchain-how"><strong>Freaking
-blockchains: How do they work?</strong></a></p>
-<h2 id="applications--trade-offs">Applications &amp; Trade-Offs</h2>
-<p>Let&#39;s go back to our examples. Am I saying that blockchains will supersede AWS,
-Google Sheet, Google Search, Dropbox, banks and insurances?</p>
-<p>Not necessarily.</p>
-<p>In reality, there is a trade-off. Nothing is truly trustless or riskless.
-Running most web apps on AWS is really fine, because the risk that Amazon is
-going to manipulate your results is close to zero, and the downside if they do
-is very low. Even if you&#39;re running with a brand-new competitor, you&#39;re not
-risking all that much.</p>
-<p>But for some applications, trust and security are a really big deal. In
-particular, where money is concerned. It&#39;s not by accident that finance is
-stringently regulated. And similarly, it&#39;s not an accident that most popular
-applications of blockchains right now deal with money. It&#39;s doubly important
-when you&#39;re dealing with anonymous blockchain developers with no pre-existing
-reputation (more on this in the section on permissionless innovation).</p>
-<!--
-
-Since we mentionned Dropbox, I will mention there are a few blockchains
-specialized in storage, like [Arweave] and [Filecoin]. These are very useful if
-censorship is a concern ([example][hong-kong]).
-
-Privacy-wise, blockchains are not there yet, at least for computation. In most
-blockchain, transactions are public! It's already possible the hide the
-transactions using [zero-knowledge proofs][zkp], however the resulting
-blockchain state modification is public. you are only "protected" by the
-pseudonimity of your blockchain address, but that is a weak kind of protection.
-This is a topic of ongoing research.
-
-[Arweave]: https://www.arweave.org/
-[Filecoin]: https://filecoin.io/
-[hong-kong]: https://www.reuters.com/article/us-hongkong-security-apple-daily-blockch-idCAKCN2E00JP
-[zkp]: https://en.wikipedia.org/wiki/Zero-knowledge_proof
-
--->
-
-<h2 id="permissionless-innovation">Permissionless Innovation</h2>
-<p>Finally, we come to what is to me the most exciting consequence of decentralized
-trust: <em>permissionless innovation</em>.</p>
-<p>On computation-centric blockchains, like <a href="https://ethereum.org/en/">Ethereum</a>,
-the network certifies computation, and the code of the computation is a public
-smart contract stored on the blockchain, you can trust the contract to do what
-its code says, nothing more and nothing less.</p>
-<p>This means that <em>anybody</em> can deploy a new smart contract, and other people can
-use it as long as they trust the code. The contract author does not need to have
-resources, a reputation or even to comply with regulations (1) to deploy his
-contract, or for you to trust that the contract will be executed faithfully.</p>
-<p>(1) He <em>has to</em>, legally speaking, but blockchains being novel, it&#39;s unclear
-which rules apply in the first place. Such <a href="https://en.wikipedia.org/wiki/Fear,_uncertainty,_and_doubt">FUD</a> would normally stifle
-innovation — but not on the blockchain where the barrier to entry is low, and
-many developers are anonymous.</p>
-<p>This is super exciting! It has already led to numerous innovations in the
-financial realm, such as <a href="https://www.paradigm.xyz/2021/04/understanding-automated-market-makers-part-1-price-impact/">automated market makers</a> (AMM), as well as many
-new forms of clever incentivization mechanisms such as <a href="https://academy.shrimpy.io/post/what-is-liquidity-mining">liquidity mining</a>,
-<a href="https://www.okex.com/academy/en/olympusdao-protocol-owned-liquidity-defi-reserve-currency-ohm">liquidity purchases via bonding</a>, and more.</p>
-<p>Besides brand new constructions, it also makes opportunities available to
-everyone that were previously available only to a few. Option protocols such as
-<a href="https://docs.lyra.finance/">Lyra</a> make it possible for everyone to profit from market-making the option
-market: a process where the <em>market maker</em> sells an option, which is hedged by
-the underlying, in order to pocket the option premium. (If this is Chinese to
-you, see my articles on <a href="/options/">options</a> and on <a href="/gamestop/">gamma squeezes</a>.) Previously, this
-lucrative and relatively safe opportunity reserved to big investment banks.
-On-chain, everyone can add their money to a pool and participate!</p>
-<p>And this is just an example amongst many. Another one would be <a href="https://medium.com/coinmonks/what-is-liquidation-in-defi-lending-and-borrowing-platforms-3326e0ba8d0">lending to
-overcollateralized borrowers</a>.</p>
-<p>Hopefully, more areas can benefit from this innovative drive besides finance.
-One area that looks promising at the moment is gaming. Increasingly, game
-development is financed by the sales of in-game assets (skins, character
-customizations, convenience features, ...). One could be hesitant to buy into a
-relatively unknown game. Using the blockchain to encode these assets incurs many
-benefits: it can be made certain that they won&#39;t disappear at the whim of the
-developer, that they are tradeable without the developer investing any resources
-to make them so. Even better, another developer could decide to reuse the
-assets, and give them a function within his own game.</p>
-<blockquote>
-<p>I think the use of blockchain in gaming is at the same stage where
-<a href="https://en.wikipedia.org/wiki/Peer-to-peer">peer-to-peer</a> (P2P) technology used to be some 20 years back. P2P had a
-terrible reputation as a thing used only to download copyrighted material. Yet
-only a few years later it became a common way to distribute big games and their
-updates, proving invaluable at handling the load on release day.</p>
-</blockquote>
-<p>Or maybe crypto gaming doesn&#39;t work out. Who knows? There are <strong>many</strong> other
-areas in which people are building on the blockchain at the moment. Most
-projects will fail, but those who succeed might create immense value (I&#39;m
-talking about usefulness, not money), and these wouldn&#39;t have gotten built
-without the blockchain.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>I&#39;ll simply recap the thesis: blockchain are decentralized trust engines.
-Instead of trusting a single service provider, you trust a majority of the
-validators to be honest — and they are incentivized to be.</p>
-<p>On decentralized computation blockchains like Ethereum, this enable anybody to
-deploy a smart contract, and anybody else to trust that the code will be
-executed faithfully (it still requires reading and understanding the code!).</p>
-<p>This enables permissionless innovation: anybody can innovate, not only big
-companies with a reputation, or with government sign-off — even when money is
-involved.</p>
-<p>It also enables anybody to port existing constructions to the blockchain, for
-all to take advantage of (e.g. option market-making).</p>
-<p>Hopefully, these innovations will spread outside finance in the future.</p>
-<h2 id="ps">PS</h2>
-<p>The subject seems to be momentous, and here are two excellent recent pieces that
-harp on the value of decentralization:</p>
-<ul>
-<li><a href="https://mnot.github.io/avoiding-internet-centralization/draft-nottingham-avoiding-internet-centralization.html">Avoiding Internet Centralization</a> talks about the importance of
-decentralizing the internet&#39;s infrastructure, but many of its arguments are
-valid arguments against centralization in general. (It also makes clear that
-blockchains aren&#39;t really the solution for low-level internet infrastructure.)</li>
-<li><a href="https://www.chris-granger.com/2021/12/09/is-web3-anything/">Is Web3... anything?</a> is similar to this post and explains
-blockchains as &quot;a protocol/architecture for near-trustless commitments&quot;.</li>
-</ul>
-      ]]>
-      </description>
-      <pubDate>2021-12-10T16:00:00.000Z</pubDate>
-      <link>https://norswap.com/essence-blockchains</link>
-      <guid isPermaLink="true">https://norswap.com/essence-blockchains</guid>
     </item>
   </channel>
 </rss>
